@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://wx.qq.com/http.xsd"
+  xmlns="http://wx.qq.com/http.xsd">
+  <xs:element name="Urls">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Url">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="Connection" type="xs:string"/>
+              <xs:element name="ContentType" type="xs:string"/>
+              <xs:element name="Origin" type="xs:string"/>
+              <xs:element name="Referer" type="xs:string"/>
+              <xs:element name="Accept" type="xs:string"/>
+              <xs:element name="UserAgent" type="xs:string"/>
+              <xs:element name="AcceptEncoding" type="xs:string"/>
+              <xs:element name="AcceptLanguage" type="xs:string"/>
+              <xs:element name="Logout" type="xs:string"/>
+              <xs:element name="Encoding" type="xs:string"/>
+              <xs:element name="KeepAlive" type="xs:string"/>
+            </xs:choice>
+            <xs:attribute name="prefix" use="required" type="xs:string">
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,64 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WebApplication1.Entity;
+
+namespace WebApplication1.filter
+{
+    /// <summary>
+    /// 登录校验模块
+    /// </summary>
+    public class LoginAuthorizeAttribute : AuthorizeAttribute
+    {
+        /// <summary>
+        /// 每次发生请求前先检查action是否允许匿名访问，如果不允许匿名访问，
+        /// 并且当前请求并没有登录时，设置后续处理为EmptyResult
+        /// </summary>
+        /// <param name="filterContext">过滤器上下文</param>
+        public override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            object[] objs = filterContext.ActionDescriptor.GetCustomAttributes(false);
+            bool OnlyLogin = true;
+            foreach (object obj in objs)
+            {
+                if (obj.GetType() == typeof(AllowAnonymousAttribute))
+                {
+                    OnlyLogin = false;
+                    break;
+                }
+            }
+            if (OnlyLogin && !filterContext.HttpContext.User.Identity.IsAuthenticated)
+                filterContext.Result = new EmptyResult();
+            base.OnAuthorization(filterContext);
+        }
+
+        /// <summary>
+        /// 返回用户是否已登录，如果已登录返回true，否则返回false
+        /// </summary>
+        /// <param name="httpContext">过滤器上下文</param>
+        /// <returns>如果已登录返回true，否则返回false</returns>
+        protected override bool AuthorizeCore(HttpContextBase httpContext)
+        {
+            return httpContext.User.Identity.IsAuthenticated;
+        }
+
+        /// <summary>
+        /// 如果用户未登录，则会调用这个方法，告诉用户没有登录。
+        /// </summary>
+        /// <param name="filterContext">过滤器上下文</param>
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            HttpResponseBase Response = filterContext.HttpContext.Response;
+            Response.ContentType = "application/json;charset=UTF-8";
+            Response.StatusCode = 200;
+            string jsonStr = JsonConvert.SerializeObject(new Result()
+            {
+                Code = -10
+            });
+            Response.Write(jsonStr);
+        }
+    }
+}

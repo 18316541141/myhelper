@@ -1,0 +1,38 @@
+.gradle
+# 此为注释 – 将被 Git 忽略
+ 
+*.a       # 忽略所有 .a 结尾的文件
+!lib.a    # 但 lib.a 除外
+/TODO     # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO
+build/    # 忽略 build/ 目录下的所有文件
+doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+
+*.suo
+*.cache
+*.pdb
+*.user
+obj/
+bin/
+Output/
+TestResults/
+src/BSY.FC.Om/bin/
+src/BSY.FC.Om/obj/
+src/BSY.FC.MpApi/bin/
+src/BSY.FC.MpApi/obj/
+src/BSY.FC.Business/bin/
+src/BSY.FC.Business/obj/
+src/BSY.FC.DataAccess/bin/
+src/BSY.FC.DataAccess/obj/
+src/BSY.FC.Test/bin/
+src/BSY.FC.Test/obj/
+src/TestResults/
+src/BSY.FC.Om/Logs/
+src/BSY.FC.MpApi/Logs/
+src/FC.suo
+BSY.FC.MpApi.Publish.xml
+BSY.FC.Om.Publish.xml
+src/BSY.FC.Om/BSY.FC.Om.Publish.xml
+src/BSY.FC.MpApi/BSY.FC.Om.Publish.xml
+src/packages
+src/BSY.FC.Om/Content/
+src/BSY.FC.API.Pub/Logs/

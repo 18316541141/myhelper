@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{894851A0-8849-4F2F-8C14-936694B97F60}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CommonHelper</RootNamespace>
+    <AssemblyName>CommonHelper</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.StringTemplate, Version=3.4.1.9004, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr3.StringTemplate.3.4.1.9005\lib\net35\Antlr3.StringTemplate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\HtmlAgilityPack.1.11.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SeleniumExtras.WaitHelpers, Version=3.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\DotNetSeleniumExtras.WaitHelpers.3.11.0\lib\net45\SeleniumExtras.WaitHelpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebDriver, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="zxing, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\ZXing.Net.0.16.4\lib\net45\zxing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\乐车邦机器人\packages\ZXing.Net.0.16.4\lib\net45\zxing.presentation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FindAttr\FindDataAttr.cs" />
+    <Compile Include="FindAttr\FindDataConvertAttr.cs" />
+    <Compile Include="Guess\GuessList.cs" />
+    <Compile Include="Helper\ActivateFunc.cs" />
+    <Compile Include="Helper\BigIntegerHelper.cs" />
+    <Compile Include="Helper\BinaryHelper.cs" />
+    <Compile Include="Helper\BpHelper.cs" />
+    <Compile Include="Helper\CheckHelper.cs" />
+    <Compile Include="Helper\CombineHelper.cs" />
+    <Compile Include="Helper\CompressHelper.cs" />
+    <Compile Include="Helper\CountAutoResetEvent.cs" />
+    <Compile Include="Helper\DataImageConvertHelper.cs" />
+    <Compile Include="Helper\DateHelper.cs" />
+    <Compile Include="Helper\EmailHelper.cs" />
+    <Compile Include="Helper\EncrypHelper.cs" />
+    <Compile Include="Helper\EnumerableHelper.cs" />
+    <Compile Include="Helper\ExcelHelper.cs" />
+    <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\FileTypeEnum.cs" />
+    <Compile Include="Helper\FindDataHelper.cs" />
+    <Compile Include="Helper\GenerateHelper.cs" />
+    <Compile Include="Helper\GuessHelper.cs" />
+    <Compile Include="Helper\HttpWebRequestHelper.cs" />
+    <Compile Include="Helper\ImageHandleHelper.cs" />
+    <Compile Include="Helper\IpHelper.cs" />
+    <Compile Include="Helper\Matrix.cs" />
+    <Compile Include="Helper\MatrixHelper.cs" />
+    <Compile Include="Helper\PasswordHelper.cs" />
+    <Compile Include="Helper\PhysicsHelper.cs" />
+    <Compile Include="Helper\SeleniumHelper.cs" />
+    <Compile Include="Helper\SparseArray.cs" />
+    <Compile Include="Helper\SparseMatrix.cs" />
+    <Compile Include="Helper\StreamHelper.cs" />
+    <Compile Include="Helper\TemplateHelper.cs" />
+    <Compile Include="Helper\ThreadHelper.cs" />
+    <Compile Include="Helper\ProcessHelper.cs" />
+    <Compile Include="Helper\VerifyCodeHelper.cs" />
+    <Compile Include="IpProxy\FeiYiProxyIp.cs" />
+    <Compile Include="IpProxy\ProxyUserInfo.cs" />
+    <Compile Include="IpProxy\UseChargeZhimaProxyIp.cs" />
+    <Compile Include="IpProxy\FreeXunlianProxyIp.cs" />
+    <Compile Include="IpProxy\UseTaiYangProxyIp.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IpProxy\QingtingProxyIp.cs" />
+    <Compile Include="IpProxy\IpPort.cs" />
+    <Compile Include="IpProxy\ProxyIpPool.cs" />
+    <Compile Include="IpProxy\UseDefaultProxyIp.cs" />
+    <Compile Include="IpProxy\UseJiGuangProxyIp.cs" />
+    <Compile Include="IpProxy\UseProxyIp.cs" />
+    <Compile Include="IpProxy\UseFreeZhimaProxyIp.cs" />
+    <Compile Include="IpProxy\WandouProxyIp.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="http.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Guess.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="http.xml" />
+    <Content Include="SmallTemplate.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
