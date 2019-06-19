@@ -1,4 +1,5 @@
 package web.template.entity;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * 后台的左侧菜单栏
@@ -25,6 +26,10 @@ public class LeftMenu {
 	 * 子菜单
 	 */
 	private List<LeftMenu> leftMenus;
+	
+	public LeftMenu(){
+		leftMenus=new ArrayList<LeftMenu>();
+	}
 
 	public String getTitle() {
 		return title;

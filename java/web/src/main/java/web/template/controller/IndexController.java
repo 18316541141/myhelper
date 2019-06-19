@@ -31,12 +31,23 @@ public class IndexController {
 	private SystemService systemService;
 	
 	/**
+	 * 登出功能
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	public Result logout(){
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+		return new Result(0,null,null);
+	}
+	
+	/**
 	 * 获取左侧菜单
 	 * @return
 	 */
 	@RequestMapping("/loadLeftMenus")
 	public Result loadLeftMenus(){
-		return new Result(0,"",systemService.loadLeftMenus(new String((char[])SecurityUtils.getSubject().getPrincipal())));
+		return new Result(0,"",systemService.loadLeftMenus((String)SecurityUtils.getSubject().getPrincipal()));
 	}
 	
 	/**

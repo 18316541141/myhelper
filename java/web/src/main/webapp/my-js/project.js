@@ -66,7 +66,7 @@ addCustomVerify(layuiForm);
 		  layuiLayer.close(index);
 		  //登录超时，退出登录
 		  if(result.code===-10){
-			  logout();
+			  logoutCallback();
 		  }
 		  //用户无权限，无法操作，但需要后续处理
 		  else if(result.code===-9){
@@ -94,12 +94,20 @@ addCustomVerify(layuiForm);
   };
   $.extend({
 	  //自定义的post，和原版的$.post用法一致
-	  "myPost": function (url,data,callback,dataType) {
-		  $.post(url, data,myCallback(callback) , dataType);
+	  "myPost": function (url,data,callback) {
+		  if($.type(data)==='function'){
+			  $.post(url,myCallback(data),'json');
+		  }else{			  
+			  $.post(url, data,myCallback(callback),'json');
+		  }
 	  },
 	  //自定义的get，和原版的$.get用法一致
-	  "myGet":function (url,data,callback,dataType) {
-		  $.get(url, data,myCallback(callback) , dataType);
+	  "myGet":function (url,data,callback) {
+		  if($.type(data)==='function'){
+			  $.get(url, myCallback(data),'json');
+		  }else{
+			  $.get(url, data,myCallback(callback),'json');
+		  }
 	  },
 	  //自定义的ajax，和原版的$.ajax用法一致
 	  "myAjax":function(settings){
@@ -107,20 +115,20 @@ addCustomVerify(layuiForm);
 		  $.ajax(url, settings);
 	  },
 	  //自定义的表单post，不需要data参数，直接提交表单的数据
-	  "formPost": function (url,callback,dataType) {
+	  "formPost": function (url,callback) {
 		  var data={}; 
 		  this.get(0).find('input[name]').each(function(){
 			  data[$(this).attr('name')]=$(this).val();
 		  });
-		  $.post(url, data,myCallback(callback) , dataType);
+		  $.post(url, data,myCallback(callback),'json');
 	  },
 	  //自定义的表单get，不需要data参数，直接提交表单的数据
-	  "formGet":function (url,callback,dataType) {
+	  "formGet":function (url,callback) {
 		  var data={}; 
 		  this.get(0).find('input[name]').each(function(){
 			  data[$(this).attr('name')]=$(this).val();
 		  });
-		  $.get(url, data,myCallback(callback) , dataType);
+		  $.get(url, data,myCallback(callback),'json');
 	  },
 	  /*
 	   * 自定义的表单ajax，直接提交表单的数据，如果settings.data不为空，则附加settings.data数据。
@@ -185,13 +193,14 @@ layuiForm.on('submit(LAY-user-login-submit)', function(){
 			$scope.$apply(function(){
 				$scope.leftMenus=result.data.leftMenus;
 			});
-			layuiElement.render('nav','left-menus');
+			$('.layui-nav-bar').remove();
+			layuiElement.render('nav');
 			setTimeout(function(){
 				$('#login-page').removeClass().css('left','100%');
 			},450);
 			$('#login-page').removeClass().addClass('login-ani');
 		}
-	},'json');
+	});
 });
 
 
@@ -337,16 +346,25 @@ $.myGet('/index/loadLeftMenus',function(result){
 	$scope.$apply(function(){
 		$scope.leftMenus=result.data;
 	});
-	layuiElement.render('nav','left-menus');
-},'json');
+	$('.layui-nav-bar').remove();
+	layuiElement.render('nav');
+});
 
 /**
- * 退出登录的方法
+ * 退出登录的回调方法
  */
-function logout(){
+function logoutCallback(){
 	$('#login-page').removeClass().addClass('logout-ani').css('left','0');
 	var $scope=$('[ng-controller="login-form"]').scope();
 	$scope.$apply(function(){
 		$scope.data=null;
+		$scope.rNum=Math.random();
 	});
+}
+
+/**
+ * 退出登陆的方法
+ */
+function logout(){
+	$.myGet('/index/logout',logoutCallback);
 }

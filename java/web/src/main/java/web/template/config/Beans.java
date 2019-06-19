@@ -3,6 +3,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.Filter;
+
 import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -90,10 +91,12 @@ public class Beans {
 		Map<String,Filter> filterMap=shiroFilterFactoryBean.getFilters();
 		filterMap.put("authc",myFormAuthenticationFilter);
 		filterMap.put("perms", myPermissionsAuthorizationFilter);
+		
 		filterMap=shiroFilterFactoryBean.getFilters();
 		
 		Map<String, String> filterChainDefinitionMap=shiroFilterFactoryBean.getFilterChainDefinitionMap();
 		filterChainDefinitionMap.put("/index/verificationCode", "anon");
+//		filterChainDefinitionMap.put("/index/logout", "logout");
 		filterChainDefinitionMap.put("/index/login", "authc");
 		filterChainDefinitionMap.put("/index/loadLeftMenus", "authc");
 //		filterChainDefinitionMap.put("/user/teacher", "authc,perms[\"/user/teacher\"]");

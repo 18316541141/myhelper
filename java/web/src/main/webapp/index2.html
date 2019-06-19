@@ -1,6 +1,6 @@
-<!doctype html>
-<html ng-app="my-app">
- <head> 
+<!DOCTYPE html>
+<html >
+<head>
   <meta charset="utf-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
   <title>测试后台</title> 
@@ -68,7 +68,7 @@
                 float:left;
             }
 		</style> 
-  <script type="text/template" id="singleUploadProgress">
+		 <script type="text/template" id="singleUploadProgress">
             <div class="layui-progress" lay-showPercent="yes" id="single-upload-progress">
                 <div class="layui-progress-bar layui-bg-red" lay-percent=""></div>
             </div>
@@ -127,80 +127,70 @@
                 </table>
             </div>
         </script>
- </head> 
- <body class="layui-layout-body"> 
-  <input type="password" id="out-screen-password"> 
-  <div class="layui-layout layui-layout-admin"> 
-   <div class="layui-header"> 
-    <div class="layui-logo">
-      layui 后台布局 
-    </div> 
-    <!-- 头部区域（可配合layui已有的水平导航） --> 
-    <ul class="layui-nav layui-layout-left"> 
-     <li class="layui-nav-item"><a href="">控制台</a></li> 
-     <li class="layui-nav-item"><a href="">商品管理</a></li> 
-     <li class="layui-nav-item"><a href="">用户</a></li> 
-     <li class="layui-nav-item"><a href="javascript:;">其它系统</a> 
-      <dl class="layui-nav-child"> 
-       <dd> 
-        <a href="">邮件管理</a> 
-       </dd> 
-       <dd> 
-        <a href="">消息管理</a> 
-       </dd> 
-       <dd> 
-        <a href="">授权管理</a> 
-       </dd> 
-      </dl> </li> 
-    </ul> 
-    <ul class="layui-nav layui-layout-right"> 
-     <li class="layui-nav-item"> <a href="javascript:;"> <img src="" class="layui-nav-img"> 用户 </a> 
-      <dl class="layui-nav-child"> 
-       <dd> 
-        <a href="">基本资料</a> 
-       </dd> 
-       <dd> 
-        <a href="">安全设置</a> 
-       </dd> 
-      </dl></li> 
-     <li class="layui-nav-item"><a href="javascript:logout();">退了</a></li> 
-    </ul> 
-   </div> 
-   <div class="layui-side layui-bg-black"> 
-    <div class="layui-side-scroll"> 
-     <!-- 左侧导航区域（可配合layui已有的垂直导航） --> 
-     <ul class="layui-nav layui-nav-tree" lay-filter="left-menus" ng-controller="left-menus"> 
-      <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0">
-		<a href="javascript:;">{{x.title}}</a> 
-		<dl class="layui-nav-child"> 
-			<dd ng-repeat="y in x.leftMenus"> 
-			<a href="javascript:void(0);" ng-click="openMenuPage(y.id,y.url,y.title)">{{y.title}}</a> 
-			</dd>
-		</dl> 
-	   </li>
-	   <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">layui 后台布局</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          贤心
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="left-menus" ng-controller="left-menus">
+        <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0">
+			<a href="javascript:;">{{x.title}}</a> 
+			<dl class="layui-nav-child"> 
+				<dd ng-repeat="y in x.leftMenus"> 
+					<a href="javascript:void(0);" ng-click="openMenuPage(y.id,y.url,y.title)">{{y.title}}</a> 
+				</dd>
+			</dl>
+        </li>
+		<li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0">
 			<a href="javascript:;">{{x.title}}</a> 
 		</li>
-		<span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
-     </ul> 
-    </div> 
-   </div> 
-   <div class="layui-body" ng-controller="main-body"> 
-    <!-- 内容主体区域 --> 
-    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"> 
-     <ul class="layui-tab-title"> 
-      <li ng-repeat="x in menus" data-menu-id="{{x.id}}" on-finish-render-filters> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
-     </ul> 
-     <div class="layui-tab-content"> 
-      <div ng-repeat="x in menus" class="main-content layui-tab-item" ng-include="{{x.url+'?v=20190618173131'}}"></div> 
-     </div> 
-    </div> 
-   </div> 
-   <div class="layui-footer">
-     © layui.com - 底部固定区域 
-   </div> 
-  </div> 
-  <div id="login-page"> 
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">内容主体区域</div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+<div id="login-page"> 
    <div class="layadmin-user-login layadmin-user-display-show"> 
     <div class="layadmin-user-login-main"> 
      <div class="layadmin-user-login-box layadmin-user-login-header"> 
@@ -240,7 +230,7 @@
     </div> 
    </div> 
   </div> 
-  <script src="layui/layui.all.js" charset="utf-8"></script> 
+<script src="layui/layui.all.js" charset="utf-8"></script> 
   <script src="plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
   <script src="plugin/jquery.min.js" charset="utf-8"></script> 
   <script src="plugin/jquery.cookie.js" charset="utf-8"></script> 
@@ -250,5 +240,5 @@
   <script src="my-js/common-by-layui.js" charset="utf-8"></script> 
   <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
   <script src="my-js/project.js?v=20190618173131" charset="utf-8"></script>  
- </body>
+</body>
 </html>

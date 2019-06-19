@@ -93,7 +93,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 			}
 			subject.login(token);
 			Map<String,Object> dataMap=new HashMap<String,Object>();
-			dataMap.put("leftMenus", systemService.loadLeftMenus(new String((char[])token.getPrincipal())));
+			dataMap.put("leftMenus", systemService.loadLeftMenus((String)token.getPrincipal()));
 			printWriter.write(objectMapper.writeValueAsString(new Result(0, "", dataMap)));
 		} catch (AuthenticationException e) {
 			printWriter.write(objectMapper.writeValueAsString(new Result(-1, "账号或密码错误，登陆失败！", null)));

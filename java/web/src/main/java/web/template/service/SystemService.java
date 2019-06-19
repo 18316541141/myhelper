@@ -21,16 +21,19 @@ public class SystemService {
 		LeftMenu leftMenu1=new LeftMenu();
 		leftMenu1.setId("m1");
 		leftMenu1.setTitle("测试1");
-		List<LeftMenu>  leftMenuList11=new ArrayList<LeftMenu>();
-		LeftMenu leftMenu111=new LeftMenu();
-		leftMenu111.setId("m11");
-		leftMenu111.setTitle("测试1-1");
-		leftMenu111.setUrl("menus/testMenus1/test.html");
+		List<LeftMenu>  leftMenuList11=new ArrayList<LeftMenu>();			
+		LeftMenu leftMenu111=new LeftMenu();{
+			leftMenu111.setId("m11");
+			leftMenu111.setTitle("测试1-1");
+			leftMenu111.setUrl("menus/testMenus1/test.html");			
+		}
 		leftMenuList11.add(leftMenu111);
-		LeftMenu leftMenu112=new LeftMenu();
-		leftMenu112.setId("m12");
-		leftMenu112.setTitle("测试1-2");
-		leftMenu112.setUrl("menus/testMenus2/test1.html");
+		
+		LeftMenu leftMenu112=new LeftMenu();{
+			leftMenu112.setId("m12");
+			leftMenu112.setTitle("测试1-2");
+			leftMenu112.setUrl("menus/testMenus2/test1.html");			
+		}
 		leftMenuList11.add(leftMenu112);
 		leftMenu1.setLeftMenus(leftMenuList11);
 		leftMenuList.add(leftMenu1);
