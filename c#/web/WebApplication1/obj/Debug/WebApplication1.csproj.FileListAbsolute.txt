@@ -279,3 +279,16 @@ E:\git_projects\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Ide
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Guess.xml
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\CommonHelper.exe
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Antlr3.StringTemplate.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\zxing.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\NPOI.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\NPOI.OOXML.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\WebDriver.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\SeleniumExtras.WaitHelpers.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\ICSharpCode.SharpZipLib.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\NPOI.OpenXml4Net.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\NPOI.OpenXmlFormats.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\CommonHelper.pdb
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Antlr3.StringTemplate.pdb

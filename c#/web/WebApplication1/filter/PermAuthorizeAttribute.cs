@@ -57,7 +57,7 @@ namespace WebApplication1.filter
             Response.StatusCode = 200;
             string jsonStr = JsonConvert.SerializeObject(new Result
             {
-                Code = -9
+                code = -9
             });
             Response.Write(jsonStr);
         }

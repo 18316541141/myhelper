@@ -14,11 +14,18 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.SessionState;
 using WebApplication1.Entity;
+using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
 {
-    public class HomeController : Controller
+    public class IndexController : Controller
     {
+        SystemService _systemService;
+
+        public IndexController()
+        {
+            _systemService = new SystemService();
+        }
 
         /// <summary>
         /// 验证码获取
@@ -35,13 +42,31 @@ namespace WebApplication1.Controllers
         }
 
         /// <summary>
+        /// 加载左侧菜单
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult LoadLeftMenus()
+        {
+            return Json(new Result {code=0,data= _systemService.LoadLeftMenus() }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 上传图片通用方法
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult UploadImage()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// 退出登录
         /// </summary>
         /// <returns></returns>
         public JsonResult Logout()
         {
             FormsAuthentication.SignOut();
-            return Json(new Result { Code = 0}, JsonRequestBehavior.AllowGet);
+            return Json(new Result { code = 0}, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -58,17 +83,20 @@ namespace WebApplication1.Controllers
             {
                 if (!Convert.ToString(Session["vercode"]).Equals(vercode, StringComparison.OrdinalIgnoreCase))
                 {
-                    return Json(new Result { Code = -1, Msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
+                    return Json(new Result { code = -1, msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
                 }
                 Random random = new Random();
                 if (random.NextDouble() > .5)
                 {
                     FormsAuthentication.SetAuthCookie(Username, false);
-                    return Json(new Result { Code = 0, Msg = "登录成功！" }, JsonRequestBehavior.AllowGet);
+                    return Json(new Result { code = 0,data=new
+                    {
+                        leftMenus= _systemService.LoadLeftMenus()
+                    } }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(new Result { Code = -1, Msg = "登录失败，账号或密码错误！" }, JsonRequestBehavior.AllowGet);
+                    return Json(new Result { code = -1, msg = "登录失败，账号或密码错误！" }, JsonRequestBehavior.AllowGet);
                 }
             }
             finally

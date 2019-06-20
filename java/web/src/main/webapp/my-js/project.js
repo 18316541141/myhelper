@@ -259,7 +259,7 @@ var myApp=angular.module('my-app', ['ngSanitize']).controller('main-body', funct
 			var index;
 			setTimeout(function () {
 				var uploader = new WebUploader.Uploader({
-					swf: '/scripts/Uploader.swf',
+					swf: 'plugin/webuploader/Uploader.swf',
 					auto: true,
 					duplicate: true,
 					server: '/index/uploadImage',
@@ -292,7 +292,7 @@ var myApp=angular.module('my-app', ['ngSanitize']).controller('main-body', funct
 			$scope.files = [];
 			setTimeout(function () {
 				var uploader = new WebUploader.Uploader({
-					swf: '/scripts/Uploader.swf',
+					swf: 'plugin/webuploader/Uploader.swf',
 					auto: true,
 					duplicate: true,
 					server: '/index/uploadFiles',

@@ -144,6 +144,7 @@
     <Compile Include="Helper\ThreadHelper.cs" />
     <Compile Include="Helper\ProcessHelper.cs" />
     <Compile Include="Helper\VerifyCodeHelper.cs" />
+    <Compile Include="Helper\WebProjectHelper.cs" />
     <Compile Include="IpProxy\FeiYiProxyIp.cs" />
     <Compile Include="IpProxy\ProxyUserInfo.cs" />
     <Compile Include="IpProxy\UseChargeZhimaProxyIp.cs" />
