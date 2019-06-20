@@ -1,6 +1,11 @@
 package web.template.controller;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.code.kaptcha.Producer;
 
 import web.template.entity.Result;
+import web.template.entity.TreeFormNode;
 import web.template.service.SystemService;
 @RestController
 @RequestMapping("/index")
@@ -29,6 +35,12 @@ public class IndexController {
 	
 	@Autowired
 	private SystemService systemService;
+	
+	Set<String> allowPath;
+	
+	public IndexController(){
+		allowPath=new HashSet<String>();
+	}
 	
 	/**
 	 * 登出功能
@@ -75,15 +87,65 @@ public class IndexController {
 	
 	@RequestMapping("/uploadImage")
 	public Result uploadImage(@RequestParam("file")MultipartFile file,HttpServletRequest request,String pathName){
-		try {
-			file.transferTo(new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile());
-			return null;
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+		if(allowPath.contains(pathName)){			
+			try {
+				File target=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
+				target.createNewFile();
+				file.transferTo(target);
+				return null;
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}else{
+			return new Result(-1, "该目录不允许上传！", null);
 		}
 	}
+	
+	
+	@RequestMapping("/loadTreeNode")
+	public Result loadTreeNode()
+    {
+        List<TreeFormNode> treeNodeList = new ArrayList<TreeFormNode>();
+        TreeFormNode t01=new TreeFormNode();
+        {
+        	t01.setId("01");
+        	t01.setName("广东"); 
+        }
+        treeNodeList.add(t01);
+        TreeFormNode t02=new TreeFormNode();
+        {
+        	t02.setId("02");
+        	t02.setName("佛山");
+        }
+        treeNodeList.add(t02);
+        TreeFormNode treeNode = new TreeFormNode();
+        {
+        	treeNode.setId("03");
+        	treeNode.setName("顺德");
+        }
+        treeNodeList.add(treeNode);
+        TreeFormNode t31=new TreeFormNode();
+        {
+        	t31.setId("31");
+        	t31.setName("陈村");
+        }
+        treeNode.getChildren().add(t31);
+        TreeFormNode t32=new TreeFormNode();
+        {
+        	t32.setId("32");
+        	t32.setName("陳村");
+        }
+        treeNode.getChildren().add(t32);
+        TreeFormNode t33=new TreeFormNode();
+        {
+        	t33.setId("33");
+        	t33.setName("陳邨");
+        }
+        treeNode.getChildren().add(t33);
+        return new Result (0,null ,treeNodeList );
+    }
 }
