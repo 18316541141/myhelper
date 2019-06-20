@@ -201,10 +201,10 @@
             <!-- 内容主体区域 -->
             <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                 <ul class="layui-tab-title">
-                    <li ng-repeat="x in menus" data-menu-id="{{x.id}}" on-finish-render-filters> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
+                    <li ng-repeat="x in menus" data-menu-id="{{x.id}}" on-finish-render-filters=""> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                 </ul>
                 <div class="layui-tab-content">
-                    <div ng-repeat="x in menus" class="main-content layui-tab-item" ng-include="{{x.url+'?v=20190618173131'}}"></div>
+                    <div ng-repeat="x in menus" class="main-content layui-tab-item" ng-include="{x.url+'?v=20190620100934'}"></div>
                 </div>
             </div>
         </div>
@@ -261,6 +261,6 @@
     <script src="my-js/common-by-jquery.js" charset="utf-8"></script>
     <script src="my-js/common-by-layui.js" charset="utf-8"></script>
     <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
-    <script src="my-js/project.js?v=20190618173131" charset="utf-8"></script>
+    <script src="my-js/project.js?v=20190620100934" charset="utf-8"></script>
 </body>
 </html>

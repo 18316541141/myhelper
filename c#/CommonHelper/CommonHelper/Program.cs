@@ -20,7 +20,7 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            WebProjectHelper.RefreshVersion(@"E:\git_projects\myhelper\c#\web\WebApplication1");
+            WebProjectHelper.RefreshVersion(@"E:\git_projects\myhelper\c#\web\WebApplication1\");
             //Random r = new Random();
             //SparseArray<int> sa = new SparseArray<int>(10000, 0);
             //int[] ia = new int[10000];
