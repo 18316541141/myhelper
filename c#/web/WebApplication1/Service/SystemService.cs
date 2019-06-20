@@ -28,7 +28,7 @@ namespace WebApplication1.Service
             {
                 id="m11",
                 title= "测试1-1",
-                url= "menus/testMenus1/test.html"
+                url= "menus/testMenus1/treeForm.html"
             };
             leftMenuList11.Add(leftMenu111);
 
@@ -36,7 +36,7 @@ namespace WebApplication1.Service
             {
                 id= "m12",
                 title= "测试1-2",
-                url= "menus/testMenus2/test1.html"
+                url= "menus/testMenus1/uploadImage.html"
             };
             leftMenuList11.Add(leftMenu112);
             leftMenu1.leftMenus=leftMenuList11;

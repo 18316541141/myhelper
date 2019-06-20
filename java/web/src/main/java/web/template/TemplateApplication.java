@@ -33,7 +33,7 @@ public class TemplateApplication {
 		try {
 			File indexFile=new File("src"+s+"main"+s+"webapp"+s+"index.html");
 			Document doc=Jsoup.parse(FileUtils.readFileToString(indexFile, "UTF-8"));
-			doc.selectFirst(".main-content").attr("ng-include", "{{x.url+'?v="+newVersion+"'}}");
+			doc.selectFirst(".main-content").attr("ng-include", "x.url+'?v="+newVersion+"'");
 			doc.selectFirst("script[src^='my-js/project.js']").attr("src","my-js/project.js?v="+newVersion);
 			FileUtils.writeStringToFile(indexFile, doc.outerHtml(),"UTF-8");
 		} catch (IOException e) {

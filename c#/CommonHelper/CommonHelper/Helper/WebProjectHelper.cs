@@ -24,7 +24,7 @@ namespace CommonHelper.Helper
             HtmlDocument doc= new HtmlDocument();
             doc.Load($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html");
             HtmlNode node = doc.DocumentNode;
-            node.SelectSingleNode("//div[@ng-include]").SetAttributeValue("ng-include", $"{{x.url+'?v={version}'}}");
+            node.SelectSingleNode("//div[@ng-include]").SetAttributeValue("ng-include", $"x.url+'?v={version}'");
             node.SelectSingleNode("//script[starts-with(@src,'my-js/project.js')]").SetAttributeValue("src", $"my-js/project.js?v={version}");
             doc.Save($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html");
         }

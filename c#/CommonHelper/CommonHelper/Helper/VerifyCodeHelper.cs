@@ -42,7 +42,7 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 字体大小
         /// </summary>
-        private static int fontSize = 22;
+        private static int fontSize = 30;
         #endregion
 
         #region 生成验证码图片

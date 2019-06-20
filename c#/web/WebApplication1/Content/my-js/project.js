@@ -43,13 +43,14 @@
 		"images/256x256/zip-256.png"
     ];
     for (var i = 0, len = images.length; i < len; i++) {
-        layui.img(images[i]);
+        new Image().src = images[i];
     }
 }());
 
 var layuiForm = layui.form;
 var layuiLayer = layui.layer;
 var layuiElement = layui.element;
+var layuiTree = layui.tree;
 /**
  * layui自定义的表单校验，
  * 方法源码在webapp/my-js/common-by-layui.js
@@ -255,6 +256,7 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
         template: $('#uploadImageTemplate').html(),
         scope: { name: "@" },
         controller: function ($scope) {
+            debugger;
             $scope.isUploaded = false;
             var index;
             setTimeout(function () {
@@ -281,6 +283,50 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
                 });
             }, 1);
         },
+    };
+}).directive('treeForm', function () {
+    return {
+        restrict: 'E',
+        template: $('#treeFormTemplate').html(),
+        transclude: true,
+        scope: { url: "@", id: "@",targetController:"@"},
+        controller: function ($scope) {
+            var $rightContent = $('#' + $scope.id + ' .right-content');
+            var $treeContent = $rightContent.parent();
+            var $leftTree = $('#' + $scope.id + ' .left-tree');
+            $.myGet($scope.url, function (result) {
+                $.fn.zTree.init($('#tree-' + $scope.id), {
+                    view: {
+                        showLine: false
+                    },
+                    edit: {
+                        enable: true,
+                        showRemoveBtn:true
+                    },
+                    callback: {
+                        onClick: function (event, treeId, treeNode) {
+                            $rightContent.addClass('ani');
+                            $treeContent.css('overflow-x', 'hidden');
+                            setTimeout(function () {
+                                $leftTree.css('opacity', 'unset');
+                                $rightContent.css('opacity', 'unset').removeClass('ani');
+                                $treeContent.css('overflow-x', 'unset');
+                            },280);
+                        }
+                    }
+                }, result.data);
+                layuiForm.render();
+                $leftTree.height($rightContent.height());
+                $treeContent.css('overflow-x', 'hidden');
+                $leftTree.addClass('ani');
+                $rightContent.addClass('ani');
+                setTimeout(function () {
+                    $leftTree.css('opacity', 'unset').removeClass('ani');
+                    $rightContent.css('opacity', 'unset').removeClass('ani');
+                    $treeContent.css('overflow-x','unset');
+                }, 280);
+            });
+        }
     };
 }).directive("uploadFiles", function () {
     return {
@@ -368,3 +414,15 @@ function logoutCallback() {
 function logout() {
     $.myGet('/index/logout', logoutCallback);
 }
+
+//--------------------------分割线-------------------------------
+//上面的代码不能改，下面的代码可以改
+//--------------------------分割线-------------------------------
+myApp.controller('testTreeForm', function ($scope) {
+    $scope.callback = function (result) {
+
+    }
+});
+myApp.controller("upload-image", function ($scope) {
+    
+});
