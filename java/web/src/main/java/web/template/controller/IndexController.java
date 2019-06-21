@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -22,9 +23,11 @@ import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.code.kaptcha.Producer;
+import com.txj.common.FileHelper;
 
 import web.template.entity.Result;
 import web.template.entity.TreeFormNode;
+import web.template.entity.UploadFilesResult;
 import web.template.service.SystemService;
 @RestController
 @RequestMapping("/index")
@@ -40,6 +43,7 @@ public class IndexController {
 	
 	public IndexController(){
 		allowPath=new HashSet<String>();
+		allowPath.add("test");
 	}
 	
 	/**
@@ -85,13 +89,19 @@ public class IndexController {
 		}
 	}
 	
-	@RequestMapping("/uploadImage")
-	public Result uploadImage(@RequestParam("file")MultipartFile file,HttpServletRequest request,String pathName){
+	/**
+	 * 上次单张图片
+	 * @param fileUpload	上传图片
+	 * @param request	请求对象
+	 * @param pathName	路径名称
+	 * @return
+	 */
+	@RequestMapping("/uploadSingleImage")
+	public Result uploadSingleImage(@RequestParam("fileUpload")MultipartFile fileUpload,HttpServletRequest request,String pathName){
 		if(allowPath.contains(pathName)){			
 			try {
 				File target=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
-				target.createNewFile();
-				file.transferTo(target);
+				FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
 				return null;
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
@@ -103,6 +113,35 @@ public class IndexController {
 		}else{
 			return new Result(-1, "该目录不允许上传！", null);
 		}
+	}
+	
+	/**
+	 * 上传多个文件
+	 * @param fileUploads	上传的文件
+	 * @param pathName	路径名称
+	 * @return
+	 */
+	public Result uploadFiles(@RequestParam("fileUpload")MultipartFile[] fileUploads, HttpServletRequest request,String pathName){
+		if (allowPath.contains(pathName))
+        {
+			List<UploadFilesResult> uploadFilesResultList=new ArrayList<>();
+			UploadFilesResult uploadFilesResult;
+			for (MultipartFile multipartFile : fileUploads) {
+				uploadFilesResult=new UploadFilesResult();
+				File target;
+				try {
+					target = new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
+					uploadFilesResult.setSha1(FileHelper.SaveInputStreamBySha1(multipartFile.getInputStream(), target.getAbsolutePath()));
+					multipartFile.getOriginalFilename();
+					uploadFilesResult.setExtension("");
+					uploadFilesResultList.add(uploadFilesResult);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+        }
+		return null;
 	}
 	
 	

@@ -57,5 +57,11 @@
 	    <artifactId>commons-lang3</artifactId>
 	    <version>3.9</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
+	<dependency>
+	    <groupId>org.apache.shiro</groupId>
+	    <artifactId>shiro-core</artifactId>
+	    <version>1.4.1</version>
+	</dependency>
   </dependencies>
 </project>

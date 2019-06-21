@@ -60,18 +60,6 @@
 		    <artifactId>shiro-spring</artifactId>
 		    <version>1.4.1</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
-		<dependency>
-		    <groupId>org.apache.shiro</groupId>
-		    <artifactId>shiro-core</artifactId>
-		    <version>1.4.1</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-web -->
-		<dependency>
-		    <groupId>org.apache.shiro</groupId>
-		    <artifactId>shiro-web</artifactId>
-		    <version>1.4.1</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>
 		    <groupId>org.jsoup</groupId>
