@@ -54,6 +54,10 @@
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonHelper\CommonHelper\bin\Debug\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
@@ -187,9 +191,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Entity\AreaTree.cs" />
     <Compile Include="Entity\LeftMenu.cs" />
     <Compile Include="Entity\Result.cs" />
     <Compile Include="Entity\TreeFormNode.cs" />
+    <Compile Include="Entity\UploadFilesResult.cs" />
     <Compile Include="filter\LoginAuthorizeAttribute.cs" />
     <Compile Include="filter\PermAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -237,6 +243,17 @@
     <Content Include="Content\images\256x256\xlsx-256.png" />
     <Content Include="Content\images\256x256\zip-256.png" />
     <Content Include="Content\index.html" />
+    <Content Include="Content\Jcrop-master\.eslintrc.js" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.css" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.dev.css" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.dev.js" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.js" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\config.js" />
+    <Content Include="Content\Jcrop-master\examples\image.html" />
+    <Content Include="Content\Jcrop-master\examples\style.css" />
+    <Content Include="Content\Jcrop-master\examples\svg.html" />
+    <Content Include="Content\Jcrop-master\MIT-LICENSE.txt" />
+    <Content Include="Content\Jcrop-master\webpack.config.babel.js" />
     <Content Include="Content\layui\css\layui.css" />
     <Content Include="Content\layui\css\layui.mobile.css" />
     <Content Include="Content\layui\css\login.css" />
@@ -321,6 +338,7 @@
     <Content Include="Content\layui\images\face\71.gif" />
     <Content Include="Content\layui\images\face\8.gif" />
     <Content Include="Content\layui\images\face\9.gif" />
+    <Content Include="Content\menus\testMenus1\areaSelect.html" />
     <Content Include="Content\menus\testMenus1\treeForm.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
     <Content Include="Content\plugin-animate\animate.css" />
@@ -2946,6 +2964,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Script\" />
     <Folder Include="Template\" />
+    <Folder Include="uploadFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -3185,6 +3204,41 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Jcrop-master\.eslintignore" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.css.map" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.dev.js.map" />
+    <Content Include="Content\Jcrop-master\dist\jcrop.js.map" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\components\coords.vue" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\components\example1.vue" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\components\example2.vue" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\components\example3.vue" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\components\Jcrop.vue" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\override.styl" />
+    <Content Include="Content\Jcrop-master\docs\.vuepress\style.styl" />
+    <Content Include="Content\Jcrop-master\docs\examples\aspect.md" />
+    <Content Include="Content\Jcrop-master\docs\examples\custom-widget.md" />
+    <Content Include="Content\Jcrop-master\docs\examples\README.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\about.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\design.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\events.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\extend.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\instance.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\multiple.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\options.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\README.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\styling.md" />
+    <Content Include="Content\Jcrop-master\docs\guide\widgets.md" />
+    <Content Include="Content\Jcrop-master\docs\jquery\README.md" />
+    <Content Include="Content\Jcrop-master\docs\objects\confobj.md" />
+    <Content Include="Content\Jcrop-master\docs\objects\domobj.md" />
+    <Content Include="Content\Jcrop-master\docs\objects\rect.md" />
+    <Content Include="Content\Jcrop-master\docs\README.md" />
+    <Content Include="Content\Jcrop-master\docs\roadmap.md" />
+    <Content Include="Content\Jcrop-master\docs\vue\README.md" />
+    <Content Include="Content\Jcrop-master\package.json" />
+    <Content Include="Content\Jcrop-master\README.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

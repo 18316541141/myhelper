@@ -1,5 +1,6 @@
 ﻿
 using CommonHelper.Helper;
+using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,16 @@ namespace WebApplication1.Controllers
     {
         SystemService _systemService;
 
+        /// <summary>
+        /// 上传文件所允许的路径
+        /// </summary>
+        HashSet<string> _allowPath { set; get; }
+
         public IndexController()
         {
             _systemService = new SystemService();
+            _allowPath = new HashSet<string>();
+            _allowPath.Add("test");
         }
 
         /// <summary>
@@ -48,15 +56,6 @@ namespace WebApplication1.Controllers
         public JsonResult LoadLeftMenus()
         {
             return Json(new Result {code=0,data= _systemService.LoadLeftMenus() }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// 上传图片通用方法
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult UploadImage()
-        {
-            return null;
         }
 
         /// <summary>
@@ -111,12 +110,142 @@ namespace WebApplication1.Controllers
         }
 
         /// <summary>
-        /// 
+        /// 上传单张图片
         /// </summary>
         /// <returns></returns>
-        public JsonResult UploadImage(string basePath)
+        public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload, string pathName)
         {
-            return null;
+            if (_allowPath.Contains(pathName))
+            {
+                try
+                {
+                    return Json(new Result { code= 0, data= FileHelper.SaveFileNameBySha1(fileUpload.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}") }, JsonRequestBehavior.AllowGet);
+                }
+                catch(Exception ex)
+                {
+                    return Json(new Result { code = -1, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new Result { code = -1, msg = "该路径不允许上传文件。" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 多个文件上传
+        /// </summary>
+        /// <param name="fileUploads"></param>
+        /// <param name="pathName"></param>
+        /// <returns></returns>
+        public JsonResult UploadFiles(HttpPostedFileBase[] fileUploads, string pathName)
+        {
+            if (_allowPath.Contains(pathName))
+            {
+                string filePath = $"{Server.MapPath("~/uploadFiles/")}{pathName}";
+                List<UploadFilesResult> uploadFilesResultList=new List<UploadFilesResult>();
+                foreach (HttpPostedFileBase fileUpload in fileUploads)
+                {
+                    uploadFilesResultList.Add(new UploadFilesResult
+                    {
+                        sha1 = FileHelper.SaveFileNameBySha1(fileUpload.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
+                        extension = Path.GetExtension(fileUpload.FileName)
+                    });
+                }
+                return Json(new Result { code = 0, data = uploadFilesResultList }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new Result { code = -1, msg = "该路径不允许上传文件。" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 切割单张图片
+        /// </summary>
+        /// <param name="pathName">图片路径名称</param>
+        /// <param name="imgName">图片名称</param>
+        /// <param name="imgWidth">图片宽度</param>
+        /// <param name="imgHeight">图片高度</param>
+        /// <param name="x">左上角切点x坐标</param>
+        /// <param name="y">左上角切点y坐标</param>
+        /// <param name="w">切割宽度</param>
+        /// <param name="h">切割高度</param>
+        public JsonResult SingleImageCrop(string pathName, string imgName,int imgWidth,int imgHeight,int x,int y,int w,int h)
+        {
+            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
+            if (System.IO.File.Exists(imgPath))
+            {
+                try
+                {
+                    using (Bitmap bitmap = new Bitmap(imgPath))
+                    {
+                        using (Image cutImg = ImageHandleHelper.CutPicByRect(bitmap.GetThumbnailImage(imgWidth, imgHeight, () => false, IntPtr.Zero), x, y, w, h))
+                        {
+                            return Json(new Result { code = 0, data = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}") }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    return Json(new Result { code = -1, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new Result { code = -1, msg = "图片不存在，切割失败！" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 显示上传的图片
+        /// <param name="pathName">图片路径名称</param>
+        /// <param name="imgName">图片名称</param>
+        /// </summary>
+        [OutputCache(Duration = int.MaxValue)]
+        public void ShowImage(string pathName,string imgName)
+        {
+            Response.ContentType = "image/jpeg";
+            string imgPath =$"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
+            if (System.IO.File.Exists(imgPath))
+            {
+                using (Stream stream = System.IO.File.OpenRead(imgPath))
+                {
+                    StreamHelper.CopyStream(stream, Response.OutputStream, false);
+                }
+            }
+            else
+            {
+                Response.StatusCode = 404;
+            }
+        }
+
+        /// <summary>
+        /// 加载地区选择json
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult AreaSelect()
+        {
+            List<AreaTree> areaTreeList = new List<AreaTree>();
+            AreaTree areaTree1 = new AreaTree
+            {
+                name = "天际省",
+                value = "1"
+            };
+            areaTreeList.Add(areaTree1);
+            AreaTree areaTree11 = new AreaTree
+            {
+                name= "测试区",
+                value="11"
+            };
+            areaTreeList.Add(areaTree11);
+            AreaTree areaTree2 = new AreaTree
+            {
+                name = "热河省",
+                value = "2"
+            };
+            areaTreeList.Add(areaTree2);
+            return Json(new Result { code = 0, data = areaTreeList }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

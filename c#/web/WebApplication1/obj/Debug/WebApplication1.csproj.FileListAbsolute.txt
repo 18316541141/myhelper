@@ -295,3 +295,4 @@ E:\git_projects\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Ide
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Google.Protobuf.dll

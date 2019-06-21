@@ -206,7 +206,7 @@ layuiForm.on('submit(LAY-user-login-submit)', function () {
 
 
 
-var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', function ($scope) {
+var myApp = angular.module('my-app', ['ngSanitize', 'ngAnimate']).controller('main-body', function ($scope) {
     $scope.menus = [];
     $scope.close = function (id) {
         var menus = $scope.menus;
@@ -237,8 +237,6 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
     $scope.refreshVercode = function () {
         $scope.rNum = Math.random();
     };
-}).directive("uploadImage", function () {
-    return { template: $('#uploadImageTemplate').html() };
 }).directive('onFinishRenderFilters', function ($timeout) {
     return {
         restrict: 'A',
@@ -250,13 +248,57 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
             }
         }
     };
+}).directive("areaSelect", function () {
+    return {
+        restrict: 'E',
+        template: $('#areaSelectTemplate').html(),
+        scope: { type: "@", deep: "@", required:"@" },
+        controller: function ($scope) {
+            $scope.ie8 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/8./i) == "8.";
+            $.myGet('/index/areaSelect', function (result) {
+                $scope.data = result.data;
+            });
+            $scope.changeProvice = function (e) {
+                $scope.provinceVal = $(e.target).val();
+                $scope.cities = [];
+                for (var i = 0, len = $scope.data.length;i<len ;i++) {
+                    if ($scope.data[i].parentValue == $scope.provinceVal) {
+                        $scope.cities[$scope.cities.length] = $scope.data[i];
+                    }
+                }
+                $scope.counties = [];
+                $scope.towns = [];
+                layuiForm.render('select');
+            }
+            $scope.changeCity = function (e) {
+                $scope.cityVal = $(e.target).val();
+                $scope.counties = [];
+                for (var i = 0, len = $scope.data.length; i < len ; i++) {
+                    if ($scope.data[i].parentValue == $scope.cityVal) {
+                        $scope.counties[$scope.counties.length] = $scope.data[i];
+                    }
+                }
+                $scope.towns = [];
+                layuiForm.render('select');
+            }
+            $scope.changeCountry = function (e) {
+                $scope.countryVal = $(e.target).val();
+                $scope.towns = [];
+                for (var i = 0, len = $scope.data.length; i < len ; i++) {
+                    if ($scope.data[i].parentValue == $scope.countryVal) {
+                        $scope.towns[$scope.towns.length] = $scope.data[i];
+                    }
+                }
+                layuiForm.render('select');
+            }
+        }
+    };
 }).directive("uploadImage", function () {
     return {
         restrict: 'E',
         template: $('#uploadImageTemplate').html(),
-        scope: { name: "@" },
+        scope: { name: "@",path:"@",cut:"@" },
         controller: function ($scope) {
-            debugger;
             $scope.isUploaded = false;
             var index;
             setTimeout(function () {
@@ -264,7 +306,11 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
                     swf: 'plugin/webuploader/Uploader.swf',
                     auto: true,
                     duplicate: true,
-                    server: '/index/uploadImage',
+                    server: '/index/uploadSingleImage',
+                    fileVal: 'fileUpload',
+                    formData:{
+                        pathName:$scope.path
+                    },
                     pick: { id: '#' + $scope.name + 'Id' }
                 });
                 uploader.on('startUpload', function () {
@@ -277,9 +323,42 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
                     $('#single-upload-progress>[lay-percent]').attr("lay-percent", (percentage * 100).toFixed(1) + '%');
                 });
                 uploader.on('uploadSuccess', function (file, response) {
+                    debugger;
+                    if ($scope.cut === 'true') {
+                        var cropIndex=layuiLayer.open({
+                            type: 1,
+                            area:['1000px','800px'],
+                            content: '<form id="' + $scope.name + '-crop-form">' +
+                                        '<div class="layui-form-item"><img id="' + $scope.name + '-crop" src="/index/showImage?pathName=' + $scope.path + '&imgName=' + response.data + '"/></div>' +
+                                        '<div class="layui-form-item"><div class="layui-input-block"><button id="' + $scope.name + '-crop-btn" class="layui-btn" type="button">裁剪</button></div></div>' +
+                                    '</form>'
+                        });
+                        var $corp=$('#' + $scope.name + '-crop');
+                        $corp.Jcrop({ allowSelect: false });
+                        $('#' + $scope.name + '-crop-btn').one(function () {
+                            var select=$corp.tellSelect();
+                            $.myPost('/index/singleImageCrop', { pathName: $scope.path, imgName: response.data, x: select.x, y: select.y, w: select.w, h: select.h }, function () {
+                                layer.close(cropIndex);
+                                $scope.$apply(function () {
+                                    $scope.isUploaded = true;
+                                    $scope.value = response.data;
+                                });
+                                $('#' + $scope.name + '-show-area').addClass('ani');
+                                setTimeout(function () {
+                                    $('#' + $scope.name + '-show-area').removeClass('ani');
+                                }, 280);
+                            });
+                        });
+                    }
                     layer.close(index);
-                    var data = response.data;
-                    $('#' + $scope.name).val(data.name);
+                    $scope.$apply(function () {
+                        $scope.isUploaded = true;
+                        $scope.value = response.data;
+                    });
+                    $('#' + $scope.name + '-show-area').addClass('ani');
+                    setTimeout(function () {
+                        $('#' + $scope.name + '-show-area').removeClass('ani');
+                    },280);
                 });
             }, 1);
         },

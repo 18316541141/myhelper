@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="plugin-animate/animate.css" media="all">
         <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all">
         <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all">
+        <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all">
         <style type="text/css">
             #login-page {
                 position: fixed;
@@ -26,10 +27,9 @@
                 background: #2F4056;
                 overflow: hidden;
             }
-
-                #login-page .layui-form-checkbox[lay-skin=primary] span {
-                    color: #fff;
-                }
+            #login-page .layui-form-checkbox[lay-skin=primary] span {
+                color: #fff;
+            }
             /* 屏幕外的密码 */
             #out-screen-password {
                 position: fixed;
@@ -93,6 +93,23 @@
                     animation-duration: .3s;
                     animation-timing-function: linear;
                 }
+                .show-image.ani{
+                    animation-name: flipInX;
+                    animation-duration: .8s;
+                    animation-timing-function: linear;
+                }
+                /*缩略图的外边框装饰样式*/
+                .thumbnail-img{
+	                box-sizing:border-box;
+	                border: 1px solid #ddd;
+	                padding:4px;
+	                border-radius: 4px;
+	                -webkit-transition:border-color .30s linear;
+	                -o-transition:border-color .30s linear;
+	                transition:border-color .30s linear;
+                }
+                .thumbnail-img:hover{border-color: #5FB878;}
+                .thumbnail-img:active{border-color: #009688;border-width:1.4px;}
         </style>
         <script type="text/template" id="singleUploadProgress">
             <div class="layui-progress" lay-showPercent="yes" id="single-upload-progress">
@@ -106,11 +123,11 @@
                     <div id="{{name+'Id'}}">选择图片</div>
                 </div>
             </div>
-            <div ng-show="isUploaded" class="layui-form-item">
+            <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name+'-show-area'}}">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-block">
                     <input type="hidden" name="{{name}}" id="{{name}}" value="{{value}}">
-                    <img src="" />
+                    <img src="/index/showImage?pathName={{path}}&imgName={{value}}" class="thumbnail-img"/>
                 </div>
             </div>
         </script>
@@ -120,6 +137,87 @@
                     <div id="tree-{{id}}" class="ztree layui-side-scroll"></div>
                 </div>
                 <div class="right-content" ng-transclude style="opacity:0;"></div>
+            </div>
+        </script>
+        <script type="text/template" id="pageTemplate">
+            <div id="page{{id}}"></div>
+        </script>
+        <script type="text/template" id="areaSelectTemplate">
+            <div ng-if="type=='line'">
+                <div class="layui-inline" ng-show="(deep>>0) == 1">
+                    <label class="layui-form-label" ng-show="ie8">请选择省</label>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-verify="required" ng-change="changeProvice($event)">
+                            <option value="">请选择省</option>
+                            <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline" ng-show="(deep>>1) == 1">
+                    <label class="layui-form-label" ng-show="ie8">请选择市</label>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-verify="required" ng-change="changeCity($event)">
+                            <option value="">请选择市</option>
+                            <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline" ng-show="(deep>>2) == 1">
+                    <label class="layui-form-label" ng-show="ie8">请选择区</label>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-verify="required" ng-change="changeCountry($event)">
+                            <option value="">请选择区</option>
+                            <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline" ng-show="(deep>>3) == 1">
+                    <label class="layui-form-label" ng-show="ie8">请选择镇</label>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-verify="required">
+                            <option value="">请选择镇</option>
+                            <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="type=='form'">
+                <div class="layui-form-item" ng-show="(deep>>0) == 1">
+                    <label class="layui-form-label">请选择省</label>
+                    <div class="layui-input-block">
+                        <select name="city" lay-verify="required" ng-change="changeProvice($event)">
+                            <option value="">请选择省</option>
+                            <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" ng-show="(deep>>1) == 1">
+                    <label class="layui-form-label">请选择市</label>
+                    <div class="layui-input-block">
+                        <select name="city" lay-verify="required" ng-change="changeCity($event)">
+                            <option value="">请选择市</option>
+                            <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" ng-show="(deep>>2) == 1">
+                    <label class="layui-form-label">请选择区</label>
+                    <div class="layui-input-block">
+                        <select name="city" lay-verify="required" ng-change="changeCountry($event)">
+                            <option value="">请选择区</option>
+                            <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" ng-show="(deep>>3) == 1">
+                    <label class="layui-form-label">请选择镇</label>
+                    <div class="layui-input-block">
+                        <select name="city" lay-verify="required">
+                            <option value="">请选择镇</option>
+                            <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </script>
         <script type="text/template" id="uploadFilesTemplate">
@@ -230,7 +328,7 @@
                         <li ng-repeat="x in menus" data-menu-id="{{x.id}}" on-finish-render-filters=""> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                     </ul>
                     <div class="layui-tab-content main-content">
-                        <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190620175038'"></div>
+                        <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190621142115'"></div>
                     </div>
                 </div>
             </div>
@@ -285,9 +383,11 @@
         <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script>
         <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
         <script src="angular-1.2.30/angular-sanitize.min.js"></script>
+        <script src="angular-1.2.30/angular-animate.min.js"></script>
         <script src="my-js/common-by-jquery.js" charset="utf-8"></script>
         <script src="my-js/common-by-layui.js" charset="utf-8"></script>
         <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
-        <script src="my-js/project.js?v=20190620175038" charset="utf-8"></script>
+        <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
+        <script src="my-js/project.js?v=20190621142115" charset="utf-8"></script>
     </body>
 </html>

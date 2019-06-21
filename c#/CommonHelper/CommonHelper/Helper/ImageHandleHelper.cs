@@ -42,6 +42,7 @@ namespace CommonHelper.Helper
             }
         }
 
+
         /// <summary>
         /// 按照切点进行切图，按行切割
         /// </summary>
@@ -138,6 +139,35 @@ namespace CommonHelper.Helper
             return cutRet;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="autoDispose"></param>
+        /// <returns></returns>
+        public static Bitmap CutPicByRect(Bitmap bitmap,int x,int y,int width,int height, bool autoDispose = true)
+        {
+            return CutPicByRect(bitmap,new Rectangle(x, y, width, height), autoDispose);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="autoDispose"></param>
+        /// <returns></returns>
+        public static Image CutPicByRect(Image image, int x, int y, int width, int height, bool autoDispose = true)
+        {
+            return CutPicByRect(image, new Rectangle(x, y, width, height), autoDispose);
+        }
 
         /// <summary>
         /// 根据矩形范围，截取部分图片

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 namespace CommonHelper.Helper
 {
@@ -36,17 +38,55 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 保存文件，并使用sha1给文件命名
+        /// 保存图片，并使用sha1给图片命名，最后返回图片的sha1，会释放图片
         /// </summary>
-        /// <param name="InputStream"></param>
-        /// <param name="BasePath"></param>
+        /// <param name="bitmap"></param>
+        /// <param name="basePath"></param>
         /// <returns></returns>
+        public static string SaveBitmapBySha1(Bitmap bitmap, string basePath)
+        {
+            Directory.CreateDirectory(basePath);
+            string guid = Guid.NewGuid().ToString();
+            using (bitmap)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    bitmap.Save(memoryStream, ImageFormat.Jpeg);
+                    return SaveFileNameBySha1(memoryStream, basePath);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 保存图片，并使用sha1给图片命名，最后返回图片的sha1，会释放图片
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="basePath"></param>
+        /// <returns></returns>
+        public static string SaveImageBySha1(Image image, string basePath)
+        {
+            using (Bitmap bitmap = new Bitmap(image))
+            {
+                return SaveBitmapBySha1(bitmap, basePath);
+            }
+        }
+
+        /// <summary>
+        /// 保存文件，并使用sha1给文件命名，最后返回文件的sha1，会关闭流
+        /// </summary>
+        /// <param name="inputStream">文件的输入流</param>
+        /// <param name="basePath">文件夹位置</param>
+        /// <returns>返回文件的sha1</returns>
         public static string SaveFileNameBySha1(Stream inputStream, string basePath)
         {
             Directory.CreateDirectory(basePath);
             string guid = Guid.NewGuid().ToString();
             StreamHelper.CopyStream(inputStream, File.OpenWrite(basePath + Path.DirectorySeparatorChar + guid));
-            string SHA1 = EncrypHelper.GetSha1FromStream(File.OpenRead(basePath + Path.DirectorySeparatorChar + guid));
+            string SHA1;
+            using (Stream guidStream= File.OpenRead(basePath + Path.DirectorySeparatorChar + guid))
+            {
+                SHA1 = EncrypHelper.GetSha1FromStream(guidStream);
+            }
             if (File.Exists(basePath + Path.DirectorySeparatorChar + SHA1))
                 File.Delete(basePath + Path.DirectorySeparatorChar + guid);
             else

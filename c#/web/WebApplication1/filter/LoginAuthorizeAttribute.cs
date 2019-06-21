@@ -20,6 +20,7 @@ namespace WebApplication1.filter
         /// <param name="filterContext">过滤器上下文</param>
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
+            var s=filterContext.HttpContext.Request.Url;
             object[] objs = filterContext.ActionDescriptor.GetCustomAttributes(false);
             bool OnlyLogin = true;
             foreach (object obj in objs)
