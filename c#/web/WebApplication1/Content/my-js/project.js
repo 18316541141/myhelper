@@ -237,6 +237,20 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ngAnimate']).controller('ma
     $scope.refreshVercode = function () {
         $scope.rNum = Math.random();
     };
+}).directive('bigImg', function () {
+    return {
+        restrict: 'E',
+        template: $('#bigImgTemplate').html(),
+        scope: { path: "@", bigPath: "@" },
+        controller: function ($scope) {
+            $scope.showBigImg = function (e) {
+                layuiLayer.open({
+                    type: 1,
+                    content: '<img src="' + $scope.bigPath + '" class="thumbnail-img"/>'
+                });
+            }
+        }
+    };
 }).directive('onFinishRenderFilters', function ($timeout) {
     return {
         restrict: 'A',
