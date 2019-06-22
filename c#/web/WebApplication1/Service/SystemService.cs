@@ -39,6 +39,15 @@ namespace WebApplication1.Service
                 url= "menus/testMenus1/uploadImage.html"
             };
             leftMenuList11.Add(leftMenu112);
+
+            LeftMenu leftMenu13 = new LeftMenu
+            {
+                id="m13",
+                title="测试1-3",
+                url = "menus/testMenus1/bigImg.html"
+            };
+            leftMenuList11.Add(leftMenu13);
+
             leftMenu1.leftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);
             LeftMenu leftMenu2 = new LeftMenu

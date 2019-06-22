@@ -206,7 +206,7 @@ layuiForm.on('submit(LAY-user-login-submit)', function () {
 
 
 
-var myApp = angular.module('my-app', ['ngSanitize', 'ngAnimate']).controller('main-body', function ($scope) {
+var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', function ($scope) {
     $scope.menus = [];
     $scope.close = function (id) {
         var menus = $scope.menus;
@@ -220,11 +220,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ngAnimate']).controller('ma
             menus[i - 1] = menus[i];
         }
         menus.length--;
+        setTimeout(function () {
+            layuiElement.render('tab', 'docDemoTabBrief');
+        },1);
     };
-    $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
-        var menus = $scope.menus;
-        $('[data-menu-id="' + menus[menus.length - 1].id + '"]:last').click();
-    });
 }).controller('login-form', function ($scope) {
     var username = $.cookie('username');
     var password = $.cookie('password');
@@ -246,7 +245,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ngAnimate']).controller('ma
             $scope.showBigImg = function (e) {
                 layuiLayer.open({
                     type: 1,
-                    content: '<img src="' + $scope.bigPath + '" class="thumbnail-img"/>'
+                    maxmin:true,
+                    title:'查看大图',
+                    area: [$(window).width()-100 + 'px', $(window).height()-100 + 'px'],
+                    content: '<div style="text-align:center;"><img src="' + $scope.bigPath + '" class="thumbnail-img"/></div>'
                 });
             }
         }
@@ -341,17 +343,19 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ngAnimate']).controller('ma
                     if ($scope.cut === 'true') {
                         var cropIndex=layuiLayer.open({
                             type: 1,
-                            area:['1000px','800px'],
+                            area: [$(window).width() - 100 + 'px', $(window).height() - 100 + 'px'],
                             content: '<form id="' + $scope.name + '-crop-form">' +
                                         '<div class="layui-form-item"><img id="' + $scope.name + '-crop" src="/index/showImage?pathName=' + $scope.path + '&imgName=' + response.data + '"/></div>' +
                                         '<div class="layui-form-item"><div class="layui-input-block"><button id="' + $scope.name + '-crop-btn" class="layui-btn" type="button">裁剪</button></div></div>' +
                                     '</form>'
                         });
                         var $corp=$('#' + $scope.name + '-crop');
-                        $corp.Jcrop({ allowSelect: false });
+                        $corp.Jcrop({ allowSelect: false }, function () {
+                            this.setSelect([0, 0, 200, 100]);
+                        });
                         $('#' + $scope.name + '-crop-btn').one(function () {
                             var select=$corp.tellSelect();
-                            $.myPost('/index/singleImageCrop', { pathName: $scope.path, imgName: response.data, x: select.x, y: select.y, w: select.w, h: select.h }, function () {
+                            $.myPost('/index/singleImageCrop', { pathName: $scope.path, imgName: response.data, imgWidth: select.x, imgHeight: select.y, x: select.x, y: select.y, w: select.w, h: select.h }, function () {
                                 layer.close(cropIndex);
                                 $scope.$apply(function () {
                                     $scope.isUploaded = true;

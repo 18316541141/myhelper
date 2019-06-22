@@ -3240,6 +3240,9 @@
     <Content Include="Content\Jcrop-master\package.json" />
     <Content Include="Content\Jcrop-master\README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\menus\testMenus1\bigImg.html" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
