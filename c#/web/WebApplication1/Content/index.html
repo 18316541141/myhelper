@@ -310,15 +310,15 @@
                     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                     <ul class="layui-nav layui-nav-tree" lay-filter="left-menus" ng-controller="left-menus">
                         <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0">
-                            <a href="javascript:;">{{x.title}}</a>
+                            <a href="javascript:;" ng-bind="x.title"></a>
                             <dl class="layui-nav-child">
                                 <dd ng-repeat="y in x.leftMenus">
-                                    <a href="javascript:void(0);" ng-click="openMenuPage(y.id,y.url,y.title)">{{y.title}}</a>
+                                    <a href="javascript:void(0);" ng-click="openMenuPage(y)" ng-bind="y.title"></a>
                                 </dd>
                             </dl>
                         </li>
                         <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0">
-                            <a href="javascript:;">{{x.title}}</a>
+                            <a href="javascript:;" ng-bind="x.title"></a>
                         </li>
                         <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
                     </ul>

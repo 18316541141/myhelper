@@ -120,19 +120,19 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">上传图片</label>
                 <div class="layui-input-block">
-                    <div id="{{name+'Id'}}">选择图片</div>
+                    <div id="{{name}}Id">选择图片</div>
                 </div>
             </div>
-            <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name+'-show-area'}}">
+            <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name}}-show-area">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-block">
                     <input type="hidden" name="{{name}}" id="{{name}}" value="{{value}}">
-                    <img src="/index/showImage?pathName={{path}}&imgName={{value}}" class="thumbnail-img"/>
+                    <img ng-src="{{'/index/showImage?pathName='+path+'&imgName='+value}}" class="thumbnail-img"/>
                 </div>
             </div>
         </script>
         <script type="text/template" id="bigImgTemplate">
-            <img src="{{path}}" class="thumbnail-img" ng-click="showBigImg($event);"/>
+            <img src="{{path}}" width="150" class="thumbnail-img" ng-click="showBigImg($event);"/>
         </script>
         <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
@@ -227,7 +227,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">上传文件</label>
                 <div class="layui-input-block">
-                    <div id="{{name+'Id'}}">选择文件</div>
+                    <div id="{{name}}Id">选择文件</div>
                 </div>
             </div>
             <div ng-show="isUploaded" class="layui-form-item">
@@ -328,10 +328,10 @@
                 <!-- 内容主体区域 -->
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                     <ul class="layui-tab-title">
-                        <li ng-repeat="x in menus" data-menu-id="{{x.id}}" on-finish-render-filters=""> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
+                        <li ng-repeat="x in menus track by x.id" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}"> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                     </ul>
                     <div class="layui-tab-content main-content">
-                        <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190621142115'"></div>
+                        <div ng-repeat="x in menus track by x.id" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190622095521'"></div>
                     </div>
                 </div>
             </div>
@@ -363,7 +363,7 @@
                                 </div>
                                 <div class="layui-col-xs5">
                                     <div style="margin-left: 10px;">
-                                        <img ng-click="refreshVercode()" src="/index/verificationCode?r={{rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode">
+                                        <img ng-click="refreshVercode()" ng-src="{{'/index/verificationCode?r='+rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode">
                                     </div>
                                 </div>
                             </div>
@@ -386,11 +386,10 @@
         <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script>
         <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
         <script src="angular-1.2.30/angular-sanitize.min.js"></script>
-        <script src="angular-1.2.30/angular-animate.min.js"></script>
         <script src="my-js/common-by-jquery.js" charset="utf-8"></script>
         <script src="my-js/common-by-layui.js" charset="utf-8"></script>
         <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
         <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
-        <script src="my-js/project.js?v=20190621142115" charset="utf-8"></script>
+        <script src="my-js/project.js?v=20190622095521" charset="utf-8"></script>
     </body>
 </html>

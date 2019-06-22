@@ -58,7 +58,7 @@ namespace CommonHelper.IpProxy
             return new JObject
             {
                 ["ProxyIp"] = textBuilder.ToString(),
-                ["LimitDate"] = DateTime.Now.AddMinutes(3).ToString("yyyy-MM-dd HH:mm:ss")
+                ["LimitDate"] = DateTime.Now.AddMinutes(2).ToString("yyyy-MM-dd HH:mm:ss")
             }.ToString();
         }
 
