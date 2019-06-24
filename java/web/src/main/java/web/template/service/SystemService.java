@@ -35,6 +35,13 @@ public class SystemService {
 			leftMenu112.setUrl("menus/testMenus1/uploadImage.html");			
 		}
 		leftMenuList11.add(leftMenu112);
+		
+		LeftMenu leftMenu113=new LeftMenu();
+		leftMenu113.setId("m13");
+		leftMenu113.setTitle("测试1-3");
+		leftMenu113.setUrl("menus/testMenus1/bigImg.html");
+		leftMenuList11.add(leftMenu113);
+		
 		leftMenu1.setLeftMenus(leftMenuList11);
 		leftMenuList.add(leftMenu1);
 		LeftMenu leftMenu2=new LeftMenu();

@@ -1,19 +1,24 @@
 <!doctype html>
-<html ng-app="app">
+<html>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="jquery-viewer-master/dist/viewer.css">
 	</head>
 	<body>
-		<div ng-controller="c1">
-			<div ng-bind-html="aaa"></div>
-		</div>
-		<script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
-		<script src="angular-1.2.30/angular-sanitize.min.js" charset="utf-8"></script>
+		<ul id="viewer">
+			<li><img src="images/256x256/accdb-256.png" data-original="images/256x256/accdb-256.png" alt="ͼƬ1"></li>
+			<li><img src="images/256x256/avi-256.png" data-original="images/256x256/avi-256.png" alt="ͼƬ2"></li>
+			<li><img src="images/256x256/bmp-256.png" data-original="images/256x256/bmp-256.png" alt="ͼƬ3"></li>
+			<li><img src="images/256x256/css-256.png" data-original="images/256x256/css-256.png" alt="ͼƬ4"></li>
+			<li><img src="images/256x256/docx-256.png" data-original="images/256x256/docx-256.png" alt="ͼƬ5"></li>
+			<li><img src="images/256x256/eml-256.png" data-original="images/256x256/eml-256.png" alt="ͼƬ6"></li>
+		</ul>
+		<script src="plugin/jquery.min.js" charset="utf-8"></script>
+		<script src="jquery-viewer-master/dist/jquery-viewer.min.js" charset="utf-8"></script>
 		<script type="text/javascript">
-			angular.module('app',['ngSanitize']).controller('c1',function($scope,$sce){
-				$scope.aaa=$sce.trustAsHtml('<iframe src="https://www.baidu.com/"/>');
-			});
+				$('#viewer').viewer({
+					url: 'data-original',
+				});
 		</script>
 	</body>
 </html>

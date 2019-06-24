@@ -2,6 +2,7 @@ package web.template.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,6 +88,29 @@ public class IndexController {
 			ImageIO.write(bufferedImage, "jpg", response.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 显示图片
+	 * @param pathName
+	 * @param imgName
+	 */
+	@RequestMapping("/showImage")
+	public Result showImage(String pathName,String imgName,HttpServletRequest request,HttpServletResponse response){
+		if(allowPath.contains(pathName)){
+			InputStream inputStream;
+			try {
+				inputStream = new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getInputStream();
+				response.addHeader("Cache-control","max-age="+Integer.MAX_VALUE);
+				response.setContentType("image/jpeg");
+				FileCopyUtils.copy(inputStream, response.getOutputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}else {
+			return new Result(-1, "该目录不允许查看", null);
 		}
 	}
 	

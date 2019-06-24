@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all">
         <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all">
         <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all">
+        <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all">
         <style type="text/css">
             #login-page {
                 position: fixed;
@@ -110,6 +111,15 @@
                 }
                 .thumbnail-img:hover{border-color: #5FB878;}
                 .thumbnail-img:active{border-color: #009688;border-width:1.4px;}
+                .viewer-container{
+                	background-color:rgba(47,64,86,.9);
+                }
+                .layui-header {
+    				z-index: 998;
+    			}
+    			.layui-side {
+    				z-index: 998;
+    			}
         </style>
         <script type="text/template" id="singleUploadProgress">
             <div class="layui-progress" lay-showPercent="yes" id="single-upload-progress">
@@ -130,9 +140,6 @@
                     <img ng-src="{{'/index/showImage?pathName='+path+'&imgName='+value}}" class="thumbnail-img"/>
                 </div>
             </div>
-        </script>
-        <script type="text/template" id="bigImgTemplate">
-            <img src="{{path}}" width="150" class="thumbnail-img" ng-click="showBigImg($event);"/>
         </script>
         <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
@@ -310,15 +317,15 @@
                     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                     <ul class="layui-nav layui-nav-tree" lay-filter="left-menus" ng-controller="left-menus">
                         <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0">
-                            <a href="javascript:;">{{x.title}}</a>
+                            <a href="javascript:;" ng-bind="x.title"></a>
                             <dl class="layui-nav-child">
                                 <dd ng-repeat="y in x.leftMenus">
-                                    <a href="javascript:void(0);" ng-click="openMenuPage(y.id,y.url,y.title)">{{y.title}}</a>
+                                    <a href="javascript:void(0);" ng-click="openMenuPage(y)" ng-bind="y.title"></a>
                                 </dd>
                             </dl>
                         </li>
                         <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0">
-                            <a href="javascript:;">{{x.title}}</a>
+                            <a href="javascript:;" ng-bind="x.title"></a>
                         </li>
                         <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
                     </ul>
@@ -390,6 +397,7 @@
         <script src="my-js/common-by-layui.js" charset="utf-8"></script>
         <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
         <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
+        <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script>
         <script src="my-js/project.js?v=20190622095521" charset="utf-8"></script>
     </body>
 </html>

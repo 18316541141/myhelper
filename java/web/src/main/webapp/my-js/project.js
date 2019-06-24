@@ -236,23 +236,6 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
     $scope.refreshVercode = function () {
         $scope.rNum = Math.random();
     };
-}).directive('bigImg', function () {
-    return {
-        restrict: 'E',
-        template: $('#bigImgTemplate').html(),
-        scope: { path: "@", bigPath: "@" },
-        controller: function ($scope) {
-            $scope.showBigImg = function (e) {
-                layuiLayer.open({
-                    type: 1,
-                    maxmin:true,
-                    title:'查看大图',
-                    area: [$(window).width()-100 + 'px', $(window).height()-100 + 'px'],
-                    content: '<div style="text-align:center;"><img src="' + $scope.bigPath + '" class="thumbnail-img"/></div>'
-                });
-            }
-        }
-    };
 }).directive('onFinishRenderFilters', function ($timeout) {
     return {
         restrict: 'A',
@@ -461,23 +444,23 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
     /**
 	 * 打开指定菜单页
 	 */
-    $scope.openMenuPage = function (id, url, title) {
+    $scope.openMenuPage = function (y) {
         var $scope = $('[ng-controller="main-body"]').scope();
         var menus = $scope.menus;
         var exist = false;
         for (var i = 0, len = menus.length; i < len; i++) {
-            if (menus[i].id == id) {
+            if (menus[i].id == y.id) {
                 exist = true;
                 break;
             }
         }
         if (exist) {
-            $('[data-menu-id="' + id + '"]').click();
+            $('[data-menu-id="' + y.id + '"]').click();
         } else {
             $scope.menus[$scope.menus.length] = {
-                title: title,
-                url: url,
-                id: id
+                title: y.title,
+                url: y.url,
+                id: y.id
             };
         }
     };
@@ -522,4 +505,11 @@ myApp.controller('testTreeForm', function ($scope) {
 });
 myApp.controller("upload-image", function ($scope) {
     
+});
+myApp.controller('big-img-ctrl',function($scope,$timeout){
+	$timeout(function(){
+		$('.xxx-table').viewer({
+			url: 'data-original',
+		});
+	});
 });
