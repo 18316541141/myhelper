@@ -342,6 +342,7 @@
     <Content Include="Content\menus\testMenus1\treeForm.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
     <Content Include="Content\plugin-animate\animate.css" />
+    <Content Include="Content\plugin\ng-layer.js" />
     <Content Include="Content\plugin\webuploader\webuploader.css" />
     <Content Include="Content\zTree_v3-master\.gitattributes" />
     <Content Include="Content\zTree_v3-master\.gitignore" />

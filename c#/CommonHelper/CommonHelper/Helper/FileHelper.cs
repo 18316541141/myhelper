@@ -49,10 +49,13 @@ namespace CommonHelper.Helper
             string guid = Guid.NewGuid().ToString();
             using (bitmap)
             {
-                using (MemoryStream memoryStream = new MemoryStream())
+                using (MemoryStream outputStream = new MemoryStream())
                 {
-                    bitmap.Save(memoryStream, ImageFormat.Jpeg);
-                    return SaveFileNameBySha1(memoryStream, basePath);
+                    bitmap.Save(outputStream, ImageFormat.Jpeg);
+                    using (MemoryStream inputStream = new MemoryStream(outputStream.ToArray()))
+                    {
+                        return SaveFileNameBySha1(inputStream, basePath);
+                    }
                 }
             }
         }
