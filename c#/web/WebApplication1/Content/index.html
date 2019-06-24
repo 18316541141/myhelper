@@ -110,10 +110,44 @@
                 }
                 .thumbnail-img:hover{border-color: #5FB878;}
                 .thumbnail-img:active{border-color: #009688;border-width:1.4px;}
+                .layer-body{
+                    position: absolute;
+                    top:43px;
+                    left: 0;
+                    bottom: 50px;
+                    right:0;
+                    overflow:auto;
+                    padding:5px 5px 0;
+                }
+                .layer-foot{
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    height: 50px;
+                    padding: 6px 15px;
+                    background-color: #eee;
+                    width:100%;
+                    box-sizing:border-box;
+                }
+                .layer-foot>.layui-inline{
+                    float:right;
+                }
         </style>
         <script type="text/template" id="singleUploadProgress">
             <div class="layui-progress" lay-showPercent="yes" id="single-upload-progress">
                 <div class="layui-progress-bar layui-bg-red" lay-percent=""></div>
+            </div>
+        </script>
+        <script type="text/template" id="cropTemplate">
+            <div class="layer-body">
+                <form id="{{name}}-crop-form" class="layui-form">
+                    <div class="layui-form-item"><img style="max-width:100%;" id="{{name}}-crop" /></div>
+                </form>
+            </div>
+            <div class="layer-foot">
+                <div class="layui-inline">
+                    <div class="layui-input-inline"><button id="{{name}}-crop-btn" class="layui-btn" type="button" ng-click="crop()">裁剪</button></div>
+                </div>
             </div>
         </script>
         <script type="text/template" id="uploadImageTemplate">
@@ -126,8 +160,8 @@
             <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name}}-show-area">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-block">
-                    <input type="hidden" name="{{name}}" id="{{name}}" value="{{value}}">
-                    <img ng-src="{{'/index/showImage?pathName='+path+'&imgName='+value}}" class="thumbnail-img"/>
+                    <input type="hidden" name="{{name}}" id="{{name}}" value="{{imgName}}">
+                    <img style="max-width:100%;" ng-src="{{'/index/showImage?pathName='+path+'&imgName='+imgName}}" class="thumbnail-img"/>
                 </div>
             </div>
         </script>
@@ -331,7 +365,7 @@
                         <li ng-repeat="x in menus track by x.id" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}"> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                     </ul>
                     <div class="layui-tab-content main-content">
-                        <div ng-repeat="x in menus track by x.id" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190622095521'"></div>
+                        <div ng-repeat="x in menus track by x.id" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190624123304'"></div>
                     </div>
                 </div>
             </div>
@@ -389,7 +423,8 @@
         <script src="my-js/common-by-jquery.js" charset="utf-8"></script>
         <script src="my-js/common-by-layui.js" charset="utf-8"></script>
         <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
+        <script src="plugin/ng-layer.js" charset="utf-8"></script>
         <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
-        <script src="my-js/project.js?v=20190622095521" charset="utf-8"></script>
+        <script src="my-js/project.js?v=20190624123304" charset="utf-8"></script>
     </body>
 </html>

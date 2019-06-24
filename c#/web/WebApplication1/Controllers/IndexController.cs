@@ -119,7 +119,11 @@ namespace WebApplication1.Controllers
             {
                 try
                 {
-                    return Json(new Result { code= 0, data= FileHelper.SaveFileNameBySha1(fileUpload.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}") }, JsonRequestBehavior.AllowGet);
+                    string imgName=FileHelper.SaveFileNameBySha1(fileUpload.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+                    using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}"))
+                    {
+                        return Json(new Result { code = 0, data = new { imgName=imgName, imgWidth = img.Width, imgHeight = img.Height} }, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 catch(Exception ex)
                 {
