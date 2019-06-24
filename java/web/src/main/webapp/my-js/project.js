@@ -461,23 +461,23 @@ var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', fun
     /**
 	 * 打开指定菜单页
 	 */
-    $scope.openMenuPage = function (id, url, title) {
+    $scope.openMenuPage = function (y) {
         var $scope = $('[ng-controller="main-body"]').scope();
         var menus = $scope.menus;
         var exist = false;
         for (var i = 0, len = menus.length; i < len; i++) {
-            if (menus[i].id == id) {
+            if (menus[i].id == y.id) {
                 exist = true;
                 break;
             }
         }
         if (exist) {
-            $('[data-menu-id="' + id + '"]').click();
+            $('[data-menu-id="' + y.id + '"]').click();
         } else {
             $scope.menus[$scope.menus.length] = {
-                title: title,
-                url: url,
-                id: id
+                title: y.title,
+                url: y.url,
+                id: y.id
             };
         }
     };
