@@ -305,7 +305,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                         $scope.data.vercode = '';
                     });
                 } else if (result.code == 0) {
-                    $scope = $('[ng-controller="left-menus"]').scope();
+                    $scope = $('[ng-controller="main-body"]').scope();
                     $scope.$apply(function () {
                         $scope.leftMenus = result.data.leftMenus;
                     });

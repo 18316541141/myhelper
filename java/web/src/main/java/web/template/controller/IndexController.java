@@ -1,18 +1,20 @@
 package web.template.controller;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -115,6 +117,33 @@ public class IndexController {
 	}
 	
 	/**
+	 * 切割单张图片
+	 * @param pathName	图片路径名称
+	 * @param imgName	图片名称
+	 * @param imgWidth	图片宽度
+	 * @param imgHeight	图片高度
+	 * @param x	左上角切点x坐标
+	 * @param y	左上角切点y坐标
+	 * @param w	切割宽度
+	 * @param h	切割高度
+	 * @return	返回切割结果
+	 */
+	@RequestMapping("/singleImageCrop")
+	public Result singleImageCrop(String pathName, String imgName,int imgWidth,int imgHeight,int x,int y,int w,int h,HttpServletRequest request){
+		try {
+			File file=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFile();
+			if(file.exists()){
+				
+			}else{
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * 上次单张图片
 	 * @param fileUpload	上传图片
 	 * @param request	请求对象
@@ -126,8 +155,13 @@ public class IndexController {
 		if(allowPath.contains(pathName)){			
 			try {
 				File target=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
-				FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
-				return null;
+				String sha1=FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
+				Image image=ImageIO.read(new File(target.getAbsoluteFile()+File.separator+sha1));
+				Map<String, Object> dataMap=new HashMap<>();
+				dataMap.put("imgName", sha1);
+				dataMap.put("imgWidth", image.getWidth(null));
+				dataMap.put("imgHeight", image.getHeight(null));
+				return new Result(0, null, dataMap);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
