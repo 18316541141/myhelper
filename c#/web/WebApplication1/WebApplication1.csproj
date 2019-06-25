@@ -339,6 +339,7 @@
     <Content Include="Content\layui\images\face\8.gif" />
     <Content Include="Content\layui\images\face\9.gif" />
     <Content Include="Content\menus\testMenus1\areaSelect.html" />
+    <Content Include="Content\menus\testMenus1\bigImg.html" />
     <Content Include="Content\menus\testMenus1\treeForm.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
     <Content Include="Content\plugin-animate\animate.css" />
@@ -3240,9 +3241,6 @@
     <Content Include="Content\Jcrop-master\docs\vue\README.md" />
     <Content Include="Content\Jcrop-master\package.json" />
     <Content Include="Content\Jcrop-master\README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\menus\testMenus1\bigImg.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

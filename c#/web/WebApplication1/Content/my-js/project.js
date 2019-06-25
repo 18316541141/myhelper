@@ -206,7 +206,7 @@ layuiForm.on('submit(LAY-user-login-submit)', function () {
 
 
 
-var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope) {
+var myApp = angular.module('my-app', ['ngSanitize']).controller('main-body', function ($scope) {
     $scope.menus = [];
     $scope.close = function (id) {
         var menus = $scope.menus;
@@ -224,56 +224,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             layuiElement.render('tab', 'docDemoTabBrief');
         },1);
     };
-}).factory('$myHttp', function ($http) {
-    var myCallback = function (callback) {
-        var index = layuiLayer.load(0);
-        return function (response, status, headers, config) {
-            layuiLayer.close(index);
-            //登录超时，退出登录
-            if (response.code === -10) {
-                logoutCallback();
-            }
-                //用户无权限，无法操作，但需要后续处理
-            else if (response.code === -9) {
-                layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
-                callback(response, status, headers, config);
-            }
-                //用户无权限，无法操作
-            else if (response.code === -8) {
-                layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
-            }
-                //常规错误，
-            else if (response.code === -1) {
-                layuiLayer.msg(response.msg, { icon: 5, anim: 6 });
-                callback(response, status, headers, config);
-            }
-                //成功
-            else if (response.code === 0) {
-                if (response.msg != null && response.msg != '') {
-                    layuiLayer.msg(response.msg, { icon: 1 });
-                }
-                callback(response, status, headers, config);
-            }
-            callback = null;
-        }
-    };
-    return {
-        get: function (url, params) {
-            params['v'] = Math.random();
-            var ret = $http({ method: 'GET', params: params, url: url });
-            ret.mySuccess = function (callback) {
-                ret.success(myCallback(callback));
-            };
-            return ret;
-        },
-        post: function (url, data) {
-            var ret = $http({ method: 'POST', url: url, params: { v: Math.random() }, data: data });
-            ret.mySuccess = function (callback) {
-                ret.success(myCallback(callback));
-            };
-            return ret;
-        },
-    };
 }).controller('login-form', function ($scope) {
     var username = $.cookie('username');
     var password = $.cookie('password');
@@ -285,23 +235,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     };
     $scope.refreshVercode = function () {
         $scope.rNum = Math.random();
-    };
-}).directive('bigImg', function () {
-    return {
-        restrict: 'E',
-        template: $('#bigImgTemplate').html(),
-        scope: { path: "@", bigPath: "@" },
-        controller: function ($scope) {
-            $scope.showBigImg = function (e) {
-                layuiLayer.open({
-                    type: 1,
-                    maxmin:true,
-                    title:'查看大图',
-                    area: [$(window).width()-100 + 'px', $(window).height()-100 + 'px'],
-                    content: '<div style="text-align:center;"><img src="' + $scope.bigPath + '" class="thumbnail-img"/></div>'
-                });
-            }
-        }
     };
 }).directive('onFinishRenderFilters', function ($timeout) {
     return {
@@ -319,9 +252,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         restrict: 'E',
         template: $('#areaSelectTemplate').html(),
         scope: { type: "@", deep: "@", required:"@" },
-        controller: function ($scope, $myHttp) {
+        controller: function ($scope) {
             $scope.ie8 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/8./i) == "8.";
-            $myHttp.get('/index/areaSelect').mySuccess(function (result) {
+            $.myGet('/index/areaSelect', function (result) {
                 $scope.data = result.data;
             });
             $scope.changeProvice = function (e) {
@@ -364,29 +297,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         restrict: 'E',
         template: $('#uploadImageTemplate').html(),
         scope: { name: "@",path:"@",cut:"@" },
-        controller: function ($scope, layer, $timeout, $myHttp) {
+        controller: function ($scope) {
             $scope.isUploaded = false;
-            $scope.crop = function () {
-                var select = $scope.jcropApi.tellSelect();
-                var $img = $scope.$img;
-                $myHttp.post('/index/singleImageCrop',{
-                    pathName: $scope.path, 
-                    imgName: $scope.imgName,
-                    imgWidth: $img.width(), 
-                    imgHeight: $img.height(), 
-                    x: select.x, 
-                    y: select.y, 
-                    w: select.w, 
-                    h: select.h 
-                }).mySuccess(function (response) {
-                    layer.close($scope.cropLayer);
-                    $scope.cropLayer = null;
-                    $scope.imgName = response.data;
-                });
-            };
-            $timeout(function () {
-                var index;
-                $scope.uploader = new WebUploader.Uploader({
+            var index;
+            setTimeout(function () {
+                var uploader = new WebUploader.Uploader({
                     swf: 'plugin/webuploader/Uploader.swf',
                     auto: true,
                     duplicate: true,
@@ -396,55 +311,60 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                         pathName:$scope.path
                     },
                     pick: { id: '#' + $scope.name + 'Id' }
-                }).on('startUpload', function () {
+                });
+                uploader.on('startUpload', function () {
                     index = layuiLayer.open({
                         type: 1,
                         content: $('#singleUploadProgress').html()
                     });
-                }).on('uploadProgress', function (file, percentage) {
+                });
+                uploader.on('uploadProgress', function (file, percentage) {
                     $('#single-upload-progress>[lay-percent]').attr("lay-percent", (percentage * 100).toFixed(1) + '%');
-                }).on('uploadSuccess', function (file, response) {
-                    var data = response.data;
-                    $scope.imgName = data.imgName;
-                    layer.close(index);
+                });
+                uploader.on('uploadSuccess', function (file, response) {
+                    debugger;
                     if ($scope.cut === 'true') {
-                        $scope.cropLayer = layer.open({
+                        var cropIndex=layuiLayer.open({
                             type: 1,
-                            area: areaAnalysis(data.imgWidth, data.imgHeight),
-                            content: $('#cropTemplate').html(),
-                            scope: $scope,
-                            title: '裁剪图片',
-                            cancel: function () {
-                                $scope.crop();
-                            },
-                            compileFinish: function () {
-                                var wait=layuiLayer.load(0);
-                                $scope.$img = $('#' + $scope.name + '-crop').attr('src', '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName).on('load', function () {
-                                    layuiLayer.close(wait);
-                                    $(this).Jcrop({ allowSelect: false }, function () {
-                                        this.setSelect([0, 0, 250, 300]);
-                                        $scope.jcropApi = this
-                                    });
+                            area: [$(window).width() - 100 + 'px', $(window).height() - 100 + 'px'],
+                            content: '<form id="' + $scope.name + '-crop-form">' +
+                                        '<div class="layui-form-item"><img id="' + $scope.name + '-crop" src="/index/showImage?pathName=' + $scope.path + '&imgName=' + response.data + '"/></div>' +
+                                        '<div class="layui-form-item"><div class="layui-input-block"><button id="' + $scope.name + '-crop-btn" class="layui-btn" type="button">裁剪</button></div></div>' +
+                                    '</form>'
+                        });
+                        var $corp=$('#' + $scope.name + '-crop');
+                        $corp.Jcrop({ allowSelect: false }, function () {
+                            this.setSelect([0, 0, 200, 100]);
+                        });
+                        $('#' + $scope.name + '-crop-btn').one(function () {
+                            var select=$corp.tellSelect();
+                            $.myPost('/index/singleImageCrop', { pathName: $scope.path, imgName: response.data, imgWidth: select.x, imgHeight: select.y, x: select.x, y: select.y, w: select.w, h: select.h }, function () {
+                                layer.close(cropIndex);
+                                $scope.$apply(function () {
+                                    $scope.isUploaded = true;
+                                    $scope.value = response.data;
                                 });
-                            }
+                                $('#' + $scope.name + '-show-area').addClass('ani');
+                                setTimeout(function () {
+                                    $('#' + $scope.name + '-show-area').removeClass('ani');
+                                }, 280);
+                            });
                         });
                     }
+                    layer.close(index);
                     $scope.$apply(function () {
                         $scope.isUploaded = true;
+                        $scope.value = response.data;
                     });
                     $('#' + $scope.name + '-show-area').addClass('ani');
-                    $timeout(function () {
+                    setTimeout(function () {
                         $('#' + $scope.name + '-show-area').removeClass('ani');
                     },280);
                 });
-            });
-        }
+            }, 1);
+        },
     };
 }).directive('treeForm', function () {
-    /**
-     * 注册树表单标签。
-     * 通过<tree-form> ...表单元素... </tree-form>快速构建树表单标签。
-     */
     return {
         restrict: 'E',
         template: $('#treeFormTemplate').html(),
@@ -546,35 +466,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     };
 });
 
-/**
- * 区域分析，用于解析使用多大的区域去装载物体
- * @param width   装载物宽度
- * @param height  装载物高度
- */
-function areaAnalysis(width, height) {
-    var maxWidth = window.screen.width - 100;
-    var maxHeight = window.screen.height - 200;
-    var minWidth = 400;
-    var minHeight = 400;
-    var finalWidth;
-    if(width > maxWidth){
-        finalWidth = maxWidth;
-    }else if(width < minWidth){
-        finalWidth = minWidth;
-    }else{
-        finalWidth = width;
-    }
-    var finalHeight;
-    if (height > maxHeight) {
-        finalHeight = maxHeight;
-    }else if(height < minHeight){
-        finalHeight = minHeight
-    } else {
-        finalHeight = height;
-    }
-    return [finalWidth + 'px', finalHeight + 'px'];
-}
-
 //加载左侧菜单
 $.myGet('/index/loadLeftMenus', function (result) {
     var $scope = $('[ng-controller="left-menus"]').scope();
@@ -614,4 +505,11 @@ myApp.controller('testTreeForm', function ($scope) {
 });
 myApp.controller("upload-image", function ($scope) {
     
+});
+myApp.controller('big-img-ctrl',function($scope,$timeout){
+	$timeout(function(){
+		$('.xxx-table').viewer({
+			url: 'data-original',
+		});
+	});
 });

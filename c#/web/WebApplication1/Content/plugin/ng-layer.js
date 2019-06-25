@@ -42,11 +42,9 @@
                 var $el         = $('#layui-layer' + oldOpen);
                 var $content    = $el.find('.layui-layer-content');
                 var injectScope = deliver.scope || $rootScope.$new();
-                $content.replaceWith($compile($.trim($content[0].innerHTML))(injectScope));
+                $content.replaceWith($compile($content[0].innerHTML)(injectScope));
+
                 $timeout(function () {
-                    if ($.type(deliver.compileFinish) === 'function') {
-                        deliver.compileFinish();
-                    }
                     $(window).resize();
                 });
 
