@@ -340,6 +340,7 @@
     <Content Include="Content\layui\images\face\9.gif" />
     <Content Include="Content\menus\testMenus1\areaSelect.html" />
     <Content Include="Content\menus\testMenus1\treeForm.html" />
+    <Content Include="Content\menus\testMenus1\uploadFiles.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
     <Content Include="Content\plugin-animate\animate.css" />
     <Content Include="Content\plugin\ng-layer.js" />

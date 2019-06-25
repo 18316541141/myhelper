@@ -48,6 +48,14 @@ namespace WebApplication1.Service
             };
             leftMenuList11.Add(leftMenu13);
 
+            LeftMenu leftMenu14 = new LeftMenu
+            {
+                id = "m14",
+                title = "测试1-4",
+                url = "menus/testMenus1/uploadFiles.html"
+            };
+            leftMenuList11.Add(leftMenu14);
+
             leftMenu1.leftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);
             LeftMenu leftMenu2 = new LeftMenu

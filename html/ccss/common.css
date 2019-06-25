@@ -1,5 +1,10 @@
 /*宽度刚好的列，用于表格的列*/
-.auto-col-width{width:1%;white-space:nowrap;}
+.auto-col-width{
+	width:1%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
 /*把一个元素移动到很远的地方，使得该元素无法看见*/
 .out-of-main{
 	position:absolute;

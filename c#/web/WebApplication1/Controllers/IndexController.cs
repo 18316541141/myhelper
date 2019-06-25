@@ -142,25 +142,38 @@ namespace WebApplication1.Controllers
         /// <param name="fileUploads"></param>
         /// <param name="pathName"></param>
         /// <returns></returns>
-        public JsonResult UploadFiles(HttpPostedFileBase[] fileUploads, string pathName)
+        public JsonResult UploadFiles(HttpPostedFileBase fileUploads, string pathName)
         {
             if (_allowPath.Contains(pathName))
             {
-                string filePath = $"{Server.MapPath("~/uploadFiles/")}{pathName}";
-                List<UploadFilesResult> uploadFilesResultList=new List<UploadFilesResult>();
-                foreach (HttpPostedFileBase fileUpload in fileUploads)
-                {
-                    uploadFilesResultList.Add(new UploadFilesResult
-                    {
-                        sha1 = FileHelper.SaveFileNameBySha1(fileUpload.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
-                        extension = Path.GetExtension(fileUpload.FileName)
-                    });
-                }
-                return Json(new Result { code = 0, data = uploadFilesResultList }, JsonRequestBehavior.AllowGet);
+                return Json(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}") }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 return Json(new Result { code = -1, msg = "该路径不允许上传文件。" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 删除指定文件名称的文件
+        /// </summary>
+        /// <param name="fileName">文件名称</param>
+        /// <param name="pathName">文件路径</param>
+        /// <returns></returns>
+        public JsonResult DelFiles(string fileName,string pathName)
+        {
+            if (_allowPath.Contains(pathName))
+            {
+                string fullFileName=$"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{fileName}";
+                if (System.IO.File.Exists(fullFileName))
+                {
+                    System.IO.File.Delete(fullFileName);
+                }
+                return Json(new Result { code = 0 }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new Result { code = -1, msg = "该路径不允许删除文件。" }, JsonRequestBehavior.AllowGet);
             }
         }
 

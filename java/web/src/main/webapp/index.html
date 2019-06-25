@@ -54,7 +54,7 @@
                 bottom: 0;
                 right: 0;
                 left: 0;
-                top: 41px;
+                top: 50px;
                 overflow: auto;
             }
 
@@ -67,87 +67,92 @@
                 width: 100%;
             }
 
-                .tree-container > .left-tree {
-                    float: left;
-                    width: 200px;
-                    border: 1px solid #ddd;
-                    overflow: hidden;
-                    padding-bottom: 10px;
-                    box-sizing: border-box;
-                }
-                .tree-container > .left-tree.ani{
-                    animation-name: fadeInLeft;
-                    animation-duration: .3s;
-                    animation-timing-function: linear;
-                }
+            .tree-container > .left-tree {
+                float: left;
+                width: 200px;
+                border: 1px solid #ddd;
+                overflow: hidden;
+                padding-bottom: 10px;
+                box-sizing: border-box;
+            }
+            .tree-container > .left-tree.ani{
+                animation-name: fadeInLeft;
+                animation-duration: .3s;
+                animation-timing-function: linear;
+            }
 
-                .tree-container > .right-content {
-                    float: left;
-                }
-                .tree-container > .right-content.ani{
-                    animation-name: fadeInRight;
-                    animation-duration: .3s;
-                    animation-timing-function: linear;
-                }
-                .layui-layout-body{
-                    animation-name: fadeIn;
-                    animation-duration: .3s;
-                    animation-timing-function: linear;
-                }
-                .show-image.ani{
-                    animation-name: flipInX;
-                    animation-duration: .8s;
-                    animation-timing-function: linear;
-                }
-                /*缩略图的外边框装饰样式*/
-                .thumbnail-img{
-	                box-sizing:border-box;
-	                border: 1px solid #ddd;
-	                padding:4px;
-	                border-radius: 4px;
-	                -webkit-transition:border-color .30s linear;
-	                -o-transition:border-color .30s linear;
-	                transition:border-color .30s linear;
-                }
-                .thumbnail-img:hover{border-color: #5FB878;}
-                .thumbnail-img:active{border-color: #009688;border-width:1.4px;}
-                .layer-body{
-                    position: absolute;
-                    top:43px;
-                    left: 0;
-                    bottom: 50px;
-                    right:0;
-                    overflow:auto;
-                    padding:5px 5px 0;
-                }
-                .layer-foot{
-                    position: absolute;
-                    left: 0;
-                    bottom: 0;
-                    height: 50px;
-                    padding: 6px 15px;
-                    background-color: #eee;
-                    width:100%;
-                    box-sizing:border-box;
-                }
-                .layer-foot>.layui-inline{
-                    float:right;
-                }
-				.viewer-container{
-                	background-color:rgba(47,64,86,.9);
-                }
-                .layui-header {
-    				z-index: 998;
-    			}
-    			.layui-side {
-    				z-index: 998;
-    			}
+            .tree-container > .right-content {
+                float: left;
+            }
+            .tree-container > .right-content.ani{
+                animation-name: fadeInRight;
+                animation-duration: .3s;
+                animation-timing-function: linear;
+            }
+            .layui-layout-body{
+                animation-name: fadeIn;
+                animation-duration: .3s;
+                animation-timing-function: linear;
+            }
+            .show-image.ani{
+                animation-name: flipInX;
+                animation-duration: .8s;
+                animation-timing-function: linear;
+            }
+            /*缩略图的外边框装饰样式*/
+            .thumbnail-img{
+	            box-sizing:border-box;
+	            border: 1px solid #ddd;
+	            padding:4px;
+	            border-radius: 4px;
+	            -webkit-transition:border-color .30s linear;
+	            -o-transition:border-color .30s linear;
+	            transition:border-color .30s linear;
+            }
+            .thumbnail-img:hover{border-color: #5FB878;}
+            .thumbnail-img:active{border-color: #009688;border-width:1.4px;}
+            .layer-body{
+                position: absolute;
+                top:43px;
+                left: 0;
+                bottom: 50px;
+                right:0;
+                overflow:auto;
+                padding:5px 5px 0;
+            }
+            .layer-foot{
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 50px;
+                padding: 6px 15px;
+                background-color: #eee;
+                width:100%;
+                box-sizing:border-box;
+            }
+            .layer-foot>.layui-inline{
+                float:right;
+            }
+			.viewer-container{
+                background-color:rgba(47,64,86,.9);
+            }
+            .layui-header {
+    			z-index: 998;
+    		}
+    		.layui-side {
+    			z-index: 998;
+    		}
+            .auto-col-width{
+                width:1%;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+            }
+            .layui-layer-content{
+                white-space:pre-wrap;
+                word-wrap:break-word;
+            }
         </style>
-        <script type="text/template" id="singleUploadProgress">
-            <div class="layui-progress" lay-showPercent="yes" id="single-upload-progress">
-                <div class="layui-progress-bar layui-bg-red" lay-percent=""></div>
-            </div>
-        </script>
         <script type="text/template" id="cropTemplate">
             <div class="layer-body">
                 <form id="{{name}}-crop-form" class="layui-form">
@@ -168,15 +173,20 @@
                 </div>
             </div>
             <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name}}-show-area">
-                <label class="layui-form-label"></label>
+                <label class="layui-form-label">预览</label>
                 <div class="layui-input-block">
                     <input type="hidden" name="{{name}}" id="{{name}}" value="{{imgName}}">
                     <img style="max-width:100%;" ng-src="{{'/index/showImage?pathName='+path+'&imgName='+imgName}}" class="thumbnail-img"/>
                 </div>
             </div>
-        </script>
-        <script type="text/template" id="bigImgTemplate">
-            <img src="{{path}}" width="150" class="thumbnail-img" ng-click="showBigImg($event);"/>
+            <div ng-show="showProgress">
+                <label class="layui-form-label">进度</label>
+                <div class="layui-input-block">
+                    <div class="layui-progress" lay-showPercent="yes" style="top:16px;">
+                        <div class="layui-progress-bar layui-bg-green" lay-percent="{{percentage}}%"></div>
+                    </div>
+                </div>
+            </div>
         </script>
         <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
@@ -274,30 +284,33 @@
                     <div id="{{name}}Id">选择文件</div>
                 </div>
             </div>
-            <div ng-show="isUploaded" class="layui-form-item">
-                <table class="layui-table">
+            <div ng-show="files.length>0" class="layui-form-item">
+                <table class="layui-table" lay-skin="line" lay-size="sm">
                     <thead>
                         <tr>
                             <th>类型</th>
                             <th>文件名称</th>
                             <th>进度</th>
+                            <th>状态</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="x in files">
-                            <td class=""><img src="images/256x256/{{x.typeImg}}"></td>
-                            <td>
-                                {{x.fileName}}
-                                <input type="hidden" ng-bind="x.path" />
+                            <td class="auto-col-width"><img width="36px" ng-src="{{x.typeImg}}"></td>
+                            <td class="auto-col-width" style="max-width:{{fileDescMaxWidth}}px;" ng-mouseover="showTip($event,x.fileDesc)" ng-mouseleave="hideTip();">
+                                {{x.fileDesc}}
                             </td>
                             <td>
-                                <div class="layui-progress" lay-showPercent="yes" id="single-upload-progress">
-                                    <div class="layui-progress-bar layui-bg-red" lay-percent="{{x.progress}}%"></div>
+                                <div class="layui-progress" lay-showPercent="yes">
+                                    <div class="layui-progress-bar layui-bg-green" lay-percent="{{x.progress}}%"></div>
                                 </div>
                             </td>
-                            <td>
-                                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
+                            <td class="auto-col-width">
+                                <span style="color:#FF5722;">{{x.isFinish?'（上传完毕）':x.progress+'%'}}</span>
+                            </td>
+                            <td class="auto-col-width">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" ng-disabled="!x.isFinish" ng-click="delFile(x.fileName);">
                                     <i class="layui-icon">&#xe640;</i>
                                 </button>
                             </td>

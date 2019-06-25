@@ -51,6 +51,7 @@ var layuiForm = layui.form;
 var layuiLayer = layui.layer;
 var layuiElement = layui.element;
 var layuiTree = layui.tree;
+var layuiTable = layui.table;
 /**
  * layui自定义的表单校验，
  * 方法源码在webapp/my-js/common-by-layui.js
@@ -208,7 +209,7 @@ layuiForm.on('submit(LAY-user-login-submit)', function () {
 
 var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope) {
     $scope.menus = [];
-    $scope.close = function (id) {
+    $scope.close = function (id,$timeout) {
         var menus = $scope.menus;
         for (var i = 0, len = menus.length; i < len; i++) {
             if (menus[i].id === id) {
@@ -220,9 +221,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             menus[i - 1] = menus[i];
         }
         menus.length--;
-        setTimeout(function () {
+        $timeout(function () {
             layuiElement.render('tab', 'docDemoTabBrief');
-        },1);
+        });
     };
 }).factory('$myHttp', function ($http) {
     var myCallback = function (callback) {
@@ -259,7 +260,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     };
     return {
         get: function (url, params) {
-            params['v'] = Math.random();
+            if (params === undefined){
+                params = { v: Math.random() };
+            } else {
+                params['v'] = Math.random();
+            }
             var ret = $http({ method: 'GET', params: params, url: url });
             ret.mySuccess = function (callback) {
                 ret.success(myCallback(callback));
@@ -274,7 +279,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             return ret;
         },
     };
-}).controller('login-form', function ($scope) {
+}).controller('login-form', function ($scope,$timeout) {
     var username = $.cookie('username');
     var password = $.cookie('password');
     $scope.data = {
@@ -286,6 +291,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     $scope.refreshVercode = function () {
         $scope.rNum = Math.random();
     };
+    $timeout(function () {
+        layuiForm.render('checkbox');
+    });
 }).directive('onFinishRenderFilters', function ($timeout) {
     return {
         restrict: 'A',
@@ -349,6 +357,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         scope: { name: "@",path:"@",cut:"@" },
         controller: function ($scope, layer, $timeout, $myHttp) {
             $scope.isUploaded = false;
+            $scope.showProgress = false;
             $scope.crop = function () {
                 var select = $scope.jcropApi.tellSelect();
                 var $img = $scope.$img;
@@ -380,13 +389,14 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     },
                     pick: { id: '#' + $scope.name + 'Id' }
                 }).on('startUpload', function () {
-                    index = layuiLayer.open({
-                        type: 1,
-                        content: $('#singleUploadProgress').html()
-                    });
+                    $scope.showProgress = true;
+                    $scope.$apply();
                 }).on('uploadProgress', function (file, percentage) {
-                    $('#single-upload-progress>[lay-percent]').attr("lay-percent", (percentage * 100).toFixed(1) + '%');
+                    $scope.percentage = (percentage * 100).toFixed(2);
+                    $scope.$apply();
+                    layuiElement.render('progress');
                 }).on('uploadSuccess', function (file, response) {
+                    debugger;
                     var data = response.data;
                     $scope.imgName = data.imgName;
                     layer.close(index);
@@ -412,9 +422,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                             }
                         });
                     }
-                    $scope.$apply(function () {
-                        $scope.isUploaded = true;
-                    });
+                    $scope.isUploaded = true;
+                    $scope.showProgress = false;
+                    $scope.$apply();
                     $('#' + $scope.name + '-show-area').addClass('ani');
                     $timeout(function () {
                         $('#' + $scope.name + '-show-area').removeClass('ani');
@@ -475,35 +485,74 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'E',
         template: $('#uploadFilesTemplate').html(),
-        scope: { name: "@" },
-        controller: function ($scope) {
-            $scope.isUploaded = false;
+        scope: { name: "@", fileDescMaxWidth: "@", path: "@" },
+        controller: function ($scope,$timeout,$myHttp) {
             $scope.files = [];
-            setTimeout(function () {
+            var tipIndex;
+            $scope.showTip = function (e, text) {
+                tipIndex = layer.tips(text, e.target, {
+                    tips: 1,
+                    time:-1
+                });
+            };
+            $scope.hideTip = function () {
+                layer.close(tipIndex);
+            };
+            $scope.delFile = function (fileName) {
+                $myHttp.post('/index/delFiles', { fileName: fileName, pathName: $scope.path }).mySuccess(function () {
+                    var files=$scope.files;
+                    var i = 0, len = files.length;
+                    for (;i<len;i++) {
+                        if (files[i].fileName === fileName) {
+                            i++;
+                            break;
+                        }
+                    }
+                    for(;i<len;i++){
+                        files[i - 1] = files[i];
+                    }
+                    files.length --;
+                });
+            };
+            $timeout(function () {
+                var fileMap = {};
                 var uploader = new WebUploader.Uploader({
                     swf: 'plugin/webuploader/Uploader.swf',
                     auto: true,
                     duplicate: true,
                     server: '/index/uploadFiles',
-                    pick: { id: '#' + $scope.name + 'Id' }
+                    pick: { id: '#' + $scope.name + 'Id' },
+                    fileVal: 'fileUploads',
+                    formData: {
+                        pathName: $scope.path
+                    }
+                }).on('uploadStart', function (file) {
+                    var files = $scope.files;
+                    fileMap[file.id] = files.length;
+                    files[files.length] = { fileDesc: file.name, typeImg: typeImgByMime(file.ext), progress: 0, isFinish: false };
+                    $scope.$apply();
+                }).on('uploadProgress', function (file, percentage) {
+                    var fileObj=$scope.files[fileMap[file.id]];
+                    fileObj.progress = (percentage * 100).toFixed(2);
+                    fileObj.isFinish = percentage==1;
+                    $scope.$apply();
+                    layuiElement.render('progress');
+                }).on('uploadSuccess', function (file, response) {
+                    var fileObj = $scope.files[fileMap[file.id]];
+                    fileObj.fileName = response.data;
                 });
-                uploader.on('startUpload', function () {
-                    $scope.$apply(function () {
-                        var files = $scope.files;
-                        files[files.length] = { fileName: 'aa', typeImg: 'aa', progress: 0, };
-                    });
-                });
-                uploader.on('uploadProgress', function (file, percentage) {
-
-                });
-                uploader.on('uploadSuccess', function (file, response) {
-                    var data = response.data;
-                });
-            }, 1);
+            });
         }
     };
-}).controller('left-menus', function ($scope) {
+}).controller('left-menus', function ($scope,$myHttp,$timeout) {
     $scope.leftMenus = [];
+    $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
+        $scope.leftMenus = result.data;
+        $timeout(function () {
+            $('.layui-nav-bar').remove();
+            layuiElement.render('nav');
+        });
+    });
     /**
 	 * 打开指定菜单页
 	 */
@@ -528,6 +577,93 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         }
     };
 });
+
+/**
+ * 根据附件的扩展名判断使用哪一种图片
+ * @param ext  附件的mime类型
+ */
+function typeImgByMime(ext) {
+    var basePath = 'images/256x256/';
+    ext = ext.toLowerCase();
+    if (ext === 'png') {
+        basePath += "png-256.png";
+    } else if (ext === 'ini') {
+        basePath += "ini-256.png";
+    } else if (ext === 'accdb') {
+        basePath += "accdb-256.png";
+    } else if (ext === 'avi') {
+        basePath += 'avi-256.png';
+    } else if (ext === 'bmp') {
+        basePath += 'bmp-256.png';
+    } else if (ext === 'css') {
+        basePath += 'css-256.png';
+    } else if (ext === 'docx') {
+        basePath += 'docx-256.png';
+    } else if (ext === 'eml') {
+        basePath += 'eml-256.png';
+    } else if (ext === 'eps') {
+        basePath += 'eps-256.png';
+    } else if (ext === 'fla') {
+        basePath += 'fla-256.png';
+    } else if (ext === 'gif') {
+        basePath += 'gif-256.png';
+    } else if (ext === 'html' || ext === 'htm') {
+        basePath += 'html-256.png';
+    } else if (ext === 'ind') {
+        basePath += 'ind-256.png';
+    } else if (ext === 'jpeg' || ext === 'jpg') {
+        basePath += 'jpeg-256.png';
+    } else if (ext === 'jsf') {
+        basePath += 'jsf-256.png';
+    } else if (ext === 'mdi') {
+        basePath += 'mdi-256.png';
+    } else if (ext === 'mov') {
+        basePath += 'mov-256.png';
+    } else if (ext === 'mp3') {
+        basePath += 'mp3-256.png';
+    } else if (ext === 'mpeg') {
+        basePath += 'mpeg-256.png';
+    } else if (ext === 'pdf') {
+        basePath += 'pdf-256.png';
+    } else if (ext === 'pptx' || ext === 'ppt') {
+        basePath += 'pptx-256.png';
+    } else if (ext === 'proj') {
+        basePath += 'proj-256.png';
+    } else if (ext === 'psd') {
+        basePath += 'psd-256.png';
+    } else if (ext === 'pst') {
+        basePath += 'pst-256.png';
+    } else if (ext === 'pub') {
+        basePath += 'pub-256.png';
+    } else if (ext === 'rar') {
+        basePath += 'rar-256.png';
+    } else if (ext === 'read') {
+        basePath += 'read-256.png';
+    } else if (ext === 'set') {
+        basePath += 'set-256.png';
+    } else if (ext === 'tiff') {
+        basePath += 'tiff-256.png';
+    } else if (ext === 'txt') {
+        basePath += 'txt-256.png';
+    } else if (ext === 'url') {
+        basePath += 'url-256.png';
+    } else if (ext === 'vsd') {
+        basePath += 'vsd-256.png';
+    } else if (ext === 'wav') {
+        basePath += 'wav-256.png';
+    } else if (ext === 'wma') {
+        basePath += 'wma-256.png';
+    } else if (ext === 'wmv') {
+        basePath += 'wmv-256.png';
+    } else if (ext === 'xlsx' || ext === 'xls') {
+        basePath += 'xlsx-256.png';
+    } else if (ext === 'zip') {
+        basePath += 'zip-256.png';
+    } else{
+        basePath += 'ini-256.png';
+    }
+    return basePath;
+}
 
 /**
  * 区域分析，用于解析使用多大的区域去装载物体
@@ -558,26 +694,13 @@ function areaAnalysis(width, height) {
     return [finalWidth + 'px', finalHeight + 'px'];
 }
 
-//加载左侧菜单
-$.myGet('/index/loadLeftMenus', function (result) {
-    var $scope = $('[ng-controller="left-menus"]').scope();
-    $scope.$apply(function () {
-        $scope.leftMenus = result.data;
-    });
-    $('.layui-nav-bar').remove();
-    layuiElement.render('nav');
-});
+
 
 /**
  * 退出登录的回调方法
  */
 function logoutCallback() {
     $('#login-page').removeClass().addClass('logout-ani').css('left', '0');
-    var $scope = $('[ng-controller="login-form"]').scope();
-    $scope.$apply(function () {
-        $scope.data = null;
-        $scope.rNum = Math.random();
-    });
 }
 
 /**
@@ -585,6 +708,11 @@ function logoutCallback() {
  */
 function logout() {
     $.myGet('/index/logout', logoutCallback);
+    var $scope = $('[ng-controller="login-form"]').scope();
+    $scope.$apply(function () {
+        $scope.data = null;
+        $scope.rNum = Math.random();
+    });
 }
 
 //--------------------------分割线-------------------------------
@@ -604,4 +732,7 @@ myApp.controller('big-img-ctrl',function($scope,$timeout){
             url: 'data-original',
         });
     });
+});
+myApp.controller('upload-files', function ($scope) {
+
 });
