@@ -182,8 +182,8 @@
             <div ng-show="showProgress">
                 <label class="layui-form-label">进度</label>
                 <div class="layui-input-block">
-                    <div class="layui-progress" lay-showPercent="yes" style="top:16px;">
-                        <div class="layui-progress-bar layui-bg-green" lay-percent="{{percentage}}%"></div>
+                    <div class="layui-progress" lay-showPercent="yes" style="top:16px;" lay-filter="upload-img-progress">
+                        <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
                     </div>
                 </div>
             </div>
@@ -302,8 +302,8 @@
                                 {{x.fileDesc}}
                             </td>
                             <td>
-                                <div class="layui-progress" lay-showPercent="yes">
-                                    <div class="layui-progress-bar layui-bg-green" lay-percent="{{x.progress}}%"></div>
+                                <div class="layui-progress" lay-showPercent="yes" lay-filter="{{x.id}}">
+                                    <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
                                 </div>
                             </td>
                             <td class="auto-col-width">
@@ -322,7 +322,7 @@
     </head>
     <body class="layui-layout-body">
         <input type="password" id="out-screen-password">
-        <div class="layui-layout layui-layout-admin">
+        <div class="layui-layout layui-layout-admin" ng-controller="main-body">
             <div class="layui-header">
                 <div class="layui-logo">
                     layui 后台布局
@@ -365,7 +365,7 @@
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
                     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                    <ul class="layui-nav layui-nav-tree" lay-filter="left-menus" ng-controller="left-menus">
+                    <ul class="layui-nav layui-nav-tree" lay-filter="left-menus">
                         <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0">
                             <a href="javascript:;" ng-bind="x.title"></a>
                             <dl class="layui-nav-child">
@@ -381,7 +381,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="layui-body" ng-controller="main-body">
+            <div class="layui-body">
                 <!-- 内容主体区域 -->
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                     <ul class="layui-tab-title">

@@ -162,52 +162,14 @@ addCustomVerify(layuiForm);
     });
 }());
 
-
-//登录功能
-layuiForm.on('submit(LAY-user-login-submit)', function () {
-    var $scope = $('[ng-controller="login-form"]').scope();
-    var tempData = $scope.data;
-    var data = {
-        username: tempData.username,
-        password: tempData.password,
-        vercode: tempData.vercode
-    };
-    if ($('#rememberPassword').prop('checked')) {
-        $.cookie('username', data.username);
-        $.cookie('password', data.password);
-        $.cookie('rememberPassword', true);
-    } else {
-        $.cookie('username', null);
-        $.cookie('password', null);
-        $.cookie('rememberPassword', null);
-    }
-    var SHA1 = new Hashes.SHA1();
-    data.username = SHA1.hex(data.username);
-    data.password = SHA1.hex(data.password);
-    $.myPost('/index/login', data, function (result) {
-        if (result.code == -1) {
-            $scope.$apply(function () {
-                $scope.rNum = Math.random();
-                $scope.data.vercode = '';
-            });
-        } else if (result.code == 0) {
-            $scope = $('[ng-controller="left-menus"]').scope();
-            $scope.$apply(function () {
-                $scope.leftMenus = result.data.leftMenus;
-            });
+var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout) {
+    $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
+        $scope.leftMenus = result.data;
+        $timeout(function () {
             $('.layui-nav-bar').remove();
             layuiElement.render('nav');
-            setTimeout(function () {
-                $('#login-page').removeClass().css('left', '100%');
-            }, 450);
-            $('#login-page').removeClass().addClass('login-ani');
-        }
+        });
     });
-});
-
-
-
-var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope) {
     $scope.menus = [];
     $scope.close = function (id,$timeout) {
         var menus = $scope.menus;
@@ -224,6 +186,29 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         $timeout(function () {
             layuiElement.render('tab', 'docDemoTabBrief');
         });
+    };
+    
+    /**
+	 * 打开指定菜单页
+	 */
+    $scope.openMenuPage = function (y) {
+        var menus = $scope.menus;
+        var exist = false;
+        for (var i = 0, len = menus.length; i < len; i++) {
+            if (menus[i].id == y.id) {
+                exist = true;
+                break;
+            }
+        }
+        if (exist) {
+            $('[data-menu-id="' + y.id + '"]').click();
+        } else {
+            $scope.menus[$scope.menus.length] = {
+                title: y.title,
+                url: y.url,
+                id: y.id
+            };
+        }
     };
 }).factory('$myHttp', function ($http) {
     var myCallback = function (callback) {
@@ -277,7 +262,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 ret.success(myCallback(callback));
             };
             return ret;
-        },
+        }
     };
 }).controller('login-form', function ($scope,$timeout) {
     var username = $.cookie('username');
@@ -292,19 +277,49 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         $scope.rNum = Math.random();
     };
     $timeout(function () {
+        //登录功能
+        layuiForm.on('submit(LAY-user-login-submit)', function () {
+            var $scope = $('[ng-controller="login-form"]').scope();
+            var tempData = $scope.data;
+            var data = {
+                username: tempData.username,
+                password: tempData.password,
+                vercode: tempData.vercode
+            };
+            if ($('#rememberPassword').prop('checked')) {
+                $.cookie('username', data.username);
+                $.cookie('password', data.password);
+                $.cookie('rememberPassword', true);
+            } else {
+                $.cookie('username', null);
+                $.cookie('password', null);
+                $.cookie('rememberPassword', null);
+            }
+            var SHA1 = new Hashes.SHA1();
+            data.username = SHA1.hex(data.username);
+            data.password = SHA1.hex(data.password);
+            $.myPost('/index/login', data, function (result) {
+                if (result.code == -1) {
+                    $scope.$apply(function () {
+                        $scope.rNum = Math.random();
+                        $scope.data.vercode = '';
+                    });
+                } else if (result.code == 0) {
+                    $scope = $('[ng-controller="left-menus"]').scope();
+                    $scope.$apply(function () {
+                        $scope.leftMenus = result.data.leftMenus;
+                    });
+                    $('.layui-nav-bar').remove();
+                    layuiElement.render('nav');
+                    setTimeout(function () {
+                        $('#login-page').removeClass().css('left', '100%');
+                    }, 450);
+                    $('#login-page').removeClass().addClass('login-ani');
+                }
+            });
+        });
         layuiForm.render('checkbox');
     });
-}).directive('onFinishRenderFilters', function ($timeout) {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attr) {
-            if (scope.$last === true) {
-                $timeout(function () {
-                    scope.$emit('ngRepeatFinished');
-                });
-            }
-        }
-    };
 }).directive("areaSelect", function () {
     return {
         restrict: 'E',
@@ -377,50 +392,47 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 });
             };
             $timeout(function () {
-                var index;
                 $scope.uploader = new WebUploader.Uploader({
                     swf: 'plugin/webuploader/Uploader.swf',
                     auto: true,
                     duplicate: true,
                     server: '/index/uploadSingleImage',
                     fileVal: 'fileUpload',
-                    formData:{
-                        pathName:$scope.path
-                    },
+                    formData:{ pathName:$scope.path },
                     pick: { id: '#' + $scope.name + 'Id' }
                 }).on('startUpload', function () {
                     $scope.showProgress = true;
                     $scope.$apply();
                 }).on('uploadProgress', function (file, percentage) {
-                    $scope.percentage = (percentage * 100).toFixed(2);
-                    $scope.$apply();
-                    layuiElement.render('progress');
+                    layuiElement.progress('upload-img-progress', (percentage * 100).toFixed(2) + '%');
                 }).on('uploadSuccess', function (file, response) {
-                    debugger;
-                    var data = response.data;
-                    $scope.imgName = data.imgName;
-                    layer.close(index);
-                    if ($scope.cut === 'true') {
-                        $scope.cropLayer = layer.open({
-                            type: 1,
-                            area: areaAnalysis(data.imgWidth, data.imgHeight),
-                            content: $('#cropTemplate').html(),
-                            scope: $scope,
-                            title: '裁剪图片',
-                            cancel: function () {
-                                $scope.crop();
-                            },
-                            compileFinish: function () {
-                                var wait=layuiLayer.load(0);
-                                $scope.$img = $('#' + $scope.name + '-crop').attr('src', '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName).on('load', function () {
-                                    layuiLayer.close(wait);
-                                    $(this).Jcrop({ allowSelect: false }, function () {
-                                        this.setSelect([0, 0, 250, 300]);
-                                        $scope.jcropApi = this
+                    if (response.code === 0) {
+                        if ($scope.cut === 'true') {
+                            var data = response.data;
+                            $scope.imgName = data.imgName;
+                            $scope.cropLayer = layer.open({
+                                type: 1,
+                                area: areaAnalysis(data.imgWidth, data.imgHeight),
+                                content: $('#cropTemplate').html(),
+                                scope: $scope,
+                                title: '裁剪图片',
+                                cancel: function () {
+                                    $scope.crop();
+                                },
+                                compileFinish: function () {
+                                    var wait=layuiLayer.load(0);
+                                    $scope.$img = $('#' + $scope.name + '-crop').attr('src', '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName).on('load', function () {
+                                        layuiLayer.close(wait);
+                                        $(this).Jcrop({ allowSelect: false }, function () {
+                                            this.setSelect([0, 0, 250, 300]);
+                                            $scope.jcropApi = this
+                                        });
                                     });
-                                });
-                            }
-                        });
+                                }
+                            });
+                        }
+                    } else if (response.code === -1) {
+
                     }
                     $scope.isUploaded = true;
                     $scope.showProgress = false;
@@ -489,15 +501,28 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         controller: function ($scope,$timeout,$myHttp) {
             $scope.files = [];
             var tipIndex;
+            /**
+             * 鼠标在文件描述列上移动时，显示文件描述
+             * @param e 表格元素的event对象
+             * @param text 表格的文本内容
+             */
             $scope.showTip = function (e, text) {
+                if (tipIndex != undefined) {
+                    layer.close(tipIndex);
+                }
                 tipIndex = layer.tips(text, e.target, {
                     tips: 1,
                     time:-1
                 });
             };
+            //鼠标离开文件描述列，隐藏文件描述
             $scope.hideTip = function () {
                 layer.close(tipIndex);
             };
+            /**
+             * 删除已上传的指定文件。
+             * @param fileName 文件名称sha1
+             */
             $scope.delFile = function (fileName) {
                 $myHttp.post('/index/delFiles', { fileName: fileName, pathName: $scope.path }).mySuccess(function () {
                     var files=$scope.files;
@@ -511,69 +536,38 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     for(;i<len;i++){
                         files[i - 1] = files[i];
                     }
-                    files.length --;
+                    files.length--;
                 });
             };
+            //渲染后回调
             $timeout(function () {
+                //记录每一个文件的进度
                 var fileMap = {};
-                var uploader = new WebUploader.Uploader({
-                    swf: 'plugin/webuploader/Uploader.swf',
-                    auto: true,
-                    duplicate: true,
-                    server: '/index/uploadFiles',
-                    pick: { id: '#' + $scope.name + 'Id' },
-                    fileVal: 'fileUploads',
+                //创建一个上传插件
+                new WebUploader.Uploader({
+                    swf: 'plugin/webuploader/Uploader.swf',//插件所需的flash路径，用于兼容不支持XMLHttpWebRequest对象的浏览器
+                    auto: true,//拖动后自动上传
+                    duplicate: true,//对每一个文件添加唯一hash值，用于区分文件操作进度条
+                    server: '/index/uploadFiles',//统一上传的控制器
+                    pick: { id: '#' + $scope.name + 'Id' },//上传域的id
+                    fileVal: 'fileUploads',//上传流文件的参数名
                     formData: {
-                        pathName: $scope.path
+                        pathName: $scope.path //上传时的路径参数
                     }
                 }).on('uploadStart', function (file) {
                     var files = $scope.files;
                     fileMap[file.id] = files.length;
-                    files[files.length] = { fileDesc: file.name, typeImg: typeImgByMime(file.ext), progress: 0, isFinish: false };
+                    files[files.length] = { fileDesc: file.name, typeImg: typeImgByMime(file.ext), progress: 0, isFinish: false,id:file.id};
                     $scope.$apply();
                 }).on('uploadProgress', function (file, percentage) {
-                    var fileObj=$scope.files[fileMap[file.id]];
-                    fileObj.progress = (percentage * 100).toFixed(2);
-                    fileObj.isFinish = percentage==1;
-                    $scope.$apply();
-                    layuiElement.render('progress');
+                    layuiElement.progress(file.id, (percentage * 100).toFixed(2) + '%');
                 }).on('uploadSuccess', function (file, response) {
                     var fileObj = $scope.files[fileMap[file.id]];
                     fileObj.fileName = response.data;
+                    fileObj.isFinish = true;
+                    $scope.$apply();
                 });
             });
-        }
-    };
-}).controller('left-menus', function ($scope,$myHttp,$timeout) {
-    $scope.leftMenus = [];
-    $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
-        $scope.leftMenus = result.data;
-        $timeout(function () {
-            $('.layui-nav-bar').remove();
-            layuiElement.render('nav');
-        });
-    });
-    /**
-	 * 打开指定菜单页
-	 */
-    $scope.openMenuPage = function (y) {
-        var $scope = $('[ng-controller="main-body"]').scope();
-        var menus = $scope.menus;
-        var exist = false;
-        for (var i = 0, len = menus.length; i < len; i++) {
-            if (menus[i].id == y.id) {
-                exist = true;
-                break;
-            }
-        }
-        if (exist) {
-            $('[data-menu-id="' + y.id + '"]').click();
-        } else {
-            $scope.menus[$scope.menus.length] = {
-                title: y.title,
-                url: y.url,
-                id: y.id
-            };
         }
     };
 });
@@ -709,10 +703,9 @@ function logoutCallback() {
 function logout() {
     $.myGet('/index/logout', logoutCallback);
     var $scope = $('[ng-controller="login-form"]').scope();
-    $scope.$apply(function () {
-        $scope.data = null;
-        $scope.rNum = Math.random();
-    });
+    $scope.data = null;
+    $scope.rNum = Math.random();
+    $scope.$apply();
 }
 
 //--------------------------分割线-------------------------------
