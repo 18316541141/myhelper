@@ -239,6 +239,8 @@ E:\git_projects\myhelper\c#\web\WebApplication1\bin\Microsoft.Web.Infrastructure
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\MySql.Data.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\MySql.Data.Entity.EF6.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Newtonsoft.Json.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Oracle.ManagedDataAccess.dll
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Oracle.ManagedDataAccess.EntityFramework.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\System.Web.Helpers.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\System.Web.Mvc.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\System.Web.Optimization.dll

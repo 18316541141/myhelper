@@ -21,7 +21,7 @@ namespace WebApplication1
         protected void Application_Start()
         {
             XmlConfigurator.Configure(new FileInfo($"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}{Path.DirectorySeparatorChar}Log4net.config"));
-            
+            Database.SetInitializer<DbContext>(null);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

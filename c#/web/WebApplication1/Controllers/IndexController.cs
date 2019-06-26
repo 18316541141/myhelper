@@ -1,6 +1,7 @@
 ﻿
 using CommonHelper.Helper;
 using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.UI;
 using WebApplication1.Entity;
+using WebApplication1.filter;
 using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
@@ -114,16 +116,30 @@ namespace WebApplication1.Controllers
         /// 上传单张图片
         /// </summary>
         /// <returns></returns>
+        [SizeFilter(Size= 3145728, Msg = "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
         public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload, string pathName)
         {
             if (_allowPath.Contains(pathName))
             {
+                Image image=null;
                 try
                 {
-                    string imgName=FileHelper.SaveFileNameBySha1(fileUpload.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+                    image =Image.FromStream(fileUpload.InputStream);
+                }
+                catch
+                {
+                    return Json(new Result { code = -1, msg = "上传的文件可能不是图片文件，无法处理。" }, JsonRequestBehavior.AllowGet);
+                }
+                try
+                {
+                    string imgName=FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
                     using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}"))
                     {
-                        return Json(new Result { code = 0, data = new { imgName=imgName, imgWidth = img.Width, imgHeight = img.Height} }, JsonRequestBehavior.AllowGet);
+                        using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
+                        {
+                            string thumbnailName= FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+                            return Json(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } }, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 catch(Exception ex)
@@ -143,6 +159,7 @@ namespace WebApplication1.Controllers
         /// <param name="fileUploads"></param>
         /// <param name="pathName"></param>
         /// <returns></returns>
+        [SizeFilter(Size = 52428800, Msg = "上传文件大小不能超过50M，可通过压缩减少文件大小。")]
         public JsonResult UploadFiles(HttpPostedFileBase fileUploads, string pathName)
         {
             if (_allowPath.Contains(pathName))
@@ -152,29 +169,6 @@ namespace WebApplication1.Controllers
             else
             {
                 return Json(new Result { code = -1, msg = "该路径不允许上传文件。" }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        /// <summary>
-        /// 删除指定文件名称的文件
-        /// </summary>
-        /// <param name="fileName">文件名称</param>
-        /// <param name="pathName">文件路径</param>
-        /// <returns></returns>
-        public JsonResult DelFiles(string fileName,string pathName)
-        {
-            if (_allowPath.Contains(pathName))
-            {
-                string fullFileName=$"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{fileName}";
-                if (System.IO.File.Exists(fullFileName))
-                {
-                    System.IO.File.Delete(fullFileName);
-                }
-                return Json(new Result { code = 0 }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new Result { code = -1, msg = "该路径不允许删除文件。" }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -194,9 +188,18 @@ namespace WebApplication1.Controllers
             string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
             if (System.IO.File.Exists(imgPath))
             {
+                Bitmap bitmap = null;
                 try
                 {
-                    using (Bitmap bitmap = new Bitmap(imgPath))
+                    bitmap = new Bitmap(imgPath);
+                }
+                catch
+                {
+                    return Json(new Result { code = -1, msg = "该文件可能不是图片文件，切割失败！" }, JsonRequestBehavior.AllowGet);
+                }
+                try
+                {
+                    using (bitmap)
                     {
                         using (Image cutImg = ImageHandleHelper.CutPicByRect(bitmap.GetThumbnailImage(imgWidth, imgHeight, () => false, IntPtr.Zero), x, y, w, h))
                         {
@@ -242,28 +245,33 @@ namespace WebApplication1.Controllers
         /// 加载地区选择json
         /// </summary>
         /// <returns></returns>
+        [OutputCache(Duration = int.MaxValue)]
         public JsonResult AreaSelect()
         {
-            List<AreaTree> areaTreeList = new List<AreaTree>();
-            AreaTree areaTree1 = new AreaTree
+            SystemService systemService = new SystemService();
+            return Json(new Result { code = 0, data = systemService.LoadAreaTree() }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="pathName">文件路径名称</param>
+        /// <param name="fileName">文件sha1名称</param>
+        /// <param name="fileDesc">文件的中文描述</param>
+        /// <returns></returns>
+        [OutputCache(Duration = int.MaxValue)]
+        public FilePathResult DownFile(string pathName, string fileName, string fileDesc)
+        {
+            string filePath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{fileName}";
+            if (System.IO.File.Exists(filePath))
             {
-                name = "天际省",
-                value = "1"
-            };
-            areaTreeList.Add(areaTree1);
-            AreaTree areaTree11 = new AreaTree
+                return File(filePath, MimeMapping.GetMimeMapping(filePath), fileDesc);
+            }
+            else
             {
-                name= "测试区",
-                value="11"
-            };
-            areaTreeList.Add(areaTree11);
-            AreaTree areaTree2 = new AreaTree
-            {
-                name = "热河省",
-                value = "2"
-            };
-            areaTreeList.Add(areaTree2);
-            return Json(new Result { code = 0, data = areaTreeList }, JsonRequestBehavior.AllowGet);
+                Response.StatusCode = 404;
+                return null;
+            }
         }
 
         /// <summary>

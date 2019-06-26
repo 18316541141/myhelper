@@ -333,35 +333,40 @@ function postCurrentWin(url,params){
 
 /**
  * 使用post的方式打开一个新窗口
- * url：新窗口的url地址
- * params：请求参数
+ * @url：新窗口的url地址
+ * @params：post请求参数
+ * @searchParam：url上的参数
  */
-function postOpenWin(url,params){
-	var times=new Date().getTime();
-	var input='';
-	if(params){
-		for(var key in params){
-			if(params.hasOwnProperty(key))
-				input+='<textarea name="'+key+'"></textarea>';
-		}
-	}
-	for(var key in searchParam){
-		if(searchParam.hasOwnProperty(key))
-			input+='<textarea name="'+key+'"></textarea>';
-	}
-	$('body').append('<form style="display:none;" id="'+times+'" method="post" target="_blank" action="'+url+'">'+input+'</form>');
-	if(params){
-		for(var key in params){
-			if(params.hasOwnProperty(key))
-				$('#'+times).find('textarea[name="'+key+'"]').val(params[key]);
-		}
-	}
-	for(var key in searchParam){
-		if(searchParam.hasOwnProperty(key))
-			$('#'+times).find('textarea[name="'+key+'"]').val(searchParam[key]);
-	}
-	$('#'+times).submit();
-	$('#'+times).remove();
+function postOpenWin(url, params, searchParam) {
+    var times = new Date().getTime();
+    var input = '';
+    if (params) {
+        for (var key in params) {
+            if (params.hasOwnProperty(key))
+                input += '<textarea name="' + key + '"></textarea>';
+        }
+    }
+    if ($.type(searchParam) === 'object') {
+        for (var key in searchParam) {
+            if (searchParam.hasOwnProperty(key))
+                input += '<textarea name="' + key + '"></textarea>';
+        }
+    }
+    $('body').append('<form style="display:none;" id="' + times + '" method="post" target="_blank" action="' + url + '">' + input + '</form>');
+    if (params) {
+        for (var key in params) {
+            if (params.hasOwnProperty(key))
+                $('#' + times).find('textarea[name="' + key + '"]').val(params[key]);
+        }
+    }
+    if ($.type(searchParam) === 'object') {
+        for (var key in searchParam) {
+            if (searchParam.hasOwnProperty(key))
+                $('#' + times).find('textarea[name="' + key + '"]').val(searchParam[key]);
+        }
+    }
+    $('#' + times).submit();
+    $('#' + times).remove();
 }
 
 /**

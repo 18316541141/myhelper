@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
+using WebApplication1.Repository;
 
 namespace WebApplication1.Service
 {
@@ -11,6 +12,60 @@ namespace WebApplication1.Service
     /// </summary>
     public class SystemService
     {
+
+        /// <summary>
+        /// 加载地区树
+        /// </summary>
+        /// <returns></returns>
+        public List<AreaTree> LoadAreaTree()
+        {
+            ProvinceRepository provinceRepository = new ProvinceRepository();
+            CityRepository cityRepository = new CityRepository();
+            DistrictRepository districtRepository = new DistrictRepository();
+            TownRepository townRepository = new TownRepository();
+            List<AreaTree> areaTreeList = new List<AreaTree>();
+            foreach (Province province in provinceRepository.FindList())
+            {
+                areaTreeList.Add(new AreaTree
+                {
+                    name=province.ProvinceName,
+                    value=province.ProvinceID,
+                    type=0
+                });
+            }
+            foreach (City city in cityRepository.FindList())
+            {
+                areaTreeList.Add(new AreaTree
+                {
+                    name = city.CityName,
+                    value = city.CityID,
+                    parentValue = city.ProvinceID,
+                    type = 1
+                });
+            }
+            foreach (District district in districtRepository.FindList())
+            {
+                areaTreeList.Add(new AreaTree
+                {
+                    name = district.DistrictName,
+                    value = district.DistrictID,
+                    parentValue = district.CityID,
+                    type = 2
+                });
+            }
+            //foreach (Town town in townRepository.FindList())
+            //{
+            //    areaTreeList.Add(new AreaTree
+            //    {
+            //        name = town.TownName,
+            //        value = town.TownID,
+            //        parentValue = town.DistrictID,
+            //        type = 3
+            //    });
+            //}
+            return areaTreeList;
+        }
+
         /// <summary>
         /// 加载左侧菜单
         /// </summary>
@@ -55,6 +110,14 @@ namespace WebApplication1.Service
                 url = "menus/testMenus1/uploadFiles.html"
             };
             leftMenuList11.Add(leftMenu14);
+
+            LeftMenu leftMenu15 = new LeftMenu
+            {
+                id = "m15",
+                title = "测试1-5",
+                url = "menus/testMenus1/areaSelect.html"
+            };
+            leftMenuList11.Add(leftMenu15);
 
             leftMenu1.leftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);

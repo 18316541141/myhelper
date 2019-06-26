@@ -10,6 +10,11 @@ namespace WebApplication1
         {
             filters.Add(new LoginAuthorizeAttribute());
             filters.Add(new PermAuthorizeAttribute());
+            CompressAttribute compressAttribute = new CompressAttribute();
+            compressAttribute.IgnoreRequests.Add("/index/showImage".ToLower());
+            compressAttribute.IgnoreRequests.Add("/index/verificationCode".ToLower());
+            compressAttribute.IgnoreRequests.Add("/index/downFile".ToLower());
+            filters.Add(compressAttribute);
             filters.Add(new HandleErrorAttribute());
         }
     }

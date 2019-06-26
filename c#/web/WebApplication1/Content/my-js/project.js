@@ -162,6 +162,37 @@ addCustomVerify(layuiForm);
     });
 }());
 
+//上传文件插件的回调函数
+var uploadCallback = function (callback) {
+    return function (file, response) {
+        //登录超时，退出登录
+        if (response.code === -10) {
+            logoutCallback();
+        }
+            //用户无权限，无法操作，但需要后续处理
+        else if (response.code === -9) {
+            layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
+            callback(file, response);
+        }
+            //用户无权限，无法操作
+        else if (response.code === -8) {
+            layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
+        }
+            //常规错误，
+        else if (response.code === -1) {
+            layuiLayer.msg(response.msg, { icon: 5, anim: 6 });
+            callback(file, response);
+        }
+            //成功
+        else if (response.code === 0) {
+            if (response.msg != null && response.msg != '') {
+                layuiLayer.msg(response.msg, { icon: 1 });
+            }
+            callback(file, response);
+        }
+    }
+};
+
 var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout) {
     $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
         $scope.leftMenus = result.data;
@@ -171,7 +202,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         });
     });
     $scope.menus = [];
-    $scope.close = function (id,$timeout) {
+    $scope.close = function (id) {
         var menus = $scope.menus;
         for (var i = 0, len = menus.length; i < len; i++) {
             if (menus[i].id === id) {
@@ -244,6 +275,14 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         }
     };
     return {
+        //发送get请求，如果缓存内有该请求的资源，则使用缓存的
+        getCache: function (url, params) {
+            var ret = $http({ method: 'GET', params: params, url: url });
+            ret.mySuccess = function (callback) {
+                ret.success(myCallback(callback));
+            };
+            return ret;
+        },
         get: function (url, params) {
             if (params === undefined){
                 params = { v: Math.random() };
@@ -305,7 +344,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                         $scope.data.vercode = '';
                     });
                 } else if (result.code == 0) {
-                    $scope = $('[ng-controller="left-menus"]').scope();
+                    $scope = $('[ng-controller="main-body"]').scope();
                     $scope.$apply(function () {
                         $scope.leftMenus = result.data.leftMenus;
                     });
@@ -327,8 +366,14 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         scope: { type: "@", deep: "@", required:"@" },
         controller: function ($scope, $myHttp) {
             $scope.ie8 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/8./i) == "8.";
-            $myHttp.get('/index/areaSelect').mySuccess(function (result) {
+            $myHttp.getCache('/index/areaSelect').mySuccess(function (result) {
                 $scope.data = result.data;
+                $scope.provinces = [];
+                for (var i = 0, len = $scope.data.length; i < len ; i++) {
+                    if ($scope.data[i].type == 0) {
+                        $scope.provinces[$scope.provinces.length] = $scope.data[i];
+                    }
+                }
             });
             $scope.changeProvice = function (e) {
                 $scope.provinceVal = $(e.target).val();
@@ -369,7 +414,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'E',
         template: $('#uploadImageTemplate').html(),
-        scope: { name: "@",path:"@",cut:"@" },
+        scope: { name: "@", path: "@", cut: "@"},
         controller: function ($scope, layer, $timeout, $myHttp) {
             $scope.isUploaded = false;
             $scope.showProgress = false;
@@ -399,18 +444,21 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     server: '/index/uploadSingleImage',
                     fileVal: 'fileUpload',
                     formData:{ pathName:$scope.path },
-                    pick: { id: '#' + $scope.name + 'Id' }
+                    pick: { id: '#' + $scope.name + 'Id' },
+                    fileNumLimit: 1,
+                    //允许上传的图片格式后缀
+                    extensions: 'webp,gif,jpg,jpeg,bmp,png,tif,emf,ico,flic,wmf,raw,hdri,ai,eps,ufo,dxf,pcd,cdr,psd,svg,fpx,exif,tga,pcx,GIF,JPG,JPEG,BMP,PNG,WEBP,PCX,TIF,TGA,EXIF,FPX,SVG,PSD,CDR,PCD,DXF,UFO,EPS,AI,HDRI,RAW,WMF,FLIC,EMF,ICO'
                 }).on('startUpload', function () {
                     $scope.showProgress = true;
                     $scope.$apply();
                 }).on('uploadProgress', function (file, percentage) {
                     layuiElement.progress('upload-img-progress', (percentage * 100).toFixed(2) + '%');
-                }).on('uploadSuccess', function (file, response) {
+                }).on('uploadSuccess', uploadCallback(function (file, response) {
                     if (response.code === 0) {
                         if ($scope.cut === 'true') {
                             var data = response.data;
                             $scope.imgName = data.imgName;
-                            $scope.cropLayer = layer.open({
+                            $scope.cropLayer = layer.ngOpen({
                                 type: 1,
                                 area: areaAnalysis(data.imgWidth, data.imgHeight),
                                 content: $('#cropTemplate').html(),
@@ -431,17 +479,17 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                                 }
                             });
                         }
+                        $scope.isUploaded = true;
                     } else if (response.code === -1) {
-
+                        $scope.isUploaded = false;
                     }
-                    $scope.isUploaded = true;
                     $scope.showProgress = false;
                     $scope.$apply();
                     $('#' + $scope.name + '-show-area').addClass('ani');
                     $timeout(function () {
                         $('#' + $scope.name + '-show-area').removeClass('ani');
                     },280);
-                });
+                }));
             });
         }
     };
@@ -498,7 +546,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         restrict: 'E',
         template: $('#uploadFilesTemplate').html(),
         scope: { name: "@", fileDescMaxWidth: "@", path: "@" },
-        controller: function ($scope,$timeout,$myHttp) {
+        controller: function ($scope, $timeout, $myHttp) {
             $scope.files = [];
             var tipIndex;
             /**
@@ -507,37 +555,45 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
              * @param text 表格的文本内容
              */
             $scope.showTip = function (e, text) {
-                if (tipIndex != undefined) {
-                    layer.close(tipIndex);
+                if (tipIndex === undefined) {
+                    tipIndex = layuiLayer.tips(text, e.target, {
+                        tips: 1,
+                        time:-1
+                    });
                 }
-                tipIndex = layer.tips(text, e.target, {
-                    tips: 1,
-                    time:-1
-                });
             };
             //鼠标离开文件描述列，隐藏文件描述
             $scope.hideTip = function () {
-                layer.close(tipIndex);
+                layuiLayer.close(tipIndex);
+                tipIndex = undefined;
             };
+
+            //下载文件
+            $scope.downFile = function (x) {
+                postOpenWin('/index/downFile', {
+                    pathName: $scope.path,
+                    fileName: x.fileName,
+                    fileDesc: x.fileDesc
+                });
+            };
+
             /**
              * 删除已上传的指定文件。
              * @param fileName 文件名称sha1
              */
             $scope.delFile = function (fileName) {
-                $myHttp.post('/index/delFiles', { fileName: fileName, pathName: $scope.path }).mySuccess(function () {
-                    var files=$scope.files;
-                    var i = 0, len = files.length;
-                    for (;i<len;i++) {
-                        if (files[i].fileName === fileName) {
-                            i++;
-                            break;
-                        }
+                var files=$scope.files;
+                var i = 0, len = files.length;
+                for (;i<len;i++) {
+                    if (files[i].fileName === fileName) {
+                        i++;
+                        break;
                     }
-                    for(;i<len;i++){
-                        files[i - 1] = files[i];
-                    }
-                    files.length--;
-                });
+                }
+                for(;i<len;i++){
+                    files[i - 1] = files[i];
+                }
+                files.length--;
             };
             //渲染后回调
             $timeout(function () {
@@ -708,6 +764,45 @@ function logout() {
     $scope.$apply();
 }
 
+
+/**
+ * 使用post的方式打开一个新窗口
+ * @url：新窗口的url地址
+ * @params：post请求参数
+ * @searchParam：url上的参数
+ */
+function postOpenWin(url, params, searchParam) {
+    var times = new Date().getTime();
+    var input = '';
+    if (params) {
+        for (var key in params) {
+            if (params.hasOwnProperty(key))
+                input += '<textarea name="' + key + '"></textarea>';
+        }
+    }
+    if ($.type(searchParam) === 'object') {
+        for (var key in searchParam) {
+            if (searchParam.hasOwnProperty(key))
+                input += '<textarea name="' + key + '"></textarea>';
+        }
+    }
+    $('body').append('<form style="display:none;" id="' + times + '" method="post" target="_blank" action="' + url + '">' + input + '</form>');
+    if (params) {
+        for (var key in params) {
+            if (params.hasOwnProperty(key))
+                $('#' + times).find('textarea[name="' + key + '"]').val(params[key]);
+        }
+    }
+    if ($.type(searchParam) === 'object') {
+        for (var key in searchParam) {
+            if (searchParam.hasOwnProperty(key))
+                $('#' + times).find('textarea[name="' + key + '"]').val(searchParam[key]);
+        }
+    }
+    $('#' + times).submit();
+    $('#' + times).remove();
+}
+
 //--------------------------分割线-------------------------------
 //上面的代码不能改，下面的代码可以改
 //--------------------------分割线-------------------------------
@@ -723,6 +818,9 @@ myApp.controller('big-img-ctrl',function($scope,$timeout){
     $timeout(function(){
         $('.xxx-table').viewer({
             url: 'data-original',
+            built: function () {
+                $('.layui-layout-body').append($('.viewer-container'));
+            },
         });
     });
 });

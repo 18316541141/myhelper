@@ -136,12 +136,6 @@
 			.viewer-container{
                 background-color:rgba(47,64,86,.9);
             }
-            .layui-header {
-    			z-index: 998;
-    		}
-    		.layui-side {
-    			z-index: 998;
-    		}
             .auto-col-width{
                 width:1%;
                 white-space:nowrap;
@@ -310,8 +304,11 @@
                                 <span style="color:#FF5722;">{{x.isFinish?'（上传完毕）':x.progress+'%'}}</span>
                             </td>
                             <td class="auto-col-width">
-                                <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" ng-disabled="!x.isFinish" ng-click="delFile(x.fileName);">
+                                <button ng-mouseover="showTip($event,'删除文件')" ng-mouseleave="hideTip();" type="button" class="layui-btn layui-btn-sm layui-btn-danger" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]"  ng-disabled="!x.isFinish" ng-click="delFile(x.fileName);">
                                     <i class="layui-icon">&#xe640;</i>
+                                </button>
+                                <button ng-mouseover="showTip($event,'下载文件')" ng-mouseleave="hideTip();" class="layui-btn layui-btn-sm layui-btn-primary" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]" ng-disabled="!x.isFinish" ng-click="downFile(x);">
+                                    <i class="layui-icon">&#xe601;</i>
                                 </button>
                             </td>
                         </tr>
@@ -388,7 +385,7 @@
                         <li ng-repeat="x in menus track by x.id" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}"> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                     </ul>
                     <div class="layui-tab-content main-content">
-                        <div ng-repeat="x in menus track by x.id" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190624123304'"></div>
+                        <div ng-repeat="x in menus track by x.id" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190626100153'"></div>
                     </div>
                 </div>
             </div>
@@ -449,6 +446,6 @@
         <script src="plugin/ng-layer.js" charset="utf-8"></script>
         <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
 		<script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script>
-        <script src="my-js/project.js?v=20190624123304" charset="utf-8"></script>
+        <script src="my-js/project.js?v=20190626100153" charset="utf-8"></script>
     </body>
 </html>

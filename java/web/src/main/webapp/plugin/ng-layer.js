@@ -1,6 +1,4 @@
 (function () {
-    angular.module('ng-layer', []).factory('layer', layer);
-
     /**
      * ng-layer
      * @desc 扩展layer,让layer支持ng
@@ -13,20 +11,20 @@
      *
      * @returns layer
      */
-    function layer ($rootScope, $compile, $timeout, $q, $http) {
-        var layer  = window.layer;
-        var _open  = layer.open;
+    angular.module('ng-layer', []).factory('layer', function ($rootScope, $compile, $timeout, $q, $http) {
+        var layer = window.layer;
+        var _open = layer.open;
         var _close = layer.close;
-        var _full  = layer.full;
+        var _full = layer.full;
 
         // 装饰open
-        layer.open = function (deliver) {
+        layer.ngOpen = function (deliver) {
             var defer = $q.defer();
 
             // 判断异步载入
             if (deliver.contentUrl) {
                 $http({
-                    url  : deliver.contentUrl,
+                    url: deliver.contentUrl,
                     cache: true
                 }).then(function (rst) {
                     defer.resolve(deliver.data = rst.data);
@@ -38,9 +36,9 @@
             return defer.promise.then(function (content) {
                 deliver.content = content || deliver.content || '';
 
-                var oldOpen     = _open(deliver);
-                var $el         = $('#layui-layer' + oldOpen);
-                var $content    = $el.find('.layui-layer-content');
+                var oldOpen = _open(deliver);
+                var $el = $('#layui-layer' + oldOpen);
+                var $content = $el.find('.layui-layer-content');
                 var injectScope = deliver.scope || $rootScope.$new();
                 $content.replaceWith($compile($.trim($content[0].innerHTML))(injectScope));
                 $timeout(function () {
@@ -69,5 +67,5 @@
         };
 
         return layer;
-    }
+    });
 })();
