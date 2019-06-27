@@ -363,51 +363,67 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'E',
         template: $('#areaSelectTemplate').html(),
-        scope: { type: "@", deep: "@", required:"@" },
-        controller: function ($scope, $myHttp) {
+        scope: { type: "@", deep: "@", required: "@", provinceVal: "@", cityVal: "@", countyVal: "@",townVal:"@" },
+        controller: function ($scope, $myHttp,$timeout) {
             $scope.ie8 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/8./i) == "8.";
             $myHttp.getCache('/index/areaSelect').mySuccess(function (result) {
                 $scope.data = result.data;
-                $scope.provinces = [];
-                for (var i = 0, len = $scope.data.length; i < len ; i++) {
-                    if ($scope.data[i].type == 0) {
-                        $scope.provinces[$scope.provinces.length] = $scope.data[i];
-                    }
+                $scope.provinces = [{ name: '请选择省', value: '' }].concat($scope.data['provinces']);
+                $scope.cities = [{ name: '请选择市', value: '' }];
+                $scope.counties = [{ name: '请选择区', value: '' }];
+                $scope.towns = [{name: '请选择镇', value: '' }];
+                if ($scope.deep >= 1 && $scope.provinceVal !== undefined) {
+                    $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
+                        return val.parentValue == $scope.provinceVal;
+                    }).get());
                 }
+                if ($scope.deep >= 2 && $scope.cityVal !== undefined) {
+                    $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
+                        return val.parentValue == $scope.cityVal;
+                    }).get());
+                }
+                if ($scope.deep >= 3 && $scope.countyVal !== undefined) {
+                    $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
+                        return val.parentValue == $scope.countyVal;
+                    }).get());
+                }
+                $timeout(function () {
+                    layuiForm.on('select(province-select)', function (data) {
+                        $scope.provinceVal = $scope.provinces[parseInt(data.value)].value;
+                        $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
+                            return val.parentValue == $scope.provinceVal;
+                        }).get());
+                        $scope.counties = [{ name: '请选择区', value: '' }];
+                        $scope.towns = [{ name: '请选择镇', value: '' }];
+                        $scope.cityVal = "";
+                        $scope.countyVal = "";
+                        $scope.townVal = "";
+                        $scope.$apply();
+                        layuiForm.render('select');
+                    });
+                    layuiForm.on('select(city-select)', function (data) {
+                        $scope.cityVal = $scope.cities[parseInt(data.value)].value;
+                        $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
+                            return val.parentValue == $scope.cityVal;
+                        }).get());
+                        $scope.towns = [{ name: '请选择镇', value: '' }];
+                        $scope.countyVal = "";
+                        $scope.townVal = "";
+                        $scope.$apply();
+                        layuiForm.render('select');
+                    });
+                    layuiForm.on('select(county-select)', function (data) {
+                        $scope.townVal = $scope.towns[parseInt(data.value)].value;
+                        $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
+                            return val.parentValue == $scope.countyVal;
+                        }).get());
+                        $scope.townVal = "";
+                        $scope.$apply();
+                        layuiForm.render('select');
+                    });
+                    layuiForm.render('select');
+                });
             });
-            $scope.changeProvice = function (e) {
-                $scope.provinceVal = $(e.target).val();
-                $scope.cities = [];
-                for (var i = 0, len = $scope.data.length;i<len ;i++) {
-                    if ($scope.data[i].parentValue == $scope.provinceVal) {
-                        $scope.cities[$scope.cities.length] = $scope.data[i];
-                    }
-                }
-                $scope.counties = [];
-                $scope.towns = [];
-                layuiForm.render('select');
-            }
-            $scope.changeCity = function (e) {
-                $scope.cityVal = $(e.target).val();
-                $scope.counties = [];
-                for (var i = 0, len = $scope.data.length; i < len ; i++) {
-                    if ($scope.data[i].parentValue == $scope.cityVal) {
-                        $scope.counties[$scope.counties.length] = $scope.data[i];
-                    }
-                }
-                $scope.towns = [];
-                layuiForm.render('select');
-            }
-            $scope.changeCountry = function (e) {
-                $scope.countryVal = $(e.target).val();
-                $scope.towns = [];
-                for (var i = 0, len = $scope.data.length; i < len ; i++) {
-                    if ($scope.data[i].parentValue == $scope.countryVal) {
-                        $scope.towns[$scope.towns.length] = $scope.data[i];
-                    }
-                }
-                layuiForm.render('select');
-            }
         }
     };
 }).directive("uploadImage", function () {
@@ -438,17 +454,22 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             };
             $timeout(function () {
                 $scope.uploader = new WebUploader.Uploader({
-                    swf: 'plugin/webuploader/Uploader.swf',
-                    auto: true,
-                    duplicate: true,
-                    server: '/index/uploadSingleImage',
-                    fileVal: 'fileUpload',
-                    formData:{ pathName:$scope.path },
-                    pick: { id: '#' + $scope.name + 'Id' },
-                    fileNumLimit: 1,
+                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    auto: true,//选中文件后自动上传
+                    server: '/index/uploadSingleImage',//处理上传文件的统一控制器
+                    fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
+                    formData:{ pathName:$scope.path },//每次上传时要提供一个上传目录，让服务端确认保存位置
+                    pick: {
+                        id: '#' + $scope.name + 'Id',//生成上传插件的位置
+                        multiple:false //每次只能选一个文件
+                    },
                     //允许上传的图片格式后缀
-                    extensions: 'webp,gif,jpg,jpeg,bmp,png,tif,emf,ico,flic,wmf,raw,hdri,ai,eps,ufo,dxf,pcd,cdr,psd,svg,fpx,exif,tga,pcx,GIF,JPG,JPEG,BMP,PNG,WEBP,PCX,TIF,TGA,EXIF,FPX,SVG,PSD,CDR,PCD,DXF,UFO,EPS,AI,HDRI,RAW,WMF,FLIC,EMF,ICO'
-                }).on('startUpload', function () {
+                    accept: {
+                        title:'image',
+                        extensions: 'gif,webp,jpg,jpeg,bmp,png,tif,emf,ico,flic,wmf,raw,hdri,ai,eps,ufo,dxf,pcd,cdr,psd,svg,fpx,exif,tga,pcx,GIF,JPG,JPEG,BMP,PNG,WEBP,PCX,TIF,TGA,EXIF,FPX,SVG,PSD,CDR,PCD,DXF,UFO,EPS,AI,HDRI,RAW,WMF,FLIC,EMF,ICO',
+                        mimeTypes: 'image/*',
+                    }
+                }).on('uploadStart', function (file) {
                     $scope.showProgress = true;
                     $scope.$apply();
                 }).on('uploadProgress', function (file, percentage) {
@@ -489,7 +510,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     $timeout(function () {
                         $('#' + $scope.name + '-show-area').removeClass('ani');
                     },280);
-                }));
+                })).on('error', function (type) {
+                    if (type === 'Q_TYPE_DENIED') {
+                        layuiLayer.msg('该文件类型可能不是图片文件。', { icon: 5, anim: 6 });
+                    }
+                });
             });
         }
     };
@@ -503,11 +528,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         template: $('#treeFormTemplate').html(),
         transclude: true,
         scope: { url: "@", id: "@",targetController:"@"},
-        controller: function ($scope) {
+        controller: function ($scope,$myHttp) {
             var $rightContent = $('#' + $scope.id + ' .right-content');
             var $treeContent = $rightContent.parent();
             var $leftTree = $('#' + $scope.id + ' .left-tree');
-            $.myGet($scope.url, function (result) {
+            $myHttp.get($scope.url).mySuccess(function (result) {
                 $.fn.zTree.init($('#tree-' + $scope.id), {
                     view: {
                         showLine: false
@@ -518,6 +543,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     },
                     callback: {
                         onClick: function (event, treeId, treeNode) {
+                            $scope.$emit('onClick',event, treeId, treeNode);
                             $rightContent.addClass('ani');
                             $treeContent.css('overflow-x', 'hidden');
                             setTimeout(function () {
@@ -525,7 +551,8 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                                 $rightContent.css('opacity', 'unset').removeClass('ani');
                                 $treeContent.css('overflow-x', 'unset');
                             },280);
-                        }
+                        },
+
                     }
                 }, result.data);
                 layuiForm.render();
@@ -806,10 +833,12 @@ function postOpenWin(url, params, searchParam) {
 //--------------------------分割线-------------------------------
 //上面的代码不能改，下面的代码可以改
 //--------------------------分割线-------------------------------
-myApp.controller('testTreeForm', function ($scope) {
-    $scope.callback = function (result) {
+myApp.controller('testTreeForm', function ($scope,$myHttp) {
+    //监听树菜单点击事件
+    $scope.$on('onClick', function (event, treeId, treeNode) {
 
-    }
+    });
+
 });
 myApp.controller("upload-image", function ($scope) {
     

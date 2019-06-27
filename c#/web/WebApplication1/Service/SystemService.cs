@@ -17,53 +17,55 @@ namespace WebApplication1.Service
         /// 加载地区树
         /// </summary>
         /// <returns></returns>
-        public List<AreaTree> LoadAreaTree()
+        public Dictionary<string, List<AreaTree>> LoadAreaTree()
         {
             ProvinceRepository provinceRepository = new ProvinceRepository();
             CityRepository cityRepository = new CityRepository();
             DistrictRepository districtRepository = new DistrictRepository();
             TownRepository townRepository = new TownRepository();
-            List<AreaTree> areaTreeList = new List<AreaTree>();
+            Dictionary<string, List<AreaTree>> areaTreeMap = new Dictionary<string, List<AreaTree>>();
+            List<AreaTree> provinces = new List<AreaTree>();
             foreach (Province province in provinceRepository.FindList())
             {
-                areaTreeList.Add(new AreaTree
+                provinces.Add(new AreaTree
                 {
                     name=province.ProvinceName,
-                    value=province.ProvinceID,
-                    type=0
+                    value=Convert.ToString(province.ProvinceID)
                 });
             }
+            areaTreeMap.Add("provinces", provinces);
+            List<AreaTree> cities = new List<AreaTree>();
             foreach (City city in cityRepository.FindList())
             {
-                areaTreeList.Add(new AreaTree
+                cities.Add(new AreaTree
                 {
                     name = city.CityName,
                     value = city.CityID,
-                    parentValue = city.ProvinceID,
-                    type = 1
+                    parentValue = city.ProvinceID
                 });
             }
+            areaTreeMap.Add("cities", cities);
+            List<AreaTree> counties = new List<AreaTree>();
             foreach (District district in districtRepository.FindList())
             {
-                areaTreeList.Add(new AreaTree
+                counties.Add(new AreaTree
                 {
                     name = district.DistrictName,
                     value = district.DistrictID,
-                    parentValue = district.CityID,
-                    type = 2
+                    parentValue = district.CityID
                 });
             }
+            areaTreeMap.Add("counties", counties);
             //foreach (Town town in townRepository.FindList())
             //{
             //    areaTreeList.Add(new AreaTree
             //    {
             //        name = town.TownName,
             //        value = town.TownID,
-            //        parentValue = town.DistrictID,
-            //        type = 3
+            //        parentValue = town.DistrictID
             //    });
             //}
-            return areaTreeList;
+            return areaTreeMap;
         }
 
         /// <summary>

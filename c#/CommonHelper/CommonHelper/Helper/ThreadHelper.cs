@@ -71,23 +71,26 @@ namespace CommonHelper.Helper
             /// <returns>在冷却时间之外返回false</returns>
             public bool OutCooldownTime()
             {
-                long millisecondSpan = _millisecondSpans[_index % _millisecondSpans.Length];
-                if (_last < DateTime.Now)
+                lock (this)
                 {
-                    _index++;
-                    if (_cooldownType == CooldownType.ORDER && _index >= _millisecondSpans.Length)
+                    long millisecondSpan = _millisecondSpans[_index % _millisecondSpans.Length];
+                    if (_last < DateTime.Now)
                     {
-                        _last = DateTime.MaxValue;
+                        _index++;
+                        if (_cooldownType == CooldownType.ORDER && _index >= _millisecondSpans.Length)
+                        {
+                            _last = DateTime.MaxValue;
+                        }
+                        else
+                        {
+                            _last = DateTime.Now.AddMilliseconds(millisecondSpan);
+                        }
+                        return true;
                     }
                     else
                     {
-                        _last = DateTime.Now.AddMilliseconds(millisecondSpan);
+                        return false;
                     }
-                    return true;
-                }
-                else
-                {
-                    return false;
                 }
             }
         }

@@ -195,78 +195,54 @@
         </script>
         <script type="text/template" id="areaSelectTemplate">
             <div ng-if="type=='line'">
-                <div class="layui-inline" ng-show="(deep>>0) == 1">
+                <div class="layui-inline" ng-show="deep >= 0">
                     <label class="layui-form-label" ng-show="ie8">请选择省</label>
                     <div class="layui-input-inline">
-                        <select name="city" lay-verify="required" ng-change="changeProvice($event)">
-                            <option value="">请选择省</option>
-                            <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" lay-filter="province-select" ng-model="provinceVal" ng-options="x.value as x.name for x in provinces"></select>
                     </div>
                 </div>
-                <div class="layui-inline" ng-show="(deep>>1) == 1">
+                <div class="layui-inline" ng-show="deep >= 1">
                     <label class="layui-form-label" ng-show="ie8">请选择市</label>
                     <div class="layui-input-inline">
-                        <select name="city" lay-verify="required" ng-change="changeCity($event)">
-                            <option value="">请选择市</option>
-                            <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" lay-filter="city-select" ng-model="cityVal" ng-options="x.value as x.name for x in cities"></select>
                     </div>
                 </div>
-                <div class="layui-inline" ng-show="(deep>>2) == 1">
+                <div class="layui-inline" ng-show="deep >= 2">
                     <label class="layui-form-label" ng-show="ie8">请选择区</label>
                     <div class="layui-input-inline">
-                        <select name="city" lay-verify="required" ng-change="changeCountry($event)">
-                            <option value="">请选择区</option>
-                            <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" lay-filter="county-select" ng-model="countyVal" ng-options="x.value as x.name for x in counties"></select>
                     </div>
                 </div>
-                <div class="layui-inline" ng-show="(deep>>3) == 1">
+                <div class="layui-inline" ng-show="deep >= 3">
                     <label class="layui-form-label" ng-show="ie8">请选择镇</label>
                     <div class="layui-input-inline">
-                        <select name="city" lay-verify="required">
-                            <option value="">请选择镇</option>
-                            <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" ng-model="townVal" ng-options="x.value as x.name for x in towns"></select>
                     </div>
                 </div>
             </div>
             <div ng-if="type=='form'">
-                <div class="layui-form-item" ng-show="(deep>>0) == 1">
+                <div class="layui-form-item" ng-show="deep >= 0">
                     <label class="layui-form-label">请选择省</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-verify="required" ng-change="changeProvice($event)">
-                            <option value="">请选择省</option>
-                            <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" lay-filter="province-select" ng-model="provinceVal" ng-options="x.value as x.name for x in provinces"></select>
                     </div>
                 </div>
-                <div class="layui-form-item" ng-show="(deep>>1) == 1">
+                <div class="layui-form-item" ng-show="deep >= 1">
                     <label class="layui-form-label">请选择市</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-verify="required" ng-change="changeCity($event)">
-                            <option value="">请选择市</option>
-                            <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" lay-filter="city-select" ng-model="cityVal" ng-options="x.value as x.name for x in cities"></select>
                     </div>
                 </div>
-                <div class="layui-form-item" ng-show="(deep>>2) == 1">
+                <div class="layui-form-item" ng-show="deep >= 2">
                     <label class="layui-form-label">请选择区</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-verify="required" ng-change="changeCountry($event)">
-                            <option value="">请选择区</option>
-                            <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" lay-filter="county-select" ng-model="countyVal" ng-options="x.value as x.name for x in counties"></select>
                     </div>
                 </div>
-                <div class="layui-form-item" ng-show="(deep>>3) == 1">
+                <div class="layui-form-item" ng-show="deep >= 3">
                     <label class="layui-form-label">请选择镇</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-verify="required">
-                            <option value="">请选择镇</option>
-                            <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
-                        </select>
+                        <select name="city" lay-verify="required" ng-model="townVal" ng-options="x.value as x.name for x in towns"></select>
                     </div>
                 </div>
             </div>
@@ -321,9 +297,7 @@
         <input type="password" id="out-screen-password">
         <div class="layui-layout layui-layout-admin" ng-controller="main-body">
             <div class="layui-header">
-                <div class="layui-logo">
-                    layui 后台布局
-                </div>
+                <div class="layui-logo">layui 后台布局</div>
                 <!-- 头部区域（可配合layui已有的水平导航） -->
                 <ul class="layui-nav layui-layout-left">
                     <li class="layui-nav-item"><a href="">控制台</a></li>
@@ -382,10 +356,10 @@
                 <!-- 内容主体区域 -->
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                     <ul class="layui-tab-title">
-                        <li ng-repeat="x in menus track by x.id" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}"> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
+                        <li ng-repeat="x in menus" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}"> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                     </ul>
                     <div class="layui-tab-content main-content">
-                        <div ng-repeat="x in menus track by x.id" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190626100153'"></div>
+                        <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190627151602'"></div>
                     </div>
                 </div>
             </div>
@@ -446,6 +420,6 @@
         <script src="plugin/ng-layer.js" charset="utf-8"></script>
         <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
 		<script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script>
-        <script src="my-js/project.js?v=20190626100153" charset="utf-8"></script>
+        <script src="my-js/project.js?v=20190627151602" charset="utf-8"></script>
     </body>
 </html>
