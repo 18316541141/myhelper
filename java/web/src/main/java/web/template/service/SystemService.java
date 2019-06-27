@@ -1,9 +1,11 @@
 package web.template.service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import web.template.entity.AreaTree;
 import web.template.entity.LeftMenu;
 /**
  * 项目内置的业务逻辑类
@@ -11,6 +13,12 @@ import web.template.entity.LeftMenu;
  */
 @Service("systemService")
 public class SystemService {
+	
+	public Map<String, List<AreaTree>> loadAreaTree(){
+		
+		return null;
+	}
+	
 	/**
 	 * 根据用户名，加载左侧的菜单。
 	 * @param username 当前用户的用户名称

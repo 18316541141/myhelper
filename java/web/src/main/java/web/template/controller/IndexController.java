@@ -1,7 +1,9 @@
 package web.template.controller;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -10,11 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -25,13 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.google.code.kaptcha.Producer;
 import com.txj.common.FileHelper;
-
+import com.txj.common.ImageHandleHelper;
 import web.template.entity.Result;
 import web.template.entity.TreeFormNode;
-import web.template.entity.UploadFilesResult;
 import web.template.service.SystemService;
 @RestController
 @RequestMapping("/index")
@@ -48,6 +46,14 @@ public class IndexController {
 	public IndexController(){
 		allowPath=new HashSet<String>();
 		allowPath.add("test");
+	}
+	
+	/**
+	 * 加载地区选择json
+	 * @return
+	 */
+	public Result areaSelect(){
+		return null;
 	}
 	
 	/**
@@ -103,10 +109,15 @@ public class IndexController {
 		if(allowPath.contains(pathName)){
 			InputStream inputStream;
 			try {
-				inputStream = new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getInputStream();
-				response.addHeader("Cache-control","max-age="+Integer.MAX_VALUE);
-				response.setContentType("image/jpeg");
-				FileCopyUtils.copy(inputStream, response.getOutputStream());
+				String imgFile=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFilename();
+				if(new File(imgFile).exists()){
+					inputStream = new FileInputStream(imgFile);
+					response.addHeader("Cache-control","max-age="+Integer.MAX_VALUE);
+					response.setContentType("image/jpeg");
+					FileCopyUtils.copy(inputStream, response.getOutputStream());					
+				}else{
+					response.setStatus(404);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -133,15 +144,20 @@ public class IndexController {
 		try {
 			File file=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFile();
 			if(file.exists()){
-				
+				Image scaleImage=ImageHandleHelper.scale(ImageIO.read(file), imgWidth, imgHeight);
+				Image cutImage=ImageHandleHelper.cutPicByRect(scaleImage, new Rectangle(x, y, w, h));
+				String sha1=FileHelper.SaveImageBySha1(cutImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getPath());
+				return new Result(0, null, sha1);
 			}else{
-				
+				return new Result(-1,"图片不存在，切割失败！",null);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			return new Result(-1,e.getMessage(),null);
 		}
-		return null;
 	}
+	
+	
 	
 	/**
 	 * 上次单张图片
@@ -157,7 +173,10 @@ public class IndexController {
 				File target=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
 				String sha1=FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
 				Image image=ImageIO.read(new File(target.getAbsoluteFile()+File.separator+sha1));
+				Image scaleImg=ImageHandleHelper.scale(image, 150, image.getHeight(null) * 150 / image.getWidth(null));
+				String scaleSha1=FileHelper.SaveImageBySha1(scaleImg, target.getAbsolutePath());
 				Map<String, Object> dataMap=new HashMap<>();
+				dataMap.put("thumbnailName", scaleSha1);
 				dataMap.put("imgName", sha1);
 				dataMap.put("imgWidth", image.getWidth(null));
 				dataMap.put("imgHeight", image.getHeight(null));
@@ -180,27 +199,19 @@ public class IndexController {
 	 * @param pathName	路径名称
 	 * @return
 	 */
-	public Result uploadFiles(@RequestParam("fileUpload")MultipartFile[] fileUploads, HttpServletRequest request,String pathName){
+	public Result uploadFiles(@RequestParam("fileUploads")MultipartFile fileUploads, HttpServletRequest request,String pathName){
 		if (allowPath.contains(pathName))
         {
-			List<UploadFilesResult> uploadFilesResultList=new ArrayList<>();
-			UploadFilesResult uploadFilesResult;
-			for (MultipartFile multipartFile : fileUploads) {
-				uploadFilesResult=new UploadFilesResult();
-				File target;
-				try {
-					target = new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
-					uploadFilesResult.setSha1(FileHelper.SaveInputStreamBySha1(multipartFile.getInputStream(), target.getAbsolutePath()));
-					multipartFile.getOriginalFilename();
-					uploadFilesResult.setExtension("");
-					uploadFilesResultList.add(uploadFilesResult);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			try {
+				File target = new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
+				return new Result(0, null, FileHelper.SaveInputStreamBySha1(fileUploads.getInputStream(), target.getAbsolutePath()));
+			} catch (IOException e) {
+				e.printStackTrace();
+				return new Result(-1,e.getMessage(),null);
 			}
-        }
-		return null;
+		}else{			
+			return new Result(-1, "该路径不允许上传文件。", null);
+		}
 	}
 	
 	
