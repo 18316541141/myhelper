@@ -528,44 +528,72 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         template: $('#treeFormTemplate').html(),
         transclude: true,
         scope: { url: "@", id: "@",targetController:"@"},
-        controller: function ($scope,$myHttp) {
+        controller: function ($scope, $myHttp) {
+            $scope.$on('delNode', function (event, id) {
+                var nodes = $scope.ztree.getNodesByParam("id", id, null);
+                if (nodes.length === 0)
+                    throw new Error('找不到该节点，删除失败！');
+                $scope.ztree.removeNode(nodes[0], false);
+            });
+            $scope.$on('rename', function (event, id,name) {
+                var nodes = $scope.ztree.getNodesByParam("id", id, null);
+                if (nodes.length === 0)
+                    throw new Error('找不到该节点，编辑失败！');
+                nodes[0].name = name;
+                $scope.ztree.updateNode(nodes[0]);
+            });
+            $scope.$on('reloadTree', function (event) {
+                $scope.loadTree();
+            });
             var $rightContent = $('#' + $scope.id + ' .right-content');
             var $treeContent = $rightContent.parent();
             var $leftTree = $('#' + $scope.id + ' .left-tree');
-            $myHttp.get($scope.url).mySuccess(function (result) {
-                $.fn.zTree.init($('#tree-' + $scope.id), {
-                    view: {
-                        showLine: false
-                    },
-                    edit: {
-                        enable: true,
-                        showRemoveBtn:true
-                    },
-                    callback: {
-                        onClick: function (event, treeId, treeNode) {
-                            $scope.$emit('onClick',event, treeId, treeNode);
-                            $rightContent.addClass('ani');
-                            $treeContent.css('overflow-x', 'hidden');
-                            setTimeout(function () {
-                                $leftTree.css('opacity', 'unset');
-                                $rightContent.css('opacity', 'unset').removeClass('ani');
-                                $treeContent.css('overflow-x', 'unset');
-                            },280);
+            $scope.loadTree = function () {
+                $myHttp.get($scope.url).mySuccess(function (result) {
+                    $scope.ztree = $.fn.zTree.init($('#tree-' + $scope.id), {
+                        view: {
+                            showLine: false
                         },
-
-                    }
-                }, result.data);
-                layuiForm.render();
-                $leftTree.height($rightContent.height());
-                $treeContent.css('overflow-x', 'hidden');
-                $leftTree.addClass('ani');
-                $rightContent.addClass('ani');
-                setTimeout(function () {
-                    $leftTree.css('opacity', 'unset').removeClass('ani');
-                    $rightContent.css('opacity', 'unset').removeClass('ani');
-                    $treeContent.css('overflow-x','unset');
-                }, 280);
-            });
+                        edit: {
+                            enable: true,
+                            showRemoveBtn: false,
+                            showRenameBtn: false,
+                            drag:{
+                                prev : true,
+                                inner : true,
+                                next: true,
+                                isMove: true
+                            }
+                        },
+                        callback: {
+                            onClick: function (event, treeId, treeNode) {
+                                $scope.$emit('onClick',event, treeId, treeNode);
+                                $rightContent.addClass('ani');
+                                $treeContent.css('overflow-x', 'hidden');
+                                setTimeout(function () {
+                                    $leftTree.css('opacity', 'unset');
+                                    $rightContent.css('opacity', 'unset').removeClass('ani');
+                                    $treeContent.css('overflow-x', 'unset');
+                                },280);
+                            },
+                            onDrop: function (event, treeId, treeNodes, targetNode, moveType, isCopy) {
+                                $scope.$emit('onDrop', event, treeId, treeNodes, targetNode, moveType, isCopy);
+                            }
+                        }
+                    }, result.data);
+                    layuiForm.render();
+                    $leftTree.height($rightContent.height());
+                    $treeContent.css('overflow-x', 'hidden');
+                    $leftTree.addClass('ani');
+                    $rightContent.addClass('ani');
+                    setTimeout(function () {
+                        $leftTree.css('opacity', 'unset').removeClass('ani');
+                        $rightContent.css('opacity', 'unset').removeClass('ani');
+                        $treeContent.css('overflow-x','unset');
+                    }, 280);
+                });
+            };
+            $scope.loadTree();
         }
     };
 }).directive("uploadFiles", function () {
@@ -833,12 +861,24 @@ function postOpenWin(url, params, searchParam) {
 //--------------------------分割线-------------------------------
 //上面的代码不能改，下面的代码可以改
 //--------------------------分割线-------------------------------
-myApp.controller('testTreeForm', function ($scope,$myHttp) {
+myApp.controller('testTreeForm', function ($scope, $myHttp) {
     //监听树菜单点击事件
     $scope.$on('onClick', function (event, treeId, treeNode) {
-
+        alert('点击');
     });
-
+    //监听树菜单的拖动事件
+    $scope.$on('onDrop', function (event, treeId, treeNodes, targetNode, moveType, isCopy) {
+        alert('拖动结束');
+    });
+    $scope.del = function () {
+        $scope.$broadcast('delNode', '01');
+    };
+    $scope.refresh = function () {
+        $scope.$broadcast('reloadTree');
+    };
+    $scope.rename = function () {
+        $scope.$broadcast('rename', '01','新名称');
+    };
 });
 myApp.controller("upload-image", function ($scope) {
     

@@ -70,11 +70,14 @@
             .tree-container > .left-tree {
                 float: left;
                 width: 200px;
+            }
+            .left-tree>.left-tree-contain{
                 border: 1px solid #ddd;
                 overflow: hidden;
                 padding-bottom: 10px;
                 box-sizing: border-box;
             }
+
             .tree-container > .left-tree.ani{
                 animation-name: fadeInLeft;
                 animation-duration: .3s;
@@ -146,6 +149,9 @@
                 white-space:pre-wrap;
                 word-wrap:break-word;
             }
+            .left-tree>.left-tree-contain{
+                margin-top:10px;
+            }
         </style>
         <script type="text/template" id="cropTemplate">
             <div class="layer-body">
@@ -185,7 +191,10 @@
         <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
                 <div class="left-tree" style="opacity:0;">
-                    <div id="tree-{{id}}" class="ztree layui-side-scroll"></div>
+                    <input placeholder="按名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam"/>
+                    <div class="left-tree-contain">
+                        <div id="tree-{{id}}" class="ztree layui-side-scroll"></div>
+                    </div>
                 </div>
                 <div class="right-content" ng-transclude style="opacity:0;"></div>
             </div>
