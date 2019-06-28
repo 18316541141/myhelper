@@ -52,6 +52,7 @@ var layuiLayer = layui.layer;
 var layuiElement = layui.element;
 var layuiTree = layui.tree;
 var layuiTable = layui.table;
+var layuiLaypage = layui.laypage
 /**
  * layui自定义的表单校验，
  * 方法源码在webapp/my-js/common-by-layui.js
@@ -350,18 +351,33 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     });
                     $('.layui-nav-bar').remove();
                     layuiElement.render('nav');
-                    setTimeout(function () {
-                        $('#login-page').removeClass().css('left', '100%');
-                    }, 450);
-                    $('#login-page').removeClass().addClass('login-ani');
+                    $('#login-page').removeClass('logout');
                 }
             });
         });
         layuiForm.render('checkbox');
     });
+}).directive('pageTable', function () {
+    return {
+        restrict: 'EA',
+        template: $('#pageTableTemplate').html(),
+        scope: { id: "@",url:"@" ,postData:"$",pageCallback:"$"},
+        transclude: true,
+        controller: function ($scope, $timeout,$myHttp) {
+            $myHttp.post($scope.url, $scope.postData()).mySuccess(function (result) {
+                $scope.pageCallback(result);
+                $timeout(function () {
+                    layuiLaypage.render({
+                        elem: 'page-' + $scope.id,
+                        count: totalCount
+                    });
+                });
+            });
+        }
+    };
 }).directive("areaSelect", function () {
     return {
-        restrict: 'E',
+        restrict: 'EA',
         template: $('#areaSelectTemplate').html(),
         scope: { type: "@", deep: "@", required: "@", provinceVal: "@", cityVal: "@", countyVal: "@",townVal:"@" },
         controller: function ($scope, $myHttp,$timeout) {
@@ -388,39 +404,45 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     }).get());
                 }
                 $timeout(function () {
-                    layuiForm.on('select(province-select)', function (data) {
-                        $scope.provinceVal = $scope.provinces[parseInt(data.value)].value;
-                        $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
-                            return val.parentValue == $scope.provinceVal;
-                        }).get());
-                        $scope.counties = [{ name: '请选择区', value: '' }];
-                        $scope.towns = [{ name: '请选择镇', value: '' }];
-                        $scope.cityVal = "";
-                        $scope.countyVal = "";
-                        $scope.townVal = "";
-                        $scope.$apply();
-                        layuiForm.render('select');
-                    });
-                    layuiForm.on('select(city-select)', function (data) {
-                        $scope.cityVal = $scope.cities[parseInt(data.value)].value;
-                        $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
-                            return val.parentValue == $scope.cityVal;
-                        }).get());
-                        $scope.towns = [{ name: '请选择镇', value: '' }];
-                        $scope.countyVal = "";
-                        $scope.townVal = "";
-                        $scope.$apply();
-                        layuiForm.render('select');
-                    });
-                    layuiForm.on('select(county-select)', function (data) {
-                        $scope.townVal = $scope.towns[parseInt(data.value)].value;
-                        $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
-                            return val.parentValue == $scope.countyVal;
-                        }).get());
-                        $scope.townVal = "";
-                        $scope.$apply();
-                        layuiForm.render('select');
-                    });
+                    if ($scope.deep >= 2) {
+                        layuiForm.on('select(province-select)', function (data) {
+                            $scope.provinceVal = $scope.provinces[parseInt(data.value)].value;
+                            $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
+                                return val.parentValue == $scope.provinceVal;
+                            }).get());
+                            $scope.counties = [{ name: '请选择区', value: '' }];
+                            $scope.towns = [{ name: '请选择镇', value: '' }];
+                            $scope.cityVal = "";
+                            $scope.countyVal = "";
+                            $scope.townVal = "";
+                            $scope.$apply();
+                            layuiForm.render('select');
+                        });
+                    }
+                    if ($scope.deep >= 2) {
+                        layuiForm.on('select(city-select)', function (data) {
+                            $scope.cityVal = $scope.cities[parseInt(data.value)].value;
+                            $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
+                                return val.parentValue == $scope.cityVal;
+                            }).get());
+                            $scope.towns = [{ name: '请选择镇', value: '' }];
+                            $scope.countyVal = "";
+                            $scope.townVal = "";
+                            $scope.$apply();
+                            layuiForm.render('select');
+                        });
+                    }
+                    if ($scope.deep >= 3) {
+                        layuiForm.on('select(county-select)', function (data) {
+                            $scope.townVal = $scope.towns[parseInt(data.value)].value;
+                            $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
+                                return val.parentValue == $scope.countyVal;
+                            }).get());
+                            $scope.townVal = "";
+                            $scope.$apply();
+                            layuiForm.render('select');
+                        });
+                    }
                     layuiForm.render('select');
                 });
             });
@@ -428,7 +450,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     };
 }).directive("uploadImage", function () {
     return {
-        restrict: 'E',
+        restrict: 'EA',
         template: $('#uploadImageTemplate').html(),
         scope: { name: "@", path: "@", cut: "@"},
         controller: function ($scope, layer, $timeout, $myHttp) {
@@ -449,7 +471,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 }).mySuccess(function (response) {
                     layer.close($scope.cropLayer);
                     $scope.cropLayer = null;
-                    $scope.imgName = response.data;
+                    var data=response.data;
+                    $scope.imgName = data.imgName;
+                    $scope.thumbnailName = data.thumbnailName;
                 });
             };
             $timeout(function () {
@@ -458,7 +482,8 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     auto: true,//选中文件后自动上传
                     server: '/index/uploadSingleImage',//处理上传文件的统一控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
-                    formData:{ pathName:$scope.path },//每次上传时要提供一个上传目录，让服务端确认保存位置
+                    formData: { pathName: $scope.path },//每次上传时要提供一个上传目录，让服务端确认保存位置
+                    duplicate: true,
                     pick: {
                         id: '#' + $scope.name + 'Id',//生成上传插件的位置
                         multiple:false //每次只能选一个文件
@@ -506,10 +531,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     }
                     $scope.showProgress = false;
                     $scope.$apply();
-                    $('#' + $scope.name + '-show-area').addClass('ani');
-                    $timeout(function () {
-                        $('#' + $scope.name + '-show-area').removeClass('ani');
-                    },280);
                 })).on('error', function (type) {
                     if (type === 'Q_TYPE_DENIED') {
                         layuiLayer.msg('该文件类型可能不是图片文件。', { icon: 5, anim: 6 });
@@ -524,7 +545,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
      * 通过<tree-form> ...表单元素... </tree-form>快速构建树表单标签。
      */
     return {
-        restrict: 'E',
+        restrict: 'EA',
         template: $('#treeFormTemplate').html(),
         transclude: true,
         scope: { url: "@", id: "@",targetController:"@"},
@@ -545,8 +566,25 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             $scope.$on('reloadTree', function (event) {
                 $scope.loadTree();
             });
+            $scope.search = function () {
+                var ztree = $scope.ztree;
+                if ($.type($scope.searchParam) === 'string' && ($scope.searchParam = $.trim($scope.searchParam)).length > 0) {
+                    ztree.hideNodes(ztree.getNodesByParam("isHidden", false));
+                    var nodes = ztree.getNodesByParamFuzzy('name', $scope.searchParam, null);
+                    var showNodes=[];
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        var tempNode=nodes[i];
+                        do {
+                            showNodes[showNodes.length] = tempNode;
+                        } while ((tempNode = tempNode.getParentNode()) != null);
+                    }
+                    ztree.showNodes(showNodes);
+                    ztree.expandAll(true);
+                } else {
+                    ztree.showNodes(ztree.getNodesByParam("isHidden", true));
+                }
+            };
             var $rightContent = $('#' + $scope.id + ' .right-content');
-            var $treeContent = $rightContent.parent();
             var $leftTree = $('#' + $scope.id + ' .left-tree');
             $scope.loadTree = function () {
                 $myHttp.get($scope.url).mySuccess(function (result) {
@@ -568,13 +606,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                         callback: {
                             onClick: function (event, treeId, treeNode) {
                                 $scope.$emit('onClick',event, treeId, treeNode);
-                                $rightContent.addClass('ani');
-                                $treeContent.css('overflow-x', 'hidden');
-                                setTimeout(function () {
-                                    $leftTree.css('opacity', 'unset');
-                                    $rightContent.css('opacity', 'unset').removeClass('ani');
-                                    $treeContent.css('overflow-x', 'unset');
-                                },280);
                             },
                             onDrop: function (event, treeId, treeNodes, targetNode, moveType, isCopy) {
                                 $scope.$emit('onDrop', event, treeId, treeNodes, targetNode, moveType, isCopy);
@@ -583,14 +614,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     }, result.data);
                     layuiForm.render();
                     $leftTree.height($rightContent.height());
-                    $treeContent.css('overflow-x', 'hidden');
-                    $leftTree.addClass('ani');
-                    $rightContent.addClass('ani');
-                    setTimeout(function () {
-                        $leftTree.css('opacity', 'unset').removeClass('ani');
-                        $rightContent.css('opacity', 'unset').removeClass('ani');
-                        $treeContent.css('overflow-x','unset');
-                    }, 280);
                 });
             };
             $scope.loadTree();
@@ -598,7 +621,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     };
 }).directive("uploadFiles", function () {
     return {
-        restrict: 'E',
+        restrict: 'EA',
         template: $('#uploadFilesTemplate').html(),
         scope: { name: "@", fileDescMaxWidth: "@", path: "@" },
         controller: function ($scope, $timeout, $myHttp) {
@@ -805,7 +828,7 @@ function areaAnalysis(width, height) {
  * 退出登录的回调方法
  */
 function logoutCallback() {
-    $('#login-page').removeClass().addClass('logout-ani').css('left', '0');
+    $('#login-page').addClass('logout');
 }
 
 /**
@@ -895,4 +918,15 @@ myApp.controller('big-img-ctrl',function($scope,$timeout){
 });
 myApp.controller('upload-files', function ($scope) {
 
+});
+myApp.controller('pageTableTest', function ($scope) {
+    $scope.postData = function () {
+        return {
+            provinceName:$scope.provinceName,
+            provinceID: $scope.provinceID
+        };
+    };
+    $scope.pageCallback = function (result) {
+        $scope.provinces = result.data.pageDataList;
+    };
 });

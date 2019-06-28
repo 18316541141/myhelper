@@ -2,28 +2,11 @@
     <head>
         <meta charset="utf-8">
     </head>
-    <body ng-app="MyModule">
-        <div ng-controller="MyCtrl">
-			<input type="text" ng-model="pureWater">
-			<drink water="pureWater"></drink>
-        </div>
+    <body>
+		
         <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
         <script type="text/javascript">
-			var myModule = angular.module("MyModule", []);
-			myModule.controller('MyCtrl', ['$scope', function($scope){
-				$scope.pureWater="纯净水";
-			}])
-			myModule.directive("drink", function() {
-				return {
-					restrict:'E',
-					scope:{
-						water:'='
-					},
-					template:'<input type="text" ng-model="water"/>'
-				}
-			});
+			
         </script>
     </body>
 </html>
-
-"500731"

@@ -13,9 +13,9 @@ namespace WebApplication1.Mapping
         public ProvinceMap()
         {
             this.ToTable("S_Province");
-            this.HasKey(u => u.ProvinceID);
-            this.Property(u => u.ProvinceID).HasColumnName("ProvinceID").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            this.Property(u => u.ProvinceName).HasColumnName("ProvinceName");
+            this.HasKey(u => u.provinceID);
+            this.Property(u => u.provinceID).HasColumnName("ProvinceID").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            this.Property(u => u.provinceName).HasColumnName("ProvinceName");
         }
     }
 }

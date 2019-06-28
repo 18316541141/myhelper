@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Entity
+namespace WebApplication1.Params
 {
-    public class Province
+    /// <summary>
+    /// 省表查询条件
+    /// </summary>
+    public class ProvinceParams
     {
         /// <summary>
         /// 地区名称

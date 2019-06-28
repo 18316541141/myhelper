@@ -18,6 +18,8 @@ using System.Web.SessionState;
 using System.Web.UI;
 using WebApplication1.Entity;
 using WebApplication1.filter;
+using WebApplication1.Params;
+using WebApplication1.Repository;
 using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
@@ -203,7 +205,14 @@ namespace WebApplication1.Controllers
                     {
                         using (Image cutImg = ImageHandleHelper.CutPicByRect(bitmap.GetThumbnailImage(imgWidth, imgHeight, () => false, IntPtr.Zero), x, y, w, h))
                         {
-                            return Json(new Result { code = 0, data = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}") }, JsonRequestBehavior.AllowGet);
+
+                            using (Image thumbnailImg = cutImg.GetThumbnailImage(150, cutImg.Height * 150 / cutImg.Width, () => false, IntPtr.Zero))
+                            {
+                                return Json(new Result { code = 0, data = new {
+                                    thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
+                                    imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}")
+                                } }, JsonRequestBehavior.AllowGet);
+                            }
                         }
                     }
                 }
@@ -309,6 +318,19 @@ namespace WebApplication1.Controllers
             {
                 Session["vercode"] = Guid.NewGuid().ToString();
             }
+        }
+
+        /// <summary>
+        /// 分页查询测试
+        /// </summary>
+        /// <param name="provinceParams"></param>
+        /// <returns></returns>
+        public JsonResult TestPage(ProvinceParams provinceParams,int pageIndex,int pageSize=20)
+        {
+            ProvinceRepository provinceRepository = new ProvinceRepository();
+            return Json(new Result { code = 0, data = provinceRepository.PageList((province) =>
+            province.provinceID == provinceParams.provinceID && province.provinceName.Contains(provinceParams.provinceName)
+            , pageIndex, pageSize)}, JsonRequestBehavior.AllowGet);
         }
     }
 }

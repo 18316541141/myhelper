@@ -28,16 +28,19 @@ namespace WebApplication1.filter
             {
                 var content = filterContext.Result;
                 var response = filterContext.HttpContext.Response;
-                var acceptEncoding = filterContext.HttpContext.Request.Headers["Accept-Encoding"].ToUpper();
-                if (acceptEncoding.Contains("GZIP"))
+                var acceptEncoding = filterContext.HttpContext.Request.Headers["Accept-Encoding"]?.ToUpper();
+                if (acceptEncoding != null)
                 {
-                    response.AppendHeader("Content-Encoding", "gzip");
-                    response.Filter= new GZipStream(response.Filter, CompressionMode.Compress);
-                }
-                else if (acceptEncoding.Contains("DEFLATE"))
-                {
-                    response.AppendHeader("Content-Encoding", "deflate");
-                    response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                    if (acceptEncoding.Contains("GZIP"))
+                    {
+                        response.AppendHeader("Content-Encoding", "gzip");
+                        response.Filter= new GZipStream(response.Filter, CompressionMode.Compress);
+                    }
+                    else if (acceptEncoding.Contains("DEFLATE"))
+                    {
+                        response.AppendHeader("Content-Encoding", "deflate");
+                        response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                    }
                 }
             }
             base.OnActionExecuted(filterContext);

@@ -25,17 +25,17 @@ namespace WebApplication1.Service
             TownRepository townRepository = new TownRepository();
             Dictionary<string, List<AreaTree>> areaTreeMap = new Dictionary<string, List<AreaTree>>();
             List<AreaTree> provinces = new List<AreaTree>();
-            foreach (Province province in provinceRepository.FindList())
+            foreach (Province province in provinceRepository.ReadOnly.FindList())
             {
                 provinces.Add(new AreaTree
                 {
-                    name=province.ProvinceName,
-                    value=Convert.ToString(province.ProvinceID)
+                    name=province.provinceName,
+                    value=Convert.ToString(province.provinceID)
                 });
             }
             areaTreeMap.Add("provinces", provinces);
             List<AreaTree> cities = new List<AreaTree>();
-            foreach (City city in cityRepository.FindList())
+            foreach (City city in cityRepository.ReadOnly.FindList())
             {
                 cities.Add(new AreaTree
                 {
@@ -46,7 +46,7 @@ namespace WebApplication1.Service
             }
             areaTreeMap.Add("cities", cities);
             List<AreaTree> counties = new List<AreaTree>();
-            foreach (District district in districtRepository.FindList())
+            foreach (District district in districtRepository.ReadOnly.FindList())
             {
                 counties.Add(new AreaTree
                 {
@@ -120,6 +120,14 @@ namespace WebApplication1.Service
                 url = "menus/testMenus1/areaSelect.html"
             };
             leftMenuList11.Add(leftMenu15);
+
+            LeftMenu leftMenu16 = new LeftMenu
+            {
+                id="m16",
+                title="测试1-6",
+                url= "menus/testMenus1/pageTable.html"
+            };
+            leftMenuList11.Add(leftMenu16);
 
             leftMenu1.leftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);

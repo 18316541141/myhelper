@@ -4,6 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using WebApplication1.Entity;
+using WebApplication1.MyExtensions;
 using Webdiyer.WebControls.Mvc;
 
 namespace WebApplication1.Repository
@@ -14,6 +16,131 @@ namespace WebApplication1.Repository
     /// <typeparam name="TEntity"></typeparam>
     public abstract class BaseRepository<TEntity> where TEntity : class
     {
+        /// <summary>
+        /// 只读数据操作
+        /// </summary>
+        public ReadOnlyRepository ReadOnly { get; private set; }
+
+        static ReadOnlyRepository _readOnly { set; get; }
+
+        public BaseRepository()
+        {
+            if (ReadOnly == null)
+            {
+                lock (this)
+                {
+                    if (ReadOnly == null)
+                    {
+                        _readOnly = ReadOnly = new ReadOnlyRepository();
+                    }
+                    else
+                    {
+                        ReadOnly = _readOnly;
+                    }
+                }
+            }
+            else
+            {
+                ReadOnly=_readOnly;
+            }
+        }
+
+        public class ReadOnlyRepository
+        {
+            /// <summary>
+            /// 只读的dbContext，只用于查询只读数据，使用缓存提高效率
+            /// </summary>
+            MyDbContext _readonlyDbContext { set; get; }
+
+            public ReadOnlyRepository()
+            {
+                _readonlyDbContext = new MyDbContext();
+            }
+
+            /// <summary>
+            /// 根据主键查找一个实体
+            /// </summary>
+            /// <param name="id">主键</param>
+            /// <returns></returns>
+            public TEntity FindEntity(object id)
+            {
+                return _readonlyDbContext.Set<TEntity>().Find(id);
+            }
+
+            /// <summary>
+            /// 根据条件查找一个实体
+            /// </summary>
+            /// <param name="predicate">条件</param>
+            /// <returns></returns>
+            public TEntity FindEntity(Expression<Func<TEntity, bool>> predicate)
+            {
+                return _readonlyDbContext.Set<TEntity>().FirstOrDefault(predicate);
+            }
+
+            /// <summary>
+            /// 根据条件查询是否有匹配的数据
+            /// </summary>
+            /// <param name="predicate">条件</param>
+            /// <returns></returns>
+            public bool Exist(Expression<Func<TEntity, bool>> predicate)
+            {
+                return _readonlyDbContext.Set<TEntity>().Where(predicate).Any();
+            }
+
+            /// <summary>
+            /// 根据条件查询符合条件的数据量
+            /// </summary>
+            /// <param name="predicate"></param>
+            /// <returns></returns>
+            public int Count(Expression<Func<TEntity, bool>> predicate)
+            {
+                return _readonlyDbContext.Set<TEntity>().Where(predicate).Count();
+            }
+
+            /// <summary>
+            /// 根据sql查询列表
+            /// </summary>
+            /// <param name="sql">sql</param>
+            /// <returns></returns>
+            public List<TEntity> FindList(string sql)
+            {
+                var query = _readonlyDbContext.Database.SqlQuery<TEntity>(sql);
+                if (query.Any()) { return query.ToList(); }
+                return new List<TEntity>();
+            }
+
+            /// <summary>
+            /// 根据条件查询列表
+            /// </summary>
+            /// <param name="predicate"></param>
+            /// <returns></returns>
+            public List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate = null)
+            {
+                var query = _readonlyDbContext.Set<TEntity>();
+                if (predicate == null)
+                {
+                    return query.ToList();
+                }
+                else
+                {
+                    return query.Where(predicate).ToList();
+                }
+            }
+
+            /// <summary>
+            /// 根据条件分页查询
+            /// </summary>
+            /// <param name="predicate"></param>
+            /// <param name="pageIndex"></param>
+            /// <param name="pageSize"></param>
+            /// <returns></returns>
+            public MyPagedList<TEntity> PageList(Expression<Func<TEntity, bool>> predicate, int pageIndex, int pageSize)
+            {
+                return _readonlyDbContext.Set<TEntity>().Where(predicate).ToMyPagedList(pageIndex, pageSize);
+            }
+        }
+
+
         /// <summary>
         /// 插入一条数据
         /// </summary>
@@ -103,6 +230,7 @@ namespace WebApplication1.Repository
                 return dbContext.Set<TEntity>().Find(id);
             }
         }
+        
 
         /// <summary>
         /// 根据条件查找一个实体
@@ -187,11 +315,11 @@ namespace WebApplication1.Repository
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public IPagedList<TEntity> PageList(Expression<Func<TEntity, bool>> predicate,int pageIndex,int pageSize)
+        public MyPagedList<TEntity> PageList(Expression<Func<TEntity, bool>> predicate,int pageIndex,int pageSize)
         {
             using (MyDbContext dbContext = new MyDbContext())
             {
-                return dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToPagedList(pageIndex,pageSize);
+                return dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToMyPagedList(pageIndex,pageSize);
             }
         }
     }
