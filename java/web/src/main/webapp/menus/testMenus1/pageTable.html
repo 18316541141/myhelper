@@ -1,0 +1,36 @@
+﻿<fieldset class="layui-elem-field layui-field-title">
+    <legend>表格分页查询</legend>
+</fieldset>
+<div ng-controller="pageTableTest">
+    <div page-table id="adasda" url="/index/testPage">
+        <form class="">
+
+        </form>
+        <table class="">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>id</th>
+                    <th>name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in provinces">
+                    <td>{{x.provinceID}}</td>
+                    <td>{{x.provinceName}}</td>
+                    <td>{{x.provinceID}}</td>
+                    <td>{{x.provinceName}}</td>
+                    <td>{{x.provinceID}}</td>
+                    <td>{{x.provinceName}}</td>
+                    <td>{{x.provinceID}}</td>
+                    <td>{{x.provinceName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

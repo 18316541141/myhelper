@@ -27,7 +27,14 @@
                 z-index: 10086;
                 background: #2F4056;
                 overflow: hidden;
+                opacity: 0;
+                transition:all .4s linear;
             }
+            #login-page.logout{
+                opacity: 1;
+                left:0%;
+            }
+
             #login-page .layui-form-checkbox[lay-skin=primary] span {
                 color: #fff;
             }
@@ -35,18 +42,6 @@
             #out-screen-password {
                 position: fixed;
                 left: -10086px;
-            }
-
-            #login-page.login-ani {
-                animation-name: fadeOutRight;
-                animation-duration: .5s;
-                animation-timing-function: linear;
-            }
-
-            #login-page.logout-ani {
-                animation-name: fadeInRight;
-                animation-duration: .5s;
-                animation-timing-function: linear;
             }
 
             .main-content {
@@ -62,44 +57,49 @@
                 top: 1px;
                 padding: 9px 15px;
             }
-
-            .tree-container {
-                width: 100%;
-            }
-
             .tree-container > .left-tree {
                 float: left;
                 width: 200px;
+                position:relative;
+                animation-name: fadeInLeft;
+                animation-duration: .3s;
+                animation-timing-function: linear;
+            }
+            .tree-container > .right-content {
+                float: left;
+                animation-name: fadeInRight;
+                animation-duration: .3s;
+                animation-timing-function: linear;
             }
             .left-tree>.left-tree-contain{
                 border: 1px solid #ddd;
                 overflow: hidden;
                 padding-bottom: 10px;
                 box-sizing: border-box;
-            }
-
-            .tree-container > .left-tree.ani{
-                animation-name: fadeInLeft;
-                animation-duration: .3s;
-                animation-timing-function: linear;
-            }
-
-            .tree-container > .right-content {
-                float: left;
-            }
-            .tree-container > .right-content.ani{
-                animation-name: fadeInRight;
-                animation-duration: .3s;
-                animation-timing-function: linear;
+                position:absolute;
+                bottom:0;
+                top:48px;
+                width: 200px;
             }
             .layui-layout-body{
                 animation-name: fadeIn;
                 animation-duration: .3s;
                 animation-timing-function: linear;
             }
-            .show-image.ani{
+            .show-image{
                 animation-name: flipInX;
                 animation-duration: .8s;
+                animation-timing-function: linear;
+            }
+            .layui-form-item{
+                animation-name: flipInX;
+                animation-duration: .8s;
+                animation-timing-function: linear;
+            }
+            /*表格行动画*/
+            .tr-ani{
+                animation-name: flipInX;
+                animation-duration: .4s;
                 animation-timing-function: linear;
             }
             /*缩略图的外边框装饰样式*/
@@ -149,9 +149,6 @@
                 white-space:pre-wrap;
                 word-wrap:break-word;
             }
-            .left-tree>.left-tree-contain{
-                margin-top:10px;
-            }
         </style>
         <script type="text/template" id="cropTemplate">
             <div class="layer-body">
@@ -175,7 +172,6 @@
             <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name}}-show-area">
                 <label class="layui-form-label">预览</label>
                 <div class="layui-input-block">
-                    <input type="hidden" name="{{name}}" id="{{name}}" value="{{imgName}}">
                     <img style="max-width:100%;" ng-src="{{'/index/showImage?pathName='+path+'&imgName='+imgName}}" class="thumbnail-img"/>
                 </div>
             </div>
@@ -188,15 +184,19 @@
                 </div>
             </div>
         </script>
+        <script type="text/template" id="pageTableTemplate">
+            <div ng-transclude></div>
+            <div id="page-{{id}}"></div>
+        </script>
         <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
-                <div class="left-tree" style="opacity:0;">
-                    <input placeholder="按名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam"/>
+                <div class="left-tree">
+                    <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()"/>
                     <div class="left-tree-contain">
                         <div id="tree-{{id}}" class="ztree layui-side-scroll"></div>
                     </div>
                 </div>
-                <div class="right-content" ng-transclude style="opacity:0;"></div>
+                <div class="right-content" ng-transclude></div>
             </div>
         </script>
         <script type="text/template" id="pageTemplate">
@@ -368,7 +368,7 @@
                         <li ng-repeat="x in menus" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}"> {{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li>
                     </ul>
                     <div class="layui-tab-content main-content">
-                        <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190627151602'"></div>
+                        <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190628153446'"></div>
                     </div>
                 </div>
             </div>
@@ -421,6 +421,7 @@
         <script src="plugin/jquery.min.js" charset="utf-8"></script>
         <script src="plugin/jquery.cookie.js" charset="utf-8"></script>
         <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script>
+        <script src="zTree_v3-master/js/jquery.ztree.exhide.js" charset="utf-8"></script>
         <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
         <script src="angular-1.2.30/angular-sanitize.min.js"></script>
         <script src="my-js/common-by-jquery.js" charset="utf-8"></script>
@@ -429,6 +430,6 @@
         <script src="plugin/ng-layer.js" charset="utf-8"></script>
         <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
 		<script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script>
-        <script src="my-js/project.js?v=20190627151602" charset="utf-8"></script>
+        <script src="my-js/project.js?v=20190628153446" charset="utf-8"></script>
     </body>
 </html>
