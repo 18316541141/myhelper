@@ -382,8 +382,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         				}
         				postData['currentPageIndex']=obj.curr;
         				postData['pageSize']=20;
-        				$myHttp.post($scope.url, postData).mySuccess(function (result) {
+        				$.myPost($scope.url, postData,function (result) {
         					$scope.data=result.data;
+        					obj.count=$scope.data.totalCount;
+        					$scope.$apply();
         				});
         			}
         		});
