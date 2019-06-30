@@ -1,5 +1,8 @@
 package web.template.mapper;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import web.template.entity.MyPagedList;
 public interface BaseMapper<T,P> {
 	/**
@@ -65,7 +68,7 @@ public interface BaseMapper<T,P> {
 	 * @param params
 	 * @return
 	 */
-	public List<T> findListByParams(P params,int pageIndex,int pageSize);
+	public List<T> findListByParams(@Param("params")P params,@Param("currentPageIndex")int currentPageIndex,@Param("pageSize")int pageSize);
 	
 	/**
 	 * 分页查询结果

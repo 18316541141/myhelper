@@ -20,7 +20,7 @@ public class IRobotQrCodePayTaskService {
 	 * @param pageSize
 	 * @return
 	 */
-	public MyPagedList<IRobotQrCodePayTask> page(IRobotQrCodePayTaskParam param,int currentPageIndex,int pageSize){
+	public MyPagedList<IRobotQrCodePayTask> page(IRobotQrCodePayTaskParam param,Integer currentPageIndex,Integer pageSize){
 		return irobotQrCodePayTaskMapper.pageList(param, currentPageIndex, pageSize);
 	}
 }

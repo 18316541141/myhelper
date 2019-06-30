@@ -16,7 +16,7 @@ public class IRobotQrCodePayTaskController {
 	private IRobotQrCodePayTaskService irobotQrCodePayTaskService;
 	
 	@RequestMapping("/page")	
-	public Result page(IRobotQrCodePayTaskParam param,int currentPageIndex,int pageSize){
+	public Result page(IRobotQrCodePayTaskParam param,Integer currentPageIndex,Integer pageSize){
 		return new Result(0, null, irobotQrCodePayTaskService.page(param, currentPageIndex, pageSize));
 	}
 }
