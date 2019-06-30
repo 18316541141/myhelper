@@ -50,6 +50,12 @@ public class SystemService {
 		leftMenu113.setUrl("menus/testMenus1/bigImg.html");
 		leftMenuList11.add(leftMenu113);
 		
+		LeftMenu leftMenu114=new LeftMenu();
+		leftMenu114.setId("m14");
+		leftMenu114.setTitle("测试1-4");
+		leftMenu114.setUrl("menus/testMenus1/pageTable.html");
+		leftMenuList11.add(leftMenu114);
+		
 		leftMenu1.setLeftMenus(leftMenuList11);
 		leftMenuList.add(leftMenu1);
 		LeftMenu leftMenu2=new LeftMenu();

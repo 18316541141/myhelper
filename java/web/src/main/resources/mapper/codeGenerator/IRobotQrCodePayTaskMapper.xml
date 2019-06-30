@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.template.mapper.ProvinceMapper">
+    <resultMap type="IRobotQrCodePayTask" id="IRobotQrCodePayTaskMap">
+    	<id property="IrTaskID" column="IR_TaskID"/>
+		<result property="irOrderNo" column="IR_OrderNo"/>
+		<result property="irWeiXinNickName" column="IR_WeiXinNickName"/>
+		<result property="irWeiXinHeaderImage" column="IR_WeiXinHeaderImage"/>
+		<result property="irQrCodeImagePath" column="IR_QrCodeImagePath"/>
+		<result property="irHandleState" column="IR_HandleState"/>
+		<result property="irHandleMessage" column="IR_HandleMessage"/>
+		<result property="irHandleTime" column="IR_HandleTime"/>
+		<result property="irCreateTime" column="IR_CreateTime"/>
+		<result property="irReportPicPathJson" column="IR_ReportPicPathJson"/>
+		<result property="irTakeMoney" column="IR_TakeMoney"/>
+		<result property="irRobotId" column="IR_RobotId"/>
+		<result property="irRemark" column="IR_Remark"/>
+		<result property="irPushState" column="IR_PushState"/>
+		<result property="irPushTime" column="IR_PushTime"/>
+		<result property="irScanPayNotifyRet" column="IR_ScanPayNotifyRet"/>
+    </resultMap>
+    <sql id="insertParamPart">
+    	insert into IRobot_QrCodePayTask(
+    		IR_TaskID,
+			IR_OrderNo,
+			IR_WeiXinNickName,
+			IR_WeiXinHeaderImage,
+			IR_QrCodeImagePath,
+			IR_HandleState,
+			IR_HandleMessage,
+			IR_HandleTime,
+			IR_CreateTime,
+			IR_ReportPicPathJson,
+			IR_TakeMoney,
+			IR_RobotId,
+			IR_Remark,
+			IR_PushState,
+			IR_PushTime,
+			IR_ScanPayNotifyRet
+    	)values
+    </sql>
+    <sql id="insertValPart">
+    	(
+    		#{irTaskID},
+			#{irOrderNo},
+			#{irWeiXinNickName},
+			#{irWeiXinHeaderImage},
+			#{irQrCodeImagePath},
+			#{irHandleState},
+			#{irHandleMessage},
+			#{irHandleTime},
+			#{irCreateTime},
+			#{irReportPicPathJson},
+			#{irTakeMoney},
+			#{irRobotId},
+			#{irRemark},
+			#{irPushState},
+			#{irPushTime},
+			#{irScanPayNotifyRet}
+    	)
+    </sql>
+    <insert id="insert" parameterType="IRobotQrCodePayTask">
+    	<include refid="insertParamPart"></include>
+    	<include refid="insertValPart"></include>
+    </insert>
+	
+	<insert id="insertList" parameterType="List">
+		<include refid="insertParamPart"></include>
+		<foreach collection="list" item="item" index="index" separator=",">
+			<include refid="insertValPart"></include>
+		</foreach>
+	</insert>
+	
+	<delete id="delete">
+		delete from IRobot_QrCodePayTask where IR_TaskID=#{key}
+	</delete>
+	
+	<delete id="deleteList">
+		delete from IRobot_QrCodePayTask where IR_TaskID in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+	</delete>
+	
+	
+	<delete id="deleteByParams" parameterType="IRobotQrCodePayTaskParam">
+		delete from IRobot_QrCodePayTask
+		<where>
+			<if test="irTaskID!=null">IR_TaskID=#{irTaskID},</if>
+			<if test="irOrderNo!=null">IR_OrderNo=#{irOrderNo},</if>
+			<if test="irOrderNoLike!=null">IR_OrderNo like '%'+#{irOrderNoLike}+'%',</if>
+			<if test="irWeiXinNickName!=null">IR_WeiXinNickName=#{irWeiXinNickName},</if>
+			<if test="irWeiXinNickNameLike!=null">IR_WeiXinNickName like '%'+#{irWeiXinNickNameLike}+'%',</if>
+			<if test="irWeiXinHeaderImage!=null">IR_WeiXinHeaderImage=#{irWeiXinHeaderImage},</if>
+			<if test="irWeiXinHeaderImageLike!=null">IR_WeiXinHeaderImage like '%'+#{irWeiXinHeaderImageLike}+'%',</if>
+			<if test="irQrCodeImagePath!=null">IR_QrCodeImagePath=#{irQrCodeImagePath},</if>
+			<if test="irQrCodeImagePathLike!=null">IR_QrCodeImagePath like '%'+#{irQrCodeImagePathLike}+'%',</if>
+			<if test="irHandleState!=null">IR_HandleState=#{irHandleState},</if>
+			<if test="irHandleStateLike!=null">IR_HandleState like '%'+#{irHandleStateLike}+'%',</if>
+			<if test="irHandleMessage!=null">IR_HandleMessage=#{irHandleMessage},</if>
+			<if test="irHandleMessageLike!=null">IR_HandleMessage like '%'+#{irHandleMessageLike}+'%',</if>
+			<if test="irHandleTime!=null">IR_HandleTime=#{irHandleTime},</if>
+			<if test="irHandleTimeStart!=null">IR_HandleTime &gt;= #{irHandleTimeStart},</if>
+			<if test="irHandleTimeEnd!=null">IR_HandleTime &lt;= #{irHandleTimeEnd},</if>
+			<if test="irCreateTime!=null">IR_CreateTime=#{irCreateTime},</if>
+			<if test="irCreateTimeStart!=null">IR_CreateTime &gt;= #{irCreateTimeStart},</if>
+			<if test="irCreateTimeEnd!=null">IR_CreateTime &lt;= #{irCreateTimeEnd},</if>
+			<if test="irReportPicPathJson!=null">IR_ReportPicPathJson=#{irReportPicPathJson},</if>
+			<if test="irReportPicPathJsonLike!=null">IR_ReportPicPathJson like '%'+#{irReportPicPathJsonLike}+'%',</if>
+			<if test="irTakeMoney!=null">IR_TakeMoney=#{irTakeMoney},</if>
+			<if test="irTakeMoneyStart!=null">IR_TakeMoney &gt;= #{irTakeMoneyStart},</if>
+			<if test="irTakeMoneyEnd!=null">IR_TakeMoney &lt;= #{irTakeMoneyEnd},</if>
+			<if test="irRobotId!=null">IR_RobotId=#{irRobotId},</if>
+			<if test="irRobotIdLike!=null">IR_RobotId like '%'+#{irRobotIdLike}+'%',</if>
+			<if test="irRemark!=null">IR_Remark=#{irRemark},</if>
+			<if test="irRemarkLike!=null">IR_Remark like '%'+#{irRemarkLike}+'%',</if>
+			<if test="irPushState!=null">IR_PushState=#{irPushState},</if>
+			<if test="irPushStateLike!=null">IR_PushState like '%'+#{irPushStateLike}+'%',</if>
+			<if test="irPushTime!=null">IR_PushTime=#{irPushTime},</if>
+			<if test="irPushTimeStart!=null">IR_PushTime &gt;= #{irPushTimeStart},</if>
+			<if test="irPushTimeEnd!=null">IR_PushTime &lt;= #{irPushTimeEnd},</if>
+			<if test="irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{irScanPayNotifyRet}</if>
+			<if test="irScanPayNotifyRetLike!=null">IR_ScanPayNotifyRet like '%'+#{irScanPayNotifyRetLike}+'%'</if>
+		</where>
+	</delete>
+	
+	<select id="findEntity" resultMap="IRobotQrCodePayTaskMap">
+		select 
+			IR_TaskID,
+			IR_OrderNo,
+			IR_WeiXinNickName,
+			IR_WeiXinHeaderImage,
+			IR_QrCodeImagePath,
+			IR_HandleState,
+			IR_HandleMessage,
+			IR_HandleTime,
+			IR_CreateTime,
+			IR_ReportPicPathJson,
+			IR_TakeMoney,
+			IR_RobotId,
+			IR_Remark,
+			IR_PushState,
+			IR_PushTime,
+			IR_ScanPayNotifyRet
+		from where IR_TaskID=#{key}
+	</select>
+	
+	<sql id="selectWherePart">
+		<if test="irTaskID!=null">IR_TaskID=#{irTaskID},</if>
+		<if test="irOrderNo!=null">IR_OrderNo=#{irOrderNo},</if>
+		<if test="irOrderNoLike!=null and irOrderNoLike!=''">IR_OrderNo like '%'+#{irOrderNoLike}+'%',</if>
+		<if test="irWeiXinNickName!=null">IR_WeiXinNickName=#{irWeiXinNickName},</if>
+		<if test="irWeiXinNickNameLike!=null and irWeiXinNickNameLike!=''">IR_WeiXinNickName like '%'+#{irWeiXinNickNameLike}+'%',</if>
+		<if test="irWeiXinHeaderImage!=null">IR_WeiXinHeaderImage=#{irWeiXinHeaderImage},</if>
+		<if test="irWeiXinHeaderImageLike!=null and irWeiXinHeaderImageLike!=''">IR_WeiXinHeaderImage like '%'+#{irWeiXinHeaderImageLike}+'%',</if>
+		<if test="irQrCodeImagePath!=null">IR_QrCodeImagePath=#{irQrCodeImagePath},</if>
+		<if test="irQrCodeImagePathLike!=null and irQrCodeImagePathLike!=''">IR_QrCodeImagePath like '%'+#{irQrCodeImagePathLike}+'%',</if>
+		<if test="irHandleState!=null">IR_HandleState=#{irHandleState},</if>
+		<if test="irHandleStateLike!=null and irHandleStateLike!=''">IR_HandleState like '%'+#{irHandleStateLike}+'%',</if>
+		<if test="irHandleMessage!=null">IR_HandleMessage=#{irHandleMessage},</if>
+		<if test="irHandleMessageLike!=null and irHandleMessageLike!=''">IR_HandleMessage like '%'+#{irHandleMessageLike}+'%',</if>
+		<if test="irHandleTime!=null">IR_HandleTime=#{irHandleTime},</if>
+		<if test="irHandleTimeStart!=null">IR_HandleTime &gt;= #{irHandleTimeStart},</if>
+		<if test="irHandleTimeEnd!=null">IR_HandleTime &lt;= #{irHandleTimeEnd},</if>
+		<if test="irCreateTime!=null">IR_CreateTime=#{irCreateTime},</if>
+		<if test="irCreateTimeStart!=null">IR_CreateTime &gt;= #{irCreateTimeStart},</if>
+		<if test="irCreateTimeEnd!=null">IR_CreateTime &lt;= #{irCreateTimeEnd},</if>
+		<if test="irReportPicPathJson!=null">IR_ReportPicPathJson=#{irReportPicPathJson},</if>
+		<if test="irReportPicPathJsonLike!=null and irReportPicPathJsonLike!=''">IR_ReportPicPathJson like '%'+#{irReportPicPathJsonLike}+'%',</if>
+		<if test="irTakeMoney!=null">IR_TakeMoney=#{irTakeMoney},</if>
+		<if test="irTakeMoneyStart!=null">IR_TakeMoney &gt;= #{irTakeMoneyStart},</if>
+		<if test="irTakeMoneyEnd!=null">IR_TakeMoney &lt;= #{irTakeMoneyEnd},</if>
+		<if test="irRobotId!=null">IR_RobotId=#{irRobotId},</if>
+		<if test="irRobotIdLike!=null and irRobotIdLike!=''">IR_RobotId like '%'+#{irRobotIdLike}+'%',</if>
+		<if test="irRemark!=null">IR_Remark=#{irRemark},</if>
+		<if test="irRemarkLike!=null and irRemarkLike!=''">IR_Remark like '%'+#{irRemarkLike}+'%',</if>
+		<if test="irPushState!=null">IR_PushState=#{irPushState},</if>
+		<if test="irPushStateLike!=null and irPushStateLike!=''">IR_PushState like '%'+#{irPushStateLike}+'%',</if>
+		<if test="irPushTime!=null">IR_PushTime=#{irPushTime},</if>
+		<if test="irPushTimeStart!=null">IR_PushTime &gt;= #{irPushTimeStart},</if>
+		<if test="irPushTimeEnd!=null">IR_PushTime &lt;= #{irPushTimeEnd},</if>
+		<if test="irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{irScanPayNotifyRet}</if>
+		<if test="irScanPayNotifyRetLike!=null and irScanPayNotifyRetLike!=''">IR_ScanPayNotifyRet like '%'+#{irScanPayNotifyRetLike}+'%'</if>
+	</sql>
+	
+	<select id="findEntityByParams" resultMap="IRobotQrCodePayTaskMap">
+		select 
+			IR_TaskID,
+			IR_OrderNo,
+			IR_WeiXinNickName,
+			IR_WeiXinHeaderImage,
+			IR_QrCodeImagePath,
+			IR_HandleState,
+			IR_HandleMessage,
+			IR_HandleTime,
+			IR_CreateTime,
+			IR_ReportPicPathJson,
+			IR_TakeMoney,
+			IR_RobotId,
+			IR_Remark,
+			IR_PushState,
+			IR_PushTime,
+			IR_ScanPayNotifyRet
+		from
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		<if test="orderBy!=null">order by ${orderBy}</if>
+	</select>
+	
+	<select id="count" resultType="long">
+		select count(IR_TaskID) from
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</select>
+	
+	<select id="findAllByParams" resultMap="IRobotQrCodePayTaskMap">
+		select 
+			IR_TaskID,
+			IR_OrderNo,
+			IR_WeiXinNickName,
+			IR_WeiXinHeaderImage,
+			IR_QrCodeImagePath,
+			IR_HandleState,
+			IR_HandleMessage,
+			IR_HandleTime,
+			IR_CreateTime,
+			IR_ReportPicPathJson,
+			IR_TakeMoney,
+			IR_RobotId,
+			IR_Remark,
+			IR_PushState,
+			IR_PushTime,
+			IR_ScanPayNotifyRet
+		from
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		<if test="orderBy!=null">order by ${orderBy}</if>
+	</select>
+	
+	
+	<select id="findListByParams" resultMap="IRobotQrCodePayTaskMap">
+		select 
+			IR_TaskID,
+			IR_OrderNo,
+			IR_WeiXinNickName,
+			IR_WeiXinHeaderImage,
+			IR_QrCodeImagePath,
+			IR_HandleState,
+			IR_HandleMessage,
+			IR_HandleTime,
+			IR_CreateTime,
+			IR_ReportPicPathJson,
+			IR_TakeMoney,
+			IR_RobotId,
+			IR_Remark,
+			IR_PushState,
+			IR_PushTime,
+			IR_ScanPayNotifyRet,
+			ROW_NUMBER() OVER(Order by 
+			<choose>
+				<when test="orderBy!=null">#{orderBy}</when>
+				<otherwise>IR_TaskID</otherwise>
+			</choose>
+			) AS RowId
+		from
+		<where>
+			<include refid="selectWherePart"></include>
+			RowId between (pageIndex-1)*pageSize+1 and pageIndex*pageSize
+		</where>
+	</select>
+</mapper>

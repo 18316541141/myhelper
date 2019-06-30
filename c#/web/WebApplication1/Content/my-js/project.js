@@ -361,18 +361,28 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'EA',
         template: $('#pageTableTemplate').html(),
-        scope: { id: "@",url:"@" ,postData:"$",pageCallback:"$"},
+        scope: { id: "@",url:"@" ,postData:"&",pageCallback:"&"},
         transclude: true,
         controller: function ($scope, $timeout,$myHttp) {
-            $myHttp.post($scope.url, $scope.postData()).mySuccess(function (result) {
-                $scope.pageCallback(result);
-                $timeout(function () {
-                    layuiLaypage.render({
-                        elem: 'page-' + $scope.id,
-                        count: totalCount
-                    });
-                });
-            });
+        	$timeout(function(){        		
+        		layuiLaypage.render({
+        			elem: 'page-' + $scope.id,
+        			limit: 20,
+        			curr:1,
+        			limits:[20,40,60,80,100],
+        			jump:function(obj, first){
+        				var postData=$scope.postData();
+        				if($.type(postData)==='undefined'){
+        					postData={};
+        				}
+        				postData['currentPageIndex']=obj.curr;
+        				postData['pageSize']=$scope.pageSize=20;
+        				$myHttp.post($scope.url, postData).mySuccess(function (result) {
+        					$scope.pageCallback(result);
+        				});
+        			}
+        		});
+        	});
         }
     };
 }).directive("areaSelect", function () {
@@ -920,10 +930,10 @@ myApp.controller('upload-files', function ($scope) {
 
 });
 myApp.controller('pageTableTest', function ($scope) {
+	debugger;
     $scope.postData = function () {
         return {
-            provinceName:$scope.provinceName,
-            provinceID: $scope.provinceID
+            
         };
     };
     $scope.pageCallback = function (result) {

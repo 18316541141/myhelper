@@ -1,0 +1,16 @@
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+c:\users\temp.desktop-3uind36.124\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache

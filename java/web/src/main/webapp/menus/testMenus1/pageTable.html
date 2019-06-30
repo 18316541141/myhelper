@@ -1,34 +1,48 @@
-﻿<fieldset class="layui-elem-field layui-field-title">
-    <legend>表格分页查询</legend>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>分页表格</legend>
 </fieldset>
 <div ng-controller="pageTableTest">
-    <div page-table id="adasda" url="/index/testPage">
-        <form class="">
-
-        </form>
-        <table class="">
+    <div page-table id="adasda" url="/IRobotQrCodePayTaskController/page">
+        <form class="layui-form"></form>
+        <table class="layui-table">
             <thead>
                 <tr>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>id</th>
-                    <th>name</th>
+                    <td>irTaskID</td>
+					<td>irOrderNo</td>
+					<td>irWeiXinNickName</td>
+					<td>irWeiXinHeaderImage</td>
+					<td>irQrCodeImagePath</td>
+					<td>irHandleState</td>
+					<td>irHandleMessage</td>
+					<td>irHandleTime</td>
+					<td>irCreateTime</td>
+					<td>irReportPicPathJson</td>
+					<td>irTakeMoney</td>
+					<td>irRobotId</td>
+					<td>irRemark</td>
+					<td>irPushState</td>
+					<td>irPushTime</td>
+					<td>irScanPayNotifyRet</td>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="x in provinces">
-                    <td>{{x.provinceID}}</td>
-                    <td>{{x.provinceName}}</td>
-                    <td>{{x.provinceID}}</td>
-                    <td>{{x.provinceName}}</td>
-                    <td>{{x.provinceID}}</td>
-                    <td>{{x.provinceName}}</td>
-                    <td>{{x.provinceID}}</td>
-                    <td>{{x.provinceName}}</td>
+                <tr ng-repeat="x in irobotQrCodePayTasks">
+					<td>{{x.irTaskID}}</td>
+					<td>{{x.irOrderNo}}</td>
+					<td>{{x.irWeiXinNickName}}</td>
+					<td>{{x.irWeiXinHeaderImage}}</td>
+					<td>{{x.irQrCodeImagePath}}</td>
+					<td>{{x.irHandleState}}</td>
+					<td>{{x.irHandleMessage}}</td>
+					<td>{{x.irHandleTime}}</td>
+					<td>{{x.irCreateTime}}</td>
+					<td>{{x.irReportPicPathJson}}</td>
+					<td>{{x.irTakeMoney}}</td>
+					<td>{{x.irRobotId}}</td>
+					<td>{{x.irRemark}}</td>
+					<td>{{x.irPushState}}</td>
+					<td>{{x.irPushTime}}</td>
+					<td>{{x.irScanPayNotifyRet}}</td>
                 </tr>
             </tbody>
         </table>
