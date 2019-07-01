@@ -368,27 +368,40 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         template: $('#pageTableTemplate').html(),
         scope: { id: "@",url:"@" ,postData:"=",data:"="},
         transclude: true,
-        controller: function ($scope, $timeout,$myHttp) {
-        	$timeout(function(){        		
-        		layuiLaypage.render({
-        			elem: 'page-' + $scope.id,
-        			limit: 20,
-        			curr:1,
-        			limits:[20,40,60,80,100],
-        			jump:function(obj, first){
-        				var postData=$scope.postData;
-        				if($.type(postData)==='undefined'){
-        					postData={};
-        				}
-        				postData['currentPageIndex']=obj.curr;
-        				postData['pageSize']=20;
-        				$.myPost($scope.url, postData,function (result) {
-        					$scope.data=result.data;
-        					obj.count=$scope.data.totalCount;
-        					$scope.$apply();
-        				});
-        			}
-        		});
+        controller: function ($scope, $timeout, $myHttp) {
+            $scope.currentPageIndex = 1;
+            $scope.pageSize = 20;
+            $scope.$on('refreshPage', function () {
+                $scope.refreshPage();
+            });
+            $scope.refreshPage = function () {
+                var postData = $scope.postData;
+                if($.type(postData)==='undefined'){
+                    postData={};
+                }
+                postData['currentPageIndex'] = $scope.currentPageIndex;
+                postData['pageSize'] = $scope.pageSize;
+                $myHttp.post($scope.url,postData).mySuccess(function(result){
+                    $scope.data = result.data;
+        		    layuiLaypage.render({
+        			    elem: 'page-' + $scope.id,
+        			    limit: $scope.pageSize,
+        			    curr: $scope.currentPageIndex,
+        			    count: $scope.data.totalItemCount,
+        			    limits: [20, 40, 60, 80, 100],
+        		        layout: ['count','prev', 'page', 'next','limit','refresh','skip'],
+        			    jump: function (obj, first) {
+        			        if (!first) {
+        			            $scope.pageSize = obj.limit;
+        			            $scope.currentPageIndex = obj.curr;
+        			            $scope.refreshPage();
+        			        }
+        			    }
+        		    });
+                });
+            };
+            $timeout(function () {
+                $scope.refreshPage();
         	});
         }
     };

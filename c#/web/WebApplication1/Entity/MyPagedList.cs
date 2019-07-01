@@ -44,5 +44,11 @@ namespace WebApplication1.Entity
         /// 总页数
         /// </summary>
         public int totalPageCount { get; set; }
+
+        /// <summary>
+        /// 扩展数据，假如使用分页返回值时需要顺带其他附加数据，则
+        /// 该成员用于保存其他附加数据
+        /// </summary>
+        public Dictionary<string,object> ExtendData { get; set; }
     }
 }

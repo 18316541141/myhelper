@@ -20,13 +20,13 @@ namespace CommonHelper.Helper
         public static void RefreshVersion(string webRootPath)
         {
             string version=DateTime.Now.ToString("yyyyMMddHHmmss");
-            File.WriteAllText($"{webRootPath}index.aspx", $"<script type='text/javascript'>location.href = '/Content/index.html?v={version}';</script>");
+            File.WriteAllText($"{webRootPath}index.aspx", $"<script type='text/javascript'>location.href = '/Content/index.html?v={version}';</script>", Encoding.UTF8);
             HtmlDocument doc= new HtmlDocument();
-            doc.Load($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html");
+            doc.Load($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html", Encoding.UTF8);
             HtmlNode node = doc.DocumentNode;
             node.SelectSingleNode("//div[@ng-include]").SetAttributeValue("ng-include", $"x.url+'?v={version}'");
             node.SelectSingleNode("//script[starts-with(@src,'my-js/project.js')]").SetAttributeValue("src", $"my-js/project.js?v={version}");
-            doc.Save($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html");
+            doc.Save($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html", Encoding.UTF8);
         }
     }
 }

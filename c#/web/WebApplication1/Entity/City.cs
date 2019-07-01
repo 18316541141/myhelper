@@ -18,11 +18,11 @@ namespace WebApplication1.Entity
         /// <summary>
         /// 地区值
         /// </summary>
-        public string CityID { set; get; }
+        public int CityID { set; get; }
 
         /// <summary>
         /// 所在省值
         /// </summary>
-        public string ProvinceID { set; get; }
+        public int ProvinceID { set; get; }
     }
 }

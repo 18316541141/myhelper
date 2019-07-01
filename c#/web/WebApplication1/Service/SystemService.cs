@@ -40,8 +40,8 @@ namespace WebApplication1.Service
                 cities.Add(new AreaTree
                 {
                     name = city.CityName,
-                    value = city.CityID,
-                    parentValue = city.ProvinceID
+                    value = Convert.ToString(city.CityID),
+                    parentValue = Convert.ToString(city.ProvinceID)
                 });
             }
             areaTreeMap.Add("cities", cities);
@@ -51,8 +51,8 @@ namespace WebApplication1.Service
                 counties.Add(new AreaTree
                 {
                     name = district.DistrictName,
-                    value = district.DistrictID,
-                    parentValue = district.CityID
+                    value = Convert.ToString(district.DistrictID),
+                    parentValue = Convert.ToString(district.CityID)
                 });
             }
             areaTreeMap.Add("counties", counties);
