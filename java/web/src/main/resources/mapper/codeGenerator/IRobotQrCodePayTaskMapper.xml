@@ -176,7 +176,50 @@
 		<where>
 			<include refid="selectWherePart"></include>
 		</where>
-		<if test="orderBy!=null">order by ${orderBy}</if>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+	    		<when test="params.orderByDesc!=null">    			
+			    	<if test="params.orderByDesc.irTaskID">IR_TaskID DESC,</if>
+					<if test="params.orderByDesc.irOrderNo">IR_OrderNo DESC,</if>
+					<if test="params.orderByDesc.irWeiXinNickName">IR_WeiXinNickName DESC,</if>
+					<if test="params.orderByDesc.irWeiXinHeaderImage">IR_WeiXinHeaderImage DESC,</if>
+					<if test="params.orderByDesc.irQrCodeImagePath">IR_QrCodeImagePath DESC,</if>
+					<if test="params.orderByDesc.irHandleState">IR_HandleState DESC,</if>
+					<if test="params.orderByDesc.irHandleMessage">IR_HandleMessage DESC,</if>
+					<if test="params.orderByDesc.irHandleTime">IR_HandleTime DESC,</if>
+					<if test="params.orderByDesc.irCreateTime">IR_CreateTime DESC,</if>
+					<if test="params.orderByDesc.irReportPicPathJson">IR_ReportPicPathJson DESC,</if>
+					<if test="params.orderByDesc.irTakeMoney">IR_TakeMoney DESC,</if>
+					<if test="params.orderByDesc.irRobotId">IR_RobotId DESC,</if>
+					<if test="params.orderByDesc.irRemark">IR_Remark DESC,</if>
+					<if test="params.orderByDesc.irPushState">IR_PushState DESC,</if>
+					<if test="params.orderByDesc.irPushTime">IR_PushTime DESC,</if>
+					<if test="params.orderByDesc.irScanPayNotifyRet">IR_ScanPayNotifyRet DESC,</if>
+	    		</when>
+	    		<otherwise>
+	    			<if test="params.orderByDesc.irTaskID">IR_TaskID DESC,</if>
+	    		</otherwise>
+	    	</choose>
+	    	<if test="params.orderByASC!=null">
+		    	<if test="params.orderByASC.irTaskID">IR_TaskID ASC,</if>
+				<if test="params.orderByASC.irOrderNo">IR_OrderNo ASC,</if>
+				<if test="params.orderByASC.irWeiXinNickName">IR_WeiXinNickName ASC,</if>
+				<if test="params.orderByASC.irWeiXinHeaderImage">IR_WeiXinHeaderImage ASC,</if>
+				<if test="params.orderByASC.irQrCodeImagePath">IR_QrCodeImagePath ASC,</if>
+				<if test="params.orderByASC.irHandleState">IR_HandleState ASC,</if>
+				<if test="params.orderByASC.irHandleMessage">IR_HandleMessage ASC,</if>
+				<if test="params.orderByASC.irHandleTime">IR_HandleTime ASC,</if>
+				<if test="params.orderByASC.irCreateTime">IR_CreateTime ASC,</if>
+				<if test="params.orderByASC.irReportPicPathJson">IR_ReportPicPathJson ASC,</if>
+				<if test="params.orderByASC.irTakeMoney">IR_TakeMoney ASC,</if>
+				<if test="params.orderByASC.irRobotId">IR_RobotId ASC,</if>
+				<if test="params.orderByASC.irRemark">IR_Remark ASC,</if>
+				<if test="params.orderByASC.irPushState">IR_PushState ASC,</if>
+				<if test="params.orderByASC.irPushTime">IR_PushTime ASC,</if>
+				<if test="params.orderByASC.irScanPayNotifyRet">IR_ScanPayNotifyRet ASC,</if>
+	    	</if> 
+    	</trim>
 	</select>
 	
 	<select id="count" resultType="long" parameterType="IRobotQrCodePayTaskParams">
@@ -202,12 +245,51 @@
 			<include refid="colNames"></include>
 		from IRobot_QrCodePayTask where IR_TaskID in(
 			select b.IR_TaskID from(
-			select IR_TaskID,ROW_NUMBER() OVER(Order by 
+			select IR_TaskID,ROW_NUMBER() OVER(Order by
+	    	<trim suffixOverrides=",">
 				<choose>
-					<when test="params.orderBy!=null">${params.orderBy}</when>
-					<otherwise>IR_TaskID</otherwise>
-				</choose>
-				) AS RowId
+		    		<when test="params.orderByDesc!=null">    			
+				    	<if test="params.orderByDesc.irTaskID">IR_TaskID DESC,</if>
+						<if test="params.orderByDesc.irOrderNo">IR_OrderNo DESC,</if>
+						<if test="params.orderByDesc.irWeiXinNickName">IR_WeiXinNickName DESC,</if>
+						<if test="params.orderByDesc.irWeiXinHeaderImage">IR_WeiXinHeaderImage DESC,</if>
+						<if test="params.orderByDesc.irQrCodeImagePath">IR_QrCodeImagePath DESC,</if>
+						<if test="params.orderByDesc.irHandleState">IR_HandleState DESC,</if>
+						<if test="params.orderByDesc.irHandleMessage">IR_HandleMessage DESC,</if>
+						<if test="params.orderByDesc.irHandleTime">IR_HandleTime DESC,</if>
+						<if test="params.orderByDesc.irCreateTime">IR_CreateTime DESC,</if>
+						<if test="params.orderByDesc.irReportPicPathJson">IR_ReportPicPathJson DESC,</if>
+						<if test="params.orderByDesc.irTakeMoney">IR_TakeMoney DESC,</if>
+						<if test="params.orderByDesc.irRobotId">IR_RobotId DESC,</if>
+						<if test="params.orderByDesc.irRemark">IR_Remark DESC,</if>
+						<if test="params.orderByDesc.irPushState">IR_PushState DESC,</if>
+						<if test="params.orderByDesc.irPushTime">IR_PushTime DESC,</if>
+						<if test="params.orderByDesc.irScanPayNotifyRet">IR_ScanPayNotifyRet DESC,</if>
+		    		</when>
+		    		<otherwise>
+		    			<if test="params.orderByDesc.irTaskID">IR_TaskID DESC,</if>
+		    		</otherwise>
+		    	</choose>
+		    	<if test="params.orderByASC!=null">
+			    	<if test="params.orderByASC.irTaskID">IR_TaskID ASC,</if>
+					<if test="params.orderByASC.irOrderNo">IR_OrderNo ASC,</if>
+					<if test="params.orderByASC.irWeiXinNickName">IR_WeiXinNickName ASC,</if>
+					<if test="params.orderByASC.irWeiXinHeaderImage">IR_WeiXinHeaderImage ASC,</if>
+					<if test="params.orderByASC.irQrCodeImagePath">IR_QrCodeImagePath ASC,</if>
+					<if test="params.orderByASC.irHandleState">IR_HandleState ASC,</if>
+					<if test="params.orderByASC.irHandleMessage">IR_HandleMessage ASC,</if>
+					<if test="params.orderByASC.irHandleTime">IR_HandleTime ASC,</if>
+					<if test="params.orderByASC.irCreateTime">IR_CreateTime ASC,</if>
+					<if test="params.orderByASC.irReportPicPathJson">IR_ReportPicPathJson ASC,</if>
+					<if test="params.orderByASC.irTakeMoney">IR_TakeMoney ASC,</if>
+					<if test="params.orderByASC.irRobotId">IR_RobotId ASC,</if>
+					<if test="params.orderByASC.irRemark">IR_Remark ASC,</if>
+					<if test="params.orderByASC.irPushState">IR_PushState ASC,</if>
+					<if test="params.orderByASC.irPushTime">IR_PushTime ASC,</if>
+					<if test="params.orderByASC.irScanPayNotifyRet">IR_ScanPayNotifyRet ASC,</if>
+		    	</if> 
+	    	</trim>
+			) AS RowId
 			from IRobot_QrCodePayTask
 			<where>
 				<if test="params.irTaskID!=null">IR_TaskID=#{params.irTaskID},</if>

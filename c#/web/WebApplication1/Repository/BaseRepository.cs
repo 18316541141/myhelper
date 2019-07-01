@@ -260,6 +260,20 @@ namespace WebApplication1.Repository
         }
 
         /// <summary>
+        /// 修改所有字段，注意：为null的也会在数据库上写成null
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public int UpdateAll(TEntity entity)
+        {
+            using (MyDbContext dbContext = new MyDbContext())
+            {
+                dbContext.Entry(entity).State = EntityState.Modified;
+                return dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// 根据条件查询符合条件的数据量
         /// </summary>
         /// <param name="predicate"></param>
@@ -305,21 +319,6 @@ namespace WebApplication1.Repository
                 {
                     return query.Where(predicate).ToList();
                 }
-            }
-        }
-
-        /// <summary>
-        /// 根据条件分页查询
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-        public MyPagedList<TEntity> PageList(Expression<Func<TEntity, bool>> predicate,int pageIndex,int pageSize)
-        {
-            using (MyDbContext dbContext = new MyDbContext())
-            {
-                return dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToMyPagedList(pageIndex,pageSize);
             }
         }
     }

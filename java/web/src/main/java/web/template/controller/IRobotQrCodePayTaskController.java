@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import web.template.entity.Result;
-import web.template.entity.params.IRobotQrCodePayTaskParams;
+import web.template.entity.params.codeGenerator.IRobotQrCodePayTaskParams;
 import web.template.service.IRobotQrCodePayTaskService;
 
 @RestController
-@RequestMapping("/IRobotQrCodePayTaskController")
+@RequestMapping("/IRobotQrCodePayTask")
 public class IRobotQrCodePayTaskController {
 	
 	@Autowired

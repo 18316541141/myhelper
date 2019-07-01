@@ -1,4 +1,4 @@
-package web.template.entity.params;
+package web.template.entity.params.codeGenerator;
 import java.util.Date;
 public class IRobotQrCodePayTaskParams {
 	private Integer irTaskID;
@@ -36,7 +36,21 @@ public class IRobotQrCodePayTaskParams {
 	private Date irPushTimeEnd;
 	private String irScanPayNotifyRet;
 	private String irScanPayNotifyRetLike;
+	private IRobotQrCodePayTaskOrderBy orderByAsc;
+	private IRobotQrCodePayTaskOrderBy orderByDesc;
 	
+	public IRobotQrCodePayTaskOrderBy getOrderByAsc() {
+		return orderByAsc;
+	}
+	public void setOrderByAsc(IRobotQrCodePayTaskOrderBy orderByAsc) {
+		this.orderByAsc = orderByAsc;
+	}
+	public IRobotQrCodePayTaskOrderBy getOrderByDesc() {
+		return orderByDesc;
+	}
+	public void setOrderByDesc(IRobotQrCodePayTaskOrderBy orderByDesc) {
+		this.orderByDesc = orderByDesc;
+	}
 	public Integer getIrTaskID() {
 		return irTaskID;
 	}

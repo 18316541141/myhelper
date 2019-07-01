@@ -1,4 +1,4 @@
-package web.template.entity;
+package web.template.entity.codeGenerator;
 
 import java.util.Date;
 

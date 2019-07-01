@@ -319,18 +319,5 @@ namespace WebApplication1.Controllers
                 Session["vercode"] = Guid.NewGuid().ToString();
             }
         }
-
-        /// <summary>
-        /// 分页查询测试
-        /// </summary>
-        /// <param name="provinceParams"></param>
-        /// <returns></returns>
-        public JsonResult TestPage(ProvinceParams provinceParams,int pageIndex,int pageSize=20)
-        {
-            ProvinceRepository provinceRepository = new ProvinceRepository();
-            return Json(new Result { code = 0, data = provinceRepository.PageList((province) =>
-            province.provinceID == provinceParams.provinceID && province.provinceName.Contains(provinceParams.provinceName)
-            , pageIndex, pageSize)}, JsonRequestBehavior.AllowGet);
-        }
     }
 }
