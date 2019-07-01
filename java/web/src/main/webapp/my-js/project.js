@@ -296,13 +296,8 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             };
             return ret;
         },
-        post: function (url, params) {
-        	if (params === undefined){
-                params = { v: Math.random() };
-            } else {
-                params['v'] = Math.random();
-            }
-            var ret = $http({ method: 'POST', url: url, params:params});
+        post: function (url, data) {
+            var ret = $http({ method: 'POST', url: url, params: { v: Math.random() }, data: data });
             ret.mySuccess = function (callback) {
                 ret.success(myCallback(callback));
             };
@@ -366,7 +361,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'EA',
         template: $('#pageTableTemplate').html(),
-        scope: { id: "@",url:"@" ,postData:"=",data:"="},
+        scope: { id: "@",url:"@" ,postData:"&",pageCallback:"&"},
         transclude: true,
         controller: function ($scope, $timeout,$myHttp) {
         	$timeout(function(){        		
@@ -376,16 +371,14 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         			curr:1,
         			limits:[20,40,60,80,100],
         			jump:function(obj, first){
-        				var postData=$scope.postData;
+        				var postData=$scope.postData();
         				if($.type(postData)==='undefined'){
         					postData={};
         				}
         				postData['currentPageIndex']=obj.curr;
-        				postData['pageSize']=20;
-        				$.myPost($scope.url, postData,function (result) {
-        					$scope.data=result.data;
-        					obj.count=$scope.data.totalCount;
-        					$scope.$apply();
+        				postData['pageSize']=$scope.pageSize=20;
+        				$myHttp.post($scope.url, postData).mySuccess(function (result) {
+        					$scope.pageCallback(result);
         				});
         			}
         		});
@@ -937,4 +930,13 @@ myApp.controller('upload-files', function ($scope) {
 
 });
 myApp.controller('pageTableTest', function ($scope) {
+	debugger;
+    $scope.postData = function () {
+        return {
+            
+        };
+    };
+    $scope.pageCallback = function (result) {
+        $scope.provinces = result.data.pageDataList;
+    };
 });

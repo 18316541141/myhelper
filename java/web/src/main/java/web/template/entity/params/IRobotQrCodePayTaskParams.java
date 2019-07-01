@@ -1,6 +1,6 @@
-package web.template.entity.param;
+package web.template.entity.params;
 import java.util.Date;
-public class IRobotQrCodePayTaskParam {
+public class IRobotQrCodePayTaskParams {
 	private Integer irTaskID;
 	private String irOrderNo;
 	private String irOrderNoLike;
@@ -37,14 +37,6 @@ public class IRobotQrCodePayTaskParam {
 	private String irScanPayNotifyRet;
 	private String irScanPayNotifyRetLike;
 	
-	private String orderBy;
-	
-	public String getOrderBy() {
-		return orderBy;
-	}
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
 	public Integer getIrTaskID() {
 		return irTaskID;
 	}

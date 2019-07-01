@@ -2,6 +2,10 @@
 <html>
 <head></head>
 <body>
-<script type='text/javascript'>location.replace('index.html?v=20190630163135');</script>
+<script type='text/javascript'>
+setTimeout(function(){
+location.href='index.html?v=20190701212423';
+});
+</script>
 </body>
 </html>

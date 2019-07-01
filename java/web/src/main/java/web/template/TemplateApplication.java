@@ -30,7 +30,11 @@ public class TemplateApplication {
 "<html>\r\n"+
 	"<head></head>\r\n"+
 	"<body>\r\n"+
-		"<script type='text/javascript'>location.replace('index.html?v="+newVersion+"');</script>\r\n"+
+		"<script type='text/javascript'>\r\n"+
+			"setTimeout(function(){\r\n"+
+				"location.href='index.html?v="+newVersion+"';\r\n"+
+			"});\r\n"+
+		"</script>\r\n"+
 	"</body>\r\n"+
 "</html>","UTF-8");
 		} catch (IOException e) {

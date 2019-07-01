@@ -84,7 +84,7 @@
 	</delete>
 	
 	
-	<delete id="deleteByParams" parameterType="IRobotQrCodePayTaskParam">
+	<delete id="deleteByParams" parameterType="IRobotQrCodePayTaskParams">
 		delete from IRobot_QrCodePayTask
 		<where>
 			<if test="irTaskID!=null">IR_TaskID=#{irTaskID},</if>
@@ -179,7 +179,7 @@
 		<if test="orderBy!=null">order by ${orderBy}</if>
 	</select>
 	
-	<select id="count" resultType="long">
+	<select id="count" resultType="long" parameterType="IRobotQrCodePayTaskParams">
 		select count(IR_TaskID) from IRobot_QrCodePayTask
 		<where>
 			<include refid="selectWherePart"></include>
@@ -249,4 +249,46 @@
 			where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and #{currentPageIndex}*#{pageSize}
 		)
 	</select>
+	
+	<update id="updateAll" parameterType="IRobotQrCodePayTask">
+		update IRobot_QrCodePayTask set
+			IR_OrderNo=#{irOrderNo},
+			IR_WeiXinNickName=#{irWeiXinNickName},
+			IR_WeiXinHeaderImage=#{irWeiXinHeaderImage},
+			IR_QrCodeImagePath=#{irQrCodeImagePath},
+			IR_HandleState=#{irHandleState},
+			IR_HandleMessage=#{irHandleMessage},
+			IR_HandleTime=#{irHandleTime},
+			IR_CreateTime=#{irCreateTime},
+			IR_ReportPicPathJson=#{irReportPicPathJson},
+			IR_TakeMoney=#{irTakeMoney},
+			IR_RobotId=#{irRobotId},
+			IR_Remark=#{irRemark},
+			IR_PushState=#{irPushState},
+			IR_PushTime=#{irPushTime},
+			IR_ScanPayNotifyRet=#{irScanPayNotifyRet}
+		where IR_TaskID=#{irTaskID}
+	</update>
+	
+	<update id="updateChange" parameterType="IRobotQrCodePayTask">
+		update IRobot_QrCodePayTask
+		<set>
+			<if test="irOrderNo!=null">IR_OrderNo=#{irOrderNo},</if>
+			<if test="irWeiXinNickName!=null">IR_WeiXinNickName=#{irWeiXinNickName},</if>
+			<if test="irWeiXinHeaderImage!=null">IR_WeiXinHeaderImage=#{irWeiXinHeaderImage},</if>
+			<if test="irQrCodeImagePath!=null">IR_QrCodeImagePath=#{irQrCodeImagePath},</if>
+			<if test="irHandleState!=null">IR_HandleState=#{irHandleState},</if>
+			<if test="irHandleMessage!=null">IR_HandleMessage=#{irHandleMessage},</if>
+			<if test="irHandleTime!=null">IR_HandleTime=#{irHandleTime},</if>
+			<if test="irCreateTime!=null">IR_CreateTime=#{irCreateTime},</if>
+			<if test="irReportPicPathJson!=null">IR_ReportPicPathJson=#{irReportPicPathJson},</if>
+			<if test="irTakeMoney!=null">IR_TakeMoney=#{irTakeMoney},</if>
+			<if test="irRobotId!=null">IR_RobotId=#{irRobotId},</if>
+			<if test="irRemark!=null">IR_Remark=#{irRemark},</if>
+			<if test="irPushState!=null">IR_PushState=#{irPushState},</if>
+			<if test="irPushTime!=null">IR_PushTime=#{irPushTime},</if>
+			<if test="irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{irScanPayNotifyRet},</if>
+		</set>
+		where IR_TaskID=#{irTaskID}
+	</update>
 </mapper>

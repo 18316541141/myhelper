@@ -71,6 +71,18 @@ public interface BaseMapper<T,P> {
 	public List<T> findListByParams(@Param("params")P params,@Param("currentPageIndex")int currentPageIndex,@Param("pageSize")int pageSize);
 	
 	/**
+	 * 修改所有字段
+	 * @param entity
+	 */
+	public void updateAll(T entity);
+	
+	/**
+	 * 只修改变化的字段
+	 * @param entity
+	 */
+	public void updateChange(T entity);
+	
+	/**
 	 * 分页查询结果
 	 * @param params
 	 * @param pageIndex

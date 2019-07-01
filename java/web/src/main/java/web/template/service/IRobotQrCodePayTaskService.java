@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import web.template.entity.IRobotQrCodePayTask;
 import web.template.entity.MyPagedList;
-import web.template.entity.param.IRobotQrCodePayTaskParam;
+import web.template.entity.params.IRobotQrCodePayTaskParams;
 import web.template.mapper.IRobotQrCodePayTaskMapper;
 
 @Service
@@ -20,7 +20,7 @@ public class IRobotQrCodePayTaskService {
 	 * @param pageSize
 	 * @return
 	 */
-	public MyPagedList<IRobotQrCodePayTask> page(IRobotQrCodePayTaskParam param,Integer currentPageIndex,Integer pageSize){
-		return irobotQrCodePayTaskMapper.pageList(param, currentPageIndex, pageSize);
+	public MyPagedList<IRobotQrCodePayTask> page(IRobotQrCodePayTaskParams params,Integer currentPageIndex,Integer pageSize){
+		return irobotQrCodePayTaskMapper.pageList(params, currentPageIndex, pageSize);
 	}
 }
