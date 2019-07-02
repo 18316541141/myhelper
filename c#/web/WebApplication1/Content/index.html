@@ -104,7 +104,7 @@
 }
 /*表格行动画*/
 .layui-table>tbody>tr {
-	animation-name: flipInX;
+	animation-name: fadeIn;
 	animation-duration: .4s;
 	animation-timing-function: linear;
 }
@@ -383,7 +383,7 @@
       <li ng-repeat="x in menus" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}">{{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190701163852'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190702091642'"></div> 
      </div> 
     </div> 
    </div> 
@@ -445,6 +445,6 @@
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
   <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
   <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
-  <script src="my-js/project.js?v=20190701163852" charset="utf-8"></script>  
+  <script src="my-js/project.js?v=20190702091642" charset="utf-8"></script>  
  </body>
 </html>

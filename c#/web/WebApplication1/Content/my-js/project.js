@@ -369,9 +369,14 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         scope: { id: "@",url:"@" ,postData:"=",data:"="},
         transclude: true,
         controller: function ($scope, $timeout, $myHttp) {
+            $scope.postData = {};
             $scope.currentPageIndex = 1;
             $scope.pageSize = 20;
+            $scope.$on('searchPage', function () {
+                $scope.refreshPage();
+            });
             $scope.$on('refreshPage', function () {
+                $scope.postData = {};
                 $scope.refreshPage();
             });
             $scope.refreshPage = function () {
@@ -950,4 +955,10 @@ myApp.controller('upload-files', function ($scope) {
 
 });
 myApp.controller('pageTableTest', function ($scope) {
+    $scope.search = function () {
+        $scope.$broadcast('searchPage');
+    }
+    $scope.refresh = function () {
+        $scope.$broadcast('refreshPage');
+    }
 });
