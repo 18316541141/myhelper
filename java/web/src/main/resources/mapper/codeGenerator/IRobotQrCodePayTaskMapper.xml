@@ -201,23 +201,23 @@
 	    			<if test="params.orderByDesc.irTaskID">IR_TaskID DESC,</if>
 	    		</otherwise>
 	    	</choose>
-	    	<if test="params.orderByASC!=null">
-		    	<if test="params.orderByASC.irTaskID">IR_TaskID ASC,</if>
-				<if test="params.orderByASC.irOrderNo">IR_OrderNo ASC,</if>
-				<if test="params.orderByASC.irWeiXinNickName">IR_WeiXinNickName ASC,</if>
-				<if test="params.orderByASC.irWeiXinHeaderImage">IR_WeiXinHeaderImage ASC,</if>
-				<if test="params.orderByASC.irQrCodeImagePath">IR_QrCodeImagePath ASC,</if>
-				<if test="params.orderByASC.irHandleState">IR_HandleState ASC,</if>
-				<if test="params.orderByASC.irHandleMessage">IR_HandleMessage ASC,</if>
-				<if test="params.orderByASC.irHandleTime">IR_HandleTime ASC,</if>
-				<if test="params.orderByASC.irCreateTime">IR_CreateTime ASC,</if>
-				<if test="params.orderByASC.irReportPicPathJson">IR_ReportPicPathJson ASC,</if>
-				<if test="params.orderByASC.irTakeMoney">IR_TakeMoney ASC,</if>
-				<if test="params.orderByASC.irRobotId">IR_RobotId ASC,</if>
-				<if test="params.orderByASC.irRemark">IR_Remark ASC,</if>
-				<if test="params.orderByASC.irPushState">IR_PushState ASC,</if>
-				<if test="params.orderByASC.irPushTime">IR_PushTime ASC,</if>
-				<if test="params.orderByASC.irScanPayNotifyRet">IR_ScanPayNotifyRet ASC,</if>
+	    	<if test="params.orderByAsc!=null">
+		    	<if test="params.orderByAsc.irTaskID">IR_TaskID ASC,</if>
+				<if test="params.orderByAsc.irOrderNo">IR_OrderNo ASC,</if>
+				<if test="params.orderByAsc.irWeiXinNickName">IR_WeiXinNickName ASC,</if>
+				<if test="params.orderByAsc.irWeiXinHeaderImage">IR_WeiXinHeaderImage ASC,</if>
+				<if test="params.orderByAsc.irQrCodeImagePath">IR_QrCodeImagePath ASC,</if>
+				<if test="params.orderByAsc.irHandleState">IR_HandleState ASC,</if>
+				<if test="params.orderByAsc.irHandleMessage">IR_HandleMessage ASC,</if>
+				<if test="params.orderByAsc.irHandleTime">IR_HandleTime ASC,</if>
+				<if test="params.orderByAsc.irCreateTime">IR_CreateTime ASC,</if>
+				<if test="params.orderByAsc.irReportPicPathJson">IR_ReportPicPathJson ASC,</if>
+				<if test="params.orderByAsc.irTakeMoney">IR_TakeMoney ASC,</if>
+				<if test="params.orderByAsc.irRobotId">IR_RobotId ASC,</if>
+				<if test="params.orderByAsc.irRemark">IR_Remark ASC,</if>
+				<if test="params.orderByAsc.irPushState">IR_PushState ASC,</if>
+				<if test="params.orderByAsc.irPushTime">IR_PushTime ASC,</if>
+				<if test="params.orderByAsc.irScanPayNotifyRet">IR_ScanPayNotifyRet ASC,</if>
 	    	</if> 
     	</trim>
 	</select>
@@ -266,27 +266,25 @@
 						<if test="params.orderByDesc.irPushTime">IR_PushTime DESC,</if>
 						<if test="params.orderByDesc.irScanPayNotifyRet">IR_ScanPayNotifyRet DESC,</if>
 		    		</when>
-		    		<otherwise>
-		    			<if test="params.orderByDesc.irTaskID">IR_TaskID DESC,</if>
-		    		</otherwise>
+		    		<otherwise>IR_TaskID DESC,</otherwise>
 		    	</choose>
-		    	<if test="params.orderByASC!=null">
-			    	<if test="params.orderByASC.irTaskID">IR_TaskID ASC,</if>
-					<if test="params.orderByASC.irOrderNo">IR_OrderNo ASC,</if>
-					<if test="params.orderByASC.irWeiXinNickName">IR_WeiXinNickName ASC,</if>
-					<if test="params.orderByASC.irWeiXinHeaderImage">IR_WeiXinHeaderImage ASC,</if>
-					<if test="params.orderByASC.irQrCodeImagePath">IR_QrCodeImagePath ASC,</if>
-					<if test="params.orderByASC.irHandleState">IR_HandleState ASC,</if>
-					<if test="params.orderByASC.irHandleMessage">IR_HandleMessage ASC,</if>
-					<if test="params.orderByASC.irHandleTime">IR_HandleTime ASC,</if>
-					<if test="params.orderByASC.irCreateTime">IR_CreateTime ASC,</if>
-					<if test="params.orderByASC.irReportPicPathJson">IR_ReportPicPathJson ASC,</if>
-					<if test="params.orderByASC.irTakeMoney">IR_TakeMoney ASC,</if>
-					<if test="params.orderByASC.irRobotId">IR_RobotId ASC,</if>
-					<if test="params.orderByASC.irRemark">IR_Remark ASC,</if>
-					<if test="params.orderByASC.irPushState">IR_PushState ASC,</if>
-					<if test="params.orderByASC.irPushTime">IR_PushTime ASC,</if>
-					<if test="params.orderByASC.irScanPayNotifyRet">IR_ScanPayNotifyRet ASC,</if>
+		    	<if test="params.orderByAsc!=null">
+			    	<if test="params.orderByAsc.irTaskID">IR_TaskID ASC,</if>
+					<if test="params.orderByAsc.irOrderNo">IR_OrderNo ASC,</if>
+					<if test="params.orderByAsc.irWeiXinNickName">IR_WeiXinNickName ASC,</if>
+					<if test="params.orderByAsc.irWeiXinHeaderImage">IR_WeiXinHeaderImage ASC,</if>
+					<if test="params.orderByAsc.irQrCodeImagePath">IR_QrCodeImagePath ASC,</if>
+					<if test="params.orderByAsc.irHandleState">IR_HandleState ASC,</if>
+					<if test="params.orderByAsc.irHandleMessage">IR_HandleMessage ASC,</if>
+					<if test="params.orderByAsc.irHandleTime">IR_HandleTime ASC,</if>
+					<if test="params.orderByAsc.irCreateTime">IR_CreateTime ASC,</if>
+					<if test="params.orderByAsc.irReportPicPathJson">IR_ReportPicPathJson ASC,</if>
+					<if test="params.orderByAsc.irTakeMoney">IR_TakeMoney ASC,</if>
+					<if test="params.orderByAsc.irRobotId">IR_RobotId ASC,</if>
+					<if test="params.orderByAsc.irRemark">IR_Remark ASC,</if>
+					<if test="params.orderByAsc.irPushState">IR_PushState ASC,</if>
+					<if test="params.orderByAsc.irPushTime">IR_PushTime ASC,</if>
+					<if test="params.orderByAsc.irScanPayNotifyRet">IR_ScanPayNotifyRet ASC,</if>
 		    	</if> 
 	    	</trim>
 			) AS RowId

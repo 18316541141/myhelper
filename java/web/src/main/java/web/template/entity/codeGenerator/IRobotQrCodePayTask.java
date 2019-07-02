@@ -2,6 +2,8 @@ package web.template.entity.codeGenerator;
 
 import java.util.Date;
 
+import web.template.entity.params.codeGenerator.IRobotQrCodePayTaskOrderBy;
+
 public class IRobotQrCodePayTask {
 	private Integer irTaskID;
 	private String irOrderNo;
@@ -19,6 +21,21 @@ public class IRobotQrCodePayTask {
 	private String irPushState;
 	private Date irPushTime;
 	private String irScanPayNotifyRet;
+	private IRobotQrCodePayTaskOrderBy orderByAsc;
+	private IRobotQrCodePayTaskOrderBy orderByDesc;
+	
+	public IRobotQrCodePayTaskOrderBy getOrderByAsc() {
+		return orderByAsc;
+	}
+	public void setOrderByAsc(IRobotQrCodePayTaskOrderBy orderByAsc) {
+		this.orderByAsc = orderByAsc;
+	}
+	public IRobotQrCodePayTaskOrderBy getOrderByDesc() {
+		return orderByDesc;
+	}
+	public void setOrderByDesc(IRobotQrCodePayTaskOrderBy orderByDesc) {
+		this.orderByDesc = orderByDesc;
+	}
 	public Integer getIrTaskID() {
 		return irTaskID;
 	}

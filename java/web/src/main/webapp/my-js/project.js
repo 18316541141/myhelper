@@ -1,5 +1,16 @@
 'use strict';
 
+//标题移动效果
+(function(){	
+	var title=document.title;
+	if(title.length>10){
+		setInterval(function(){
+			var title=document.title;
+			document.title=title.substring(1, title.length)+title.charAt(0);
+		},400);
+	}
+}());
+
 //异步加载图片
 (function () {
     var images = [
@@ -367,7 +378,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'EA',
         template: $('#pageDataTableTemplate').html(),
-        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", postData: "=", cols: "=" },
+        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@",key:"@", postData: "=", cols: "=" },
         controller: function ($scope, $timeout, $myHttp) {
             if ($scope.cols === undefined) {
                 throw new Error('请设置cols的值');
@@ -381,7 +392,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 for (var i = tempArray.length-1;i>0 ;i--) {
                     tempArray[i]=tempArray[i - 1];
                 }
-                tempArray[0] = { type: 'checkbox', LAY_CHECKED: false };
+                tempArray[0] = { type: 'checkbox', LAY_CHECKED: false,fixed:'left' };
             }
             if ($scope.showDefaultOperCol === 'true') {
                 tempArray[tempArray.length]={ fixed: 'right', title: '操作', toolbar: '#rowToolbar', width: 110 };
@@ -391,6 +402,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 layuiTable.render({
                     elem: '#' + $scope.id,
                     autoSort: false,
+                    initSort:{
+                    	field:$scope.key,
+                    	type:'desc',
+                    },
                     height: $('.layui-tab-content').height() - 76 - reduceHeight,
                     page: {
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
@@ -404,6 +419,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     toolbar: $scope.tableToolbar,
                     defaultToolbar: ['filter'],
                     id: $scope.id + '-checked',
+                    sort:true,
                     request: {
                         pageName: 'currentPageIndex',
                         limitName: 'pageSize'
@@ -447,6 +463,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     var event = obj.event;
                     var data = obj.data;
                     $scope.$emit('rowOper', event, data);
+                });
+                debugger;
+                layuiTable.on('sort(' + $scope.id + ')', function(obj){
+                	debugger;
                 });
             });
         }
