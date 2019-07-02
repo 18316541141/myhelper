@@ -288,17 +288,15 @@
     <Content Include="Content\images\256x256\xlsx-256.png" />
     <Content Include="Content\images\256x256\zip-256.png" />
     <Content Include="Content\index.html" />
-    <Content Include="Content\Jcrop-master\.eslintrc.js" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.css" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.dev.css" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.dev.js" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.js" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\config.js" />
-    <Content Include="Content\Jcrop-master\examples\image.html" />
-    <Content Include="Content\Jcrop-master\examples\style.css" />
-    <Content Include="Content\Jcrop-master\examples\svg.html" />
-    <Content Include="Content\Jcrop-master\MIT-LICENSE.txt" />
-    <Content Include="Content\Jcrop-master\webpack.config.babel.js" />
+    <Content Include="Content\Jcrop-0.9.12\css\Jcrop.gif" />
+    <Content Include="Content\Jcrop-0.9.12\css\jquery.Jcrop.css" />
+    <Content Include="Content\Jcrop-0.9.12\css\jquery.Jcrop.min.css" />
+    <Content Include="Content\Jcrop-0.9.12\js\jquery.color.js" />
+    <Content Include="Content\Jcrop-0.9.12\js\jquery.Jcrop.js" />
+    <Content Include="Content\Jcrop-0.9.12\js\jquery.Jcrop.min.js" />
+    <Content Include="Content\Jcrop-0.9.12\js\jquery.min.js" />
+    <Content Include="Content\jquery-viewer\dist\jquery-viewer.min.js" />
+    <Content Include="Content\jquery-viewer\dist\viewer.css" />
     <Content Include="Content\layui\css\layui.css" />
     <Content Include="Content\layui\css\layui.mobile.css" />
     <Content Include="Content\layui\css\login.css" />
@@ -385,6 +383,7 @@
     <Content Include="Content\layui\images\face\9.gif" />
     <Content Include="Content\menus\testMenus1\areaSelect.html" />
     <Content Include="Content\menus\testMenus1\pageTable.html" />
+    <Content Include="Content\menus\testMenus1\pageTable2.html" />
     <Content Include="Content\menus\testMenus1\treeForm.html" />
     <Content Include="Content\menus\testMenus1\uploadFiles.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
@@ -2893,6 +2892,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\my-js\menus\" />
     <Folder Include="Script\" />
     <Folder Include="Template\" />
     <Folder Include="uploadFiles\" />
@@ -3128,41 +3128,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\Jcrop-master\.eslintignore" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.css.map" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.dev.js.map" />
-    <Content Include="Content\Jcrop-master\dist\jcrop.js.map" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\components\coords.vue" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\components\example1.vue" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\components\example2.vue" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\components\example3.vue" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\components\Jcrop.vue" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\override.styl" />
-    <Content Include="Content\Jcrop-master\docs\.vuepress\style.styl" />
-    <Content Include="Content\Jcrop-master\docs\examples\aspect.md" />
-    <Content Include="Content\Jcrop-master\docs\examples\custom-widget.md" />
-    <Content Include="Content\Jcrop-master\docs\examples\README.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\about.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\design.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\events.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\extend.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\instance.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\multiple.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\options.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\README.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\styling.md" />
-    <Content Include="Content\Jcrop-master\docs\guide\widgets.md" />
-    <Content Include="Content\Jcrop-master\docs\jquery\README.md" />
-    <Content Include="Content\Jcrop-master\docs\objects\confobj.md" />
-    <Content Include="Content\Jcrop-master\docs\objects\domobj.md" />
-    <Content Include="Content\Jcrop-master\docs\objects\rect.md" />
-    <Content Include="Content\Jcrop-master\docs\README.md" />
-    <Content Include="Content\Jcrop-master\docs\roadmap.md" />
-    <Content Include="Content\Jcrop-master\docs\vue\README.md" />
-    <Content Include="Content\Jcrop-master\package.json" />
-    <Content Include="Content\Jcrop-master\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\menus\testMenus1\bigImg.html" />

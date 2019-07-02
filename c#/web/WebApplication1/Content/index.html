@@ -203,13 +203,16 @@
                 </div>
             </div>
         </script> 
-  <script type="text/template" id="pageTableTemplate">
+        <script type="text/template" id="pageTableTemplate">
 			<div>
             	<div ng-transclude></div>
             	<div id="page-{{id}}"></div>
 			</div>
         </script> 
-  <script type="text/template" id="treeFormTemplate">
+        <script type="text/template" id="pageDataTableTemplate">
+            <div id="data-table-{{id}}"></div>
+        </script>
+        <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
                 <div class="left-tree">
                     <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()"/>
@@ -277,6 +280,21 @@
                 </div>
             </div>
         </script> 
+     <script type="text/template" id="rowToolbar">
+         <div class="layui-btn-container">
+             <button class="layui-btn layui-btn-sm" lay-event="edit" type="button">编辑</button>
+             <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del" type="button">删除</button>
+         </div>
+     </script>
+     <script type="text/template" id="tableToolbar">
+         <div class="layui-btn-container">
+             <button class="layui-btn layui-btn-sm" lay-event="enabled" type="button"><i class="layui-icon ">&#xe605;</i> 启用</button>
+             <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="disabled" type="button"><i class="layui-icon ">&#x1006;</i> 禁用</button>
+             <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" type="button"><i class="layui-icon ">&#xe608;</i> 新增</button>
+             <button class="layui-btn layui-btn-sm" lay-event="export" type="button"><i class="layui-icon ">&#xe601;</i> 导出</button>
+             <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBatch" type="button"><i class="layui-icon ">&#xe640;</i> 删除</button>
+         </div>
+     </script>
   <script type="text/template" id="uploadFilesTemplate">
             <div class="layui-form-item">
                 <label class="layui-form-label">上传文件</label>
@@ -445,6 +463,6 @@
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
   <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
   <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
-  <script src="my-js/project.js?v=20190702091642" charset="utf-8"></script>  
+  <script src="my-js/project.js?v=20190702091642" charset="utf-8"></script> 
  </body>
 </html>

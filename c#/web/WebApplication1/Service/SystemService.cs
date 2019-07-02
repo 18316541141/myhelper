@@ -129,6 +129,14 @@ namespace WebApplication1.Service
             };
             leftMenuList11.Add(leftMenu16);
 
+            LeftMenu leftMenu17 = new LeftMenu
+            {
+                id="m17",
+                title = "测试1-7",
+                url = "menus/testMenus1/pageTable2.html"
+            };
+            leftMenuList11.Add(leftMenu17);
+
             leftMenu1.leftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);
             LeftMenu leftMenu2 = new LeftMenu

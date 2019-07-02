@@ -1,0 +1,15 @@
+﻿<fieldset class="layui-elem-field layui-field-title">
+    <legend>分页表格2</legend>
+</fieldset>
+<div ng-controller="pageTableTest2">
+    <!--
+        id：整个控件的唯一id，
+        url：获取数据的url，
+        show-check-col：显示复选框列，
+        table-toolbar：默认的表格操作工具栏
+        show-default-oper-col：显示默认的操作列，
+        post-data：（表单提交的数据）共享controller的postData，当父controller的postData变化时，data-table控件的postData也会变化。
+        cols：（表格列设置）共享controller的cols
+    -->
+    <div page-data-table id="pageTableTest2" url="/IRobotQrCodePayTask/page" table-toolbar="#tableToolbar" show-check-col="true" show-default-oper-col="true" post-data="postData" cols="cols"></div>
+</div>

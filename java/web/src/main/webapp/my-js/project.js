@@ -52,7 +52,8 @@ var layuiLayer = layui.layer;
 var layuiElement = layui.element;
 var layuiTree = layui.tree;
 var layuiTable = layui.table;
-var layuiLaypage = layui.laypage
+var layuiLaypage = layui.laypage;
+var layuiLaytpl = layui.laytpl;
 /**
  * layui自定义的表单校验，
  * 方法源码在webapp/my-js/common-by-layui.js
@@ -362,6 +363,94 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         });
         layuiForm.render('checkbox');
     });
+}).directive('pageDataTable', function () {
+    return {
+        restrict: 'EA',
+        template: $('#pageDataTableTemplate').html(),
+        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", postData: "=", cols: "=" },
+        controller: function ($scope, $timeout, $myHttp) {
+            if ($scope.cols === undefined) {
+                throw new Error('请设置cols的值');
+            }
+            if ($scope.postData === 'undefined') {
+                $scope.postData = {};
+            }
+            var tempArray=$scope.cols;
+            if ($scope.showCheckCol === 'true') {
+                tempArray.length += 1;
+                for (var i = tempArray.length-1;i>0 ;i--) {
+                    tempArray[i]=tempArray[i - 1];
+                }
+                tempArray[0] = { type: 'checkbox', LAY_CHECKED: false };
+            }
+            if ($scope.showDefaultOperCol === 'true') {
+                tempArray[tempArray.length]={ fixed: 'right', title: '操作', toolbar: '#rowToolbar', width: 110 };
+            }
+            var reduceHeight = 0;
+            $timeout(function () {
+                layuiTable.render({
+                    elem: '#' + $scope.id,
+                    autoSort: false,
+                    height: $('.layui-tab-content').height() - 76 - reduceHeight,
+                    page: {
+                        layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    },
+                    limit: 20,
+                    limits: [20, 40, 60, 80, 100],
+                    url: $scope.url,
+                    method: 'post',
+                    loading: true,
+                    where: $scope.postData,
+                    toolbar: $scope.tableToolbar,
+                    defaultToolbar: ['filter'],
+                    id: $scope.id + '-checked',
+                    request: {
+                        pageName: 'currentPageIndex',
+                        limitName: 'pageSize'
+                    },
+                    done: function (res, curr, count) {
+                        $scope.$emit('done', res, curr, count);
+                    },
+                    parseData: function (result) {
+                        var data = result.data;
+                        var ret = {};
+                        if (result.code === -10) {
+                            logoutCallback();
+                            ret = { code: result.code, count: 0, data: [] };
+                        }
+                        //用户无权限，无法操作，但需要后续处理
+                        else if (result.code === -9) {
+                            ret = { code: result.code, msg: '当前用户组无操作权限！', count: 0, data: [] };
+                        }
+                        //用户无权限，无法操作
+                        else if (result.code === -8) {
+                            ret = { code: result.code, msg: '当前用户组无操作权限！', count: 0, data: [] };
+                        }
+                        //常规错误，
+                        else if (result.code === -1) {
+                            ret = { code: result.code, msg: response.msg, count: 0, data: [] };
+                        }
+                        //成功
+                        else if (result.code === 0) {
+                            ret = { code: result.code, count: data.totalItemCount, data: data.pageDataList };
+                        }
+                        return ret;
+                    },
+                    cols: [$scope.cols]
+                });
+                layuiTable.on('toolbar(' + $scope.id + ')', function (obj) {
+                    var event = obj.event;
+                    var checkStatus = layuiTable.checkStatus($scope.id + '-checked');
+                    $scope.$emit('tableOper', event, checkStatus);
+                });
+                layuiTable.on('tool(' + $scope.id + ')', function (obj) {
+                    var event = obj.event;
+                    var data = obj.data;
+                    $scope.$emit('rowOper', event, data);
+                });
+            });
+        }
+    };
 }).directive('pageTable', function () {
     return {
         restrict: 'EA',
@@ -369,9 +458,14 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         scope: { id: "@",url:"@" ,postData:"=",data:"="},
         transclude: true,
         controller: function ($scope, $timeout, $myHttp) {
+            $scope.postData = {};
             $scope.currentPageIndex = 1;
             $scope.pageSize = 20;
+            $scope.$on('searchPage', function () {
+                $scope.refreshPage();
+            });
             $scope.$on('refreshPage', function () {
+                $scope.postData = {};
                 $scope.refreshPage();
             });
             $scope.refreshPage = function () {
@@ -950,4 +1044,32 @@ myApp.controller('upload-files', function ($scope) {
 
 });
 myApp.controller('pageTableTest', function ($scope) {
+    $scope.search = function () {
+        $scope.$broadcast('searchPage');
+    }
+    $scope.refresh = function () {
+        $scope.$broadcast('refreshPage');
+    }
+});
+myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp) {
+    /**
+     * 表格列设置，field：字段名、title：表格标题、sort：是否显示排序按钮
+     */
+    $scope.cols = [
+        { field: 'irOrderNo', title: 'irOrderNo', sort: true },
+        { field: 'irWeiXinNickName', title: 'irWeiXinNickName', sort: true },
+        { field: 'irWeiXinHeaderImage', title: 'irWeiXinHeaderImage', sort: true },
+        { field: 'irQrCodeImagePath', title: 'irQrCodeImagePath', sort: true },
+        { field: 'irHandleState', title: 'irHandleState', sort: true },
+        { field: 'irHandleMessage', title: 'irHandleMessage', sort: true },
+        { field: 'irHandleTime', title: 'irHandleTime', sort: true },
+        { field: 'irCreateTime', title: 'irCreateTime', sort: true },
+        { field: 'irReportPicPathJson', title: 'irReportPicPathJson', sort: true },
+        { field: 'irTakeMoney', title: 'irTakeMoney', sort: true },
+        { field: 'irRobotId', title: 'irRobotId', sort: true },
+        { field: 'irRemark', title: 'irRemark', sort: true },
+        { field: 'irPushState', title: 'irPushState', sort: true },
+        { field: 'irPushTime', title: 'irPushTime', sort: true },
+        { field: 'irScanPayNotifyRet', title: 'irScanPayNotifyRet', sort: true }
+    ]
 });
