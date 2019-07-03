@@ -103,9 +103,11 @@
 	animation-timing-function: linear;
 }
 /*表格行动画*/
-.layui-table>tbody>tr {
+.layui-table>tbody>tr ,
+/*数据表格分页栏特效*/
+.layui-laypage-default{
 	animation-name: fadeIn;
-	animation-duration: .4s;
+	animation-duration: .5s;
 	animation-timing-function: linear;
 }
 /*缩略图的外边框装饰样式*/
@@ -210,7 +212,24 @@
 			</div>
         </script> 
         <script type="text/template" id="pageDataTableTemplate">
-            <div id="data-table-{{id}}"></div>
+            <div class="layui-hide">
+                <div id="rowToolbar">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" lay-event="edit" type="button" ng-if="perms.edit">编辑</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del" type="button" ng-if="perms.del">删除</button>
+                    </div>
+                </div>
+                <div id="tableToolbar">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" lay-event="enabled" type="button" ng-if="perms.enabled"><i class="layui-icon ">&#xe605;</i> 启用</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="disabled" type="button" ng-if="perms.disabled"><i class="layui-icon ">&#x1006;</i> 禁用</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" type="button" ng-if="perms.add"><i class="layui-icon ">&#xe608;</i> 新增</button>
+                        <button class="layui-btn layui-btn-sm" lay-event="export" type="button" ng-if="perms.export"><i class="layui-icon ">&#xe601;</i> 导出</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBatch" type="button" ng-if="perms.delBatch"><i class="layui-icon ">&#xe640;</i> 批量删除</button>
+                    </div>
+                </div>
+            </div>
+            <div id="data-table-{{id}}" lay-filter="dataTable{{id}}"></div>
         </script>
         <script type="text/template" id="treeFormTemplate">
             <div class="tree-container layui-clear">
@@ -279,22 +298,7 @@
                     </div>
                 </div>
             </div>
-        </script> 
-     <script type="text/template" id="rowToolbar">
-         <div class="layui-btn-container">
-             <button class="layui-btn layui-btn-sm" lay-event="edit" type="button">编辑</button>
-             <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del" type="button">删除</button>
-         </div>
-     </script>
-     <script type="text/template" id="tableToolbar">
-         <div class="layui-btn-container">
-             <button class="layui-btn layui-btn-sm" lay-event="enabled" type="button"><i class="layui-icon ">&#xe605;</i> 启用</button>
-             <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="disabled" type="button"><i class="layui-icon ">&#x1006;</i> 禁用</button>
-             <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" type="button"><i class="layui-icon ">&#xe608;</i> 新增</button>
-             <button class="layui-btn layui-btn-sm" lay-event="export" type="button"><i class="layui-icon ">&#xe601;</i> 导出</button>
-             <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBatch" type="button"><i class="layui-icon ">&#xe640;</i> 删除</button>
-         </div>
-     </script>
+        </script>
   <script type="text/template" id="uploadFilesTemplate">
             <div class="layui-form-item">
                 <label class="layui-form-label">上传文件</label>
@@ -401,7 +405,7 @@
       <li ng-repeat="x in menus" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}">{{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190702091642'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190703120431'"></div> 
      </div> 
     </div> 
    </div> 
@@ -463,6 +467,6 @@
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
   <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
   <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
-  <script src="my-js/project.js?v=20190702091642" charset="utf-8"></script> 
+  <script src="my-js/project.js?v=20190703120431" charset="utf-8"></script> 
  </body>
 </html>

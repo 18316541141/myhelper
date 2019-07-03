@@ -378,13 +378,13 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     return {
         restrict: 'EA',
         template: $('#pageDataTableTemplate').html(),
-        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@",key:"@", postData: "=", cols: "=" },
+        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", height:"@", postData: "=", cols: "=", perms: "=" },
         controller: function ($scope, $timeout, $myHttp) {
             if ($scope.cols === undefined) {
                 throw new Error('请设置cols的值');
             }
-            if ($scope.postData === 'undefined') {
-                $scope.postData = {};
+            if ($scope.postData === undefined) { 
+        		$scope.postData = {};
             }
             var tempArray=$scope.cols;
             if ($scope.showCheckCol === 'true') {
@@ -397,16 +397,22 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             if ($scope.showDefaultOperCol === 'true') {
                 tempArray[tempArray.length]={ fixed: 'right', title: '操作', toolbar: '#rowToolbar', width: 110 };
             }
-            var reduceHeight = 0;
+            $scope.$on('searchPage', function () {
+                layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
+            });
+            $scope.$on('refreshPage', function () {
+                for(var key in $scope.postData){
+                	if($scope.postData.hasOwnProperty(key)){
+                		$scope.postData[key]=null;
+                	}
+                }
+                layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
+            });
             $timeout(function () {
                 layuiTable.render({
-                    elem: '#' + $scope.id,
+                    elem: '#data-table-' + $scope.id,
                     autoSort: false,
-                    initSort:{
-                    	field:$scope.key,
-                    	type:'desc',
-                    },
-                    height: $('.layui-tab-content').height() - 76 - reduceHeight,
+                    height: $scope.height,
                     page: {
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
                     },
@@ -415,11 +421,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     url: $scope.url,
                     method: 'post',
                     loading: true,
-                    where: $scope.postData,
                     toolbar: $scope.tableToolbar,
                     defaultToolbar: ['filter'],
                     id: $scope.id + '-checked',
-                    sort:true,
                     request: {
                         pageName: 'currentPageIndex',
                         limitName: 'pageSize'
@@ -454,19 +458,49 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     },
                     cols: [$scope.cols]
                 });
-                layuiTable.on('toolbar(' + $scope.id + ')', function (obj) {
-                    var event = obj.event;
-                    var checkStatus = layuiTable.checkStatus($scope.id + '-checked');
-                    $scope.$emit('tableOper', event, checkStatus);
+                layuiTable.on('sort(dataTable' + $scope.id + ')', function (obj) {
+                    if (obj.type === "asc") {
+                        $scope.postData['orderByDesc.'+obj.field]=false;
+                        $scope.postData['orderByAsc.'+obj.field]=true;
+                    } else if (obj.type === "desc") {
+                        $scope.postData['orderByAsc.'+obj.field]=false;
+                        $scope.postData['orderByDesc.'+obj.field]=true;
+                    }
+                    layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
                 });
-                layuiTable.on('tool(' + $scope.id + ')', function (obj) {
+                layuiTable.on('toolbar(dataTable' + $scope.id + ')', function (obj) {
+                    var event = obj.event;
+                    var data = layuiTable.checkStatus($scope.id + '-checked').data;
+                    if (event === 'enabled' && data.length === 0) {
+                        layuiLayer.alert('至少得选中一行数据才能启用。', { icon: 5 });
+                        return;
+                    } else if (event === 'disabled' && data.length === 0) {
+                        layuiLayer.alert('至少得选中一行数据才能禁用。', { icon: 5 });
+                        return;
+                    } else if (event === 'delBatch' && data.length === 0) {
+                        layuiLayer.alert('至少得选中一行数据才能删除。', { icon: 5 });
+                        return;
+                    }
+                    if (event === 'delBatch') {
+                        layuiLayer.confirm('确认删除？', { icon: 3, title: '删除提示' }, function (index) {
+                            layuiLayer.close(index);
+                            $scope.$emit('tableOper', event, data);
+                        });
+                    }else{
+                        $scope.$emit('tableOper', event, data);
+                    }
+                });
+                layuiTable.on('tool(dataTable' + $scope.id + ')', function (obj) {
                     var event = obj.event;
                     var data = obj.data;
-                    $scope.$emit('rowOper', event, data);
-                });
-                debugger;
-                layuiTable.on('sort(' + $scope.id + ')', function(obj){
-                	debugger;
+                    if (event === 'del') {
+                        layuiLayer.confirm('确认删除？', { icon: 3, title: '删除提示' }, function (index) {
+                            layuiLayer.close(index);
+                            $scope.$emit('rowOper', event, data);
+                        });
+                    } else {
+                        $scope.$emit('rowOper', event, data);
+                    }
                 });
             });
         }
@@ -1060,9 +1094,6 @@ myApp.controller('big-img-ctrl',function($scope,$timeout){
         });
     });
 });
-myApp.controller('upload-files', function ($scope) {
-
-});
 myApp.controller('pageTableTest', function ($scope) {
     $scope.search = function () {
         $scope.$broadcast('searchPage');
@@ -1091,5 +1122,32 @@ myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp) {
         { field: 'irPushState', title: 'irPushState', sort: true },
         { field: 'irPushTime', title: 'irPushTime', sort: true },
         { field: 'irScanPayNotifyRet', title: 'irScanPayNotifyRet', sort: true }
-    ]
+    ];
+    $scope.perms = {
+        enabled :true,
+        disabled :true,
+        add:true,
+        'export':true,
+        delBatch:true,
+        del:true,
+        edit: true
+    };
+    $scope.search = function () {
+        $scope.$broadcast('searchPage');
+    };
+    $scope.refresh = function () {
+        $scope.$broadcast('refreshPage');
+    };
+    $scope.$on('tableOper', function (event, type, data) {
+    });
+    $scope.$on('rowOper', function (event, type, data) {
+    });
+    $scope.$on('done', function (event,res, curr, count) {
+        if (count === 0) {
+            $('#pageTableTest2 [lay-event="enabled"]').hide();
+            $('#pageTableTest2 [lay-event="disabled"]').hide();
+            $('#pageTableTest2 [lay-event="export"]').hide();
+            $('#pageTableTest2 [lay-event="delBatch"]').hide();
+        }
+    });
 });

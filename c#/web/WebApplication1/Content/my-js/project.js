@@ -383,8 +383,8 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             if ($scope.cols === undefined) {
                 throw new Error('请设置cols的值');
             }
-            if ($scope.postData === undefined) {
-                $scope.postData = {};
+            if ($scope.postData === undefined) { 
+        		$scope.postData = {};
             }
             var tempArray=$scope.cols;
             if ($scope.showCheckCol === 'true') {
@@ -401,7 +401,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
             });
             $scope.$on('refreshPage', function () {
-                $scope.postData = {};
+                for(var key in $scope.postData){
+                	if($scope.postData.hasOwnProperty(key)){
+                		$scope.postData[key]=null;
+                	}
+                }
                 layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
             });
             $timeout(function () {
@@ -456,13 +460,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 });
                 layuiTable.on('sort(dataTable' + $scope.id + ')', function (obj) {
                     if (obj.type === "asc") {
-                        $scope.postData.orderByDesc = null;
-                        $scope.postData.orderByAsc = {};
-                        $scope.postData.orderByAsc[obj.field] = true;
+                        $scope.postData['orderByDesc.'+obj.field]=false;
+                        $scope.postData['orderByAsc.'+obj.field]=true;
                     } else if (obj.type === "desc") {
-                        $scope.postData.orderByAsc = null;
-                        $scope.postData.orderByDesc = {};
-                        $scope.postData.orderByDesc[obj.field] = true;
+                        $scope.postData['orderByAsc.'+obj.field]=false;
+                        $scope.postData['orderByDesc.'+obj.field]=true;
                     }
                     layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
                 });

@@ -87,41 +87,41 @@
 	<delete id="deleteByParams" parameterType="IRobotQrCodePayTaskParams">
 		delete from IRobot_QrCodePayTask
 		<where>
-			<if test="irTaskID!=null">IR_TaskID=#{irTaskID},</if>
-			<if test="irOrderNo!=null">IR_OrderNo=#{irOrderNo},</if>
-			<if test="irOrderNoLike!=null">IR_OrderNo like '%'+#{irOrderNoLike}+'%',</if>
-			<if test="irWeiXinNickName!=null">IR_WeiXinNickName=#{irWeiXinNickName},</if>
-			<if test="irWeiXinNickNameLike!=null">IR_WeiXinNickName like '%'+#{irWeiXinNickNameLike}+'%',</if>
-			<if test="irWeiXinHeaderImage!=null">IR_WeiXinHeaderImage=#{irWeiXinHeaderImage},</if>
-			<if test="irWeiXinHeaderImageLike!=null">IR_WeiXinHeaderImage like '%'+#{irWeiXinHeaderImageLike}+'%',</if>
-			<if test="irQrCodeImagePath!=null">IR_QrCodeImagePath=#{irQrCodeImagePath},</if>
-			<if test="irQrCodeImagePathLike!=null">IR_QrCodeImagePath like '%'+#{irQrCodeImagePathLike}+'%',</if>
-			<if test="irHandleState!=null">IR_HandleState=#{irHandleState},</if>
-			<if test="irHandleStateLike!=null">IR_HandleState like '%'+#{irHandleStateLike}+'%',</if>
-			<if test="irHandleMessage!=null">IR_HandleMessage=#{irHandleMessage},</if>
-			<if test="irHandleMessageLike!=null">IR_HandleMessage like '%'+#{irHandleMessageLike}+'%',</if>
-			<if test="irHandleTime!=null">IR_HandleTime=#{irHandleTime},</if>
-			<if test="irHandleTimeStart!=null">IR_HandleTime &gt;= #{irHandleTimeStart},</if>
-			<if test="irHandleTimeEnd!=null">IR_HandleTime &lt;= #{irHandleTimeEnd},</if>
-			<if test="irCreateTime!=null">IR_CreateTime=#{irCreateTime},</if>
-			<if test="irCreateTimeStart!=null">IR_CreateTime &gt;= #{irCreateTimeStart},</if>
-			<if test="irCreateTimeEnd!=null">IR_CreateTime &lt;= #{irCreateTimeEnd},</if>
-			<if test="irReportPicPathJson!=null">IR_ReportPicPathJson=#{irReportPicPathJson},</if>
-			<if test="irReportPicPathJsonLike!=null">IR_ReportPicPathJson like '%'+#{irReportPicPathJsonLike}+'%',</if>
-			<if test="irTakeMoney!=null">IR_TakeMoney=#{irTakeMoney},</if>
-			<if test="irTakeMoneyStart!=null">IR_TakeMoney &gt;= #{irTakeMoneyStart},</if>
-			<if test="irTakeMoneyEnd!=null">IR_TakeMoney &lt;= #{irTakeMoneyEnd},</if>
-			<if test="irRobotId!=null">IR_RobotId=#{irRobotId},</if>
-			<if test="irRobotIdLike!=null">IR_RobotId like '%'+#{irRobotIdLike}+'%',</if>
-			<if test="irRemark!=null">IR_Remark=#{irRemark},</if>
-			<if test="irRemarkLike!=null">IR_Remark like '%'+#{irRemarkLike}+'%',</if>
-			<if test="irPushState!=null">IR_PushState=#{irPushState},</if>
-			<if test="irPushStateLike!=null">IR_PushState like '%'+#{irPushStateLike}+'%',</if>
-			<if test="irPushTime!=null">IR_PushTime=#{irPushTime},</if>
-			<if test="irPushTimeStart!=null">IR_PushTime &gt;= #{irPushTimeStart},</if>
-			<if test="irPushTimeEnd!=null">IR_PushTime &lt;= #{irPushTimeEnd},</if>
-			<if test="irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{irScanPayNotifyRet}</if>
-			<if test="irScanPayNotifyRetLike!=null">IR_ScanPayNotifyRet like '%'+#{irScanPayNotifyRetLike}+'%'</if>
+			<if test="irTaskID!=null">AND IR_TaskID=#{irTaskID}</if>
+			<if test="irOrderNo!=null">AND IR_OrderNo=#{irOrderNo}</if>
+			<if test="irOrderNoLike!=null">AND IR_OrderNo like '%'+#{irOrderNoLike}+'%'</if>
+			<if test="irWeiXinNickName!=null">AND IR_WeiXinNickName=#{irWeiXinNickName}</if>
+			<if test="irWeiXinNickNameLike!=null">AND IR_WeiXinNickName like '%'+#{irWeiXinNickNameLike}+'%'</if>
+			<if test="irWeiXinHeaderImage!=null">AND IR_WeiXinHeaderImage=#{irWeiXinHeaderImage}</if>
+			<if test="irWeiXinHeaderImageLike!=null">AND IR_WeiXinHeaderImage like '%'+#{irWeiXinHeaderImageLike}+'%'</if>
+			<if test="irQrCodeImagePath!=null">AND IR_QrCodeImagePath=#{irQrCodeImagePath}</if>
+			<if test="irQrCodeImagePathLike!=null">AND IR_QrCodeImagePath like '%'+#{irQrCodeImagePathLike}+'%'</if>
+			<if test="irHandleState!=null">AND IR_HandleState=#{irHandleState}</if>
+			<if test="irHandleStateLike!=null">AND IR_HandleState like '%'+#{irHandleStateLike}+'%'</if>
+			<if test="irHandleMessage!=null">AND IR_HandleMessage=#{irHandleMessage}</if>
+			<if test="irHandleMessageLike!=null">AND IR_HandleMessage like '%'+#{irHandleMessageLike}+'%'</if>
+			<if test="irHandleTime!=null">AND IR_HandleTime=#{irHandleTime}</if>
+			<if test="irHandleTimeStart!=null">AND IR_HandleTime &gt;= #{irHandleTimeStart}</if>
+			<if test="irHandleTimeEnd!=null">AND IR_HandleTime &lt;= #{irHandleTimeEnd}</if>
+			<if test="irCreateTime!=null">AND IR_CreateTime=#{irCreateTime}</if>
+			<if test="irCreateTimeStart!=null">AND IR_CreateTime &gt;= #{irCreateTimeStart}</if>
+			<if test="irCreateTimeEnd!=null">AND IR_CreateTime &lt;= #{irCreateTimeEnd}</if>
+			<if test="irReportPicPathJson!=null">AND IR_ReportPicPathJson=#{irReportPicPathJson}</if>
+			<if test="irReportPicPathJsonLike!=null">AND IR_ReportPicPathJson like '%'+#{irReportPicPathJsonLike}+'%'</if>
+			<if test="irTakeMoney!=null">AND IR_TakeMoney=#{irTakeMoney}</if>
+			<if test="irTakeMoneyStart!=null">AND IR_TakeMoney &gt;= #{irTakeMoneyStart}</if>
+			<if test="irTakeMoneyEnd!=null">AND IR_TakeMoney &lt;= #{irTakeMoneyEnd}</if>
+			<if test="irRobotId!=null">AND IR_RobotId=#{irRobotId}</if>
+			<if test="irRobotIdLike!=null">AND IR_RobotId like '%'+#{irRobotIdLike}+'%'</if>
+			<if test="irRemark!=null">AND IR_Remark=#{irRemark}</if>
+			<if test="irRemarkLike!=null">AND IR_Remark like '%'+#{irRemarkLike}+'%'</if>
+			<if test="irPushState!=null">AND IR_PushState=#{irPushState}</if>
+			<if test="irPushStateLike!=null">AND IR_PushState like '%'+#{irPushStateLike}+'%'</if>
+			<if test="irPushTime!=null">AND IR_PushTime=#{irPushTime}</if>
+			<if test="irPushTimeStart!=null">AND IR_PushTime &gt;= #{irPushTimeStart}</if>
+			<if test="irPushTimeEnd!=null">AND IR_PushTime &lt;= #{irPushTimeEnd}</if>
+			<if test="irScanPayNotifyRet!=null">AND IR_ScanPayNotifyRet=#{irScanPayNotifyRet}</if>
+			<if test="irScanPayNotifyRetLike!=null">AND IR_ScanPayNotifyRet like '%'+#{irScanPayNotifyRetLike}+'%'</if>
 		</where>
 	</delete>
 	
@@ -132,41 +132,41 @@
 	</select>
 	
 	<sql id="selectWherePart">
-		<if test="irTaskID!=null">IR_TaskID=#{irTaskID},</if>
-		<if test="irOrderNo!=null">IR_OrderNo=#{irOrderNo},</if>
-		<if test="irOrderNoLike!=null and irOrderNoLike!=''">IR_OrderNo like '%'+#{irOrderNoLike}+'%',</if>
-		<if test="irWeiXinNickName!=null">IR_WeiXinNickName=#{irWeiXinNickName},</if>
-		<if test="irWeiXinNickNameLike!=null and irWeiXinNickNameLike!=''">IR_WeiXinNickName like '%'+#{irWeiXinNickNameLike}+'%',</if>
-		<if test="irWeiXinHeaderImage!=null">IR_WeiXinHeaderImage=#{irWeiXinHeaderImage},</if>
-		<if test="irWeiXinHeaderImageLike!=null and irWeiXinHeaderImageLike!=''">IR_WeiXinHeaderImage like '%'+#{irWeiXinHeaderImageLike}+'%',</if>
-		<if test="irQrCodeImagePath!=null">IR_QrCodeImagePath=#{irQrCodeImagePath},</if>
-		<if test="irQrCodeImagePathLike!=null and irQrCodeImagePathLike!=''">IR_QrCodeImagePath like '%'+#{irQrCodeImagePathLike}+'%',</if>
-		<if test="irHandleState!=null">IR_HandleState=#{irHandleState},</if>
-		<if test="irHandleStateLike!=null and irHandleStateLike!=''">IR_HandleState like '%'+#{irHandleStateLike}+'%',</if>
-		<if test="irHandleMessage!=null">IR_HandleMessage=#{irHandleMessage},</if>
-		<if test="irHandleMessageLike!=null and irHandleMessageLike!=''">IR_HandleMessage like '%'+#{irHandleMessageLike}+'%',</if>
-		<if test="irHandleTime!=null">IR_HandleTime=#{irHandleTime},</if>
-		<if test="irHandleTimeStart!=null">IR_HandleTime &gt;= #{irHandleTimeStart},</if>
-		<if test="irHandleTimeEnd!=null">IR_HandleTime &lt;= #{irHandleTimeEnd},</if>
-		<if test="irCreateTime!=null">IR_CreateTime=#{irCreateTime},</if>
-		<if test="irCreateTimeStart!=null">IR_CreateTime &gt;= #{irCreateTimeStart},</if>
-		<if test="irCreateTimeEnd!=null">IR_CreateTime &lt;= #{irCreateTimeEnd},</if>
-		<if test="irReportPicPathJson!=null">IR_ReportPicPathJson=#{irReportPicPathJson},</if>
-		<if test="irReportPicPathJsonLike!=null and irReportPicPathJsonLike!=''">IR_ReportPicPathJson like '%'+#{irReportPicPathJsonLike}+'%',</if>
-		<if test="irTakeMoney!=null">IR_TakeMoney=#{irTakeMoney},</if>
-		<if test="irTakeMoneyStart!=null">IR_TakeMoney &gt;= #{irTakeMoneyStart},</if>
-		<if test="irTakeMoneyEnd!=null">IR_TakeMoney &lt;= #{irTakeMoneyEnd},</if>
-		<if test="irRobotId!=null">IR_RobotId=#{irRobotId},</if>
-		<if test="irRobotIdLike!=null and irRobotIdLike!=''">IR_RobotId like '%'+#{irRobotIdLike}+'%',</if>
-		<if test="irRemark!=null">IR_Remark=#{irRemark},</if>
-		<if test="irRemarkLike!=null and irRemarkLike!=''">IR_Remark like '%'+#{irRemarkLike}+'%',</if>
-		<if test="irPushState!=null">IR_PushState=#{irPushState},</if>
-		<if test="irPushStateLike!=null and irPushStateLike!=''">IR_PushState like '%'+#{irPushStateLike}+'%',</if>
-		<if test="irPushTime!=null">IR_PushTime=#{irPushTime},</if>
-		<if test="irPushTimeStart!=null">IR_PushTime &gt;= #{irPushTimeStart},</if>
-		<if test="irPushTimeEnd!=null">IR_PushTime &lt;= #{irPushTimeEnd},</if>
-		<if test="irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{irScanPayNotifyRet}</if>
-		<if test="irScanPayNotifyRetLike!=null and irScanPayNotifyRetLike!=''">IR_ScanPayNotifyRet like '%'+#{irScanPayNotifyRetLike}+'%'</if>
+		<if test="irTaskID!=null">AND IR_TaskID=#{irTaskID}</if>
+		<if test="irOrderNo!=null">AND IR_OrderNo=#{irOrderNo}</if>
+		<if test="irOrderNoLike!=null and irOrderNoLike!=''">AND IR_OrderNo like '%'+#{irOrderNoLike}+'%'</if>
+		<if test="irWeiXinNickName!=null">AND IR_WeiXinNickName=#{irWeiXinNickName}</if>
+		<if test="irWeiXinNickNameLike!=null and irWeiXinNickNameLike!=''">AND IR_WeiXinNickName like '%'+#{irWeiXinNickNameLike}+'%'</if>
+		<if test="irWeiXinHeaderImage!=null">AND IR_WeiXinHeaderImage=#{irWeiXinHeaderImage}</if>
+		<if test="irWeiXinHeaderImageLike!=null and irWeiXinHeaderImageLike!=''">AND IR_WeiXinHeaderImage like '%'+#{irWeiXinHeaderImageLike}+'%'</if>
+		<if test="irQrCodeImagePath!=null">AND IR_QrCodeImagePath=#{irQrCodeImagePath}</if>
+		<if test="irQrCodeImagePathLike!=null and irQrCodeImagePathLike!=''">AND IR_QrCodeImagePath like '%'+#{irQrCodeImagePathLike}+'%'</if>
+		<if test="irHandleState!=null">AND IR_HandleState=#{irHandleState}</if>
+		<if test="irHandleStateLike!=null and irHandleStateLike!=''">AND IR_HandleState like '%'+#{irHandleStateLike}+'%'</if>
+		<if test="irHandleMessage!=null">AND IR_HandleMessage=#{irHandleMessage}</if>
+		<if test="irHandleMessageLike!=null and irHandleMessageLike!=''">AND IR_HandleMessage like '%'+#{irHandleMessageLike}+'%'</if>
+		<if test="irHandleTime!=null">AND IR_HandleTime=#{irHandleTime}</if>
+		<if test="irHandleTimeStart!=null">AND IR_HandleTime &gt;= #{irHandleTimeStart}</if>
+		<if test="irHandleTimeEnd!=null">AND IR_HandleTime &lt;= #{irHandleTimeEnd}</if>
+		<if test="irCreateTime!=null">AND IR_CreateTime=#{irCreateTime}</if>
+		<if test="irCreateTimeStart!=null">AND IR_CreateTime &gt;= #{irCreateTimeStart}</if>
+		<if test="irCreateTimeEnd!=null">AND IR_CreateTime &lt;= #{irCreateTimeEnd}</if>
+		<if test="irReportPicPathJson!=null">AND IR_ReportPicPathJson=#{irReportPicPathJson}</if>
+		<if test="irReportPicPathJsonLike!=null and irReportPicPathJsonLike!=''">AND IR_ReportPicPathJson like '%'+#{irReportPicPathJsonLike}+'%'</if>
+		<if test="irTakeMoney!=null">AND IR_TakeMoney=#{irTakeMoney}</if>
+		<if test="irTakeMoneyStart!=null">AND IR_TakeMoney &gt;= #{irTakeMoneyStart}</if>
+		<if test="irTakeMoneyEnd!=null">AND IR_TakeMoney &lt;= #{irTakeMoneyEnd}</if>
+		<if test="irRobotId!=null">AND IR_RobotId=#{irRobotId}</if>
+		<if test="irRobotIdLike!=null and irRobotIdLike!=''">AND IR_RobotId like '%'+#{irRobotIdLike}+'%'</if>
+		<if test="irRemark!=null">AND IR_Remark=#{irRemark}</if>
+		<if test="irRemarkLike!=null and irRemarkLike!=''">AND IR_Remark like '%'+#{irRemarkLike}+'%'</if>
+		<if test="irPushState!=null">AND IR_PushState=#{irPushState}</if>
+		<if test="irPushStateLike!=null and irPushStateLike!=''">AND IR_PushState like '%'+#{irPushStateLike}+'%'</if>
+		<if test="irPushTime!=null">AND IR_PushTime=#{irPushTime}</if>
+		<if test="irPushTimeStart!=null">AND IR_PushTime &gt;= #{irPushTimeStart}</if>
+		<if test="irPushTimeEnd!=null">AND IR_PushTime &lt;= #{irPushTimeEnd}</if>
+		<if test="irScanPayNotifyRet!=null">AND IR_ScanPayNotifyRet=#{irScanPayNotifyRet}</if>
+		<if test="irScanPayNotifyRetLike!=null and irScanPayNotifyRetLike!=''">AND IR_ScanPayNotifyRet like '%'+#{irScanPayNotifyRetLike}+'%'</if>
 	</sql>
 	
 	<select id="findEntityByParams" resultMap="IRobotQrCodePayTaskMap">
@@ -290,41 +290,41 @@
 			) AS RowId
 			from IRobot_QrCodePayTask
 			<where>
-				<if test="params.irTaskID!=null">IR_TaskID=#{params.irTaskID},</if>
-				<if test="params.irOrderNo!=null">IR_OrderNo=#{params.irOrderNo},</if>
-				<if test="params.irOrderNoLike!=null and params.irOrderNoLike!=''">IR_OrderNo like '%'+#{params.irOrderNoLike}+'%',</if>
-				<if test="params.irWeiXinNickName!=null">IR_WeiXinNickName=#{params.irWeiXinNickName},</if>
-				<if test="params.irWeiXinNickNameLike!=null and params.irWeiXinNickNameLike!=''">IR_WeiXinNickName like '%'+#{params.irWeiXinNickNameLike}+'%',</if>
-				<if test="params.irWeiXinHeaderImage!=null">IR_WeiXinHeaderImage=#{params.irWeiXinHeaderImage},</if>
-				<if test="params.irWeiXinHeaderImageLike!=null and params.irWeiXinHeaderImageLike!=''">IR_WeiXinHeaderImage like '%'+#{params.irWeiXinHeaderImageLike}+'%',</if>
-				<if test="params.irQrCodeImagePath!=null">IR_QrCodeImagePath=#{params.irQrCodeImagePath},</if>
-				<if test="params.irQrCodeImagePathLike!=null and params.irQrCodeImagePathLike!=''">IR_QrCodeImagePath like '%'+#{params.irQrCodeImagePathLike}+'%',</if>
-				<if test="params.irHandleState!=null">IR_HandleState=#{params.irHandleState},</if>
-				<if test="params.irHandleStateLike!=null and params.irHandleStateLike!=''">IR_HandleState like '%'+#{params.irHandleStateLike}+'%',</if>
-				<if test="params.irHandleMessage!=null">IR_HandleMessage=#{params.irHandleMessage},</if>
-				<if test="params.irHandleMessageLike!=null and params.irHandleMessageLike!=''">IR_HandleMessage like '%'+#{params.irHandleMessageLike}+'%',</if>
-				<if test="params.irHandleTime!=null">IR_HandleTime=#{params.irHandleTime},</if>
-				<if test="params.irHandleTimeStart!=null">IR_HandleTime &gt;= #{params.irHandleTimeStart},</if>
-				<if test="params.irHandleTimeEnd!=null">IR_HandleTime &lt;= #{params.irHandleTimeEnd},</if>
-				<if test="params.irCreateTime!=null">IR_CreateTime=#{params.irCreateTime},</if>
-				<if test="params.irCreateTimeStart!=null">IR_CreateTime &gt;= #{params.irCreateTimeStart},</if>
-				<if test="params.irCreateTimeEnd!=null">IR_CreateTime &lt;= #{params.irCreateTimeEnd},</if>
-				<if test="params.irReportPicPathJson!=null">IR_ReportPicPathJson=#{params.irReportPicPathJson},</if>
-				<if test="params.irReportPicPathJsonLike!=null and params.irReportPicPathJsonLike!=''">IR_ReportPicPathJson like '%'+#{params.irReportPicPathJsonLike}+'%',</if>
-				<if test="params.irTakeMoney!=null">IR_TakeMoney=#{params.irTakeMoney},</if>
-				<if test="params.irTakeMoneyStart!=null">IR_TakeMoney &gt;= #{params.irTakeMoneyStart},</if>
-				<if test="params.irTakeMoneyEnd!=null">IR_TakeMoney &lt;= #{params.irTakeMoneyEnd},</if>
-				<if test="params.irRobotId!=null">IR_RobotId=#{params.irRobotId},</if>
-				<if test="params.irRobotIdLike!=null and params.irRobotIdLike!=''">IR_RobotId like '%'+#{params.irRobotIdLike}+'%',</if>
-				<if test="params.irRemark!=null">IR_Remark=#{params.irRemark},</if>
-				<if test="params.irRemarkLike!=null and params.irRemarkLike!=''">IR_Remark like '%'+#{params.irRemarkLike}+'%',</if>
-				<if test="params.irPushState!=null">IR_PushState=#{params.irPushState},</if>
-				<if test="params.irPushStateLike!=null and params.irPushStateLike!=''">IR_PushState like '%'+#{params.irPushStateLike}+'%',</if>
-				<if test="params.irPushTime!=null">IR_PushTime=#{params.irPushTime},</if>
-				<if test="params.irPushTimeStart!=null">IR_PushTime &gt;= #{params.irPushTimeStart},</if>
-				<if test="params.irPushTimeEnd!=null">IR_PushTime &lt;= #{params.irPushTimeEnd},</if>
-				<if test="params.irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{params.irScanPayNotifyRet}</if>
-				<if test="params.irScanPayNotifyRetLike!=null and irScanPayNotifyRetLike!=''">IR_ScanPayNotifyRet like '%'+#{params.irScanPayNotifyRetLike}+'%'</if>
+				<if test="params.irTaskID!=null">AND IR_TaskID=#{params.irTaskID}</if>
+				<if test="params.irOrderNo!=null">AND IR_OrderNo=#{params.irOrderNo}</if>
+				<if test="params.irOrderNoLike!=null and params.irOrderNoLike!=''">AND IR_OrderNo like '%'+#{params.irOrderNoLike}+'%'</if>
+				<if test="params.irWeiXinNickName!=null">AND IR_WeiXinNickName=#{params.irWeiXinNickName}</if>
+				<if test="params.irWeiXinNickNameLike!=null and params.irWeiXinNickNameLike!=''">AND IR_WeiXinNickName like '%'+#{params.irWeiXinNickNameLike}+'%'</if>
+				<if test="params.irWeiXinHeaderImage!=null">AND IR_WeiXinHeaderImage=#{params.irWeiXinHeaderImage}</if>
+				<if test="params.irWeiXinHeaderImageLike!=null and params.irWeiXinHeaderImageLike!=''">AND IR_WeiXinHeaderImage like '%'+#{params.irWeiXinHeaderImageLike}+'%'</if>
+				<if test="params.irQrCodeImagePath!=null">AND IR_QrCodeImagePath=#{params.irQrCodeImagePath}</if>
+				<if test="params.irQrCodeImagePathLike!=null and params.irQrCodeImagePathLike!=''">AND IR_QrCodeImagePath like '%'+#{params.irQrCodeImagePathLike}+'%'</if>
+				<if test="params.irHandleState!=null">AND IR_HandleState=#{params.irHandleState}</if>
+				<if test="params.irHandleStateLike!=null and params.irHandleStateLike!=''">AND IR_HandleState like '%'+#{params.irHandleStateLike}+'%'</if>
+				<if test="params.irHandleMessage!=null">AND IR_HandleMessage=#{params.irHandleMessage}</if>
+				<if test="params.irHandleMessageLike!=null and params.irHandleMessageLike!=''">AND IR_HandleMessage like '%'+#{params.irHandleMessageLike}+'%'</if>
+				<if test="params.irHandleTime!=null">AND IR_HandleTime=#{params.irHandleTime}</if>
+				<if test="params.irHandleTimeStart!=null">AND IR_HandleTime &gt;= #{params.irHandleTimeStart}</if>
+				<if test="params.irHandleTimeEnd!=null">AND IR_HandleTime &lt;= #{params.irHandleTimeEnd}</if>
+				<if test="params.irCreateTime!=null">AND IR_CreateTime=#{params.irCreateTime}</if>
+				<if test="params.irCreateTimeStart!=null">AND IR_CreateTime &gt;= #{params.irCreateTimeStart}</if>
+				<if test="params.irCreateTimeEnd!=null">AND IR_CreateTime &lt;= #{params.irCreateTimeEnd}</if>
+				<if test="params.irReportPicPathJson!=null">AND IR_ReportPicPathJson=#{params.irReportPicPathJson}</if>
+				<if test="params.irReportPicPathJsonLike!=null and params.irReportPicPathJsonLike!=''">AND IR_ReportPicPathJson like '%'+#{params.irReportPicPathJsonLike}+'%'</if>
+				<if test="params.irTakeMoney!=null">AND IR_TakeMoney=#{params.irTakeMoney}</if>
+				<if test="params.irTakeMoneyStart!=null">AND IR_TakeMoney &gt;= #{params.irTakeMoneyStart}</if>
+				<if test="params.irTakeMoneyEnd!=null">AND IR_TakeMoney &lt;= #{params.irTakeMoneyEnd}</if>
+				<if test="params.irRobotId!=null">AND IR_RobotId=#{params.irRobotId}</if>
+				<if test="params.irRobotIdLike!=null and params.irRobotIdLike!=''">AND IR_RobotId like '%'+#{params.irRobotIdLike}+'%'</if>
+				<if test="params.irRemark!=null">AND IR_Remark=#{params.irRemark}</if>
+				<if test="params.irRemarkLike!=null and params.irRemarkLike!=''">AND IR_Remark like '%'+#{params.irRemarkLike}+'%'</if>
+				<if test="params.irPushState!=null">AND IR_PushState=#{params.irPushState}</if>
+				<if test="params.irPushStateLike!=null and params.irPushStateLike!=''">AND IR_PushState like '%'+#{params.irPushStateLike}+'%'</if>
+				<if test="params.irPushTime!=null">AND IR_PushTime=#{params.irPushTime}</if>
+				<if test="params.irPushTimeStart!=null">AND IR_PushTime &gt;= #{params.irPushTimeStart}</if>
+				<if test="params.irPushTimeEnd!=null">AND IR_PushTime &lt;= #{params.irPushTimeEnd}</if>
+				<if test="params.irScanPayNotifyRet!=null">AND IR_ScanPayNotifyRet=#{params.irScanPayNotifyRet}</if>
+				<if test="params.irScanPayNotifyRetLike!=null and irScanPayNotifyRetLike!=''">AND IR_ScanPayNotifyRet like '%'+#{params.irScanPayNotifyRetLike}+'%'</if>
 			</where>) b
 			where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and #{currentPageIndex}*#{pageSize}
 		)
@@ -370,5 +370,9 @@
 			<if test="irScanPayNotifyRet!=null">IR_ScanPayNotifyRet=#{irScanPayNotifyRet},</if>
 		</set>
 		where IR_TaskID=#{irTaskID}
+	</update>
+	
+	<update id="updateStatus" parameterType="List">
+		
 	</update>
 </mapper>

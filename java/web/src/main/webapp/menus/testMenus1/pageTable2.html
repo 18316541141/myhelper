@@ -1,15 +1,41 @@
 <fieldset class="layui-elem-field layui-field-title">
-    <legend>��ҳ����2</legend>
+    <legend>分页表格2</legend>
 </fieldset>
 <div ng-controller="pageTableTest2">
+    <form class="layui-form">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="irWeiXinNickName" ng-model="postData.irWeiXinNickNameLike" placeholder="irWeiXinNickName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button class="layui-btn" type="button" ng-click="search();"><i class="layui-icon">&#xe615;</i> 搜索</button>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-primary" type="button" ng-click="refresh();"><i class="layui-icon">&#xe669;</i> 刷新</button>
+            </div>
+        </div>
+    </form>
     <!--
-        id�������ؼ���Ψһid��
-        url����ȡ���ݵ�url��
-        show-check-col����ʾ��ѡ���У�
-        table-toolbar��Ĭ�ϵı������������
-        show-default-oper-col����ʾĬ�ϵĲ����У�
-        post-data���������ύ�����ݣ�����controller��postData������controller��postData�仯ʱ��data-table�ؼ���postDataҲ��仯��
-        cols�������������ã�����controller��cols
+        id：整个控件的唯一id，
+        url：获取数据的url，
+        perms：父controller提供perms数据用于决定表格是否显示如下按钮：
+            perms.enabled   是否显示“启用”按钮，是：true，否：false
+            perms.disabled  是否显示“禁用”按钮，是：true，否：false
+            perms.add       是否显示“新增”按钮，是：true，否：false
+            perms.export    是否显示“导出”按钮，是：true，否：false
+            perms.delBatch  是否显示“批量删除”按钮，是：true，否：false
+            perms.del       是否显示“删除”按钮，是：true，否：false
+            perms.edit      是否显示“编辑”按钮，是：true，否：false
+        height：表格高度，支持full-xx，实现动态填满整个界面，也可以填写具体高度
+        show-check-col：显示复选框列，
+        table-toolbar：默认的表格操作工具栏
+        show-default-oper-col：显示默认的操作列，
+        post-data：（表单提交的数据）共享controller的postData，当父controller的postData变化时，data-table控件的postData也会变化。
+        cols：（表格列设置）共享controller的cols
     -->
-    <div page-data-table id="pageTableTest2" key="irOrderNo" url="/IRobotQrCodePayTask/page" table-toolbar="#tableToolbar" show-check-col="true" show-default-oper-col="true" post-data="postData" cols="cols"></div>
+    <div page-data-table id="pageTableTest2" perms="perms" height="full-289" url="/IRobotQrCodePayTask/page" table-toolbar="#tableToolbar" show-check-col="true" show-default-oper-col="true" post-data="postData" cols="cols"></div>
 </div>
