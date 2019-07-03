@@ -1,1 +1,1 @@
-﻿<script type='text/javascript'>location.href = '/Content/index.html?v=20190702091642';</script>
+﻿<script type='text/javascript'>location.href = '/Content/index.html?v=20190703120431';</script>

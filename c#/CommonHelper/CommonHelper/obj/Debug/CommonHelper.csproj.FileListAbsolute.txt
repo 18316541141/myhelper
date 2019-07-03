@@ -97,5 +97,6 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Newtonsoft.Json.
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Newtonsoft.Json.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Newtonsoft.Json.xml
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
