@@ -18,5 +18,11 @@ namespace WebApplication1.Service
             IRobotQrCodePayTaskRepository irobotQrCodePayTaskRepository = new IRobotQrCodePayTaskRepository();
             return irobotQrCodePayTaskRepository.PageList(param,currentPageIndex,pageSize);
         }
+
+        public IRobotQrCodePayTask Load(int irTaskID)
+        {
+            IRobotQrCodePayTaskRepository irobotQrCodePayTaskRepository = new IRobotQrCodePayTaskRepository();
+            return irobotQrCodePayTaskRepository.FindEntity(irTaskID);
+        }
     }
 }

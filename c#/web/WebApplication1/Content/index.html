@@ -139,7 +139,9 @@
 	overflow: auto;
 	padding: 5px 5px 0;
 }
-
+.layer-body>.layui-form{
+    margin-right:25px;
+}
 .layer-foot {
 	position: absolute;
 	left: 0;
@@ -182,7 +184,25 @@
                     <div class="layui-input-inline"><button id="{{name}}-crop-btn" class="layui-btn" type="button" ng-click="crop()">裁剪</button></div>
                 </div>
             </div>
-        </script> 
+        </script>
+     <script type="text/template" id="uploadExcelTemplate">
+         <div id="{{name}}ExcelId" ng-if="type == 'line'">上传Excel</div>
+         <div class="layui-form-item" ng-if="type == 'form'">
+             <label class="layui-form-label">上传Excel</label>
+             <div class="layui-input-block">
+                 <div id="{{name}}ExcelId">选择Excel</div>
+             </div>
+         </div>
+         <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
+             <label class="layui-form-label">预览</label>
+             <div class="layui-input-block">
+                 <div>
+                     <img ng-src="excelType"class="thumbnail-img"/>
+                     <div>{{excelFileName}}</div>
+                 </div>
+             </div>
+         </div>
+     </script>
   <script type="text/template" id="uploadImageTemplate">
             <div class="layui-form-item">
                 <label class="layui-form-label">上传图片</label>
@@ -204,13 +224,7 @@
                     </div>
                 </div>
             </div>
-        </script> 
-        <script type="text/template" id="pageTableTemplate">
-			<div>
-            	<div ng-transclude></div>
-            	<div id="page-{{id}}"></div>
-			</div>
-        </script> 
+        </script>
         <script type="text/template" id="pageDataTableTemplate">
             <div class="layui-hide">
                 <div id="rowToolbar">

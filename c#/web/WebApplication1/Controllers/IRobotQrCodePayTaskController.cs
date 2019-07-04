@@ -9,7 +9,7 @@ using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
 {
-    public class IRobotQrCodePayTaskController : Controller
+    public class IRobotQrCodePayTaskController : BaseController
     {
         /// <summary>
         /// 
@@ -21,7 +21,13 @@ namespace WebApplication1.Controllers
         public JsonResult Page(IRobotQrCodePayTaskParams param, int currentPageIndex = 1, int pageSize = 20)
         {
             IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            return Json(new Result {code=0,data= irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) },JsonRequestBehavior.AllowGet);
+            return MyJson(new Result {code=0,data= irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) },JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Load(int irTaskID)
+        {
+            IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
+            return MyJson(new Result { code = 0, data = irobotQrCodePayTaskService.Load(irTaskID) }, JsonRequestBehavior.AllowGet);
         }
     }
 }

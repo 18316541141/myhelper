@@ -309,7 +309,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             return ret;
         },
         post: function (url, params) {
-        	if (params === undefined){
+            if (params === undefined){
                 params = { v: Math.random() };
             } else {
                 params['v'] = Math.random();
@@ -374,6 +374,46 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         });
         layuiForm.render('checkbox');
     });
+}).directive('uploadExcel', function () {
+    return {
+        restrict: 'EA',
+        template: $('#uploadExcelTemplate').html(),
+        scope: { name: "@",url:"@",postData:"=",type:"@" },
+        controller: function ($scope, $timeout) {
+            if ($scope.postData === undefined) {
+                $scope.postData = {};
+            }
+            $timeout(function () {
+                var index;
+                $scope.uploader = new WebUploader.Uploader({
+                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    auto: false,//选中文件后自动上传
+                    server: $scope.url,//处理上传excel的控制器
+                    fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
+                    formData: $scope.postData,//每次上传时上传的数据
+                    duplicate: true,
+                    pick: {
+                        id: '#' + $scope.name + 'ExcelId',//生成上传插件的位置
+                        multiple: false //每次只能选一个文件
+                    },
+                    //允许上传的图片格式后缀
+                    accept: {
+                        title: 'excel',
+                        extensions: 'xls,xlsx',
+                        mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    }
+                }).on('uploadStart', function (file) {
+                    index = layuiLayer.load(0);
+                }).on('uploadSuccess', uploadCallback(function (file, response) {
+                    layuiLayer.close(index);
+                })).on('error', function (type) {
+                    if (type === 'Q_TYPE_DENIED') {
+                        layuiLayer.msg('该文件类型可能不是Excel文件。', { icon: 5, anim: 6 });
+                    }
+                });
+            });
+        }
+    };
 }).directive('pageDataTable', function () {
     return {
         restrict: 'EA',
@@ -400,36 +440,20 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             $scope.$on('searchPage', function () {
                 layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
             });
-            $scope.$on('refreshPage', function () {
-                for(var key in $scope.postData){
-                	if($scope.postData.hasOwnProperty(key)){
-                		$scope.postData[key]=null;
-                	}
-                }
-                layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
-            });
             $timeout(function () {
                 layuiTable.render({
-                    elem: '#data-table-' + $scope.id,
                     autoSort: false,
-                    height: $scope.height,
                     page: {
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
                     },
                     limit: 20,
                     limits: [20, 40, 60, 80, 100],
-                    url: $scope.url,
                     method: 'post',
                     loading: true,
-                    toolbar: $scope.tableToolbar,
                     defaultToolbar: ['filter'],
-                    id: $scope.id + '-checked',
                     request: {
                         pageName: 'currentPageIndex',
                         limitName: 'pageSize'
-                    },
-                    done: function (res, curr, count) {
-                        $scope.$emit('done', res, curr, count);
                     },
                     parseData: function (result) {
                         var data = result.data;
@@ -456,14 +480,30 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                         }
                         return ret;
                     },
+                    elem: '#data-table-' + $scope.id,
+                    height: $scope.height,
+                    url: $scope.url,
+                    toolbar: $scope.tableToolbar,
+                    id: $scope.id + '-checked',
+                    done: function (res, curr, count) {
+                        $scope.$emit('done', res, curr, count);
+                    },
                     cols: [$scope.cols]
                 });
                 layuiTable.on('sort(dataTable' + $scope.id + ')', function (obj) {
                     if (obj.type === "asc") {
-                        $scope.postData['orderByDesc.'+obj.field]=false;
+                        for(var key in $scope.postData){
+                            if ($scope.postData.hasOwnProperty(key) && key.indexOf('orderByDesc') === 0) {
+                                $scope.postData[key] = false;
+                            }
+                        }
                         $scope.postData['orderByAsc.'+obj.field]=true;
                     } else if (obj.type === "desc") {
-                        $scope.postData['orderByAsc.'+obj.field]=false;
+                        for (var key in $scope.postData) {
+                            if ($scope.postData.hasOwnProperty(key) && key.indexOf('orderByAsc') === 0) {
+                                $scope.postData[key] = false;
+                            }
+                        }
                         $scope.postData['orderByDesc.'+obj.field]=true;
                     }
                     layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
@@ -503,54 +543,6 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     }
                 });
             });
-        }
-    };
-}).directive('pageTable', function () {
-    return {
-        restrict: 'EA',
-        template: $('#pageTableTemplate').html(),
-        scope: { id: "@",url:"@" ,postData:"=",data:"="},
-        transclude: true,
-        controller: function ($scope, $timeout, $myHttp) {
-            $scope.postData = {};
-            $scope.currentPageIndex = 1;
-            $scope.pageSize = 20;
-            $scope.$on('searchPage', function () {
-                $scope.refreshPage();
-            });
-            $scope.$on('refreshPage', function () {
-                $scope.postData = {};
-                $scope.refreshPage();
-            });
-            $scope.refreshPage = function () {
-                var postData = $scope.postData;
-                if($.type(postData)==='undefined'){
-                    postData={};
-                }
-                postData['currentPageIndex'] = $scope.currentPageIndex;
-                postData['pageSize'] = $scope.pageSize;
-                $myHttp.post($scope.url,postData).mySuccess(function(result){
-                    $scope.data = result.data;
-        		    layuiLaypage.render({
-        			    elem: 'page-' + $scope.id,
-        			    limit: $scope.pageSize,
-        			    curr: $scope.currentPageIndex,
-        			    count: $scope.data.totalItemCount,
-        			    limits: [20, 40, 60, 80, 100],
-        		        layout: ['count','prev', 'page', 'next','limit','refresh','skip'],
-        			    jump: function (obj, first) {
-        			        if (!first) {
-        			            $scope.pageSize = obj.limit;
-        			            $scope.currentPageIndex = obj.curr;
-        			            $scope.refreshPage();
-        			        }
-        			    }
-        		    });
-                });
-            };
-            $timeout(function () {
-                $scope.refreshPage();
-        	});
         }
     };
 }).directive("areaSelect", function () {
@@ -885,6 +877,38 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
 });
 
 /**
+ * 下载excel，如果excel过大，则分批下载，否则一次下载完
+ * @param url 下载的url
+ * @param postData 下载是附带的数据
+ * @param totalCount 当前符合条件的数据总量
+ */
+function downExcel(url,fileName,postData,totalCount) {
+    postData['pageSize'] = 10000;
+    if (totalCount < 10000) {
+        postData['currentPageIndex'] = 1;
+        postOpenWin(url, postData);
+    } else {
+        var html = '<p>共 ' + totalCount + ' 条数据，每个excel最多保存10000条。</p>' +
+        '<table class="layui-table down-excel-table">' +
+            '<tbody>';
+        for(var i=0,part=totalCount/(totalCount - totalCount%10000);i<part;i++){
+            html += '<tr><td><strong>“' + fileName + '”</strong> 第' + (i*10000+1) + '-' + ((i + 1) * 10000) + '条数据</td><td><a href="javascript:void(0);" data-index="'+i+'" class="down-excel" target="_blank">下载</a></td></tr>';
+        } 
+        html+= '</tbody>' +
+        '</table>';
+        layuiLayer.open({
+            type: 1,
+            area: ['400px','400px'],
+            content: html
+        });
+        $('.down-excel-table').on('click', '.down-excel', function () {
+            postData['currentPageIndex'] = parseInt($(this).data('index')) + 1;
+            postOpenWin(url, postData);
+        });
+    }
+}
+
+/**
  * 根据附件的扩展名判断使用哪一种图片
  * @param ext  附件的mime类型
  */
@@ -1094,15 +1118,7 @@ myApp.controller('big-img-ctrl',function($scope,$timeout){
         });
     });
 });
-myApp.controller('pageTableTest', function ($scope) {
-    $scope.search = function () {
-        $scope.$broadcast('searchPage');
-    }
-    $scope.refresh = function () {
-        $scope.$broadcast('refreshPage');
-    }
-});
-myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp) {
+myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp, layer) {
     /**
      * 表格列设置，field：字段名、title：表格标题、sort：是否显示排序按钮
      */
@@ -1136,11 +1152,29 @@ myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp) {
         $scope.$broadcast('searchPage');
     };
     $scope.refresh = function () {
-        $scope.$broadcast('refreshPage');
+        for (var key in $scope.postData) {
+            if ($scope.postData.hasOwnProperty(key)) {
+                $scope.postData[key] = null;
+            }
+        }
+        $scope.$broadcast('searchPage');
     };
     $scope.$on('tableOper', function (event, type, data) {
     });
     $scope.$on('rowOper', function (event, type, data) {
+        if (type === 'edit') {
+            $scope.edit = {
+                type: 'edit',
+                data: data
+            };
+            layer.ngOpen({
+                type: 1,
+                area: ['600px','400px'],
+                contentUrl: 'menus/testMenus1/edit1.html',
+                scope: $scope,
+                title: '修改'
+            });
+        }
     });
     $scope.$on('done', function (event,res, curr, count) {
         if (count === 0) {
@@ -1150,4 +1184,12 @@ myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp) {
             $('#pageTableTest2 [lay-event="delBatch"]').hide();
         }
     });
+});
+myApp.controller('testEdit1', function ($scope, $myHttp) {
+    $myHttp.get('/IRobotQrCodePayTask/load', { irTaskID: $scope.edit.data.irTaskID }).mySuccess(function (result) {
+        $scope.edit.postData = result.data;
+    });
+    $scope.edit.save = function () {
+
+    };
 });

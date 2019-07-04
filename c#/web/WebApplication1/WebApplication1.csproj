@@ -206,10 +206,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\IRobotQrCodePayTaskController.cs" />
     <Compile Include="Entity\AreaTree.cs" />
     <Compile Include="Entity\City.cs" />
+    <Compile Include="Entity\MyJsonResult.cs" />
     <Compile Include="Entity\District.cs" />
     <Compile Include="Entity\IRobotQrCodePayTask.cs" />
     <Compile Include="Entity\LeftMenu.cs" />
@@ -382,7 +384,7 @@
     <Content Include="Content\layui\images\face\8.gif" />
     <Content Include="Content\layui\images\face\9.gif" />
     <Content Include="Content\menus\testMenus1\areaSelect.html" />
-    <Content Include="Content\menus\testMenus1\pageTable.html" />
+    <Content Include="Content\menus\testMenus1\edit1.html" />
     <Content Include="Content\menus\testMenus1\pageTable2.html" />
     <Content Include="Content\menus\testMenus1\treeForm.html" />
     <Content Include="Content\menus\testMenus1\uploadFiles.html" />

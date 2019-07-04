@@ -371,8 +371,4 @@
 		</set>
 		where IR_TaskID=#{irTaskID}
 	</update>
-	
-	<update id="updateStatus" parameterType="List">
-		
-	</update>
 </mapper>

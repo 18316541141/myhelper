@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper;
+using Google.Protobuf.Collections;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -32,10 +33,44 @@ namespace CommonHelper.Helper
     public delegate Out DataFormatToEntity<Out,In>(In input) where In:ICell ;
 
     /// <summary>
+    /// excel表格的列名称属性
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class ExcelColAttr : Attribute
+    {
+        /// <summary>
+        /// 列名称
+        /// </summary>
+        public string ColName { set; get; }
+
+        /// <summary>
+        /// 列索引，从0开始
+        /// </summary>
+        public int ColIndex { set; get; }
+
+        /// <summary>
+        /// 组名称
+        /// </summary>
+        public string GroupName { set; get; }
+    }
+
+    /// <summary>
+    /// excel列信息
+    /// </summary>
+    public class ExcelColInfo
+    {
+        public ExcelColAttr ExcelColAttr { set; get; }
+
+        public PropertyInfo PropertyInfo { set; get; }
+    }
+
+    /// <summary>
     /// Excel帮助类
     /// </summary>
     public class ExcelHelper
     {
+
+
         /// <summary>
         /// 读取excel的数据到数据表对象
         /// </summary>
@@ -206,6 +241,8 @@ namespace CommonHelper.Helper
             myPro.TrimExcess();
             return myPro;
         }
+
+        
 
         /// <summary>
         /// 将数据列表生成csv文本
@@ -439,6 +476,106 @@ namespace CommonHelper.Helper
                 retList.Add((T)obj);
             }
             return retList;
+        }
+
+        /// <summary>
+        /// 导出xls结尾的Excel数据，每个实体必须含有ExcelColNameAttr
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <param name="outputStream"></param>
+        public static void ListToExcelXls(List<object> dataList, Stream outputStream,string groupName=null)
+        {
+            if(dataList==null || dataList.Count == 0)
+            {
+                throw new Exception("数据列表为空，未能导出数据！");
+            }
+            List<ExcelColInfo> excelColInfoList= ColFilter(dataList[0], groupName);
+            HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+            HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.CreateSheet("Sheet1");
+            HSSFRow hssfRow = (HSSFRow)hssfSheet.CreateRow(0);
+            ExcelColAttr excelColAttr;
+            foreach (ExcelColInfo excelColInfo in excelColInfoList)
+            {
+                excelColAttr = excelColInfo.ExcelColAttr;
+                hssfRow.CreateCell(excelColAttr.ColIndex).SetCellValue(excelColAttr.ColName);
+            }
+            object temp;
+            object val;
+            PropertyInfo propertyInfo;
+            HSSFCell hssfCell;
+            for (int i = 1, len = dataList.Count; i <= len; i++)
+            {
+                temp = dataList[i];
+                hssfRow = (HSSFRow)hssfSheet.CreateRow(i);
+                foreach (ExcelColInfo excelColInfo in excelColInfoList)
+                {
+                    excelColAttr = excelColInfo.ExcelColAttr;
+                    propertyInfo = excelColInfo.PropertyInfo;
+                    val = propertyInfo.GetValue(temp);
+                    hssfCell =(HSSFCell) hssfRow.CreateCell(excelColAttr.ColIndex);
+                    if (val.GetType() == typeof(double))
+                    {
+                        hssfCell.SetCellValue(Convert.ToDouble(val));
+                    }
+                    else if (val.GetType() == typeof(int))
+                    {
+                        hssfCell.SetCellValue(Convert.ToInt32(val));
+                    }
+                    else if (val.GetType() == typeof(string))
+                    {
+                        hssfCell.SetCellValue(Convert.ToString(val));
+                    }
+                    else if (val.GetType() == typeof(DateTime))
+                    {
+                        hssfCell.SetCellValue(Convert.ToDateTime(val));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 列过滤，只返回有效列
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        static List<ExcelColInfo> ColFilter(object obj,string groupName=null)
+        {
+            List<ExcelColInfo> excelColInfoList = new List<ExcelColInfo>();
+            Type type = obj.GetType();
+            foreach (PropertyInfo propertyInfo in type.GetProperties())
+            {
+                foreach (Attribute attr in propertyInfo.GetCustomAttributes(false))
+                {
+                    if (attr.GetType() == typeof(ExcelColNameAttr))
+                    {
+                        ExcelColNameAttr excelColNameAttr = (ExcelColNameAttr)attr;
+                        if (groupName == null)
+                        {
+                            excelColInfoList.Add(new ExcelColInfo
+                            {
+                                PropertyInfo= propertyInfo,
+                                ExcelColNameAttr=excelColNameAttr
+                            });
+                            break;
+                        }
+                        else
+                        {
+                            if (groupName == excelColNameAttr.GroupName)
+                            {
+                                excelColInfoList.Add(new ExcelColInfo
+                                {
+                                    PropertyInfo = propertyInfo,
+                                    ExcelColNameAttr = excelColNameAttr
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            excelColInfoList.Sort((x,y)=> x.ExcelColNameAttr.ColIndex - y.ExcelColNameAttr.ColIndex);
+            return excelColInfoList;
         }
 
         /// <summary>

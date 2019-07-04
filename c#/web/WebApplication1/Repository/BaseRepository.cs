@@ -225,7 +225,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public TEntity FindEntity(object id)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (MyDbContext2 dbContext = new MyDbContext2())
             {
                 return dbContext.Set<TEntity>().Find(id);
             }
