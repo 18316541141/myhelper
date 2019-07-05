@@ -12,6 +12,17 @@ namespace WebApplication1.Service
     /// </summary>
     public class SystemService
     {
+        static List<NewsAlarm> _PnewsAlarmList;
+        static SystemService()
+        {
+            _PnewsAlarmList = new List<NewsAlarm>();
+        }
+
+
+        public List<NewsAlarm> LoadNewsAlarm()
+        {
+            return _PnewsAlarmList;
+        }
 
         /// <summary>
         /// 加载地区树

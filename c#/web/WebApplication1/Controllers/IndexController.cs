@@ -78,10 +78,11 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="version"></param>
         /// <returns></returns>
-        public JsonResult LoadNewsAlarm(string version)
+        [RealTime]
+        public JsonResult LoadNewsAlarm()
         {
-
-            return MyJson(new Result { code=0});
+            List<NewsAlarm> newsAlarmList = new List<NewsAlarm>();
+            return MyJson(new Result { code=0,data= newsAlarmList }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

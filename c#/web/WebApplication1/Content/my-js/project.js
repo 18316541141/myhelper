@@ -7,11 +7,12 @@
 		setInterval(function(){
 			var title=document.title;
 			document.title=title.substring(1, title.length)+title.charAt(0);
-		},400);
+		}, 400);
+		title = null;
 	}
 }());
 
-//异步加载图片
+//异步加载静态图片素材
 (function () {
     var images = [
 		//256x256的图标
@@ -64,12 +65,6 @@ var layuiElement = layui.element;
 var layuiTree = layui.tree;
 var layuiTable = layui.table;
 var layuiLaypage = layui.laypage;
-var layuiLaytpl = layui.laytpl;
-/**
- * layui自定义的表单校验，
- * 方法源码在webapp/my-js/common-by-layui.js
- */
-addCustomVerify(layuiForm);
 
 /**
  * 扩展原有的jquery的ajax请求方法。
@@ -105,6 +100,7 @@ addCustomVerify(layuiForm);
                 callback(result, textStatus, req);
             }
             callback = null;
+            index = null;
         }
     };
     $.extend({
@@ -203,6 +199,7 @@ var uploadCallback = function (callback) {
             }
             callback(file, response);
         }
+        callback = null;
     }
 };
 /**
@@ -249,6 +246,7 @@ var defaultDataTableParams = {
         return ret;
     }
 };
+
 var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout) {
     $scope.alarmLayer= layuiLayer.open({
         type: 1,
@@ -262,11 +260,13 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             layuiTable.render($.extend(defaultDataTableParams, {
                 elem: '#newsAlarmTable',
                 height: 300,
-                url: '/index',
                 cols: [[
-
+                    { field: 'title', title: '新消息' },
+                    { field: 'createDate', title: '日期' },
+                    { field: 'menuUrl', title: '操作' }
                 ]]
             }));
+
         }
     });
     $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
@@ -316,28 +316,75 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             };
         }
     };
-}).factory('$myHttp', function ($http) {
+}).factory('$realTime', function ($http) {
     /**
      * 版本表，记录等待池和版本号
      */
-    var versionMap={};
+    var versionMap = {};
+    return {
+        //对请求参数添加随机的v参数，避免缓存
+        randomV: function (params) {
+            if (params === undefined) {
+                params = { v: Math.random() };
+            } else {
+                params['v'] = Math.random();
+            }
+            return params;
+        },
+        //使用get请求实时获取最新数据
+        get: function (url, poolName, params) {
+            var thiz = this;
+            var ret = $http({ method: 'GET', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } });
+            ret.mySuccess = function (callback) {
+                ret.success(function (response, status, headers, config) {
+                    ret = null;
+                    versionMap[poolName] = headers['Real-Time-Version'];
+                    if (response.code === -10) {
+                        url = null;
+                        poolName = null;
+                        params = null;
+                        callback = null;
+                        logoutCallback();
+                    } else if (response.code === 0 || response.code === 1) {
+                        thiz.get(url, poolName, params).mySuccess(callback);
+                    }
+                    thiz = null;
+                });
+            };
+            return ret;
+        },
+        //使用post请求实时获取最新数据
+        post: function (url, poolName, params) {
+            var thiz = this;
+            var ret = $http({ method: 'POST', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } });
+            ret.mySuccess = function (callback) {
+                ret = null;
+                ret.success(function (response, status, headers, config) {
+                    versionMap[poolName] = headers['Real-Time-Version'];
+                    if (response.code === -10) {
+                        url = null;
+                        poolName = null;
+                        params = null;
+                        callback = null;
+                        logoutCallback();
+                    } else if (response.code === 0 || response.code === 1) {
+                        thiz.post(url, poolName, params).mySuccess(callback);
+                    }
+                    thiz = null;
+                });
+            }
+        }
+    };
+}).factory('$myHttp', function ($http) {
     /**
      * 创建一个回调函数
      * showAni：是否显示加载动画
      * callback：回调函数
      */
-    var myCallback = function (showAni,callback) {
-        var index;
-        if(showAni){
-            index = layuiLayer.load(0);
-        }
+    var myCallback = function (callback) {
+        var index = layuiLayer.load(0);
         return function (response, status, headers, config) {
-            if ($.type(headers['Real-Time-Pool']) === 'string') {
-                versionMap[headers['Real-Time-Pool']] = headers['Real-Time-Version'];
-            }
-            if(showAni){
-                layuiLayer.close(index);
-            }
+            layuiLayer.close(index);
             //登录超时，退出登录
             if (response.code === -10) {
                 logoutCallback();
@@ -363,6 +410,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 }
                 callback(response, status, headers, config);
             }
+            index = null;
             callback = null;
         }
     };
@@ -380,28 +428,21 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         getCache: function (url, params) {
             var ret = $http({ method: 'GET', params: params, url: url });
             ret.mySuccess = function (callback) {
-                ret.success(myCallback(true,callback));
-            };
-            return ret;
-        },
-        getRealTime: function (url,poolName,params) {
-            var ret = $http({ method: 'GET', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } });
-            ret.mySuccess = function (callback) {
-                ret.success(myCallback(false,callback));
+                ret.success(myCallback(callback));
             };
             return ret;
         },
         get: function (url, params) {
             var ret = $http({ method: 'GET', params: this.randomV(params), url: url });
             ret.mySuccess = function (callback) {
-                ret.success(myCallback(true,callback));
+                ret.success(myCallback(callback));
             };
             return ret;
         },
         post: function (url, params) {
             var ret = $http({ method: 'POST', url: url, params: this.randomV(params) });
             ret.mySuccess = function (callback) {
-                ret.success(myCallback(true,callback));
+                ret.success(myCallback(callback));
             };
             return ret;
         }
