@@ -16,27 +16,27 @@ using System.Web;
 namespace CommonHelper.Helper
 {
     /// <summary>
-    /// excel表格数据格式化
+    /// excel表格的sheet属性
     /// </summary>
-    /// <typeparam name="T">数据类型</typeparam>
-    /// <param name="inputData">输入指定内容</param>
-    /// <returns>返回格式化后的字符串数据</returns>
-    public delegate string ExcelDataFormat<T>(T inputData);
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ExcelSheet : Attribute
+    {
+        /// <summary>
+        /// Sheet名称
+        /// </summary>
+        public string SheetName { set; get; }
 
-    /// <summary>
-    /// excel表格的数据转化为实体类的数据
-    /// </summary>
-    /// <typeparam name="In">excel表格数据</typeparam>
-    /// <typeparam name="Out">返回实体类数据</typeparam>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    public delegate Out DataFormatToEntity<Out,In>(In input) where In:ICell ;
+        /// <summary>
+        /// 组名称
+        /// </summary>
+        public string GroupName { set; get; }
+    }
 
     /// <summary>
     /// excel表格的列名称属性
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class ExcelColAttr : Attribute
+    public class ExcelCol : Attribute
     {
         /// <summary>
         /// 列名称
@@ -59,8 +59,14 @@ namespace CommonHelper.Helper
     /// </summary>
     public class ExcelColInfo
     {
-        public ExcelColAttr ExcelColAttr { set; get; }
+        /// <summary>
+        /// 列特性
+        /// </summary>
+        public ExcelCol ExcelCol { set; get; }
 
+        /// <summary>
+        /// 列属性信息
+        /// </summary>
         public PropertyInfo PropertyInfo { set; get; }
     }
 
@@ -70,412 +76,15 @@ namespace CommonHelper.Helper
     public class ExcelHelper
     {
 
-
         /// <summary>
-        /// 读取excel的数据到数据表对象
+        /// 
         /// </summary>
-        /// <param name="filePath">excel的路径</param>
-        /// <param name="sheetName">工作簿</param>
-        /// <returns>返回数据表</returns>
-        public static DataTable DoReadExcelDataTable(string filePath, string sheetName = null)
+        /// <param name="dataList"></param>
+        /// <param name="outputStream"></param>
+        /// <param name="groupName"></param>
+        public static void ListToExcelXls<T>(List<T> dataList, Stream outputStream, string groupName = null)
         {
-            IWorkbook workbook = null;
-            string fileExt = Path.GetExtension(filePath);
-
-            #region 初始化信息
-
-            try
-            {
-
-                using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                {
-                    //将文件流中模板加载到工作簿对象中
-                    if (fileExt == ".xls")
-                    {
-                        workbook = new HSSFWorkbook(file);
-                    }
-                    else if (fileExt == ".xlsx")
-                    {
-                        workbook = new XSSFWorkbook(file);
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            #endregion
-
-            ISheet sheet = null;
-
-            if (!string.IsNullOrEmpty(sheetName)) sheet = workbook.GetSheet(sheetName);
-            else sheet = workbook.GetSheetAt(0);
-
-            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
-
-            DataTable dt = new DataTable();
-
-            var firstRow = sheet.GetRow(0);
-            //一行最后一个方格的编号 即总的列数  
-            for (int j = 0; j < firstRow.LastCellNum; j++)
-            {
-                dt.Columns.Add(Convert.ToChar(((int)'A') + j).ToString());
-            }
-
-            bool isFirst = true;
-            while (rows.MoveNext())
-            {
-                if (isFirst)
-                {
-                    isFirst = false;
-                    continue;
-                }
-                IRow row = null;
-
-                if (fileExt == ".xls")
-                {
-                    row = (HSSFRow)rows.Current;
-                }
-                else if (fileExt == ".xlsx")
-                {
-                    row = (XSSFRow)rows.Current;
-                }
-
-                DataRow dr = dt.NewRow();
-
-                for (int i = 0; i < row.LastCellNum; i++)
-                {
-                    ICell cell = row.GetCell(i);
-
-                    if (cell == null)
-                    {
-                        dr[i] = null;
-                    }
-                    else
-                    {
-                        if (fileExt == ".xls")
-                        {
-                            HSSFFormulaEvaluator e = new HSSFFormulaEvaluator(workbook);
-                            cell = e.EvaluateInCell(cell);
-                            if (cell.CellType == CellType.Numeric)
-                            {
-                                //NPOI中数字和日期都是NUMERIC类型的，这里对其进行判断是否是日期类型
-                                if (HSSFDateUtil.IsCellDateFormatted(cell)) //日期类型
-                                {
-                                    dr[i] = cell.DateCellValue;
-                                }
-                                else //其他数字类型
-                                {
-                                    dr[i] = cell.NumericCellValue;
-                                }
-                            }
-                            else
-                            {
-                                dr[i] = cell.ToString();
-                            }
-                        }
-                        else if (fileExt == ".xlsx")
-                        {
-                            XSSFFormulaEvaluator e = new XSSFFormulaEvaluator(workbook);
-                            cell = e.EvaluateInCell(cell);
-                            if (cell.CellType == CellType.Numeric)
-                            {
-                                //NPOI中数字和日期都是NUMERIC类型的，这里对其进行判断是否是日期类型
-                                if (DateUtil.IsCellDateFormatted(cell)) //日期类型
-                                {
-                                    dr[i] = cell.DateCellValue;
-                                }
-                                else //其他数字类型
-                                {
-                                    dr[i] = cell.NumericCellValue;
-                                }
-                            }
-                            else
-                            {
-                                dr[i] = cell.ToString();
-                            }
-                        }
-
-                    }
-                }
-                dt.Rows.Add(dr);
-            }
-            return dt;
-        }
-
-        /// <summary>
-        /// 获取需要导出的数据列属性
-        /// </summary>
-        /// <param name="columnInfo">列信息，属性名、列名</param>
-        /// <returns>返回数据列属性</returns>
-        static List<PropertyInfo> PropertyInfoList<T>(Dictionary<string, string> columnInfo)
-        {
-            var myType = typeof(T);
-            var myPro = new List<PropertyInfo>();
-            foreach (string key in columnInfo.Keys)
-            {
-                var p = myType.GetProperty(key);
-                if (p == null) continue;
-                myPro.Add(p);
-            }
-            return myPro;
-        }
-
-        /// <summary>
-        /// 按照顺序返回导出的数据列属性
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="columnInfo">列信息，属性名、顺序</param>
-        /// <returns></returns>
-        static List<PropertyInfo> PropertyInfoList<T>(Dictionary<string, int> columnInfo)
-        {
-            var myType = typeof(T);
-            var myPro = new List<PropertyInfo>(65535);
-            foreach (KeyValuePair<string,int> keyVal in columnInfo)
-            {
-                var p = myType.GetProperty(keyVal.Key);
-                if (p == null) continue;
-                myPro[keyVal.Value] = p;
-            }
-            myPro.TrimExcess();
-            return myPro;
-        }
-
-        
-
-        /// <summary>
-        /// 将数据列表生成csv文本
-        /// </summary>
-        /// <typeparam name="T">导出的数据类型</typeparam>
-        /// <param name="objList">要导出的数据</param>
-        /// <param name="columnInfo">导出的列属性名、列中文名</param>
-        /// <param name="streamWriter">导出的内容输出的输出流</param>
-        /// <returns></returns>
-        public static void ListToCsv<T>(List<T> objList, Dictionary<string, string> columnInfo,StreamWriter streamWriter,Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap=null)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            //列分隔符
-            string splitCol = "";
-            var myPro = PropertyInfoList<T>(columnInfo);
-            foreach (string key in columnInfo.Keys)
-            {
-                //列名
-                var cName = columnInfo[key];
-                stringBuilder.Append(splitCol).Append("\"").Append(cName.Replace(",", "\",\"").Replace("\"", "\"\"")).Append("\"");
-                splitCol = ",";
-            }
-            stringBuilder.Append("\r\n");
-            //如果没有找到可用的属性则结束 
-            if (myPro.Count == 0)
-            {
-                return;
-            }
-            splitCol = "";
-            object myProValue;
-            string cellValue;
-            foreach (var obj in objList)
-            {
-                foreach (var pro in myPro)
-                {
-                    myProValue = pro.GetValue(obj, null);
-                    //取单元格的值
-                    cellValue = (myProValue ?? "").ToString().Trim();
-                    stringBuilder.Append(splitCol).Append("\"").Append("'").Append(
-                        (dataFormatMap==null || !dataFormatMap.ContainsKey(pro.Name) ? cellValue:dataFormatMap[pro.Name](cellValue))
-                        .Replace(",", "\",\"").Replace("\"", "\"\"")).Append("\"");
-                    splitCol = ",";
-                }
-                stringBuilder.Append("\r\n");
-                splitCol = "";
-            }
-            streamWriter.Write(stringBuilder.ToString());
-        }
-
-        /// <summary>
-        /// 根据xls模板导出以xls结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典：属性名、属性摆放位置</param>
-        /// <param name="templatePath">模板xls文件的本地路径</param>
-        /// <param name="outputPath">导出数据输出到该本地路径</param>
-        /// <param name="dataFormatMap">数据列格式化</param>
-        public static void ListToExcelXlsWithTemplate<T>(List<T> objList, Dictionary<string, int> columnInfo, string templatePath, string outputPath, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
-        {
-            using (Stream templateStream = File.OpenRead(templatePath))
-            using (Stream outputStream = File.OpenWrite(outputPath))
-                ListToExcelXlsWithTemplate<T>(objList, columnInfo, templateStream, outputStream, dataFormatMap);
-        }
-
-        /// <summary>
-        /// 根据xls模板导出以xls结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典：属性名、属性摆放位置</param>
-        /// <param name="templateStream">模板xls文件的输入流</param>
-        /// <param name="outputStream">导出数据输出到该输出流</param>
-        /// <param name="dataFormatMap">数据列格式化</param>
-        public static void ListToExcelXlsWithTemplate<T>(List<T> objList, Dictionary<string, int> columnInfo,Stream templateStream, Stream outputStream, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
-        {
-            if (columnInfo.Count == 0)
-                throw new Exception("字段列表为空，不能导出数据！");
-            if (objList.Count == 0)
-                throw new Exception("数据列表为空，未能导出数据！");
-            var book = new HSSFWorkbook(templateStream);
-            //添加一个sheet  
-            var sheet1 = book.GetSheetAt(0);
-            //列宽暂存变量
-            var columnWidths = new int[columnInfo.Keys.Count];
-            var myPro = PropertyInfoList<T>(columnInfo);
-            //如果没有找到可用的属性则结束 
-            if (myPro.Count == 0)
-                return;
-            Encoding e936 = Encoding.GetEncoding(936);
-
-
-            //将列表数据写入Excel文件对象
-            for (var i = 0; i < objList.Count; i++)
-            {
-                //每一行创建一次Excel的行对象
-                var tempRow = (HSSFRow)sheet1.CreateRow(i + 1);
-                for (var j = 0; j < myPro.Count; j++)
-                    if (myPro[j] != null)
-                    {
-                        var myProValue = myPro[j].GetValue(objList[i], null);
-                        if (myProValue != null)
-                        {
-                            //取单元格的值
-                            var cellValue = myProValue.ToString().Trim();
-
-                            //当前内容单元格的宽度
-                            var valueLength = e936.GetBytes(cellValue).Length;
-                            //取列宽
-                            if (columnWidths[j] < valueLength) columnWidths[j] = valueLength;
-
-                            //写单元格的内容
-                            tempRow.CreateCell(j).SetCellValue(dataFormatMap == null || !dataFormatMap.ContainsKey(myPro[j].Name) ? cellValue : dataFormatMap[myPro[j].Name](cellValue));
-                        }
-                    }
-            }
-            //调整自动列宽
-            for (var i = 0; i < columnInfo.Keys.Count; i++)
-                if(columnWidths[i]>0)
-                    //设置列宽
-                    sheet1.SetColumnWidth(i, ((columnWidths[i] > 254 ? 254 : columnWidths[i]) + 1) * 256);
-            //取出文件内容
-            book.Write(outputStream);
-        }
-
-        /// <summary>
-        /// 导出以xls结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典</param>
-        /// <param name="outputPath">导出xls输出的本地路径</param>
-        /// <param name="dataFormatMap">列格式化</param>
-        public static void ListToExcelXls<T>(List<T> objList, Dictionary<string, string> columnInfo, string outputPath, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
-        {
-            using (Stream outputStream = File.OpenWrite(outputPath))
-                ListToExcelXls<T>(objList, columnInfo, outputStream, dataFormatMap);
-        }
-
-        /// <summary>
-        /// 把excel转化为特定实体类型的集合
-        /// </summary>
-        /// <typeparam name="T">特定实体类型</typeparam>
-        /// <param name="filePath">excel的保存路径</param>
-        /// <param name="sheetName">工作簿名称</param>
-        /// <param name="columnInfo">提取的属性名称和对应的列</param>
-        /// <param name="dataFormatToEntityMap">excel单元格的数据转换器</param>
-        /// <returns>返回实体类型集合</returns>
-        public static List<T> ExcelXlsToList<T>(string filePath, string sheetName, Dictionary<string, int> columnInfo, Dictionary<string, DataFormatToEntity<dynamic, HSSFCell>> dataFormatToEntityMap = null)
-        {
-            using (Stream stream = File.OpenRead(filePath))
-               return ExcelXlsToList<T>(stream, sheetName, columnInfo, dataFormatToEntityMap);
-        }
-
-        /// <summary>
-        /// 把excel转化为特定实体类型的集合
-        /// </summary>
-        /// <typeparam name="T">特定实体类型</typeparam>
-        /// <param name="stream">excel的流</param>
-        /// <param name="sheetName">工作簿名称</param>
-        /// <param name="columnInfo">提取的属性名称和对应的列</param>
-        /// <param name="dataFormatToEntityMap">excel单元格的数据转换器</param>
-        /// <returns>返回实体类型集合</returns>
-        public static List<T> ExcelXlsToList<T>(Stream stream, string sheetName, Dictionary<string, int> columnInfo, Dictionary<string, DataFormatToEntity<dynamic,HSSFCell>> dataFormatToEntityMap=null)
-        {
-            List<T> retList = new List<T>();
-            Type type = typeof(T);
-            ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes);
-            var book = new HSSFWorkbook(stream);
-            var sheet1 = book.GetSheet(sheetName);
-            var myPro = PropertyInfoList<T>(columnInfo);
-            IEnumerator it = sheet1.GetRowEnumerator();
-            it.MoveNext();
-            while(it.MoveNext())
-            {
-                object obj = constructorInfo.Invoke(null);
-                HSSFRow ros=(HSSFRow)it.Current;
-                for (int i=0,len= myPro.Count;i<len;i++)
-                    if (dataFormatToEntityMap.ContainsKey(myPro[i].Name))
-                        type.GetField(myPro[i].Name).SetValue(obj, dataFormatToEntityMap[myPro[i].Name]((HSSFCell)ros.GetCell(i)));
-                    else
-                        type.GetField(myPro[i].Name).SetValue(obj, ((HSSFCell)ros.GetCell(i)).StringCellValue);
-                retList.Add((T)obj);
-            }
-            return retList;
-        }
-
-        /// <summary>
-        /// 把excel转化为特定实体类型的集合
-        /// </summary>
-        /// <typeparam name="T">特定实体类型</typeparam>
-        /// <param name="filePath">excel的保存路径</param>
-        /// <param name="sheetName">工作簿名称</param>
-        /// <param name="columnInfo">提取的属性名称和对应的列</param>
-        /// <param name="dataFormatToEntityMap">excel单元格的数据转换器</param>
-        /// <returns>返回实体类型集合</returns>
-        public static List<T> ExcelXlsxToList<T>(string filePath, string sheetName, Dictionary<string, int> columnInfo, Dictionary<string, DataFormatToEntity<dynamic, XSSFCell>> dataFormatToEntityMap = null)
-        {
-            using(Stream stream=File.OpenRead(filePath))
-                return ExcelXlsxToList<T>(stream, sheetName, columnInfo, dataFormatToEntityMap);
-        }
-
-        /// <summary>
-        /// 把excel转化为特定实体类型的集合
-        /// </summary>
-        /// <typeparam name="T">特定实体类型</typeparam>
-        /// <param name="stream">excel的流</param>
-        /// <param name="sheetName">工作簿名称</param>
-        /// <param name="columnInfo">提取的属性名称和对应的列</param>
-        /// <param name="dataFormatToEntityMap">excel单元格的数据转换器</param>
-        /// <returns>返回实体类型集合</returns>
-        public static List<T> ExcelXlsxToList<T>(Stream stream, string sheetName, Dictionary<string, int> columnInfo, Dictionary<string, DataFormatToEntity<dynamic, XSSFCell>> dataFormatToEntityMap = null)
-        {
-            List<T> retList = new List<T>();
-            Type type = typeof(T);
-            ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes);
-            var book = new XSSFWorkbook(stream);
-            var sheet1 = book.GetSheet(sheetName);
-            var myPro = PropertyInfoList<T>(columnInfo);
-            IEnumerator it = sheet1.GetRowEnumerator();
-            it.MoveNext();
-            while (it.MoveNext())
-            {
-                object obj = constructorInfo.Invoke(null);
-                XSSFRow ros = (XSSFRow)it.Current;
-                for (int i = 0, len = myPro.Count; i < len; i++)
-                    if (dataFormatToEntityMap.ContainsKey(myPro[i].Name))
-                        type.GetField(myPro[i].Name).SetValue(obj, dataFormatToEntityMap[myPro[i].Name]((XSSFCell)ros.GetCell(i)));
-                    else
-                        type.GetField(myPro[i].Name).SetValue(obj, ((XSSFCell)ros.GetCell(i)).StringCellValue);
-                retList.Add((T)obj);
-            }
-            return retList;
+            ListToExcelXls(new List<T>[]{ dataList }, outputStream, groupName);
         }
 
         /// <summary>
@@ -483,53 +92,170 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="dataList"></param>
         /// <param name="outputStream"></param>
-        public static void ListToExcelXls(List<object> dataList, Stream outputStream,string groupName=null)
+        public static void ListToExcelXls<T>(List<T>[] dataListArrays, Stream outputStream,string groupName=null)
         {
-            if(dataList==null || dataList.Count == 0)
-            {
-                throw new Exception("数据列表为空，未能导出数据！");
-            }
-            List<ExcelColInfo> excelColInfoList= ColFilter(dataList[0], groupName);
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-            HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.CreateSheet("Sheet1");
-            HSSFRow hssfRow = (HSSFRow)hssfSheet.CreateRow(0);
-            ExcelColAttr excelColAttr;
-            foreach (ExcelColInfo excelColInfo in excelColInfoList)
+            foreach (List<T> dataList in dataListArrays)
             {
-                excelColAttr = excelColInfo.ExcelColAttr;
-                hssfRow.CreateCell(excelColAttr.ColIndex).SetCellValue(excelColAttr.ColName);
-            }
-            object temp;
-            object val;
-            PropertyInfo propertyInfo;
-            HSSFCell hssfCell;
-            for (int i = 1, len = dataList.Count; i <= len; i++)
-            {
-                temp = dataList[i];
-                hssfRow = (HSSFRow)hssfSheet.CreateRow(i);
+                if(dataList==null || dataList.Count == 0)
+                {
+                    throw new Exception("数据列表为空，未能导出数据！");
+                }
+                List<ExcelColInfo> excelColInfoList= ColFilter(dataList[0].GetType(), groupName);
+                if (excelColInfoList.Count == 0)
+                {
+                    throw new Exception("字段列表为空，不能导出数据！");
+                }
+                HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.CreateSheet(GetSheetName(dataList[0].GetType(), groupName));
+                HSSFRow hssfRow = (HSSFRow)hssfSheet.CreateRow(0);
+                ExcelCol excelCol;
                 foreach (ExcelColInfo excelColInfo in excelColInfoList)
                 {
-                    excelColAttr = excelColInfo.ExcelColAttr;
-                    propertyInfo = excelColInfo.PropertyInfo;
-                    val = propertyInfo.GetValue(temp);
-                    hssfCell =(HSSFCell) hssfRow.CreateCell(excelColAttr.ColIndex);
-                    if (val.GetType() == typeof(double))
+                    excelCol = excelColInfo.ExcelCol;
+                    hssfRow.CreateCell(excelCol.ColIndex).SetCellValue(excelCol.ColName);
+                }
+                T temp;
+                int[] colWidths=new int[excelColInfoList.Count];
+                for (int i = 1,width, len = dataList.Count; i <= len; i++)
+                {
+                    temp = dataList[i];
+                    hssfRow = (HSSFRow)hssfSheet.CreateRow(i);
+                    foreach (ExcelColInfo excelColInfo in excelColInfoList)
                     {
-                        hssfCell.SetCellValue(Convert.ToDouble(val));
-                    }
-                    else if (val.GetType() == typeof(int))
-                    {
-                        hssfCell.SetCellValue(Convert.ToInt32(val));
-                    }
-                    else if (val.GetType() == typeof(string))
-                    {
-                        hssfCell.SetCellValue(Convert.ToString(val));
-                    }
-                    else if (val.GetType() == typeof(DateTime))
-                    {
-                        hssfCell.SetCellValue(Convert.ToDateTime(val));
+                        excelCol = excelColInfo.ExcelCol;
+                        SetCellValue(
+                            (HSSFCell)hssfRow.CreateCell(excelCol.ColIndex), 
+                            excelColInfo.PropertyInfo.GetValue(temp),
+                            out width
+                        );
+                        if(width> colWidths[excelCol.ColIndex])
+                        {
+                            colWidths[excelCol.ColIndex] = width;
+                        }
                     }
                 }
+                UpdateColWidth(hssfSheet, colWidths);
+            }
+            hssfWorkbook.Write(outputStream);
+        }
+
+        /// <summary>
+        /// 设置列宽
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="colWidths"></param>
+        static void UpdateColWidth(ISheet sheet, int[] colWidths)
+        {
+            for (var i = 0; i < colWidths.Length; i++)
+            {
+                sheet.SetColumnWidth(i, ((colWidths[i] > 254 ? 254 : colWidths[i]) + 1) * 256);
+            }
+        }
+
+        /// <summary>
+        /// 获取sheet名称
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        static string GetSheetName(Type type, string groupName=null)
+        {
+            foreach (ExcelSheet excelSheet in type.GetCustomAttributes(typeof(ExcelSheet)))
+            {
+                if (groupName==null)
+                {
+                    return excelSheet.SheetName;
+                }
+                else
+                {
+                    if (excelSheet.GroupName == groupName)
+                    {
+                        return excelSheet.SheetName;
+                    }
+                }
+            }
+            return "sheet"+PasswordHelper.RandomPassword(6,1);
+        }
+
+        static void SetPropValue(object obj, ICell cell, PropertyInfo prop)
+        {
+            CellType cellType = cell.CellType;
+            if (cellType == CellType.Boolean)
+            {
+                prop.SetValue(obj, cell.BooleanCellValue);
+            }
+            else if (cellType == CellType.Numeric)
+            {
+                Type type = prop.PropertyType;
+                if(type == typeof(double) || type == typeof(double?))
+                {
+                    prop.SetValue(obj, cell.NumericCellValue);
+                }
+                else if (type == typeof(float) || type == typeof(float?))
+                {
+                    prop.SetValue(obj, Convert.ToSingle(cell.NumericCellValue));
+                }
+                else if (type == typeof(string))
+                {
+                    prop.SetValue(obj, Convert.ToString(cell.NumericCellValue));
+                }
+                else if (type == typeof(int) || type == typeof(int?))
+                {
+                    prop.SetValue(obj, Convert.ToInt32(cell.NumericCellValue));
+                }
+                else if (type == typeof(long) || type == typeof(long?))
+                {
+                    prop.SetValue(obj, Convert.ToInt64(cell.NumericCellValue));
+                }
+                else if (type == typeof(short) || type == typeof(short?))
+                {
+                    prop.SetValue(obj, Convert.ToInt16(cell.NumericCellValue));
+                }
+            }
+            else if (cellType == CellType.String)
+            {
+                prop.SetValue(obj, cell.StringCellValue);
+            }
+            else
+            {
+                prop.SetValue(obj, null);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="val"></param>
+        /// <param name="width"></param>
+        static void SetCellValue(ICell cell, object val,out int width)
+        {
+            width = 0;
+            if (val != null)
+            {
+                Type type=val.GetType();
+                string cellString;
+                if (type == typeof(double))
+                {
+                    cell.SetCellValue(Convert.ToDouble(val));
+                    cellString = Convert.ToString(cell.NumericCellValue);
+                }
+                else if (type == typeof(int))
+                {
+                    cell.SetCellValue(Convert.ToInt32(val));
+                    cellString = Convert.ToString(cell.NumericCellValue);
+                }
+                else if (val.GetType() == typeof(DateTime))
+                {
+                    cell.SetCellValue(Convert.ToDateTime(val));
+                    cellString = Convert.ToString(cell.DateCellValue);
+                }
+                else
+                {
+                    cell.SetCellValue(Convert.ToString(val));
+                    cellString = Convert.ToString(cell.StringCellValue);
+                }
+                width = Encoding.GetEncoding(936).GetBytes(cellString).Length;
             }
         }
 
@@ -539,274 +265,150 @@ namespace CommonHelper.Helper
         /// <param name="obj"></param>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        static List<ExcelColInfo> ColFilter(object obj,string groupName=null)
+        static List<ExcelColInfo> ColFilter(Type type, string groupName=null)
         {
             List<ExcelColInfo> excelColInfoList = new List<ExcelColInfo>();
-            Type type = obj.GetType();
             foreach (PropertyInfo propertyInfo in type.GetProperties())
             {
-                foreach (Attribute attr in propertyInfo.GetCustomAttributes(false))
+                foreach (ExcelCol excelCol in propertyInfo.GetCustomAttributes(typeof(ExcelCol), true))
                 {
-                    if (attr.GetType() == typeof(ExcelColNameAttr))
+                    if (groupName == null)
                     {
-                        ExcelColNameAttr excelColNameAttr = (ExcelColNameAttr)attr;
-                        if (groupName == null)
+                        excelColInfoList.Add(new ExcelColInfo
+                        {
+                            PropertyInfo= propertyInfo,
+                            ExcelCol= excelCol
+                        });
+                        break;
+                    }
+                    else
+                    {
+                        if (groupName == excelCol.GroupName)
                         {
                             excelColInfoList.Add(new ExcelColInfo
                             {
-                                PropertyInfo= propertyInfo,
-                                ExcelColNameAttr=excelColNameAttr
+                                PropertyInfo = propertyInfo,
+                                ExcelCol = excelCol
                             });
                             break;
                         }
-                        else
-                        {
-                            if (groupName == excelColNameAttr.GroupName)
-                            {
-                                excelColInfoList.Add(new ExcelColInfo
-                                {
-                                    PropertyInfo = propertyInfo,
-                                    ExcelColNameAttr = excelColNameAttr
-                                });
-                                break;
-                            }
-                        }
                     }
                 }
             }
-            excelColInfoList.Sort((x,y)=> x.ExcelColNameAttr.ColIndex - y.ExcelColNameAttr.ColIndex);
+            excelColInfoList.Sort((x,y)=> x.ExcelCol.ColIndex - y.ExcelCol.ColIndex);
             return excelColInfoList;
         }
 
-        /// <summary>
-        /// 导出以xls结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典</param>
-        /// <param name="outputStream">导出xls的输出流</param>
-        /// <param name="dataFormatMap">列格式化</param>
-        public static void ListToExcelXls<T>(List<T> objList, Dictionary<string, string> columnInfo, Stream outputStream, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
+
+        public static void ListToExcelXlsx<T>(List<T> dataList, Stream outputStream, string groupName = null)
         {
-            if (columnInfo.Count == 0)
-                throw new Exception("字段列表为空，不能导出数据！");
-            if (objList.Count == 0)
-                throw new Exception("数据列表为空，未能导出数据！");
-            var book = new HSSFWorkbook();
-            //添加一个sheet  
-            var sheet1 = book.CreateSheet("Sheet1");
-            //给sheet1添加第一行的头部标题  
-            var row1 = (HSSFRow)sheet1.CreateRow(0);
-            //列宽暂存变量
-            var columnWidths = new int[columnInfo.Keys.Count];
-            var myPro = PropertyInfoList<T>(columnInfo);
-            //如果没有找到可用的属性则结束 
-            if (myPro.Count == 0)
-                return;
-            Encoding e936 = Encoding.GetEncoding(936);
-            for (var i = 0; i < columnInfo.Keys.Count; i++)
+            ListToExcelXlsx(new List<T>[]{ dataList }, outputStream, groupName);
+        }
+
+        public static List<T> ExcelXlsToList<T>(Stream inputStream, string groupName = null)
+        {
+            List<T> ret = new List<T>();
+            Type type = typeof(T);
+            string sheetName = GetSheetName(type, groupName);
+            List<ExcelColInfo> excelColInfoList = ColFilter(type, groupName);
+            if (excelColInfoList.Count == 0)
             {
-                var keyName = columnInfo.Keys.ElementAt(i);
-                //列名
-                var cName = columnInfo[keyName];
-                //列宽
-                columnWidths[i] = e936.GetBytes(cName).Length;
-                row1.CreateCell(i).SetCellValue(columnInfo[keyName]);
+                throw new Exception("字段列表为空，不能导入数据！");
             }
-
-
-            //将列表数据写入Excel文件对象
-            for (var i = 0; i < objList.Count; i++)
+            HSSFWorkbook hssfWorkbook = new HSSFWorkbook(inputStream);
+            HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.GetSheet(sheetName);
+            HSSFRow hssfRow;
+            T obj;
+            for (int i = 1, len = hssfSheet.LastRowNum; i <= len; i++)
             {
-                //每一行创建一次Excel的行对象
-                var tempRow = (HSSFRow)sheet1.CreateRow(i + 1);
-                for (var j = 0; j < myPro.Count; j++)
+                hssfRow = (HSSFRow)hssfSheet.GetRow(i);
+                obj = (T)Activator.CreateInstance(type);
+                foreach (ExcelColInfo excelColInfo in excelColInfoList)
                 {
-                    var myProValue = myPro[j].GetValue(objList[i], null);
-                    if (myProValue != null)
-                    {
-                        //取单元格的值
-                        var cellValue = myProValue.ToString().Trim();
-
-                        //当前内容单元格的宽度
-                        var valueLength = e936.GetBytes(cellValue).Length;
-                        //取列宽
-                        if (columnWidths[j] < valueLength) columnWidths[j] = valueLength;
-
-                        //写单元格的内容
-                        tempRow.CreateCell(j).SetCellValue(dataFormatMap == null || !dataFormatMap.ContainsKey(myPro[j].Name) ? cellValue : dataFormatMap[myPro[j].Name](cellValue));
-                    }
+                    SetPropValue(obj, (HSSFCell)hssfRow.GetCell(excelColInfo.ExcelCol.ColIndex), excelColInfo.PropertyInfo);
                 }
+                ret.Add(obj);
             }
-            //调整自动列宽
-            for (var i = 0; i < columnInfo.Keys.Count; i++)
-                //设置列宽
-                sheet1.SetColumnWidth(i, ((columnWidths[i] > 254 ? 254 : columnWidths[i]) + 1) * 256);
-            //取出文件内容
-            book.Write(outputStream);
+            return ret;
         }
 
-        /// <summary>
-        /// 根据xlsx模板导出以xlsx结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典：属性名、属性摆放位置</param>
-        /// <param name="templatePath">模板xlsx文件在本地的路径</param>
-        /// <param name="outputPath">导出数据输出到本地的路径</param>
-        /// <param name="dataFormatMap">数据列格式化</param>
-        public static void ListToExcelXlsxWithTemplate<T>(List<T> objList, Dictionary<string, int> columnInfo, string templatePath, string outputPath, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
+        public static List<T> ExcelXlsxToList<T>(Stream inputStream, string groupName = null)
         {
-            using (Stream templateStream = File.OpenRead(templatePath))
-            using (Stream outputStream = File.OpenWrite(outputPath))
-                ListToExcelXlsxWithTemplate<T>(objList, columnInfo, templateStream, outputStream, dataFormatMap);
-        }
-
-        /// <summary>
-        /// 根据xlsx模板导出以xlsx结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典：属性名、属性摆放位置</param>
-        /// <param name="templateStream">模板xlsx文件的输入流</param>
-        /// <param name="outputStream">导出数据输出到该输出流</param>
-        /// <param name="dataFormatMap">数据列格式化</param>
-        public static void ListToExcelXlsxWithTemplate<T>(List<T> objList, Dictionary<string, int> columnInfo, Stream templateStream, Stream outputStream, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
-        {
-            if (columnInfo.Count == 0)
-                throw new Exception("字段列表为空，不能导出数据！");
-            if (objList.Count == 0)
-                throw new Exception("数据列表为空，未能导出数据！");
-
-            //创建Excel文件的对象  
-            var book = new XSSFWorkbook();
-            //添加一个sheet  
-            var sheet1 = book.CreateSheet("Sheet1");
-
-            //列宽暂存变量
-            var columnWidths = new int[columnInfo.Keys.Count];
-
-            var myPro = PropertyInfoList<T>(columnInfo);
-            //如果没有找到可用的属性则结束 
-            if (myPro.Count == 0)
-                return;
-            Encoding e936 = Encoding.GetEncoding(936);
-            //将列表数据写入Excel文件对象
-            for (var i = 0; i < objList.Count; i++)
+            List<T> ret = new List<T>();
+            Type type=typeof(T);
+            string sheetName=GetSheetName(type, groupName);
+            List<ExcelColInfo> excelColInfoList = ColFilter(type, groupName);
+            if (excelColInfoList.Count == 0)
             {
-                //每一行创建一次Excel的行对象
-                var tempRow = (XSSFRow)sheet1.CreateRow(i + 1);
-                for (var j = 0; j < myPro.Count; j++)
-                    if (myPro[j] != null)
+                throw new Exception("字段列表为空，不能导入数据！");
+            }
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
+            XSSFSheet xssfSheet=(XSSFSheet)xssfWorkbook.GetSheet(sheetName);
+            XSSFRow xssfRow;
+            T obj;
+            for (int i=1,len= xssfSheet.LastRowNum;i<=len ;i++)
+            {
+                xssfRow = (XSSFRow)xssfSheet.GetRow(i);
+                obj=(T)Activator.CreateInstance(type);
+                foreach (ExcelColInfo excelColInfo in excelColInfoList)
+                {
+                    SetPropValue(obj, (XSSFCell)xssfRow.GetCell(excelColInfo.ExcelCol.ColIndex), excelColInfo.PropertyInfo);
+                }
+                ret.Add(obj);
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 导出xls结尾的Excel数据，每个实体必须含有ExcelColNameAttr
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <param name="outputStream"></param>
+        public static void ListToExcelXlsx<T>(List<T>[] dataListArrays, Stream outputStream, string groupName = null)
+        {
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+            foreach (List<T> dataList in dataListArrays)
+            {
+                if (dataList == null || dataList.Count == 0)
+                {
+                    throw new Exception("数据列表为空，未能导出数据！");
+                }
+                List<ExcelColInfo> excelColInfoList = ColFilter(dataList[0].GetType(), groupName);
+                if (excelColInfoList.Count == 0)
+                {
+                    throw new Exception("字段列表为空，不能导出数据！");
+                }
+                XSSFSheet xssfSheet = (XSSFSheet)xssfWorkbook.CreateSheet(GetSheetName(dataList[0].GetType(),groupName));
+                XSSFRow xssfRow = (XSSFRow)xssfSheet.CreateRow(0);
+                ExcelCol excelCol;
+                foreach (ExcelColInfo excelColInfo in excelColInfoList)
+                {
+                    excelCol = excelColInfo.ExcelCol;
+                    xssfRow.CreateCell(excelCol.ColIndex).SetCellValue(excelCol.ColName);
+                }
+                object temp;
+                int[] colWidths = new int[excelColInfoList.Count];
+                for (int i = 0, width, len = dataList.Count; i < len; i++)
+                {
+                    temp = dataList[i];
+                    xssfRow = (XSSFRow)xssfSheet.CreateRow(i + 1);
+                    foreach (ExcelColInfo excelColInfo in excelColInfoList)
                     {
-                        var myProValue = myPro[j].GetValue(objList[i], null);
-                        if (myProValue != null)
+                        excelCol=excelColInfo.ExcelCol;
+                        SetCellValue(
+                            (XSSFCell)xssfRow.CreateCell(excelCol.ColIndex),
+                            excelColInfo.PropertyInfo.GetValue(temp),
+                            out width
+                        );
+                        if (width > colWidths[excelCol.ColIndex])
                         {
-                            //取单元格的值
-                            var cellValue = myProValue.ToString().Trim();
-
-                            //当前内容单元格的宽度
-                            var valueLength = e936.GetBytes(cellValue).Length;
-                            //取列宽
-                            if (columnWidths[j] < valueLength) columnWidths[j] = valueLength;
-
-                            //写单元格的内容
-                            tempRow.CreateCell(j).SetCellValue(dataFormatMap == null || !dataFormatMap.ContainsKey(myPro[j].Name) ? cellValue : dataFormatMap[myPro[j].Name](cellValue));
+                            colWidths[excelCol.ColIndex] = width;
                         }
                     }
-            }
-            //调整自动列宽
-            for (var i = 0; i < columnInfo.Keys.Count; i++)
-                //设置列宽
-                sheet1.SetColumnWidth(i, ((columnWidths[i] > 254 ? 254 : columnWidths[i]) + 1) * 256);
-            //取出文件内容
-            book.Write(outputStream);
-        }
-
-        /// <summary>
-        /// 导出以xlsx结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T">导出的数据类型</typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典</param>
-        /// <param name="outputPath">导出数据输出到该输出流</param>
-        /// <param name="dataFormatMap"></param>
-        public static void ListToExcelXlsx<T>(List<T> objList, Dictionary<string, string> columnInfo, string outputPath, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
-        {
-            using (Stream outputStream = File.OpenWrite(outputPath))
-                ListToExcelXlsx<T>(objList, columnInfo, outputStream, dataFormatMap);
-        }
-
-        /// <summary>
-        /// 导出以xlsx结尾的Excel数据，
-        /// </summary>
-        /// <typeparam name="T">导出的数据类型</typeparam>
-        /// <param name="objList">导出数据列表</param>
-        /// <param name="columnInfo">数据列信息字典</param>
-        /// <param name="stream">导出数据输出到该输出流</param>
-        /// <param name="dataFormatMap"></param>
-        public static void ListToExcelXlsx<T>(List<T> objList, Dictionary<string, string> columnInfo, Stream outputStream, Dictionary<string, ExcelDataFormat<dynamic>> dataFormatMap = null)
-        {
-            if (columnInfo.Count == 0)
-                throw new Exception("字段列表为空，不能导出数据！");
-            if (objList.Count == 0)
-                throw new Exception("数据列表为空，未能导出数据！");
-
-            //创建Excel文件的对象  
-            var book = new XSSFWorkbook(); //new HSSFWorkbook();
-            //添加一个sheet  
-            var sheet1 = book.CreateSheet("Sheet1");
-            //给sheet1添加第一行的头部标题  
-            var row1 = (XSSFRow)sheet1.CreateRow(0);
-
-            //列宽暂存变量
-            var columnWidths = new int[columnInfo.Keys.Count];
-
-            var myPro = PropertyInfoList<T>(columnInfo);
-            //如果没有找到可用的属性则结束 
-            if (myPro.Count == 0)
-                return;
-            Encoding e936= Encoding.GetEncoding(936);
-            for (var i = 0; i < columnInfo.Keys.Count; i++)
-            {
-                var keyName = columnInfo.Keys.ElementAt(i);
-                //列名
-                var cName = columnInfo[keyName];
-                //列宽
-                columnWidths[i] = e936.GetBytes(cName).Length;
-                row1.CreateCell(i).SetCellValue(columnInfo[keyName]);
-            }
-
-
-            //将列表数据写入Excel文件对象
-            for (var i = 0; i < objList.Count; i++)
-            {
-                //每一行创建一次Excel的行对象
-                var tempRow = (XSSFRow)sheet1.CreateRow(i + 1);
-                for (var j = 0; j < myPro.Count; j++)
-                {
-                    var myProValue = myPro[j].GetValue(objList[i], null);
-                    if (myProValue != null)
-                    {
-                        //取单元格的值
-                        var cellValue = myProValue.ToString().Trim();
-
-                        //当前内容单元格的宽度
-                        var valueLength = e936.GetBytes(cellValue).Length;
-                        //取列宽
-                        if (columnWidths[j] < valueLength) columnWidths[j] = valueLength;
-
-                        //写单元格的内容
-                        tempRow.CreateCell(j).SetCellValue(dataFormatMap == null || !dataFormatMap.ContainsKey(myPro[j].Name) ? cellValue : dataFormatMap[myPro[j].Name](cellValue));
-                    }
                 }
+                UpdateColWidth(xssfSheet, colWidths);
             }
-            //调整自动列宽
-            for (var i = 0; i < columnInfo.Keys.Count; i++)
-                //设置列宽
-                sheet1.SetColumnWidth(i, ((columnWidths[i]>254?254: columnWidths[i]) + 1) * 256);
-            //取出文件内容
-            book.Write(outputStream);
+            xssfWorkbook.Write(outputStream);
         }
     }
 }

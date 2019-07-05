@@ -74,6 +74,17 @@ namespace WebApplication1.Controllers
         }
 
         /// <summary>
+        /// 实时加载最新消息
+        /// </summary>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        public JsonResult LoadNewsAlarm(string version)
+        {
+
+            return MyJson(new Result { code=0});
+        }
+
+        /// <summary>
         /// 加载树节点测试方法，正式上线时删除
         /// </summary>
         /// <returns></returns>

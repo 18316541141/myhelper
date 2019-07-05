@@ -210,7 +210,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (MyDbContext2 dbContext = new MyDbContext2())
             {
                 var entitys = dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToList();
                 entitys.ForEach(m => dbContext.Entry(m).State = EntityState.Deleted);

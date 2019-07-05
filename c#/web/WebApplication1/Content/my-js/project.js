@@ -205,8 +205,70 @@ var uploadCallback = function (callback) {
         }
     }
 };
-
+/**
+ * layui的datatable默认的配置，
+ * 直接继承就可以使用了。
+ */
+var defaultDataTableParams = {
+    autoSort: false,
+    page: {
+        layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+    },
+    limit: 20,
+    limits: [20, 40, 60, 80, 100],
+    method: 'post',
+    loading: true,
+    defaultToolbar: ['filter'],
+    request: {
+        pageName: 'currentPageIndex',
+        limitName: 'pageSize'
+    },
+    parseData: function (result) {
+        var data = result.data;
+        var ret = {};
+        if (result.code === -10) {
+            logoutCallback();
+            ret = { code: result.code, count: 0, data: [] };
+        }
+            //用户无权限，无法操作，但需要后续处理
+        else if (result.code === -9) {
+            ret = { code: result.code, msg: '当前用户组无操作权限！', count: 0, data: [] };
+        }
+            //用户无权限，无法操作
+        else if (result.code === -8) {
+            ret = { code: result.code, msg: '当前用户组无操作权限！', count: 0, data: [] };
+        }
+            //常规错误，
+        else if (result.code === -1) {
+            ret = { code: result.code, msg: response.msg, count: 0, data: [] };
+        }
+            //成功
+        else if (result.code === 0) {
+            ret = { code: result.code, count: data.totalItemCount, data: data.pageDataList };
+        }
+        return ret;
+    }
+};
 var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout) {
+    $scope.alarmLayer= layuiLayer.open({
+        type: 1,
+        offset: 'rb',
+        id: '20190703120431',
+        content: '<div id="newsAlarmTable"></div>',
+        shade: 0,
+        title: '最新消息',
+        area:['400px','300px'],
+        success: function (layero, index) {
+            layuiTable.render($.extend(defaultDataTableParams, {
+                elem: '#newsAlarmTable',
+                height: 300,
+                url: '/index',
+                cols: [[
+
+                ]]
+            }));
+        }
+    });
     $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
         $scope.leftMenus = result.data;
         $timeout(function () {
@@ -255,10 +317,27 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         }
     };
 }).factory('$myHttp', function ($http) {
-    var myCallback = function (callback) {
-        var index = layuiLayer.load(0);
+    /**
+     * 版本表，记录等待池和版本号
+     */
+    var versionMap={};
+    /**
+     * 创建一个回调函数
+     * showAni：是否显示加载动画
+     * callback：回调函数
+     */
+    var myCallback = function (showAni,callback) {
+        var index;
+        if(showAni){
+            index = layuiLayer.load(0);
+        }
         return function (response, status, headers, config) {
-            layuiLayer.close(index);
+            if ($.type(headers['Real-Time-Pool']) === 'string') {
+                versionMap[headers['Real-Time-Pool']] = headers['Real-Time-Version'];
+            }
+            if(showAni){
+                layuiLayer.close(index);
+            }
             //登录超时，退出登录
             if (response.code === -10) {
                 logoutCallback();
@@ -288,35 +367,41 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
         }
     };
     return {
+        //对请求参数添加随机的v参数，避免缓存
+        randomV: function (params) {
+            if (params === undefined) {
+                params = { v: Math.random() };
+            } else {
+                params['v'] = Math.random();
+            }
+            return params;
+        },
         //发送get请求，如果缓存内有该请求的资源，则使用缓存的
         getCache: function (url, params) {
             var ret = $http({ method: 'GET', params: params, url: url });
             ret.mySuccess = function (callback) {
-                ret.success(myCallback(callback));
+                ret.success(myCallback(true,callback));
+            };
+            return ret;
+        },
+        getRealTime: function (url,poolName,params) {
+            var ret = $http({ method: 'GET', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } });
+            ret.mySuccess = function (callback) {
+                ret.success(myCallback(false,callback));
             };
             return ret;
         },
         get: function (url, params) {
-            if (params === undefined){
-                params = { v: Math.random() };
-            } else {
-                params['v'] = Math.random();
-            }
-            var ret = $http({ method: 'GET', params: params, url: url });
+            var ret = $http({ method: 'GET', params: this.randomV(params), url: url });
             ret.mySuccess = function (callback) {
-                ret.success(myCallback(callback));
+                ret.success(myCallback(true,callback));
             };
             return ret;
         },
         post: function (url, params) {
-            if (params === undefined){
-                params = { v: Math.random() };
-            } else {
-                params['v'] = Math.random();
-            }
-            var ret = $http({ method: 'POST', url: url, params:params});
+            var ret = $http({ method: 'POST', url: url, params: this.randomV(params) });
             ret.mySuccess = function (callback) {
-                ret.success(myCallback(callback));
+                ret.success(myCallback(true,callback));
             };
             return ret;
         }
@@ -383,11 +468,27 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             if ($scope.postData === undefined) {
                 $scope.postData = {};
             }
+            $scope.$on('submit', function (event) {
+                $scope.uploader.upload();
+            });
+            var tipIndex;
+            $scope.showTip=function(e){
+                if (tipIndex === undefined) {
+                    tipIndex = layuiLayer.tips($scope.excelFileName, e.target, {
+                        tips: 2,
+                        time: -1
+                    });
+                }
+            };
+            $scope.hideTip = function () {
+                layuiLayer.close(tipIndex);
+                tipIndex = undefined;
+            };
             $timeout(function () {
                 var index;
                 $scope.uploader = new WebUploader.Uploader({
                     swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
-                    auto: false,//选中文件后自动上传
+                    auto: $scope.type === 'line',//选中文件后自动上传
                     server: $scope.url,//处理上传excel的控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
                     formData: $scope.postData,//每次上传时上传的数据
@@ -410,6 +511,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     if (type === 'Q_TYPE_DENIED') {
                         layuiLayer.msg('该文件类型可能不是Excel文件。', { icon: 5, anim: 6 });
                     }
+                }).on('beforeFileQueued', function (file) {
+                    $scope.isUploaded = true;
+                    $scope.excelFileName = file.name;
+                    $scope.$apply();
                 });
             });
         }
@@ -441,45 +546,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
             });
             $timeout(function () {
-                layuiTable.render({
-                    autoSort: false,
-                    page: {
-                        layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
-                    },
-                    limit: 20,
-                    limits: [20, 40, 60, 80, 100],
-                    method: 'post',
-                    loading: true,
-                    defaultToolbar: ['filter'],
-                    request: {
-                        pageName: 'currentPageIndex',
-                        limitName: 'pageSize'
-                    },
-                    parseData: function (result) {
-                        var data = result.data;
-                        var ret = {};
-                        if (result.code === -10) {
-                            logoutCallback();
-                            ret = { code: result.code, count: 0, data: [] };
-                        }
-                        //用户无权限，无法操作，但需要后续处理
-                        else if (result.code === -9) {
-                            ret = { code: result.code, msg: '当前用户组无操作权限！', count: 0, data: [] };
-                        }
-                        //用户无权限，无法操作
-                        else if (result.code === -8) {
-                            ret = { code: result.code, msg: '当前用户组无操作权限！', count: 0, data: [] };
-                        }
-                        //常规错误，
-                        else if (result.code === -1) {
-                            ret = { code: result.code, msg: response.msg, count: 0, data: [] };
-                        }
-                        //成功
-                        else if (result.code === 0) {
-                            ret = { code: result.code, count: data.totalItemCount, data: data.pageDataList };
-                        }
-                        return ret;
-                    },
+                layuiTable.render($.extend(defaultDataTableParams, {
                     elem: '#data-table-' + $scope.id,
                     height: $scope.height,
                     url: $scope.url,
@@ -489,7 +556,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                         $scope.$emit('done', res, curr, count);
                     },
                     cols: [$scope.cols]
-                });
+                }));
                 layuiTable.on('sort(dataTable' + $scope.id + ')', function (obj) {
                     if (obj.type === "asc") {
                         for(var key in $scope.postData){
@@ -842,6 +909,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                     files[i - 1] = files[i];
                 }
                 files.length--;
+                $scope.hideTip();
             };
             //渲染后回调
             $timeout(function () {
@@ -899,7 +967,10 @@ function downExcel(url,fileName,postData,totalCount) {
         layuiLayer.open({
             type: 1,
             area: ['400px','400px'],
-            content: html
+            content: html,
+            cancel: function () {
+                $('.down-excel-table').off('click');
+            }
         });
         $('.down-excel-table').on('click', '.down-excel', function () {
             postData['currentPageIndex'] = parseInt($(this).data('index')) + 1;
@@ -1106,7 +1177,10 @@ myApp.controller('testTreeForm', function ($scope, $myHttp) {
     };
 });
 myApp.controller("upload-image", function ($scope) {
-    
+
+});
+myApp.controller('upload-files', function ($scope) {
+
 });
 myApp.controller('big-img-ctrl',function($scope,$timeout){
     $timeout(function(){
@@ -1160,6 +1234,17 @@ myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp, layer) {
         $scope.$broadcast('searchPage');
     };
     $scope.$on('tableOper', function (event, type, data) {
+        if (type === 'export') {
+            downExcel('/IRobotQrCodePayTask/export', '测试excel', $scope.postData, $scope.count)
+        } else if (type === 'delBatch') {
+            var postData={};
+            for (var i = 0,len=data.length;i<len ;i++){
+                postData['irTaskIds[' + i + ']'] = data[i].irTaskID;
+            }
+            $myHttp.post('/IRobotQrCodePayTask/delBatch', postData).mySuccess(function (result) {
+                $scope.search();
+            });
+        }
     });
     $scope.$on('rowOper', function (event, type, data) {
         if (type === 'edit') {
@@ -1174,15 +1259,19 @@ myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp, layer) {
                 scope: $scope,
                 title: '修改'
             });
+        }else if(type === 'del'){
+            $myHttp.post('/IRobotQrCodePayTask/del', { irTaskID: data.irTaskID }).mySuccess(function (result) {
+                $scope.search();
+            });
         }
     });
     $scope.$on('done', function (event,res, curr, count) {
         if (count === 0) {
-            $('#pageTableTest2 [lay-event="enabled"]').hide();
-            $('#pageTableTest2 [lay-event="disabled"]').hide();
-            $('#pageTableTest2 [lay-event="export"]').hide();
-            $('#pageTableTest2 [lay-event="delBatch"]').hide();
+            $('#pageTableTest2 [lay-event="enabled"],#pageTableTest2 [lay-event="disabled"],#pageTableTest2 [lay-event="export"],#pageTableTest2 [lay-event="delBatch"]').hide();
+        } else {
+            $('#pageTableTest2 [lay-event="enabled"],#pageTableTest2 [lay-event="disabled"],#pageTableTest2 [lay-event="export"],#pageTableTest2 [lay-event="delBatch"]').show();
         }
+        $scope.count=count;
     });
 });
 myApp.controller('testEdit1', function ($scope, $myHttp) {
@@ -1192,4 +1281,10 @@ myApp.controller('testEdit1', function ($scope, $myHttp) {
     $scope.edit.save = function () {
 
     };
+});
+myApp.controller('testUploadExcel', function ($scope) {
+    $scope.postData = { otherData: 'asdasdasd' };
+    $scope.upload = function () {
+        $scope.$broadcast('submit');
+    }
 });

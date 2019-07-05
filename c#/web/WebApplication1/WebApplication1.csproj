@@ -211,6 +211,7 @@
     <Compile Include="Controllers\IRobotQrCodePayTaskController.cs" />
     <Compile Include="Entity\AreaTree.cs" />
     <Compile Include="Entity\City.cs" />
+    <Compile Include="Entity\ExcelResult.cs" />
     <Compile Include="Entity\MyJsonResult.cs" />
     <Compile Include="Entity\District.cs" />
     <Compile Include="Entity\IRobotQrCodePayTask.cs" />
@@ -221,10 +222,13 @@
     <Compile Include="Entity\Town.cs" />
     <Compile Include="Entity\TreeFormNode.cs" />
     <Compile Include="Entity\UploadFilesResult.cs" />
+    <Compile Include="ExcelEntity\IRobotQrCodePayTaskExcel.cs" />
     <Compile Include="filter\CompressAttribute.cs" />
     <Compile Include="filter\LoginAuthorizeAttribute.cs" />
     <Compile Include="filter\PermAuthorizeAttribute.cs" />
+    <Compile Include="filter\RealTimeAttribute.cs" />
     <Compile Include="filter\SizeFilterAttribute.cs" />
+    <Compile Include="filter\UpdateVersionAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -387,6 +391,7 @@
     <Content Include="Content\menus\testMenus1\edit1.html" />
     <Content Include="Content\menus\testMenus1\pageTable2.html" />
     <Content Include="Content\menus\testMenus1\treeForm.html" />
+    <Content Include="Content\menus\testMenus1\uploadExcel.html" />
     <Content Include="Content\menus\testMenus1\uploadFiles.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
     <Content Include="Content\plugin-animate\animate.css" />

@@ -172,11 +172,11 @@
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
-</style> 
+</style>
   <script type="text/template" id="cropTemplate">
             <div class="layer-body">
                 <form id="{{name}}-crop-form" class="layui-form">
-                    <div class="layui-form-item"><img style="max-width:100%;" id="{{name}}-crop" /></div>
+                    <img style="max-width:100%;" id="{{name}}-crop" />
                 </form>
             </div>
             <div class="layer-foot">
@@ -196,10 +196,7 @@
          <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
              <label class="layui-form-label">预览</label>
              <div class="layui-input-block">
-                 <div>
-                     <img ng-src="excelType"class="thumbnail-img"/>
-                     <div>{{excelFileName}}</div>
-                 </div>
+                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="images/256x256/xlsx-256.png" width="96" class="thumbnail-img"/>
              </div>
          </div>
      </script>
@@ -320,7 +317,7 @@
                     <div id="{{name}}Id">选择文件</div>
                 </div>
             </div>
-            <div ng-show="files.length>0" class="layui-form-item">
+            <div ng-show="files.length>0">
                 <table class="layui-table" lay-skin="line" lay-size="sm">
                     <thead>
                         <tr>

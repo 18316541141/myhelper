@@ -263,6 +263,7 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static bool IdCard18CheckCode(string idCard18)
         {
+            idCard18 = idCard18.ToUpper();
             int sum=0;
             for (int i=0;i<17 ;i++)
                 sum += Convert.ToInt32($"{idCard18[i]}") * _idCard18CheckWeight[i];
