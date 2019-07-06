@@ -14,3 +14,12 @@ D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\Windows
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
