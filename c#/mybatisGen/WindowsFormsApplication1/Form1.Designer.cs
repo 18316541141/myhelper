@@ -30,24 +30,24 @@
         {
             this.connectionTag = new System.Windows.Forms.TabControl();
             this.mysqlPage = new System.Windows.Forms.TabPage();
+            this.mysqlPasswordTextBox = new System.Windows.Forms.TextBox();
+            this.mysqlPasswordLabel = new System.Windows.Forms.Label();
+            this.mysqlUsernameTextBox = new System.Windows.Forms.TextBox();
+            this.mysqlUsernameLabel = new System.Windows.Forms.Label();
+            this.mysqlPortTextBox = new System.Windows.Forms.TextBox();
+            this.mysqlPortLabel = new System.Windows.Forms.Label();
             this.mysqlIpTextBox = new System.Windows.Forms.TextBox();
             this.mysqlIpLabel = new System.Windows.Forms.Label();
             this.sqlServerPage = new System.Windows.Forms.TabPage();
-            this.oraclePage = new System.Windows.Forms.TabPage();
-            this.mysqlPortLabel = new System.Windows.Forms.Label();
-            this.mysqlPortTextBox = new System.Windows.Forms.TextBox();
-            this.mysqlUsernameLabel = new System.Windows.Forms.Label();
-            this.mysqlUsernameTextBox = new System.Windows.Forms.TextBox();
-            this.mysqlPasswordLabel = new System.Windows.Forms.Label();
-            this.mysqlPasswordTextBox = new System.Windows.Forms.TextBox();
             this.sqlServerPasswordTextBox = new System.Windows.Forms.TextBox();
             this.sqlServerPasswordLabel = new System.Windows.Forms.Label();
             this.sqlServerUsernameTextBox = new System.Windows.Forms.TextBox();
             this.sqlServerUsernameLabel = new System.Windows.Forms.Label();
             this.sqlServerDbTextBox = new System.Windows.Forms.TextBox();
             this.sqlServerDbLabel = new System.Windows.Forms.Label();
-            this.sqlServerIpLabelTextBox = new System.Windows.Forms.TextBox();
+            this.sqlServerIpTextBox = new System.Windows.Forms.TextBox();
             this.sqlServerIpLabel = new System.Windows.Forms.Label();
+            this.oraclePage = new System.Windows.Forms.TabPage();
             this.tableNameLabel = new System.Windows.Forms.Label();
             this.tableNameTextBox = new System.Windows.Forms.TextBox();
             this.frameworkLabel = new System.Windows.Forms.Label();
@@ -87,6 +87,54 @@
             this.mysqlPage.Text = "mysql";
             this.mysqlPage.UseVisualStyleBackColor = true;
             // 
+            // mysqlPasswordTextBox
+            // 
+            this.mysqlPasswordTextBox.Location = new System.Drawing.Point(79, 90);
+            this.mysqlPasswordTextBox.Name = "mysqlPasswordTextBox";
+            this.mysqlPasswordTextBox.Size = new System.Drawing.Size(100, 21);
+            this.mysqlPasswordTextBox.TabIndex = 7;
+            // 
+            // mysqlPasswordLabel
+            // 
+            this.mysqlPasswordLabel.AutoSize = true;
+            this.mysqlPasswordLabel.Location = new System.Drawing.Point(44, 93);
+            this.mysqlPasswordLabel.Name = "mysqlPasswordLabel";
+            this.mysqlPasswordLabel.Size = new System.Drawing.Size(29, 12);
+            this.mysqlPasswordLabel.TabIndex = 6;
+            this.mysqlPasswordLabel.Text = "密码";
+            // 
+            // mysqlUsernameTextBox
+            // 
+            this.mysqlUsernameTextBox.Location = new System.Drawing.Point(79, 62);
+            this.mysqlUsernameTextBox.Name = "mysqlUsernameTextBox";
+            this.mysqlUsernameTextBox.Size = new System.Drawing.Size(100, 21);
+            this.mysqlUsernameTextBox.TabIndex = 5;
+            // 
+            // mysqlUsernameLabel
+            // 
+            this.mysqlUsernameLabel.AutoSize = true;
+            this.mysqlUsernameLabel.Location = new System.Drawing.Point(32, 65);
+            this.mysqlUsernameLabel.Name = "mysqlUsernameLabel";
+            this.mysqlUsernameLabel.Size = new System.Drawing.Size(41, 12);
+            this.mysqlUsernameLabel.TabIndex = 4;
+            this.mysqlUsernameLabel.Text = "用户名";
+            // 
+            // mysqlPortTextBox
+            // 
+            this.mysqlPortTextBox.Location = new System.Drawing.Point(79, 34);
+            this.mysqlPortTextBox.Name = "mysqlPortTextBox";
+            this.mysqlPortTextBox.Size = new System.Drawing.Size(100, 21);
+            this.mysqlPortTextBox.TabIndex = 3;
+            // 
+            // mysqlPortLabel
+            // 
+            this.mysqlPortLabel.AutoSize = true;
+            this.mysqlPortLabel.Location = new System.Drawing.Point(44, 37);
+            this.mysqlPortLabel.Name = "mysqlPortLabel";
+            this.mysqlPortLabel.Size = new System.Drawing.Size(29, 12);
+            this.mysqlPortLabel.TabIndex = 2;
+            this.mysqlPortLabel.Text = "端口";
+            // 
             // mysqlIpTextBox
             // 
             this.mysqlIpTextBox.Location = new System.Drawing.Point(79, 7);
@@ -111,7 +159,7 @@
             this.sqlServerPage.Controls.Add(this.sqlServerUsernameLabel);
             this.sqlServerPage.Controls.Add(this.sqlServerDbTextBox);
             this.sqlServerPage.Controls.Add(this.sqlServerDbLabel);
-            this.sqlServerPage.Controls.Add(this.sqlServerIpLabelTextBox);
+            this.sqlServerPage.Controls.Add(this.sqlServerIpTextBox);
             this.sqlServerPage.Controls.Add(this.sqlServerIpLabel);
             this.sqlServerPage.Location = new System.Drawing.Point(4, 22);
             this.sqlServerPage.Name = "sqlServerPage";
@@ -120,64 +168,6 @@
             this.sqlServerPage.TabIndex = 1;
             this.sqlServerPage.Text = "sqlServer";
             this.sqlServerPage.UseVisualStyleBackColor = true;
-            // 
-            // oraclePage
-            // 
-            this.oraclePage.Location = new System.Drawing.Point(4, 22);
-            this.oraclePage.Name = "oraclePage";
-            this.oraclePage.Padding = new System.Windows.Forms.Padding(3);
-            this.oraclePage.Size = new System.Drawing.Size(319, 135);
-            this.oraclePage.TabIndex = 2;
-            this.oraclePage.Text = "oracle";
-            this.oraclePage.UseVisualStyleBackColor = true;
-            // 
-            // mysqlPortLabel
-            // 
-            this.mysqlPortLabel.AutoSize = true;
-            this.mysqlPortLabel.Location = new System.Drawing.Point(44, 37);
-            this.mysqlPortLabel.Name = "mysqlPortLabel";
-            this.mysqlPortLabel.Size = new System.Drawing.Size(29, 12);
-            this.mysqlPortLabel.TabIndex = 2;
-            this.mysqlPortLabel.Text = "端口";
-            // 
-            // mysqlPortTextBox
-            // 
-            this.mysqlPortTextBox.Location = new System.Drawing.Point(79, 34);
-            this.mysqlPortTextBox.Name = "mysqlPortTextBox";
-            this.mysqlPortTextBox.Size = new System.Drawing.Size(100, 21);
-            this.mysqlPortTextBox.TabIndex = 3;
-            // 
-            // mysqlUsernameLabel
-            // 
-            this.mysqlUsernameLabel.AutoSize = true;
-            this.mysqlUsernameLabel.Location = new System.Drawing.Point(32, 65);
-            this.mysqlUsernameLabel.Name = "mysqlUsernameLabel";
-            this.mysqlUsernameLabel.Size = new System.Drawing.Size(41, 12);
-            this.mysqlUsernameLabel.TabIndex = 4;
-            this.mysqlUsernameLabel.Text = "用户名";
-            // 
-            // mysqlUsernameTextBox
-            // 
-            this.mysqlUsernameTextBox.Location = new System.Drawing.Point(79, 62);
-            this.mysqlUsernameTextBox.Name = "mysqlUsernameTextBox";
-            this.mysqlUsernameTextBox.Size = new System.Drawing.Size(100, 21);
-            this.mysqlUsernameTextBox.TabIndex = 5;
-            // 
-            // mysqlPasswordLabel
-            // 
-            this.mysqlPasswordLabel.AutoSize = true;
-            this.mysqlPasswordLabel.Location = new System.Drawing.Point(44, 93);
-            this.mysqlPasswordLabel.Name = "mysqlPasswordLabel";
-            this.mysqlPasswordLabel.Size = new System.Drawing.Size(29, 12);
-            this.mysqlPasswordLabel.TabIndex = 6;
-            this.mysqlPasswordLabel.Text = "密码";
-            // 
-            // mysqlPasswordTextBox
-            // 
-            this.mysqlPasswordTextBox.Location = new System.Drawing.Point(79, 90);
-            this.mysqlPasswordTextBox.Name = "mysqlPasswordTextBox";
-            this.mysqlPasswordTextBox.Size = new System.Drawing.Size(100, 21);
-            this.mysqlPasswordTextBox.TabIndex = 7;
             // 
             // sqlServerPasswordTextBox
             // 
@@ -227,12 +217,12 @@
             this.sqlServerDbLabel.TabIndex = 10;
             this.sqlServerDbLabel.Text = "数据库";
             // 
-            // sqlServerIpLabelTextBox
+            // sqlServerIpTextBox
             // 
-            this.sqlServerIpLabelTextBox.Location = new System.Drawing.Point(81, 10);
-            this.sqlServerIpLabelTextBox.Name = "sqlServerIpLabelTextBox";
-            this.sqlServerIpLabelTextBox.Size = new System.Drawing.Size(100, 21);
-            this.sqlServerIpLabelTextBox.TabIndex = 9;
+            this.sqlServerIpTextBox.Location = new System.Drawing.Point(81, 10);
+            this.sqlServerIpTextBox.Name = "sqlServerIpTextBox";
+            this.sqlServerIpTextBox.Size = new System.Drawing.Size(100, 21);
+            this.sqlServerIpTextBox.TabIndex = 9;
             // 
             // sqlServerIpLabel
             // 
@@ -242,6 +232,16 @@
             this.sqlServerIpLabel.Size = new System.Drawing.Size(65, 12);
             this.sqlServerIpLabel.TabIndex = 8;
             this.sqlServerIpLabel.Text = "主机名或IP";
+            // 
+            // oraclePage
+            // 
+            this.oraclePage.Location = new System.Drawing.Point(4, 22);
+            this.oraclePage.Name = "oraclePage";
+            this.oraclePage.Padding = new System.Windows.Forms.Padding(3);
+            this.oraclePage.Size = new System.Drawing.Size(319, 135);
+            this.oraclePage.TabIndex = 2;
+            this.oraclePage.Text = "oracle";
+            this.oraclePage.UseVisualStyleBackColor = true;
             // 
             // tableNameLabel
             // 
@@ -333,7 +333,7 @@
         private System.Windows.Forms.Label sqlServerUsernameLabel;
         private System.Windows.Forms.TextBox sqlServerDbTextBox;
         private System.Windows.Forms.Label sqlServerDbLabel;
-        private System.Windows.Forms.TextBox sqlServerIpLabelTextBox;
+        private System.Windows.Forms.TextBox sqlServerIpTextBox;
         private System.Windows.Forms.Label sqlServerIpLabel;
         private System.Windows.Forms.Label tableNameLabel;
         private System.Windows.Forms.TextBox tableNameTextBox;
