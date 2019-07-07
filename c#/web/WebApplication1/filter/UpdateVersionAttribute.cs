@@ -19,12 +19,13 @@ namespace WebApplication1.filter
         /// <param name="filterContext"></param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            HttpRequestBase request = filterContext.HttpContext.Request;
-            HttpResponseBase response = filterContext.HttpContext.Response;
-            string realTimePool = Convert.ToString(request.Headers["Real-Time-Pool"]);
+            string realTimePools = Convert.ToString(filterContext.HttpContext.Request.Headers["Real-Time-Pool"]);
             base.OnActionExecuted(filterContext);
-            ThreadHelper.EditControllerVersion(realTimePool);
-            ThreadHelper.BatchSet(realTimePool);
+            foreach(string realTimePool in realTimePools.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                ThreadHelper.EditControllerVersion(realTimePool);
+                ThreadHelper.BatchSet(realTimePool);
+            }
         }
     }
 }

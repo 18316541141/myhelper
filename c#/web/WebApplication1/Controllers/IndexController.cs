@@ -1,6 +1,5 @@
 ﻿
 using CommonHelper.Helper;
-using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -41,48 +40,47 @@ namespace WebApplication1.Controllers
         }
 
         /// <summary>
-        /// 验证码获取
-        /// </summary>
-        [AllowAnonymous]
-        public void VerificationCode()
-        {
-            string vercode;
-            using (Bitmap vercodeImg = VerifyCodeHelper.CreateVerifyCodeBmp(out vercode))
-            {
-                Session["vercode"] = vercode;
-                vercodeImg.Save(Response.OutputStream, ImageFormat.Jpeg);
-            }
-        }
-
-        /// <summary>
         /// 加载左侧菜单
         /// </summary>
         /// <returns></returns>
         public JsonResult LoadLeftMenus()
         {
-            return MyJson(new Result {code=0,data= _systemService.LoadLeftMenus() }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = _systemService.LoadLeftMenus() }, JsonRequestBehavior.AllowGet);
         }
 
+        
+
         /// <summary>
-        /// 退出登录
+        /// 实时检测最新版本号
         /// </summary>
         /// <returns></returns>
-        public JsonResult Logout()
+        public JsonResult RealTime()
         {
-            FormsAuthentication.SignOut();
-            return MyJson(new Result { code = 0}, JsonRequestBehavior.AllowGet);
+            string realTimePool = Convert.ToString(Request.Headers["Real-Time-Pool"]);
+            Response.AddHeader("Real-Time-Pool", realTimePool);
+            string newestVersion;
+            if (ThreadHelper.CompareControllerVersion(realTimePool, Convert.ToString(Request.Headers["Real-Time-Version"]), out newestVersion))
+            {
+                ThreadHelper.BatchWait(realTimePool, 60000);
+                Response.AddHeader("Real-Time-Version", newestVersion);
+                return MyJson(new Result { code = 1 });
+            }
+            else
+            {
+                Response.AddHeader("Real-Time-Version", newestVersion);
+                return MyJson(new Result { code = 0 });
+            }
         }
 
         /// <summary>
-        /// 实时加载最新消息
+        /// 加载最新提醒消息
         /// </summary>
         /// <param name="version"></param>
         /// <returns></returns>
-        [RealTime]
         public JsonResult LoadNewsAlarm()
         {
-            List<NewsAlarm> newsAlarmList = new List<NewsAlarm>();
-            return MyJson(new Result { code=0,data= newsAlarmList }, JsonRequestBehavior.AllowGet);
+            SystemService systemService = new SystemService();
+            return MyJson(new Result { code = 0, data = systemService.LoadNewsAlarm() }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -94,7 +92,7 @@ namespace WebApplication1.Controllers
             List<TreeFormNode> treeNodeList = new List<TreeFormNode>();
             treeNodeList.Add(new TreeFormNode
             {
-                id="01",
+                id = "01",
                 name = "广东"
             });
             treeNodeList.Add(new TreeFormNode
@@ -123,22 +121,22 @@ namespace WebApplication1.Controllers
                 id = "33",
                 name = "陳邨"
             });
-            return MyJson(new Result { code = 0 ,data= treeNodeList }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = treeNodeList }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
         /// 上传单张图片
         /// </summary>
         /// <returns></returns>
-        [SizeFilter(Size= 3145728, Msg = "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
+        [SizeFilter(Size = 3145728, Msg = "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
         public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload, string pathName)
         {
             if (_allowPath.Contains(pathName))
             {
-                Image image=null;
+                Image image = null;
                 try
                 {
-                    image =Image.FromStream(fileUpload.InputStream);
+                    image = Image.FromStream(fileUpload.InputStream);
                 }
                 catch
                 {
@@ -146,17 +144,17 @@ namespace WebApplication1.Controllers
                 }
                 try
                 {
-                    string imgName=FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+                    string imgName = FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
                     using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}"))
                     {
                         using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
                         {
-                            string thumbnailName= FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+                            string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
                             return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } }, JsonRequestBehavior.AllowGet);
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return MyJson(new Result { code = -1, msg = ex.Message }, JsonRequestBehavior.AllowGet);
                 }
@@ -197,7 +195,7 @@ namespace WebApplication1.Controllers
         /// <param name="y">左上角切点y坐标</param>
         /// <param name="w">切割宽度</param>
         /// <param name="h">切割高度</param>
-        public JsonResult SingleImageCrop(string pathName, string imgName,int imgWidth,int imgHeight,int x,int y,int w,int h)
+        public JsonResult SingleImageCrop(string pathName, string imgName, int imgWidth, int imgHeight, int x, int y, int w, int h)
         {
             string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
             if (System.IO.File.Exists(imgPath))
@@ -220,15 +218,20 @@ namespace WebApplication1.Controllers
 
                             using (Image thumbnailImg = cutImg.GetThumbnailImage(150, cutImg.Height * 150 / cutImg.Width, () => false, IntPtr.Zero))
                             {
-                                return MyJson(new Result { code = 0, data = new {
-                                    thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
-                                    imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}")
-                                } }, JsonRequestBehavior.AllowGet);
+                                return MyJson(new Result
+                                {
+                                    code = 0,
+                                    data = new
+                                    {
+                                        thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
+                                        imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}")
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
                             }
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return MyJson(new Result { code = -1, msg = ex.Message }, JsonRequestBehavior.AllowGet);
                 }
@@ -245,10 +248,10 @@ namespace WebApplication1.Controllers
         /// <param name="imgName">图片名称</param>
         /// </summary>
         [OutputCache(Duration = int.MaxValue)]
-        public void ShowImage(string pathName,string imgName)
+        public void ShowImage(string pathName, string imgName)
         {
             Response.ContentType = "image/jpeg";
-            string imgPath =$"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
+            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
             if (System.IO.File.Exists(imgPath))
             {
                 using (Stream stream = System.IO.File.OpenRead(imgPath))
@@ -292,43 +295,6 @@ namespace WebApplication1.Controllers
             {
                 Response.StatusCode = 404;
                 return null;
-            }
-        }
-
-        /// <summary>
-        /// 登录
-        /// </summary>
-        /// <param name="Username">用户名</param>
-        /// <param name="password">密码</param>
-        /// <param name="vercode">验证码</param>
-        /// <returns>返回登录结果的json</returns>
-        [AllowAnonymous]
-        public JsonResult Login(string username, string password,string vercode)
-        {
-            try
-            {
-                if (!Convert.ToString(Session["vercode"]).Equals(vercode, StringComparison.OrdinalIgnoreCase))
-                {
-                    return Json(new Result { code = -1, msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
-                }
-                Random random = new Random();
-                //zhang
-                string u="60b69332fb3d57a5c6537a57d45d6e790768b6b6";
-                //123
-                string p = "40bd001563085fc35165329ea1ff5c5ecbdbbeef";
-                if (u == username && p == password)
-                {
-                    FormsAuthentication.SetAuthCookie(username, false);
-                    return MyJson(new Result { code = 0,data=new {leftMenus= _systemService.LoadLeftMenus()}}, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return MyJson(new Result { code = -1, msg = "登录失败，账号或密码错误！" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            finally
-            {
-                Session["vercode"] = Guid.NewGuid().ToString();
             }
         }
     }

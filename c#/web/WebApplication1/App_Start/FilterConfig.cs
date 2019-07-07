@@ -10,9 +10,13 @@ namespace WebApplication1
         {
             filters.Add(new LoginAuthorizeAttribute());
             filters.Add(new PermAuthorizeAttribute());
+            SingleUserAttribute singleUserAttribute = new SingleUserAttribute();
+            singleUserAttribute.IgnoreRequests.Add("/session/verificationCode".ToLower());
+            singleUserAttribute.IgnoreRequests.Add("/session/login".ToLower());
+            filters.Add(singleUserAttribute);
             CompressAttribute compressAttribute = new CompressAttribute();
             compressAttribute.IgnoreRequests.Add("/index/showImage".ToLower());
-            compressAttribute.IgnoreRequests.Add("/index/verificationCode".ToLower());
+            compressAttribute.IgnoreRequests.Add("/session/verificationCode".ToLower());
             compressAttribute.IgnoreRequests.Add("/index/downFile".ToLower());
             filters.Add(compressAttribute);
             filters.Add(new HandleErrorAttribute());

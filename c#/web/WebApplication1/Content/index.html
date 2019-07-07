@@ -401,7 +401,7 @@
       <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0"><a href="javascript:;" ng-bind="x.title"></a> 
        <dl class="layui-nav-child"> 
         <dd ng-repeat="y in x.leftMenus"> 
-         <a href="javascript:void(0);" ng-click="openMenuPage(y)" ng-bind="y.title"></a> 
+         <a href="javascript:void(0);" ng-click="openMenuPage(y.id)" ng-bind="y.title"></a> 
         </dd> 
        </dl></li> 
       <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0"><a href="javascript:;" ng-bind="x.title"></a></li> 
@@ -448,7 +448,7 @@
         </div> 
         <div class="layui-col-xs5"> 
          <div style="margin-left: 10px;"> 
-          <img ng-click="refreshVercode()" ng-src="{{'/index/verificationCode?r='+rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode"> 
+          <img ng-click="refreshVercode()" ng-src="{{'/session/verificationCode?r='+rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode"> 
          </div> 
         </div> 
        </div> 

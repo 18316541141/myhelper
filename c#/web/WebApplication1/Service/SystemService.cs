@@ -12,16 +12,70 @@ namespace WebApplication1.Service
     /// </summary>
     public class SystemService
     {
-        static List<NewsAlarm> _PnewsAlarmList;
+        static List<NewsAlarm> _newsAlarmList;
         static SystemService()
         {
-            _PnewsAlarmList = new List<NewsAlarm>();
+            _newsAlarmList = new List<NewsAlarm>();
+            _newsAlarmList.Add(new NewsAlarm
+            {
+                createDate=DateTime.Now.AddDays(-1),
+                menuId= "m1",
+                readState=0,
+                receive="asdasd",
+                title="测试asdasd",
+            });
+            _newsAlarmList.Add(new NewsAlarm
+            {
+                createDate = DateTime.Now.AddDays(-2),
+                menuId = "m11",
+                readState = 0,
+                receive = "asddasd",
+                title = "测试vvss",
+            });
+            _newsAlarmList.Add(new NewsAlarm
+            {
+                createDate = DateTime.Now.AddDays(-2),
+                menuId = "m12",
+                readState = 0,
+                receive = "assdffsdd",
+                title = "测e4as试",
+            });
         }
 
-
-        public List<NewsAlarm> LoadNewsAlarm()
+        /// <summary>
+        /// 追加最新消息
+        /// </summary>
+        /// <param name="newsAlarm"></param>
+        public void AddNewsAlarm(NewsAlarm newsAlarm)
         {
-            return _PnewsAlarmList;
+            _newsAlarmList.Add(newsAlarm);
+        }
+
+        /// <summary>
+        /// 批量追加最新消息
+        /// </summary>
+        /// <param name="newsAlarmList"></param>
+        public void AddNewsAlarm(List<NewsAlarm> newsAlarmList)
+        {
+            _newsAlarmList.AddRange(newsAlarmList);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public MyPagedList<NewsAlarm> LoadNewsAlarm()
+        {
+            return new MyPagedList<NewsAlarm>
+            {
+                currentPageIndex=1,
+                startItemIndex=0,
+                endItemIndex=2,
+                pageDataList=_newsAlarmList,
+                pageSize=20,
+                totalItemCount=3,
+                totalPageCount=1
+            };
         }
 
         /// <summary>
@@ -92,6 +146,13 @@ namespace WebApplication1.Service
                 title = "测试1"
             };
             List<LeftMenu> leftMenuList11 = new List<LeftMenu>();
+            LeftMenu leftMenuNewAlarm = new LeftMenu
+            {
+                id="n11",
+                title = "实时刷最新消息",
+                url = "menus/testMenus1/testNewAlarm.html"
+            };
+            leftMenuList11.Add(leftMenuNewAlarm);
             LeftMenu leftMenu111 = new LeftMenu
             {
                 id="m11",

@@ -23,6 +23,16 @@ namespace WebApplication1.Entity
         /// <summary>
         /// 查看新消息的菜单页。
         /// </summary>
-        public string menuUrl { set; get; }
+        public string menuId { set; get; }
+
+        /// <summary>
+        /// 新消息的接受者
+        /// </summary>
+        public string receive { set; get; }
+
+        /// <summary>
+        /// 消息的读取状态：0：未读，1：已读
+        /// </summary>
+        public int readState { set; get; }
     }
 }

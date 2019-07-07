@@ -247,27 +247,45 @@ var defaultDataTableParams = {
     }
 };
 
-var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout) {
-    $scope.alarmLayer= layuiLayer.open({
-        type: 1,
-        offset: 'rb',
-        id: '20190703120431',
-        content: '<div id="newsAlarmTable"></div>',
-        shade: 0,
-        title: '最新消息',
-        area:['400px','300px'],
-        success: function (layero, index) {
-            layuiTable.render($.extend(defaultDataTableParams, {
-                elem: '#newsAlarmTable',
-                height: 300,
-                cols: [[
-                    { field: 'title', title: '新消息' },
-                    { field: 'createDate', title: '日期' },
-                    { field: 'menuUrl', title: '操作' }
-                ]]
-            }));
-
+var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout, $realTime) {
+    $scope.newAlarm = function () {
+        $scope.alarmLayer = layuiLayer.open({
+            type: 1,
+            offset: 'rb',
+            id: '20190703120431',
+            content: '<div id="newsAlarmTable" lay-filter="dataTable20190703120431"></div>',
+            shade: 0,
+            title: '最新消息',
+            area:['400px','300px'],
+            success: function (layero, index) {
+                layuiTable.render($.extend(defaultDataTableParams, {
+                    elem: '#newsAlarmTable',
+                    height: 300,
+                    url: '/index/loadNewsAlarm',
+                    id: '20190703120431-checked',
+                    cols: [[
+                        { field: 'title', title: '新消息' },
+                        { field: 'createDate', title: '日期' },
+                        { field: 'menuId', title: '操作', toolbar: '<buttton class="layui-btn layui-btn-sm" lay-event="turnToMenu">查看</button>' }
+                    ]]
+                }));
+                layuiTable.on('tool(dataTable20190703120431)', function (obj) {
+                });
+            },
+            cancel: function () {
+                $scope.alarmLayer = undefined;
+            }
+        });
+    };
+    $realTime.regPool('newsAlarm', function () {
+        if ($scope.alarmLayer === undefined) {
+            $scope.newAlarm();
+        } else {
+            layuiTable.reload('20190703120431-checked', {});
         }
+    });
+    $scope.$on("$destroy", function () {
+        $realTime.cancel('newsAlarm');
     });
     $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
         $scope.leftMenus = result.data;
@@ -276,6 +294,18 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             layuiElement.render('nav');
         });
     });
+    $scope.findLeftMenuById = function (id) {
+        var leftMenus=$scope.leftMenus;
+        for (var i = 0, len = leftMenus.length; i < len; i++) {
+            var childMenus = leftMenus[i].leftMenus;
+            for (var j = 0, len = childMenus.length; j < len; j++) {
+                if (childMenus[j].id === id) {
+                    return childMenus[j];
+                }
+            }
+        }
+        return null;
+    };
     $scope.menus = [];
     $scope.close = function (id) {
         var menus = $scope.menus;
@@ -297,31 +327,93 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
     /**
 	 * 打开指定菜单页
 	 */
-    $scope.openMenuPage = function (y) {
+    $scope.openMenuPage = function (id) {
         var menus = $scope.menus;
         var exist = false;
         for (var i = 0, len = menus.length; i < len; i++) {
-            if (menus[i].id == y.id) {
+            if (menus[i].id == id) {
                 exist = true;
                 break;
             }
         }
         if (exist) {
-            $('[data-menu-id="' + y.id + '"]').click();
+            $('[data-menu-id="' + id + '"]').click();
         } else {
+            var ret=$scope.findLeftMenuById(id);
             $scope.menus[$scope.menus.length] = {
-                title: y.title,
-                url: y.url,
-                id: y.id
+                title: ret.title,
+                url: ret.url,
+                id: id
             };
         }
     };
-}).factory('$realTime', function ($http) {
-    /**
-     * 版本表，记录等待池和版本号
-     */
+});
+/**
+ * 创建一个回调函数
+ * showAni：是否显示加载动画
+ * callback：回调函数
+ */
+var myCallback = function (callback) {
+    var index = layuiLayer.load(0);
+    return function (response, status, headers, config) {
+        layuiLayer.close(index);
+        //登录超时，退出登录
+        if (response.code === -10) {
+            logoutCallback();
+        }
+            //用户无权限，无法操作，但需要后续处理
+        else if (response.code === -9) {
+            layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
+            callback(response, status, headers, config);
+        }
+            //用户无权限，无法操作
+        else if (response.code === -8) {
+            layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
+        }
+            //常规错误，
+        else if (response.code === -1) {
+            layuiLayer.msg(response.msg, { icon: 5, anim: 6 });
+            callback(response, status, headers, config);
+        }
+            //成功
+        else if (response.code === 0) {
+            if (response.msg != null && response.msg != '') {
+                layuiLayer.msg(response.msg, { icon: 1 });
+            }
+            callback(response, status, headers, config);
+        }
+        index = null;
+        callback = null;
+    }
+};
+myApp.factory('$realTime', function ($http) {
+    //版本表，记录等待池和版本号
     var versionMap = {};
+    //注册的监听池
+    var regPoolMap = {};
     return {
+        /**
+         * 注册一个实时监听池，当发生变化是会调用callback
+         * @poolName 监听池名称
+         * @callback 监听会调
+         */
+        regPool: function (poolName, callback) {
+            if ($.type(regPoolMap[poolName]) === 'undefined') {
+                regPoolMap[poolName] = callback;
+                this.get(poolName);
+            }
+        },
+        /**
+         * 注销一个实时监听池
+         * @poolName 监听池名称
+         */
+        cancel: function (poolName) {
+            regPoolMap[poolName] = undefined;
+        },
+        //注销所有监听池
+        cancelAll:function(){
+            regPoolMap = {};
+        },
         //对请求参数添加随机的v参数，避免缓存
         randomV: function (params) {
             if (params === undefined) {
@@ -332,88 +424,48 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             return params;
         },
         //使用get请求实时获取最新数据
-        get: function (url, poolName, params) {
+        get: function (poolName) {
             var thiz = this;
-            var ret = $http({ method: 'GET', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } });
-            ret.mySuccess = function (callback) {
-                ret.success(function (response, status, headers, config) {
-                    ret = null;
-                    versionMap[poolName] = headers['Real-Time-Version'];
+            $http({ method: 'GET', params: { v: Math.random() }, url: '/index/realTime', headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } })
+            .success(function (response, status, headers, config) {
+                versionMap[poolName] = headers('Real-Time-Version');
+                if ($.type(regPoolMap[poolName]) === 'function') {
                     if (response.code === -10) {
-                        url = null;
                         poolName = null;
-                        params = null;
-                        callback = null;
+                        thiz.cancelAll();
                         logoutCallback();
-                    } else if (response.code === 0 || response.code === 1) {
-                        thiz.get(url, poolName, params).mySuccess(callback);
+                    } else if (response.code === 1) {
+                        thiz.get(poolName);
+                    } else if (response.code === 0) {
+                        thiz.get(poolName);
+                        regPoolMap[poolName]();
                     }
-                    thiz = null;
-                });
-            };
+                }
+                thiz = null;
+            });
+        },
+        /**
+         * 更新版本号
+         * @url 请求的url
+         * @params 请求的参数。
+         * @poolNames 等待池名称，必须是数组
+         */
+        getUpdate: function (url, params, poolNames) {
+            var ret = $http({ method: 'GET', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolNames.join(',') } });
+            ret.mySuccess = function (callback) {
+                ret.success(myCallback(callback));
+            }
             return ret;
         },
-        //使用post请求实时获取最新数据
-        post: function (url, poolName, params) {
-            var thiz = this;
-            var ret = $http({ method: 'POST', params: this.randomV(params), url: url, headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } });
+        postUpdate: function (url, params, poolNames) {
+            var ret = $http({ method: 'POST', url: url, params: this.randomV(params), headers: { 'Real-Time-Pool': poolNames.join(',') } });
             ret.mySuccess = function (callback) {
-                ret = null;
-                ret.success(function (response, status, headers, config) {
-                    versionMap[poolName] = headers['Real-Time-Version'];
-                    if (response.code === -10) {
-                        url = null;
-                        poolName = null;
-                        params = null;
-                        callback = null;
-                        logoutCallback();
-                    } else if (response.code === 0 || response.code === 1) {
-                        thiz.post(url, poolName, params).mySuccess(callback);
-                    }
-                    thiz = null;
-                });
-            }
+                ret.success(myCallback(callback));
+            };
+            return ret;
         }
     };
 }).factory('$myHttp', function ($http) {
-    /**
-     * 创建一个回调函数
-     * showAni：是否显示加载动画
-     * callback：回调函数
-     */
-    var myCallback = function (callback) {
-        var index = layuiLayer.load(0);
-        return function (response, status, headers, config) {
-            layuiLayer.close(index);
-            //登录超时，退出登录
-            if (response.code === -10) {
-                logoutCallback();
-            }
-                //用户无权限，无法操作，但需要后续处理
-            else if (response.code === -9) {
-                layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
-                callback(response, status, headers, config);
-            }
-                //用户无权限，无法操作
-            else if (response.code === -8) {
-                layuiLayer.msg('当前用户组无操作权限！', { icon: 5, anim: 6 });
-            }
-                //常规错误，
-            else if (response.code === -1) {
-                layuiLayer.msg(response.msg, { icon: 5, anim: 6 });
-                callback(response, status, headers, config);
-            }
-                //成功
-            else if (response.code === 0) {
-                if (response.msg != null && response.msg != '') {
-                    layuiLayer.msg(response.msg, { icon: 1 });
-                }
-                callback(response, status, headers, config);
-            }
-            index = null;
-            callback = null;
-        }
-    };
     return {
         //对请求参数添加随机的v参数，避免缓存
         randomV: function (params) {
@@ -481,7 +533,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             var SHA1 = new Hashes.SHA1();
             data.username = SHA1.hex(data.username);
             data.password = SHA1.hex(data.password);
-            $.myPost('/index/login', data, function (result) {
+            $.myPost('/session/login', data, function (result) {
                 if (result.code == -1) {
                     $scope.$apply(function () {
                         $scope.rNum = Math.random();
@@ -1149,7 +1201,7 @@ function logoutCallback() {
  * 退出登陆的方法
  */
 function logout() {
-    $.myGet('/index/logout', logoutCallback);
+    $.myGet('/session/logout', logoutCallback);
     var $scope = $('[ng-controller="login-form"]').scope();
     $scope.data = null;
     $scope.rNum = Math.random();
@@ -1328,4 +1380,11 @@ myApp.controller('testUploadExcel', function ($scope) {
     $scope.upload = function () {
         $scope.$broadcast('submit');
     }
+});
+myApp.controller('addNewAlaram', function ($scope,$realTime) {
+    $scope.adddd = function () {
+        $realTime.getUpdate('/NewAlarm/add', {}, ['newsAlarm']).mySuccess(function () {
+
+        });
+    };
 });
