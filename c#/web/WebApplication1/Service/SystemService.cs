@@ -19,7 +19,7 @@ namespace WebApplication1.Service
             _newsAlarmList.Add(new NewsAlarm
             {
                 createDate=DateTime.Now.AddDays(-1),
-                menuId= "m1",
+                menuId= "n11",
                 readState=0,
                 receive="asdasd",
                 title="测试asdasd",

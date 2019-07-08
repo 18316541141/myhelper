@@ -73,7 +73,7 @@ namespace CommonHelper.Helper
             code = sbCode.ToString();
 
             //噪音线
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 int x1 = rnd.Next(bmp.Width);
                 int x2 = rnd.Next(bmp.Width);
@@ -85,7 +85,7 @@ namespace CommonHelper.Helper
             }
 
             //扭曲
-            bmp = TwistImage(bmp, true, 3, rnd.NextDouble() * Math.PI * 2);
+            bmp = TwistImage(bmp, true, 1, rnd.NextDouble() * Math.PI * 2);
             g = Graphics.FromImage(bmp);
 
             //噪点

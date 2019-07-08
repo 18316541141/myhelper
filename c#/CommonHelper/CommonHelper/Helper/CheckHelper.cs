@@ -28,7 +28,7 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool IsMobilePhone(this string str)=>new Regex("^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[8-9])[0-9]{8}$").IsMatch(str);
+        public static bool IsMobilePhone(this string str)=>new Regex("^(13[0-9]|14[5-9]|15[012356789]|166|17[0-8]|18[0-9]|19[1-9])[0-9]{8}$").IsMatch(str);
 
         /// <summary>
         /// 军官证校验

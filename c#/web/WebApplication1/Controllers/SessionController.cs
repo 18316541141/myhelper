@@ -75,7 +75,7 @@ namespace WebApplication1.Controllers
                 }
                 Random random = new Random();
                 //zhang
-                string u = "60b69332fb3d57a5c6537a57d45d6e790768b6b6";
+                string u = "zhang";
                 //123
                 string p = "40bd001563085fc35165329ea1ff5c5ecbdbbeef";
                 if (u == username && p == password)

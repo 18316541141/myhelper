@@ -75,8 +75,11 @@ var layuiLaypage = layui.laypage;
         return function (result, textStatus, req) {
             layuiLayer.close(index);
             //登录超时，退出登录
-            if (result.code === -10) {
+            if (result.code === -10 || result.code === -11) {
                 logoutCallback();
+                if (result.code === -11) {
+                    layuiLayer.alert('强制下线，原因：当前登录用户在其它地方登录。', { icon: 5 });
+                }
             }
                 //用户无权限，无法操作，但需要后续处理
             else if (result.code === -9) {
@@ -124,50 +127,7 @@ var layuiLaypage = layui.laypage;
         "myAjax": function (settings) {
             settings.success = myCallback(settings.success);
             $.ajax(url, settings);
-        },
-        //自定义的表单post，不需要data参数，直接提交表单的数据
-        "formPost": function (url, callback) {
-            var data = {};
-            this.get(0).find('input[name]').each(function () {
-                data[$(this).attr('name')] = $(this).val();
-            });
-            $.post(url, data, myCallback(callback), 'json');
-        },
-        //自定义的表单get，不需要data参数，直接提交表单的数据
-        "formGet": function (url, callback) {
-            var data = {};
-            this.get(0).find('input[name]').each(function () {
-                data[$(this).attr('name')] = $(this).val();
-            });
-            $.get(url, data, myCallback(callback), 'json');
-        },
-        /*
-         * 自定义的表单ajax，直接提交表单的数据，如果settings.data不为空，则附加settings.data数据。
-         * 如果表单数据和data数据有重名的，则优先使用settings.data的数据
-         */
-        "formAjax": function (settings) {
-            settings.success = myCallback(settings.success);
-            var data = {};
-            this.get(0).find('input[name]').each(function () {
-                data[$(this).attr('name')] = $(this).val();
-            });
-            if (settings.data == undefined) {
-                settings.data = data;
-            } else {
-                $.extend(settings.data, data);
-            }
-            $.ajax(url, settings);
-        },
-        /**
-         * 定期延长编辑的锁定时间
-         * addEditLockLimitDate 源码在webapp/my-js/common-by-jquery.js
-         */
-        "addEditLockLimitDate": addEditLockLimitDate,
-        /**
-         * 实时刷新数据
-         * realTimeRefresh 源码在webapp/my-js/common-by-jquery.js
-         */
-        "realTimeRefresh": realTimeRefresh
+        }
     });
 }());
 
@@ -175,8 +135,11 @@ var layuiLaypage = layui.laypage;
 var uploadCallback = function (callback) {
     return function (file, response) {
         //登录超时，退出登录
-        if (response.code === -10) {
+        if (response.code === -10 || response.code === -11) {
             logoutCallback();
+            if (response.code === -11) {
+                layuiLayer.alert('强制下线，原因：当前登录用户在其它地方登录。', { icon: 5 });
+            }
         }
             //用户无权限，无法操作，但需要后续处理
         else if (response.code === -9) {
@@ -223,8 +186,11 @@ var defaultDataTableParams = {
     parseData: function (result) {
         var data = result.data;
         var ret = {};
-        if (result.code === -10) {
+        if (result.code === -10 || result.code === -11) {
             logoutCallback();
+            if (result.code === -11) {
+                layuiLayer.alert('强制下线，原因：当前登录用户在其它地方登录。', { icon: 5 });
+            }
             ret = { code: result.code, count: 0, data: [] };
         }
             //用户无权限，无法操作，但需要后续处理
@@ -249,40 +215,54 @@ var defaultDataTableParams = {
 
 var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout, $realTime) {
     $scope.newAlarm = function () {
-        $scope.alarmLayer = layuiLayer.open({
+        layuiLayer.open({
             type: 1,
             offset: 'rb',
             id: '20190703120431',
-            content: '<div id="newsAlarmTable" lay-filter="dataTable20190703120431"></div>',
+            content: '<div class="news-alarm"><div id="newsAlarmTable" lay-filter="dataTable20190703120431"></div></div>',
             shade: 0,
-            title: '最新消息',
-            area:['400px','300px'],
+            title: '消息栏',
+            area: ['450px', '320px'],
             success: function (layero, index) {
                 layuiTable.render($.extend(defaultDataTableParams, {
                     elem: '#newsAlarmTable',
-                    height: 300,
+                    height: 270,
                     url: '/index/loadNewsAlarm',
                     id: '20190703120431-checked',
+                    page: {
+                        layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                    },
                     cols: [[
                         { field: 'title', title: '新消息' },
                         { field: 'createDate', title: '日期' },
-                        { field: 'menuId', title: '操作', toolbar: '<buttton class="layui-btn layui-btn-sm" lay-event="turnToMenu">查看</button>' }
+                        {
+                            field: 'readState', title: '状态', templet: function (data) {
+                                if (data.readState === 0) {
+                                    return '<span class="layui-badge">未读</span>';
+                                } else if (data.readState === 1) {
+                                    return '<span class="layui-badge layui-bg-green">已读</span>';
+                                }
+                            }
+                        },
+                        {
+                            field: 'menuId', title: '操作', templet: function () {
+                                return '<a href="javascript:void(0);" style="color:#01AAED;" lay-event="turnToMenu">查看</a>';
+                            }
+                        }
                     ]]
                 }));
                 layuiTable.on('tool(dataTable20190703120431)', function (obj) {
+                    if (obj.event === 'turnToMenu') {
+                        $scope.openMenuPage(obj.data.menuId);
+                        $scope.$apply();
+                    }
                 });
-            },
-            cancel: function () {
-                $scope.alarmLayer = undefined;
             }
         });
     };
     $realTime.regPool('newsAlarm', function () {
-        if ($scope.alarmLayer === undefined) {
-            $scope.newAlarm();
-        } else {
-            layuiTable.reload('20190703120431-checked', {});
-        }
+        $scope.newAlarm();
+        layuiTable.reload('20190703120431-checked', {});
     });
     $scope.$on("$destroy", function () {
         $realTime.cancel('newsAlarm');
@@ -347,6 +327,71 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             };
         }
     };
+
+    var username = $.cookie('username');
+    var password = $.cookie('password');
+    $scope.loginData = {
+        username: username == 'null' ? '' : username,
+        password: password == 'null' ? '' : password,
+        vercode: "",
+        rememberPassword: $.cookie('rememberPassword') === 'true',
+        rNum : Math.random()
+    };
+    $timeout(function () {
+        layuiForm.render('checkbox');
+    });
+    $scope.refreshVercode = function () {
+        $scope.loginData.rNum = Math.random();
+    };
+
+    /**
+     * 退出登陆的方法
+     */
+    $scope.logout = function () {
+        $myHttp.get('/session/logout').mySuccess(logoutCallback);
+        $realTime.cancelAll();
+    }
+
+    $scope.login = function () {
+        if ($('#rememberPassword').prop('checked')) {
+            $.cookie('username', $scope.loginData.username);
+            $.cookie('password', $scope.loginData.password);
+            $.cookie('rememberPassword', true);
+        } else {
+            $.cookie('username', null);
+            $.cookie('password', null);
+            $.cookie('rememberPassword', null);
+        }
+        $scope.loginData.password = new Hashes.SHA1().hex($scope.loginData.password);
+        $myHttp.post('/session/login', $scope.loginData).mySuccess(function (result) {
+            if (result.code === -1) {
+                $scope.loginData.rNum = Math.random();
+                $scope.loginData.password = '';
+                $scope.loginData.vercode = '';
+            } else if (result.code == 0) {
+                $scope.menus = [];
+                $scope.leftMenus = result.data.leftMenus;
+                var username = $.cookie('username');
+                var password = $.cookie('password');
+                $scope.loginData = {
+                    rNum: Math.random(),
+                    username: username == 'null' ? '' : username,
+                    password: password == 'null' ? '' : password,
+                    vercode: "",
+                    rememberPassword: $.cookie('rememberPassword') === 'true'
+                };
+                $timeout(function () {
+                    $('.layui-nav-bar').remove();
+                    layuiElement.render('nav');
+                    $('#login-page').removeClass('logout');
+                });
+                $realTime.regPool('newsAlarm', function () {
+                    $scope.newAlarm();
+                    layuiTable.reload('20190703120431-checked', {});
+                });
+            }
+        });
+    }
 });
 /**
  * 创建一个回调函数
@@ -358,8 +403,11 @@ var myCallback = function (callback) {
     return function (response, status, headers, config) {
         layuiLayer.close(index);
         //登录超时，退出登录
-        if (response.code === -10) {
+        if (response.code === -10 || response.code === -11) {
             logoutCallback();
+            if (response.code === -11) {
+                layuiLayer.alert('强制下线，原因：当前登录用户在其它地方登录。', { icon: 5 });
+            }
         }
             //用户无权限，无法操作，但需要后续处理
         else if (response.code === -9) {
@@ -387,8 +435,6 @@ var myCallback = function (callback) {
     }
 };
 myApp.factory('$realTime', function ($http) {
-    //版本表，记录等待池和版本号
-    var versionMap = {};
     //注册的监听池
     var regPoolMap = {};
     return {
@@ -398,9 +444,20 @@ myApp.factory('$realTime', function ($http) {
          * @callback 监听会调
          */
         regPool: function (poolName, callback) {
-            if ($.type(regPoolMap[poolName]) === 'undefined') {
-                regPoolMap[poolName] = callback;
+            if (regPoolMap[poolName] === undefined) {
+                regPoolMap[poolName] = {
+                    callback: callback,
+                    version: undefined,
+                    count: 1,
+                    wait:false
+                };
                 this.get(poolName);
+            } else {
+                regPoolMap[poolName].count++;
+                regPoolMap[poolName].version = undefined;
+                if (regPoolMap[poolName].wait === false) {
+                    this.get(poolName);
+                }
             }
         },
         /**
@@ -408,11 +465,16 @@ myApp.factory('$realTime', function ($http) {
          * @poolName 监听池名称
          */
         cancel: function (poolName) {
-            regPoolMap[poolName] = undefined;
+            if (regPoolMap[poolName].count > 0) {
+                regPoolMap[poolName].count--;
+            }
         },
-        //注销所有监听池
-        cancelAll:function(){
-            regPoolMap = {};
+        cancelAll: function () {
+            for (var key in regPoolMap) {
+                if (regPoolMap.hasOwnProperty(key) && regPoolMap[key].count>0) {
+                    regPoolMap[key].count--;
+                }
+            }
         },
         //对请求参数添加随机的v参数，避免缓存
         randomV: function (params) {
@@ -426,19 +488,30 @@ myApp.factory('$realTime', function ($http) {
         //使用get请求实时获取最新数据
         get: function (poolName) {
             var thiz = this;
-            $http({ method: 'GET', params: { v: Math.random() }, url: '/index/realTime', headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': versionMap[poolName] } })
+            regPoolMap[poolName].wait = true;
+            $http({ method: 'GET', params: { v: Math.random() }, url: '/index/realTime', headers: { 'Real-Time-Pool': poolName, 'Real-Time-Version': regPoolMap[poolName].version } })
             .success(function (response, status, headers, config) {
-                versionMap[poolName] = headers('Real-Time-Version');
-                if ($.type(regPoolMap[poolName]) === 'function') {
-                    if (response.code === -10) {
-                        poolName = null;
+                regPoolMap[poolName].wait = false;
+                regPoolMap[poolName].version = headers('Real-Time-Version');
+                if ($.type(regPoolMap[poolName]) === 'object') {
+                    if (regPoolMap[poolName].count === 0) {
+                        return;
+                    }
+                    if (response.code === -10 || response.code === -11) {
                         thiz.cancelAll();
                         logoutCallback();
+                        if (response.code === -11) {
+                            layuiLayer.alert('强制下线，原因：当前登录用户在其它地方登录。', { icon: 5 });
+                        }
+                        if (regPoolMap[poolName].count > 0) {
+                            regPoolMap[poolName].count--;
+                            thiz.get(poolName);
+                        }
                     } else if (response.code === 1) {
                         thiz.get(poolName);
                     } else if (response.code === 0) {
                         thiz.get(poolName);
-                        regPoolMap[poolName]();
+                        regPoolMap[poolName].callback();
                     }
                 }
                 thiz = null;
@@ -499,59 +572,6 @@ myApp.factory('$realTime', function ($http) {
             return ret;
         }
     };
-}).controller('login-form', function ($scope,$timeout) {
-    var username = $.cookie('username');
-    var password = $.cookie('password');
-    $scope.data = {
-        username: username == 'null' ? '' : username,
-        password: password == 'null' ? '' : password,
-        vercode: "",
-        rememberPassword: $.cookie('rememberPassword') === 'true'
-    };
-    $scope.refreshVercode = function () {
-        $scope.rNum = Math.random();
-    };
-    $timeout(function () {
-        //登录功能
-        layuiForm.on('submit(LAY-user-login-submit)', function () {
-            var $scope = $('[ng-controller="login-form"]').scope();
-            var tempData = $scope.data;
-            var data = {
-                username: tempData.username,
-                password: tempData.password,
-                vercode: tempData.vercode
-            };
-            if ($('#rememberPassword').prop('checked')) {
-                $.cookie('username', data.username);
-                $.cookie('password', data.password);
-                $.cookie('rememberPassword', true);
-            } else {
-                $.cookie('username', null);
-                $.cookie('password', null);
-                $.cookie('rememberPassword', null);
-            }
-            var SHA1 = new Hashes.SHA1();
-            data.username = SHA1.hex(data.username);
-            data.password = SHA1.hex(data.password);
-            $.myPost('/session/login', data, function (result) {
-                if (result.code == -1) {
-                    $scope.$apply(function () {
-                        $scope.rNum = Math.random();
-                        $scope.data.vercode = '';
-                    });
-                } else if (result.code == 0) {
-                    $scope = $('[ng-controller="main-body"]').scope();
-                    $scope.$apply(function () {
-                        $scope.leftMenus = result.data.leftMenus;
-                    });
-                    $('.layui-nav-bar').remove();
-                    layuiElement.render('nav');
-                    $('#login-page').removeClass('logout');
-                }
-            });
-        });
-        layuiForm.render('checkbox');
-    });
 }).directive('uploadExcel', function () {
     return {
         restrict: 'EA',
@@ -1195,19 +1215,8 @@ function areaAnalysis(width, height) {
  */
 function logoutCallback() {
     $('#login-page').addClass('logout');
+    layuiLayer.closeAll();
 }
-
-/**
- * 退出登陆的方法
- */
-function logout() {
-    $.myGet('/session/logout', logoutCallback);
-    var $scope = $('[ng-controller="login-form"]').scope();
-    $scope.data = null;
-    $scope.rNum = Math.random();
-    $scope.$apply();
-}
-
 
 /**
  * 使用post的方式打开一个新窗口

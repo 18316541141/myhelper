@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
   <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all"> 
   <style type="text/css">
+      .news-alarm> .layui-border-box{
+          margin:5px 5px 0;
+      }
 #login-page {
 	position: fixed;
 	width: 100%;
@@ -356,9 +359,9 @@
             </div>
         </script> 
  </head> 
- <body class="layui-layout-body"> 
+ <body class="layui-layout-body" ng-controller="main-body"> 
   <input type="password" id="out-screen-password"> 
-  <div class="layui-layout layui-layout-admin" ng-controller="main-body"> 
+  <div class="layui-layout layui-layout-admin"> 
    <div class="layui-header"> 
     <div class="layui-logo">
       layui 后台布局 
@@ -390,8 +393,11 @@
        <dd> 
         <a href="">安全设置</a> 
        </dd> 
+        <dd>
+            <a href="javascript:void(0);" ng-click="newAlarm();">最新消息</a>
+        </dd>
       </dl></li> 
-     <li class="layui-nav-item"><a href="javascript:logout();">退了</a></li> 
+     <li class="layui-nav-item"><a href="javascript:void(0);" ng-click="logout();">退了</a></li> 
     </ul> 
    </div> 
    <div class="layui-side layui-bg-black"> 
@@ -431,34 +437,34 @@
       <h2 style="color:white;">测试后台</h2> 
       <p style="color:white;">xxxxxxxxx运营商后台</p> 
      </div> 
-     <form ng-controller="login-form" class="layadmin-user-login-box layadmin-user-login-body layui-form"> 
+     <form class="layadmin-user-login-box layadmin-user-login-body layui-form"> 
       <div class="layui-form-item"> 
        <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label> 
-       <input type="text" name="username" ng-model="data.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
+       <input type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
       </div> 
       <div class="layui-form-item"> 
        <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label> 
-       <input type="password" name="password" ng-model="data.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
+       <input type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
       </div> 
       <div class="layui-form-item"> 
        <div class="layui-row"> 
         <div class="layui-col-xs7"> 
          <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label> 
-         <input type="text" name="vercode" ng-model="data.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
+         <input type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
         </div> 
         <div class="layui-col-xs5"> 
          <div style="margin-left: 10px;"> 
-          <img ng-click="refreshVercode()" ng-src="{{'/session/verificationCode?r='+rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode"> 
+          <img ng-click="refreshVercode()" ng-src="{{'/session/verificationCode?r='+loginData.rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode"> 
          </div> 
         </div> 
        </div> 
       </div> 
       <div class="layui-form-item" style="margin-bottom: 20px;"> 
-       <input type="checkbox" lay-skin="primary" title="记住密码" ng-model="data.rememberPassword" id="rememberPassword"> 
+       <input type="checkbox" lay-skin="primary" title="记住密码" ng-model="loginData.rememberPassword" id="rememberPassword"> 
        <a href="/user/forget" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;color:white;">忘记密码？</a> 
       </div> 
       <div class="layui-form-item"> 
-       <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit">登 入</button> 
+       <button class="layui-btn layui-btn-fluid" type="button" ng-click="login();" lay-filter="LAY-user-login-submit">登 入</button> 
       </div> 
      </form> 
     </div> 
