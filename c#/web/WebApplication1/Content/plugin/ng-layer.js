@@ -11,7 +11,7 @@
      *
      * @returns layer
      */
-    angular.module('ng-layer', []).factory('layer', function ($rootScope, $compile, $timeout, $q, $http) {
+    angular.module('ng-layer', []).factory('layer', function ($rootScope, $compile, $timeout, $q, $http,$window) {
         var layer = window.layer;
         var _open = layer.open;
         var _close = layer.close;
@@ -45,9 +45,8 @@
                     if ($.type(deliver.compileFinish) === 'function') {
                         deliver.compileFinish();
                     }
-                    $(window).resize();
+                    angular.element($window).resize();
                 });
-
                 return oldOpen;
             });
         };

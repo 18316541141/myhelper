@@ -1,10 +1,12 @@
-﻿using System;
+﻿using CommonHelper.Helper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsFormsApplication1.entity;
 
 namespace WindowsFormsApplication1.Service
 {
@@ -21,8 +23,11 @@ namespace WindowsFormsApplication1.Service
 
         DbTypeTransService _dbTypeTransService;
 
+        TemplateHelper _templateHelper;
+
         public SqlServerService(string dataSource,string initialCatalog,string userId,string password)
         {
+            _templateHelper = TemplateHelper.New("AllTemplate");
             DataSource = dataSource;
             InitialCatalog = initialCatalog;
             UserId = userId;
@@ -77,13 +82,75 @@ namespace WindowsFormsApplication1.Service
             {
                 throw new Exception("找不到该数据表！");
             }
+            Entity entity = new Entity
+            {
+                TableName= tableName,
+                EntityName= _nameTransService.UnderlineToBigHump(tableName),
+            };
             foreach (DataRow cl in dataTable.Rows)
             {
                 string colName=(string)cl.ItemArray[3];
-                _nameTransService.UnderlineToHump(colName);
                 string dbType = (string)cl.ItemArray[7];
-                string s=_dbTypeTransService.SqlType2EntityType(dbType);
+                entity.PropList.Add(new Prop
+                {
+                    ColName= colName,
+                    PropName = _nameTransService.UnderlineToBigHump(colName),
+                    PropType= _dbTypeTransService.SqlType2EntityType(dbType),
+                    PropNotes= commentMap[colName],
+                    ParamsType="equal"
+                });
             }
+            _templateHelper.EntityToStr(entity, "CSharpEntity");
+
+            Entity param = new Entity
+            {
+                TableName = tableName,
+                EntityName = _nameTransService.UnderlineToBigHump(tableName)+"Params",
+            };
+            foreach (DataRow cl in dataTable.Rows)
+            {
+                string colName = (string)cl.ItemArray[3];
+                string dbType = (string)cl.ItemArray[7];
+                entity.PropList.Add(new Prop
+                {
+                    ColName = colName,
+                    PropName = _nameTransService.UnderlineToBigHump(colName),
+                    PropType = _dbTypeTransService.SqlType2EntityType(dbType),
+                    PropNotes = commentMap[colName]
+                });
+                string paramsType=_dbTypeTransService.SqlType2ParamsType(dbType);
+                if (paramsType == "range")
+                {
+                    entity.PropList.Add(new Prop
+                    {
+                        ColName = colName,
+                        PropName = _nameTransService.UnderlineToBigHump(colName)+"Start",
+                        PropType = _dbTypeTransService.SqlType2EntityType(dbType),
+                        PropNotes = commentMap[colName],
+                        ParamsType="rangeStart"
+                    });
+                    entity.PropList.Add(new Prop
+                    {
+                        ColName = colName,
+                        PropName = _nameTransService.UnderlineToBigHump(colName) + "End",
+                        PropType = _dbTypeTransService.SqlType2EntityType(dbType),
+                        PropNotes = commentMap[colName],
+                        ParamsType = "rangeEnd"
+                    });
+                }
+                else if (paramsType == "like")
+                {
+                    entity.PropList.Add(new Prop
+                    {
+                        ColName = colName,
+                        PropName = _nameTransService.UnderlineToBigHump(colName) + "Like",
+                        PropType = _dbTypeTransService.SqlType2EntityType(dbType),
+                        PropNotes = commentMap[colName],
+                        ParamsType = "like"
+                    });
+                }
+            }
+            _templateHelper.EntityToStr(entity, "CSharpEntity");
             Console.WriteLine();
         }
     }

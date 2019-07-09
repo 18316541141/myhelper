@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="entity\Entity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +82,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonHelper\CommonHelper\CommonHelper.csproj">
+      <Project>{894851A0-8849-4F2F-8C14-936694B97F60}</Project>
+      <Name>CommonHelper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="AllTemplate\CSharpEntity.txt" />
+    <Content Include="AllTemplate\EFMapping.txt" />
+    <Content Include="AllTemplate\EFRepository.txt" />
+    <Content Include="AllTemplate\JavaEntity.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

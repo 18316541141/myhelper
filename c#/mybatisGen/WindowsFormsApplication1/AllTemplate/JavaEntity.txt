@@ -1,0 +1,17 @@
+﻿package web.template.entity.codeGenerator;
+
+import java.util.Date;
+/**
+ * $entity.EntityNotes$
+ */
+public class $entity.EntityName$ {
+	
+	public $entity.EntityName$() { }
+
+	$entity.PropList:{{
+		/**
+		 * $it.PropNotes$
+		 */
+		private $it.PropType$ $it.PropName$;
+	}}$
+}

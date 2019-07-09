@@ -30,5 +30,27 @@ namespace WindowsFormsApplication1.Service
             }
             return "";
         }
+
+        /// <summary>
+        /// sql类型转参数分布类型
+        /// </summary>
+        /// <param name="sqlType"></param>
+        /// <returns></returns>
+        public string SqlType2ParamsType(string sqlType)
+        {
+            if (sqlType == "int")
+            {
+                return "range";
+            }
+            else if (sqlType == "nvarchar" || sqlType == "varchar" || sqlType == "char")
+            {
+                return "like";
+            }
+            else if (sqlType == "datetime")
+            {
+                return "range";
+            }
+            return "";
+        }
     }
 }

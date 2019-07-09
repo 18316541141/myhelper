@@ -92,7 +92,7 @@ var layuiLaypage = layui.laypage;
             }
                 //常规错误，
             else if (result.code === -1) {
-                layuiLayer.msg(result.msg, { icon: 5, anim: 6 });
+                layuiLayer.msg(result.msg, { icon: 5, anim: 6, time:1000 });
                 callback(result, textStatus, req);
             }
                 //成功
@@ -152,7 +152,7 @@ var uploadCallback = function (callback) {
         }
             //常规错误，
         else if (response.code === -1) {
-            layuiLayer.msg(response.msg, { icon: 5, anim: 6 });
+            layuiLayer.msg(response.msg, { icon: 5, anim: 6, time: 1000 });
             callback(file, response);
         }
             //成功
@@ -166,10 +166,9 @@ var uploadCallback = function (callback) {
     }
 };
 /**
- * layui的datatable默认的配置，
- * 直接继承就可以使用了。
+ * layui的datatable默认的配置
  */
-var defaultDataTableParams = {
+layuiTable.set({
     autoSort: false,
     page: {
         layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
@@ -211,7 +210,7 @@ var defaultDataTableParams = {
         }
         return ret;
     }
-};
+});
 
 var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout, $realTime) {
     $scope.newAlarm = function () {
@@ -224,9 +223,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             title: '消息栏',
             area: ['450px', '320px'],
             success: function (layero, index) {
-                layuiTable.render($.extend(defaultDataTableParams, {
+                layuiTable.render({
                     elem: '#newsAlarmTable',
-                    height: 270,
+                    height: '270',
                     url: '/index/loadNewsAlarm',
                     id: '20190703120431-checked',
                     page: {
@@ -250,7 +249,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                             }
                         }
                     ]]
-                }));
+                });
                 layuiTable.on('tool(dataTable20190703120431)', function (obj) {
                     if (obj.event === 'turnToMenu') {
                         $scope.openMenuPage(obj.data.menuId);
@@ -428,7 +427,7 @@ var myCallback = function (callback) {
         }
             //常规错误，
         else if (response.code === -1) {
-            layuiLayer.msg(response.msg, { icon: 5, anim: 6 });
+            layuiLayer.msg(response.msg, { icon: 5, anim: 6, time: 1000 });
             callback(response, status, headers, config);
         }
             //成功
@@ -667,7 +666,7 @@ myApp.factory('$realTime', function ($http) {
                 layuiTable.reload($scope.id + '-checked', { page: { curr: 1 }, where: $scope.postData });
             });
             $timeout(function () {
-                layuiTable.render($.extend(defaultDataTableParams, {
+                layuiTable.render({
                     elem: '#data-table-' + $scope.id,
                     height: $scope.height,
                     url: $scope.url,
@@ -677,7 +676,7 @@ myApp.factory('$realTime', function ($http) {
                         $scope.$emit('done', res, curr, count);
                     },
                     cols: [$scope.cols]
-                }));
+                });
                 layuiTable.on('sort(dataTable' + $scope.id + ')', function (obj) {
                     if (obj.type === "asc") {
                         for(var key in $scope.postData){
