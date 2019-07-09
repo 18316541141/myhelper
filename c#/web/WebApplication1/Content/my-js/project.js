@@ -299,8 +299,15 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             menus[i - 1] = menus[i];
         }
         menus.length--;
+        if (menus.length == 0)
+            return;
         $timeout(function () {
-            layuiElement.render('tab', 'docDemoTabBrief');
+            var len = $('[lay-filter="docDemoTabBrief"] .layui-this').length;
+            if (len === 0) {
+                $('[data-menu-id="' + menus[0].id + '"]').click();
+            } else if (len > 1) {
+                $('[lay-filter="docDemoTabBrief"] .layui-this:eq(0)').click();
+            }
         });
     };
     
@@ -316,9 +323,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 break;
             }
         }
-        if (exist) {
-            $('[data-menu-id="' + id + '"]').click();
-        } else {
+        if (!exist) {
             var ret=$scope.findLeftMenuById(id);
             $scope.menus[$scope.menus.length] = {
                 title: ret.title,
@@ -326,6 +331,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
                 id: id
             };
         }
+        $timeout(function () {
+            $('[data-menu-id="' + id + '"]').click();
+        });
     };
 
     var username = $.cookie('username');
@@ -889,6 +897,120 @@ myApp.factory('$realTime', function ($http) {
             });
         }
     };
+}).directive('pieChart', function () {
+    return {
+        restrict: 'EA',
+        template: $('#pieChartTemplate').html(),
+        scope: { id: "@",title:"@" ,pieData:"="},
+        controller: function ($scope, $timeout) {
+            $timeout(function () {
+                Highcharts.chart('pieChart' + $scope.id, {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: $scope.title//'2018 年浏览器市场份额'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data:$scope.pieData /*[{
+                            name: 'Chrome',
+                            y: 61.41
+                        }, {
+                            name: 'Internet Explorer',
+                            y: 11.84
+                        }, {
+                            name: 'Firefox',
+                            y: 10.85
+                        }, {
+                            name: 'Edge',
+                            y: 4.67
+                        }, {
+                            name: 'Safari',
+                            y: 4.18
+                        }, {
+                            name: 'Other',
+                            y: 7.05
+                        }]*/
+                    }]
+                });
+            });
+        }
+    };
+}).directive('histogram', function () {
+    return {
+        restrict: 'EA',
+        template: $('#histogramTemplate').html(),
+        scope: { id: "@", title: "@",unit:"@", rowAxisTitle: "=", yAxisTitle: "=", histogramData: "=" },
+        controller: function ($scope, $timeout) {
+            $timeout(function () {
+                Highcharts.chart('histogram' + $scope.id, {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: $scope.title//'月平均降雨量'
+                    },
+                    xAxis: {
+                        categories: $scope.rowAxisTitle/*[
+                            '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
+                        ]*/,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: $scope.yAxisTitle//'降雨量 (mm)'
+                        }
+                    },
+                    tooltip: {
+                        // head + 每个 point + footer 拼接成完整的 table
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} ' + $scope.unit+ '</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            borderWidth: 0
+                        }
+                    },
+                    series: $scope.histogramData /*[{
+                        name: '东京',
+                        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+                    }, {
+                        name: '纽约',
+                        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+                    }, {
+                        name: '伦敦',
+                        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+                    }, {
+                        name: '柏林',
+                        data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+                    }]*/
+                });
+            });
+        }
+    };
 }).directive('treeForm', function () {
     /**
      * 注册树表单标签。
@@ -1396,4 +1518,40 @@ myApp.controller('addNewAlaram', function ($scope,$realTime) {
 
         });
     };
+});
+myApp.controller('testCharts', function ($scope) {
+    $scope.rowAxisTitle = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+    $scope.yAxisTitle = ['金额（元）'];
+    $scope.histogramData = [{
+        name: '乐车邦',
+        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+    }, {
+        name: '好车帮',
+        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+    }, {
+        name: '中国人寿',
+        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+    }, {
+        name: '法国人寿',
+        data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+    }];
+    $scope.pieData = [{
+        name: '乐车邦',
+        y: 61.41
+    }, {
+        name: '好车帮',
+        y: 11.84
+    }, {
+        name: '豪车邦',
+        y: 10.85
+    }, {
+        name: '4S店',
+        y: 4.67
+    }, {
+        name: '5S店',
+        y: 4.18
+    }, {
+        name: '美国交警网',
+        y: 7.05
+    }];
 });

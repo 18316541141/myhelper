@@ -26,6 +26,7 @@ namespace WebApplication1.Controllers
     public class IndexController : BaseController
     {
         SystemService _systemService;
+        RealTimeInitService _realTimeInitService;
 
         /// <summary>
         /// 上传文件所允许的路径
@@ -35,6 +36,7 @@ namespace WebApplication1.Controllers
         public IndexController()
         {
             _systemService = new SystemService();
+            _realTimeInitService = new RealTimeInitService();
             _allowPath = new HashSet<string>();
             _allowPath.Add("test");
         }
@@ -57,9 +59,15 @@ namespace WebApplication1.Controllers
         public JsonResult RealTime()
         {
             string realTimePool = Convert.ToString(Request.Headers["Real-Time-Pool"]);
+            string realTimeVersion = Request.Headers["Real-Time-Version"];
             Response.AddHeader("Real-Time-Pool", realTimePool);
             string newestVersion;
-            if (ThreadHelper.CompareControllerVersion(realTimePool, Convert.ToString(Request.Headers["Real-Time-Version"]), out newestVersion))
+            bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
+            if (realTimeVersion == null)
+            {
+                initRet = _realTimeInitService.Init(realTimePool, User.Identity.Name);
+            }
+            if (initRet)
             {
                 ThreadHelper.BatchWait(realTimePool, 60000);
                 Response.AddHeader("Real-Time-Version", newestVersion);

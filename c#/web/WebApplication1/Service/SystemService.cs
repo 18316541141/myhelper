@@ -146,6 +146,13 @@ namespace WebApplication1.Service
                 title = "测试1"
             };
             List<LeftMenu> leftMenuList11 = new List<LeftMenu>();
+            LeftMenu leftMenuCharts = new LeftMenu
+            {
+                id = "312",
+                title = "统计图",
+                url = "menus/testMenus1/charts.html"
+            };
+            leftMenuList11.Add(leftMenuCharts);
             LeftMenu leftMenuNewAlarm = new LeftMenu
             {
                 id="n11",

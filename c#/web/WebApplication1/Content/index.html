@@ -41,12 +41,6 @@
 #login-page .layui-form-checkbox[lay-skin=primary] span {
 	color: #fff;
 }
-/* 屏幕外的密码 */
-#out-screen-password {
-	position: fixed;
-	left: -10086px;
-}
-
 .main-content {
 	position: absolute;
 	bottom: 0;
@@ -259,6 +253,12 @@
   <script type="text/template" id="pageTemplate">
             <div id="page{{id}}"></div>
         </script> 
+    <script type="text/template" id="histogramTemplate">
+        <div id="histogram{{id}}"></div>
+    </script>
+     <script type="text/template" id="pieChartTemplate">
+         <div id="pieChart{{id}}"></div>
+     </script>
   <script type="text/template" id="areaSelectTemplate">
             <div ng-if="type=='line'">
                 <div class="layui-inline" ng-show="deep >= 0">
@@ -359,14 +359,14 @@
             </div>
         </script> 
  </head> 
- <body class="layui-layout-body" ng-controller="main-body"> 
-  <input type="password" id="out-screen-password"> 
+ <body class="layui-layout-body" ng-controller="main-body">
+    <!-- 头部菜单 -->
   <div class="layui-layout layui-layout-admin"> 
    <div class="layui-header"> 
     <div class="layui-logo">
       layui 后台布局 
     </div> 
-    <!-- 头部区域（可配合layui已有的水平导航） --> 
+    <!-- 头部左侧菜单 --> 
     <ul class="layui-nav layui-layout-left"> 
      <li class="layui-nav-item"><a href="">控制台</a></li> 
      <li class="layui-nav-item"><a href="">商品管理</a></li> 
@@ -384,6 +384,7 @@
        </dd> 
       </dl></li> 
     </ul> 
+    <!-- 头部右侧菜单 -->
     <ul class="layui-nav layui-layout-right"> 
      <li class="layui-nav-item"><a href="javascript:;"> <img src="" class="layui-nav-img"> 用户 </a> 
       <dl class="layui-nav-child"> 
@@ -400,9 +401,9 @@
      <li class="layui-nav-item"><a href="javascript:void(0);" ng-click="logout();">退了</a></li> 
     </ul> 
    </div> 
+    <!-- 左侧导航区域（可配合layui已有的垂直导航） --> 
    <div class="layui-side layui-bg-black"> 
     <div class="layui-side-scroll"> 
-     <!-- 左侧导航区域（可配合layui已有的垂直导航） --> 
      <ul class="layui-nav layui-nav-tree" lay-filter="left-menus"> 
       <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0"><a href="javascript:;" ng-bind="x.title"></a> 
        <dl class="layui-nav-child"> 
@@ -415,21 +416,23 @@
      </ul> 
     </div> 
    </div> 
-   <div class="layui-body"> 
     <!-- 内容主体区域 --> 
+   <div class="layui-body"> 
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"> 
      <ul class="layui-tab-title"> 
-      <li ng-repeat="x in menus" data-menu-id="{{x.id}}" class="{{$last ? 'layui-this':''}}">{{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
+      <li ng-repeat="x in menus" data-menu-id="{{x.id}}" ng-class="{true:'layui-this',false:''}[$last]">{{x.title}} <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item {{$last ? 'layui-show':''}}" ng-include="x.url+'?v=20190703120431'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]"  ng-include="x.url+'?v=20190703120431'"></div> 
      </div> 
     </div> 
    </div> 
+    <!-- 底部模块 -->
    <div class="layui-footer">
      © layui.com - 底部固定区域 
    </div> 
   </div> 
+    <!-- 登录页 -->
   <div id="login-page"> 
    <div class="layadmin-user-login layadmin-user-display-show"> 
     <div class="layadmin-user-login-main"> 
@@ -484,6 +487,13 @@
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
   <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
   <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
+    <!--[if lt IE 9]>
+    <script src="plugin/Highcharts-7.1.2/code/modules/oldie-polyfills.js"></script>
+    <![endif]-->
+  <script src="plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
+     <!--[if lt IE 9]>
+    <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
+    <![endif]-->
   <script src="my-js/project.js?v=20190703120431" charset="utf-8"></script> 
  </body>
 </html>
