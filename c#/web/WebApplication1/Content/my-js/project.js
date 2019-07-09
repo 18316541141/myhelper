@@ -857,6 +857,7 @@ myApp.factory('$realTime', function ($http) {
                 }).on('uploadProgress', function (file, percentage) {
                     layuiElement.progress('upload-img-progress', (percentage * 100).toFixed(2) + '%');
                 }).on('uploadSuccess', uploadCallback(function (file, response) {
+                    debugger;
                     if (response.code === 0) {
                         if ($scope.cut === 'true') {
                             var data = response.data;
@@ -871,14 +872,18 @@ myApp.factory('$realTime', function ($http) {
                                     $scope.crop();
                                 },
                                 compileFinish: function () {
-                                    var wait=layuiLayer.load(0);
-                                    $scope.$img = $('#' + $scope.name + '-crop').attr('src', '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName).on('load', function () {
+                                    var wait = layuiLayer.load(0);
+                                    debugger;
+                                    $scope.$img=document.getElementById($scope.name + '-crop');
+                                    $scope.$img.onload = function () {
+                                        debugger;
                                         layuiLayer.close(wait);
                                         $(this).Jcrop({ allowSelect: false }, function () {
                                             this.setSelect([0, 0, 250, 300]);
                                             $scope.jcropApi = this
                                         });
-                                    });
+                                    };
+                                    $scope.$img.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
                                 }
                             });
                         }
