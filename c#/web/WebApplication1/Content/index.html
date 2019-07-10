@@ -55,18 +55,21 @@
 	top: 1px;
 	padding: 9px 15px;
 }
-
+.tree-container{
+    position:relative;
+}
 .tree-container>.left-tree {
-	float: left;
 	width: 200px;
-	position: relative;
+	position: absolute;
 	animation-name: fadeInLeft;
 	animation-duration: .3s;
 	animation-timing-function: linear;
 }
 
 .tree-container>.right-content {
-	float: left;
+    position:absolute;
+    left:200px;
+    right:0;
 	animation-name: fadeInRight;
 	animation-duration: .3s;
 	animation-timing-function: linear;
@@ -173,13 +176,13 @@
 </style>
   <script type="text/template" id="cropTemplate">
             <div class="layer-body">
-                <form id="{{name}}-crop-form" class="layui-form">
-                    <img style="max-width:100%;" id="{{name}}-crop" />
+                <form id="{{id}}-crop-form" class="layui-form">
+                    <img style="max-width:100%;" id="{{id}}-crop" />
                 </form>
             </div>
             <div class="layer-foot">
                 <div class="layui-inline">
-                    <div class="layui-input-inline"><button id="{{name}}-crop-btn" class="layui-btn" type="button" ng-click="crop()">裁剪</button></div>
+                    <div class="layui-input-inline"><button id="{{id}}-crop-btn" class="layui-btn" type="button" ng-click="crop()">裁剪</button></div>
                 </div>
             </div>
         </script>
@@ -202,10 +205,10 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">上传图片</label>
                 <div class="layui-input-block">
-                    <div id="{{name}}Id">选择图片</div>
+                    <div id="uploadImage{{id}}">选择图片</div>
                 </div>
             </div>
-            <div ng-show="isUploaded" class="layui-form-item show-image" id="{{name}}-show-area">
+            <div ng-show="isUploaded" class="layui-form-item show-image">
                 <label class="layui-form-label">预览</label>
                 <div class="layui-input-block">
                     <img style="max-width:100%;" ng-src="{{'/index/showImage?pathName='+path+'&imgName='+imgName}}" class="thumbnail-img"/>
@@ -241,7 +244,7 @@
             <div id="data-table-{{id}}" lay-filter="dataTable{{id}}"></div>
         </script>
         <script type="text/template" id="treeFormTemplate">
-            <div class="tree-container layui-clear">
+            <div class="tree-container">
                 <div class="left-tree">
                     <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()"/>
                     <div class="left-tree-contain">
@@ -409,7 +412,7 @@
       <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0"><a href="javascript:;" ng-bind="x.title"></a> 
        <dl class="layui-nav-child"> 
         <dd ng-repeat="y in x.leftMenus" ng-click="openMenuPage(y.id);"> 
-         <a href="javascript:void(0);"  ng-bind="y.title"></a> 
+         <a href="javascript:void(0);" ng-bind="y.title"></a> 
         </dd> 
        </dl></li> 
       <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0"><a href="javascript:;" ng-bind="x.title"></a></li> 
@@ -424,7 +427,7 @@
       <li ng-repeat="x in menus" data-menu-id="{{x.id}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]"  ng-include="x.url+'?v=20190703120431'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190710174856'"></div> 
      </div> 
     </div> 
    </div> 
@@ -495,6 +498,6 @@
      <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
     <![endif]-->
-  <script src="my-js/project.js?v=20190703120431" charset="utf-8"></script> 
+  <script src="my-js/project.js?v=20190710174856" charset="utf-8"></script> 
  </body>
 </html>

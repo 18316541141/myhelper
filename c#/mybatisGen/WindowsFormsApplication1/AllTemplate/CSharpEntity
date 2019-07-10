@@ -10,12 +10,13 @@ namespace WebApplication1.Entity
     public partial class $entity.EntityName$
     {
         public $entity.EntityName$() { }
-	$entity.PropList:{{
+	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
 
 		/// <summary>
 		/// $it.PropNotes$
 		/// </summary>
 		public virtual $it.PropType$ $it.PropName$ { set; get; }
-	}}$
+	$endif$}$
     }
 }

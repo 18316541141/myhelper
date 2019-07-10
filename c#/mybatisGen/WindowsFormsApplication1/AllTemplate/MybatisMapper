@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.template.mapper.$entity.EntityName$Mapper">
+    <resultMap type="$entity.EntityName$" id="$entity.EntityName$Map">
+    	<id property="$entity.KeyName$" column="$entity.KeyCol$"/>
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+		<result property="$it.PropName$" column="$it.ColName$"/>
+	$endif$
+}$
+    </resultMap>
+    <sql id="colNames">
+$entity.PropList:{{
+	$if(it.ParamsTypeIsEqual)$
+		$it.ColName$
+	$endif$
+}};separator=","$
+    </sql>
+    <sql id="insertParamPart">
+    	insert into $entity.TableName$(
+    		<include refid="colNames"></include>
+    	)values
+    </sql>
+    <sql id="insertValPart">
+    	(
+	$entity.PropList:{{
+		$if(it.ParamsTypeIsEqual)$
+			#{$it.PropName$}
+		$endif$
+	}};separator=","$
+    	)
+    </sql>
+    <insert id="insert" parameterType="$entity.EntityName$">
+    	<include refid="insertParamPart"></include>
+    	<include refid="insertValPart"></include>
+    </insert>
+	
+	<insert id="insertList" parameterType="List">
+		<include refid="insertParamPart"></include>
+		<foreach collection="list" item="item" index="index" separator=",">
+			<include refid="insertValPart"></include>
+		</foreach>
+	</insert>
+	
+	<delete id="delete">
+		delete from $entity.TableName$ where $entity.KeyCol$=#{key}
+	</delete>
+	
+	<delete id="deleteList">
+		delete from $entity.TableName$ where $entity.KeyCol$ in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+	</delete>
+	
+	
+	<delete id="deleteByParams" parameterType="$entity.EntityName$Params">
+		delete from $entity.TableName$
+		<where>
+	$entity.PropList:{
+		$if(it.ParamsTypeIsEqual)$
+			<if test="$it.PropName$!=null">AND $it.ColName$=#{$it.PropName$}</if>
+		$elseif(it.ParamsTypeIsRangeStart)$
+			<if test="$it.PropName$!=null">AND $it.ColName$ &gt;= #{$it.PropName$}</if>
+		$elseif(it.ParamsTypeIsRangeEnd)$
+			<if test="$it.PropName$!=null">AND $it.ColName$ &lt;= #{$it.PropName$}</if>
+		$elseif(it.ParamsTypeIsLike)$
+			<if test="$it.PropName$!=null">AND $it.ColName$ like '%'+#{$it.PropName$}+'%'</if>
+		$endif$
+	}$
+		</where>
+	</delete>
+	
+	<select id="findEntity" resultMap="$entity.EntityName$Map">
+		select 
+			<include refid="colNames"></include>
+		from $entity.TableName$ where $entity.KeyCol$=#{key}
+	</select>
+	
+	<sql id="selectWherePart">
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+		<if test="$it.PropName$!=null">AND $it.ColName$=#{$it.PropName$}</if>
+	$elseif(it.ParamsTypeIsRangeStart)$
+		<if test="$it.PropName$!=null">AND $it.ColName$ &gt;= #{$it.PropName$}</if>
+	$elseif(it.ParamsTypeIsRangeEnd)$
+		<if test="$it.PropName$!=null">AND $it.ColName$ &lt;= #{$it.PropName$}</if>
+	$elseif(it.ParamsTypeIsLike)$
+		<if test="$it.PropName$!=null and $it.PropName$!=''">AND $it.ColName$ like '%'+#{$it.PropName$}+'%'</if>
+	$endif$
+}$
+	</sql>
+	
+	<select id="findEntityByParams" resultMap="$entity.EntityName$Map">
+		select 
+			<include refid="colNames"></include>
+		from $entity.TableName$
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+	    		<when test="params.orderByDesc!=null">
+			$entity.PropList:{
+				$if(it.ParamsTypeIsEqual)$
+					<if test="params.orderByDesc.$it.PropName$">$it.ColName$ DESC,</if>
+				$endif$
+			}$
+	    		</when>
+	    		<otherwise>$entity.KeyCol$ DESC,</otherwise>
+	    	</choose>
+	    	<if test="params.orderByAsc!=null">
+		$entity.PropList:{
+			$if(it.ParamsTypeIsEqual)$
+				<if test="params.orderByDesc.$it.PropName$">$it.ColName$ ASC,</if>
+			$endif$
+		}$
+	    	</if> 
+    	</trim>
+	</select>
+	
+	<select id="count" resultType="long" parameterType="$entity.EntityName$Params">
+		select count($entity.KeyCol$) from $entity.TableName$
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</select>
+	
+	<select id="findAllByParams" resultMap="$entity.EntityName$Map">
+		select 
+			<include refid="colNames"></include>
+		from $entity.TableName$
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+	    		<when test="params.orderByDesc!=null">
+			$entity.PropList:{
+				$if(it.ParamsTypeIsEqual)$
+					<if test="params.orderByDesc.$it.PropName$">$it.ColName$ DESC,</if>
+				$endif$
+			}$
+	    		</when>
+	    		<otherwise>$entity.KeyCol$ DESC,</otherwise>
+	    	</choose>
+	    	<if test="params.orderByAsc!=null">
+		$entity.PropList:{
+			$if(it.ParamsTypeIsEqual)$
+				<if test="params.orderByAsc.$it.PropName$">$it.ColName$ ASC,</if>
+			$endif$
+		}$
+	    	</if> 
+    	</trim>
+	</select>
+	
+	<update id="updateAll" parameterType="$entity.EntityName$">
+		update $entity.TableName$ set
+	$entity.PropList:{{
+		$if(it.ParamsTypeIsEqual)$
+			$it.ColName$=#{$it.PropName$}
+		$endif$
+	}};separator=","$
+		where $entity.KeyCol$=#{$entity.KeyName$}
+	</update>
+	
+	<update id="updateChange" parameterType="$entity.EntityName$">
+		update $entity.TableName$
+		<set>
+	$entity.PropList:{
+		$if(it.ParamsTypeIsEqual)$
+			<if test="$it.PropName$!=null">$it.ColName$=#{$it.PropName$},</if>
+		$endif$
+	}$
+		</set>
+		where $entity.KeyCol$=#{$entity.KeyName$}
+	</update>
+
+	<select id="findListByParams" resultMap="$entity.EntityName$Map">
+		select
+			<include refid="colNames"></include>
+		from $entity.TableName$ where $entity.KeyCol$ in(
+			select b.$entity.KeyCol$ from(
+			select $entity.KeyCol$,ROW_NUMBER() OVER(Order by
+	    	<trim suffixOverrides=",">
+				<choose>
+		    		<when test="params.orderByDesc!=null"> 
+				$entity.PropList:{
+					$if(it.ParamsTypeIsEqual)$
+						<if test="params.orderByDesc.$it.PropName$">$it.ColName$ DESC,</if>
+					$endif$
+				}$
+		    		</when>
+		    		<otherwise>$entity.KeyCol$ DESC,</otherwise>
+		    	</choose>
+		    	<if test="params.orderByAsc!=null">
+			$entity.PropList:{
+				$if(it.ParamsTypeIsEqual)$
+					<if test="params.orderByAsc.$it.PropName$">$it.ColName$ ASC,</if>
+				$endif$
+			}$
+		    	</if> 
+	    	</trim>
+			) AS RowId
+			from $entity.TableName$
+			<where>
+				$entity.PropList:{
+					$if(it.ParamsTypeIsEqual)$
+						<if test="$it.PropName$!=null">AND $it.ColName$=#{params.$it.PropName$}</if>
+					$elseif(it.ParamsTypeIsRangeStart)$
+						<if test="$it.PropName$!=null">AND $it.ColName$ &gt;= #{params.$it.PropName$}</if>
+					$elseif(it.ParamsTypeIsRangeEnd)$
+						<if test="$it.PropName$!=null">AND $it.ColName$ &lt;= #{params.$it.PropName$}</if>
+					$elseif(it.ParamsTypeIsLike)$
+						<if test="$it.PropName$!=null and $it.PropName$!=''">AND $it.ColName$ like '%'+#{params.$it.PropName$}+'%'</if>
+					$endif$
+				}$
+			</where>) b
+			where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and #{currentPageIndex}*#{pageSize}
+		)
+	</select>
+</mapper>

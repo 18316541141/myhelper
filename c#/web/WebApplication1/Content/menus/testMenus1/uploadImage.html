@@ -3,6 +3,15 @@
 </fieldset>
 <div ng-controller="upload-image">
     <form class="layui-form">
-        <div upload-image name="asdfg" path="test" cut="true"></div>
+        <!--
+            上传图片的组件
+            id：上传图组件的唯一id
+            path：上传的路径（可能项目有多个上传路径，每个功能一个路径，用于区分）
+            cut：是否需要裁剪
+            img-name： 这是和父controller共用的数据，用于表示上传后的图片名称
+            thumbnail-name： 这是和父controller共用的数据，用于表示上传后的缩略图名称
+        -->
+        <div upload-image id="asdfg" path="test" cut="false" img-name="imgName" thumbnail-name="thumbnailName"></div>
+        <button type="button" class="layui-btn" ng-click="testImg();">测试</button>
     </form>
 </div>

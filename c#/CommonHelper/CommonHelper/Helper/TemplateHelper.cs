@@ -32,6 +32,7 @@ namespace CommonHelper.Helper
             _smallTemplatePath = smallTemplatePath;
             _attrRendererMap = new Dictionary<string, Dictionary<Type, IAttributeRenderer>>();
             _cache = new Dictionary<string, string>();
+            Directory.CreateDirectory(_templateBasePath);
             foreach (string file in Directory.GetFiles(_templateBasePath))
                 _cache.Add(new FileInfo(file).Name,File.ReadAllText(file));
             foreach (string path in Directory.GetDirectories(_templateBasePath,"*.*",SearchOption.AllDirectories))
@@ -48,13 +49,13 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 把实体的数据融合到模板中，并返回融合结果
+        /// 把实体的数据融合到模板中，并返回融合结果，会把数据整合为一行，减少空间占用
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity">实体类</param>
         /// <param name="templateNames">模板名称，可以有多级，多级用“.”分隔，对于小模板只需提供节点名称就可以了</param>
         /// <returns></returns>
-        public string EntityToStr<T>(T entity,string templateName)
+        public string EntityToRow<T>(T entity,string templateName)
         {
             StringBuilder templateSb = new StringBuilder();
             foreach (string row in _cache[templateName].Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
@@ -67,6 +68,22 @@ namespace CommonHelper.Helper
             return stringTemplate.ToString().Trim();
         }
 
+        /// <summary>
+        /// 把实体的数据融合到模板中，并返回融合结果，会保留数据的空格，换行，减少空间占用
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity">实体类</param>
+        /// <param name="templateNames">模板名称，可以有多级，多级用“.”分隔，对于小模板只需提供节点名称就可以了</param>
+        /// <returns></returns>
+        public string EntityToStr<T>(T entity, string templateName)
+        {
+            StringTemplate stringTemplate = new StringTemplate(_cache[templateName]);
+            if (_attrRendererMap.ContainsKey(templateName))
+                foreach (KeyValuePair<Type, IAttributeRenderer> keyVal in _attrRendererMap[templateName])
+                    stringTemplate.RegisterRenderer(keyVal.Key, keyVal.Value);
+            stringTemplate.SetAttribute("entity", entity);
+            return stringTemplate.ToString().Trim();
+        }
 
         /// <summary>
         /// 把实体的数据融合到模板中，并返回融合结果
@@ -76,7 +93,7 @@ namespace CommonHelper.Helper
         /// <param name="templateName"></param>
         /// <returns></returns>
         public JObject EntityToJObject<T>(T entity,string templateName)=>
-            JObject.Parse(EntityToStr<T>(entity, templateName));
+            JObject.Parse(EntityToRow<T>(entity, templateName));
 
         /// <summary>
         /// 创建一个模板帮助类

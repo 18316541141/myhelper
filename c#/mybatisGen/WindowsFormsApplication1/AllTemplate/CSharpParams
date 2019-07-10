@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using WebApplication1.Params.codeGenerator;
+
+namespace WebApplication1.Params
+{
+    /// <summary>
+    /// $entity.EntityNotes$
+    /// </summary>
+    public class $entity.EntityName$Params
+    {
+    $entity.PropList:{
+
+	    /// <summary>
+	    /// $it.PropNotes$
+	    /// </summary>
+	    public $it.PropType$ $it.PropName$ { set; get; }
+    }$
+		/// <summary>
+	    /// 升序排序
+	    /// </summary>
+        public $entity.EntityName$OrderBy orderByAsc { set; get; }
+
+		/// <summary>
+	    /// 降序排序
+	    /// </summary>
+        public $entity.EntityName$OrderBy orderByDesc { set; get; }
+    }
+}

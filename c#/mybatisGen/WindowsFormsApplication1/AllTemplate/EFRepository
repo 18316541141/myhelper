@@ -1,0 +1,148 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using WebApplication1.Entity;
+using WebApplication1.MyExtensions;
+using WebApplication1.Params;
+using WebApplication1.Params.codeGenerator;
+namespace WebApplication1.Repository
+{
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$>
+    {
+        IQueryable<$entity.EntityName$> Query(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params args)
+        {
+            if (args != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (args.$it.PropName$ != null)
+				{
+					query = query.Where(a => a.$it.SrcPropName$ == args.$it.PropName$);
+				}
+			$elseif(it.ParamsTypeIsRangeStart)$
+
+				if (args.$it.PropName$ != null)
+                {
+                    query = query.Where(a => a.$it.SrcPropName$ >= args.$it.PropName$);
+                }
+			$elseif(it.ParamsTypeIsRangeEnd)$
+
+				if (args.$it.PropName$ != null)
+                {
+                    query = query.Where(a => a.$it.SrcPropName$ <= args.$it.PropName$);
+                }
+			$elseif(it.ParamsTypeIsLike)$
+
+				if (!string.IsNullOrEmpty(args.$it.PropName$))
+                {
+                    query = query.Where(a => a.$it.SrcPropName$.Contains(args.$it.PropName$));
+                }
+			$endif$}$
+            }
+            return query;
+        }
+
+        IQueryable<$entity.EntityName$> OrderByAsc(IQueryable<$entity.EntityName$> query, $entity.EntityName$OrderBy orderBy)
+        {
+            if (orderBy != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (orderBy.$it.PropName$) { query = query.OrderBy(a => a.$it.PropName$); }
+			$endif$}$
+            }
+            return query;
+        }
+
+        IQueryable<$entity.EntityName$> OrderByDesc(IQueryable<$entity.EntityName$> query, $entity.EntityName$OrderBy orderBy)
+        {
+            if (orderBy != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (orderBy.$it.PropName$) { query = query.OrderByDescending(a => a.$it.PropName$); }
+			$endif$}$
+            }
+            else
+            {
+                query = query.OrderByDescending(a => a.$entity.KeyName$);
+            }
+            return query;
+        }
+
+        public MyPagedList<$entity.EntityName$> BigPageList($entity.EntityName$Params args, int pageIndex, int pageSize)
+        {
+            using (MyDbContext myDbContext = new MyDbContext())
+            {
+                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), $entity.EntityName$Params);
+                query = OrderByAsc(query, args.orderByAsc);
+                query = OrderByDesc(query, args.orderByDesc);
+                int totalItemCount = query.Count();
+                query = query.Skip((pageIndex-1) * pageSize);
+                List<$entity.EntityName$> pageDataList = new List<$entity.EntityName$>();
+                for (int i=0, partCount = (pageSize - pageSize % 1000) / pageSize + 1; i<partCount ;i++)
+                {
+                    pageDataList.AddRange(query.Skip(i * 1000).Take(1000).ToList());
+                }
+                return new MyPagedList<$entity.EntityName$>
+                {
+                    currentPageIndex = pageIndex,
+                    pageDataList = pageDataList,
+                    totalItemCount = totalItemCount,
+                    pageSize = pageSize,
+                    totalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
+                    startItemIndex = (pageSize - 1) * pageIndex + 1,
+                    endItemIndex = pageSize * pageIndex
+                };
+            }
+        }
+
+        public MyPagedList<$entity.EntityName$> PageList($entity.EntityName$Params args, int pageIndex, int pageSize)
+        {
+            using (MyDbContext myDbContext = new MyDbContext())
+            {
+                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), args);
+                query = OrderByAsc(query, args.orderByAsc);
+                query = OrderByDesc(query, args.orderByDesc);
+                return query.ToMyPagedList(pageIndex, pageSize);
+            }
+        }
+
+        public int Count($entity.EntityName$Params args)
+        {
+            using (MyDbContext myDbContext = new MyDbContext())
+            {
+                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), args);
+                return query.Count();
+            }
+        }
+        
+        public List<$entity.EntityName$> FindList($entity.EntityName$Params args = null)
+        {
+            using (MyDbContext myDbContext = new MyDbContext())
+            {
+                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), args);
+                return query.ToList();
+            }
+        }
+
+        public int UpdateChange($entity.EntityName$ entity)
+        {
+            using (MyDbContext myDbContext = new MyDbContext())
+            {
+                $entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
+                myDbContext.$entity.EntityNames$.Attach(updateBefore);
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (entity.$it.PropName$ != null)
+				{
+					updateBefore.$it.PropName$ = entity.$it.PropName$;
+				}
+			$endif$}$
+                return myDbContext.SaveChanges();
+            }
+        }
+    }
+}

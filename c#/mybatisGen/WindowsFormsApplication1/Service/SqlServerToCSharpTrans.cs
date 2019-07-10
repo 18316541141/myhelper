@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApplication1.Service
 {
-    public class DbTypeTransService
+    public class SqlServerToCSharpTrans: IDbTypeTrans
     {
         /// <summary>
         /// sql类型转实体类型
@@ -32,7 +32,7 @@ namespace WindowsFormsApplication1.Service
         }
 
         /// <summary>
-        /// sql类型转参数分布类型
+        /// 根据sql类型判断传参的类型：range（模糊搜索时可以传入范围条件）、like（模糊搜索时可以传入like条件）
         /// </summary>
         /// <param name="sqlType"></param>
         /// <returns></returns>

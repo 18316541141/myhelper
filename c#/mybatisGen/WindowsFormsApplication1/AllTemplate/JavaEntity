@@ -8,10 +8,12 @@ public class $entity.EntityName$ {
 	
 	public $entity.EntityName$() { }
 
-	$entity.PropList:{{
+$entity.PropList:{{
+	$if(it.ParamsTypeIsEqual)$
 		/**
 		 * $it.PropNotes$
 		 */
 		private $it.PropType$ $it.PropName$;
-	}}$
+	$endif$
+}}$
 }

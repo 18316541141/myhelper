@@ -1,0 +1,15 @@
+﻿package web.template.entity.params.codeGenerator;
+/**
+ * $entity.EntityNotes$
+ */
+public class $entity.EntityName$OrderBy {
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+
+		/**
+		 * $it.PropNotes$
+		 */
+		private boolean $it.PropName$;
+	$endif$
+}$
+}

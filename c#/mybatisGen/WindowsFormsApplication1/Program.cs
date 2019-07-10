@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApplication1.entity;
 using WindowsFormsApplication1.Service;
 
 namespace WindowsFormsApplication1
@@ -18,13 +19,20 @@ namespace WindowsFormsApplication1
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            SqlServerService sqlServerService = new SqlServerService(
-                "183.2.233.235",
-                "BusinessAssistantDB_Test",
-                "BusinessHeplerTestManager",
-                "BusinessHeplerTestManager123"
-            );
-            sqlServerService.sssa("IRobot_QrCodePayTask");
+
+            GenEntityService genEntityService = new GenEntityService
+            {
+                NameTrans=new RobotNameTrans(),
+                DbTypeTrans=new SqlServerToCSharpTrans(),
+                SqlInfo=new SqlServerInfo(
+                    "183.2.233.235",
+                    "BusinessAssistantDB_Test",
+                    "BusinessHeplerTestManager",
+                    "BusinessHeplerTestManager123")
+            };
+            Entity entity=genEntityService.GenTemplateEntity("IRobot_QrCodePayTask");
+            EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
+            entityTemplateToCode.EntityFrameworkCode(entity);
         }
     }
 }

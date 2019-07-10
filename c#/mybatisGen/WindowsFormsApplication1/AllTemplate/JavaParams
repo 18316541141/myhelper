@@ -1,0 +1,25 @@
+﻿package web.template.entity.params.codeGenerator;
+import java.util.Date;
+/**
+ * $entity.EntityNotes$
+ */
+public class $entity.EntityName$Params {
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+
+		/**
+		 * $it.PropNotes$
+		 */
+		private $it.PropType$ $it.PropName$;
+	$endif$
+}$
+	/**
+	 * 升序排列
+	 */
+	private $entity.EntityName$OrderBy orderByAsc;
+
+	/**
+	 * 降序排列
+	 */
+	private $entity.EntityName$OrderBy orderByDesc;
+}

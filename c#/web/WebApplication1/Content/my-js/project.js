@@ -809,13 +809,14 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadImageTemplate').html(),
-        scope: { name: "@", path: "@", cut: "@"},
+        scope: { id: "@", path: "@", cut: "@", imgName: "=", thumbnailName:"="},
         controller: function ($scope, layer, $timeout, $myHttp) {
+            debugger;
             $scope.isUploaded = false;
             $scope.showProgress = false;
             $scope.crop = function () {
                 var select = $scope.jcropApi.tellSelect();
-                var $img = $scope.$img;
+                var $img = $($scope.img);
                 $myHttp.post('/index/singleImageCrop',{
                     pathName: $scope.path, 
                     imgName: $scope.imgName,
@@ -842,7 +843,7 @@ myApp.factory('$realTime', function ($http) {
                     formData: { pathName: $scope.path },//每次上传时要提供一个上传目录，让服务端确认保存位置
                     duplicate: true,
                     pick: {
-                        id: '#' + $scope.name + 'Id',//生成上传插件的位置
+                        id: '#uploadImage' + $scope.id,//生成上传插件的位置
                         multiple:false //每次只能选一个文件
                     },
                     //允许上传的图片格式后缀
@@ -857,11 +858,10 @@ myApp.factory('$realTime', function ($http) {
                 }).on('uploadProgress', function (file, percentage) {
                     layuiElement.progress('upload-img-progress', (percentage * 100).toFixed(2) + '%');
                 }).on('uploadSuccess', uploadCallback(function (file, response) {
-                    debugger;
                     if (response.code === 0) {
+                        var data = response.data;
+                        $scope.imgName = data.imgName;
                         if ($scope.cut === 'true') {
-                            var data = response.data;
-                            $scope.imgName = data.imgName;
                             $scope.cropLayer = layer.ngOpen({
                                 type: 1,
                                 area: areaAnalysis(data.imgWidth, data.imgHeight),
@@ -873,17 +873,15 @@ myApp.factory('$realTime', function ($http) {
                                 },
                                 compileFinish: function () {
                                     var wait = layuiLayer.load(0);
-                                    debugger;
-                                    $scope.$img=document.getElementById($scope.name + '-crop');
-                                    $scope.$img.onload = function () {
-                                        debugger;
+                                    $scope.img=document.getElementById($scope.id + '-crop');
+                                    $scope.img.onload = function () {
                                         layuiLayer.close(wait);
                                         $(this).Jcrop({ allowSelect: false }, function () {
                                             this.setSelect([0, 0, 250, 300]);
                                             $scope.jcropApi = this
                                         });
                                     };
-                                    $scope.$img.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
+                                    $scope.img.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
                                 }
                             });
                         }
@@ -1057,7 +1055,7 @@ myApp.factory('$realTime', function ($http) {
                     ztree.showNodes(showNodes);
                     ztree.expandAll(true);
                 } else {
-                    ztree.showNodes(ztree.getNodesByParam("isHidden", true));
+                    ztree.showNodes(ztree.getNodes());
                 }
             };
             var $rightContent = $('#' + $scope.id + ' .right-content');
@@ -1405,7 +1403,9 @@ myApp.controller('testTreeForm', function ($scope, $myHttp) {
     };
 });
 myApp.controller("upload-image", function ($scope) {
-
+    $scope.testImg = function () {
+        console.log($scope.imgName + ':' + $scope.thumbnailName);
+    };
 });
 myApp.controller('upload-files', function ($scope) {
 
