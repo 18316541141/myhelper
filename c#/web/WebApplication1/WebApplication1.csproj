@@ -868,9 +868,9 @@
     <Content Include="Content\plugin\Highcharts-7.1.2\code\themes\skies.src.js" />
     <Content Include="Content\plugin\Highcharts-7.1.2\code\themes\sunset.js" />
     <Content Include="Content\plugin\Highcharts-7.1.2\code\themes\sunset.src.js" />
+    <Content Include="Content\plugin\jshashes-master\hashes.min.js" />
     <Content Include="Content\plugin\ng-layer.js" />
     <Content Include="Content\plugin\webuploader\webuploader.css" />
-    <Content Include="Content\test.html" />
     <Content Include="Content\zTree_v3-master\api\apiCss\api.js" />
     <Content Include="Content\zTree_v3-master\api\apiCss\common.css" />
     <Content Include="Content\zTree_v3-master\api\apiCss\common_ie6.css" />
@@ -3297,25 +3297,6 @@
     <Content Include="Content\my-js\project.js" />
     <Content Include="Content\plugin\jquery.cookie.js" />
     <Content Include="Content\plugin\jquery.min.js" />
-    <Content Include="Content\plugin\jshashes-master\.gitignore" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\base64.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\benchmark.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\custom.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\hexadecimal.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\hmac.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\others.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\client\uppercase.html" />
-    <Content Include="Content\plugin\jshashes-master\examples\server\base64.js" />
-    <Content Include="Content\plugin\jshashes-master\examples\server\benchmark.js" />
-    <Content Include="Content\plugin\jshashes-master\examples\server\custom.js" />
-    <Content Include="Content\plugin\jshashes-master\examples\server\hexadecimal.js" />
-    <Content Include="Content\plugin\jshashes-master\examples\server\hmac.js" />
-    <Content Include="Content\plugin\jshashes-master\examples\server\uppercase.js" />
-    <Content Include="Content\plugin\jshashes-master\hashes.js" />
-    <Content Include="Content\plugin\jshashes-master\hashes.min.js" />
-    <Content Include="Content\plugin\jshashes-master\test\crc32.js" />
-    <Content Include="Content\plugin\jshashes-master\test\hashes.js" />
-    <Content Include="Content\plugin\jshashes-master\test\hmac.js" />
     <Content Include="Content\plugin\webuploader\webuploader.custom.js" />
     <Content Include="Content\plugin\webuploader\webuploader.custom.min.js" />
     <Content Include="Content\plugin\webuploader\webuploader.fis.js" />
@@ -3349,6 +3330,8 @@
     <Content Include="Content\plugin\Highcharts-7.1.2\code\css\themes\dark-unica.scss" />
     <Content Include="Content\plugin\Highcharts-7.1.2\code\css\themes\grid-light.scss" />
     <Content Include="Content\plugin\Highcharts-7.1.2\code\css\themes\sand-signika.scss" />
+    <Content Include="Content\plugin\jshashes-master\.editorconfig" />
+    <Content Include="Content\plugin\jshashes-master\.travis.yml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -3370,6 +3353,10 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\my-js\menus\" />
+    <Folder Include="Content\plugin\jshashes-master\bin\" />
+    <Folder Include="Content\plugin\jshashes-master\examples\client\" />
+    <Folder Include="Content\plugin\jshashes-master\examples\server\" />
+    <Folder Include="Content\plugin\jshashes-master\test\" />
     <Folder Include="Script\" />
     <Folder Include="Template\" />
     <Folder Include="uploadFiles\" />
@@ -3577,16 +3564,6 @@
     <Content Include="Content\angular-1.2.30\docs\js\docs.min.js.map" />
     <Content Include="Content\angular-1.2.30\docs\js\search-data.json" />
     <Content Include="Content\angular-1.2.30\docs\js\search-worker.min.js.map" />
-    <Content Include="Content\plugin\jshashes-master\.editorconfig" />
-    <Content Include="Content\plugin\jshashes-master\.travis.yml" />
-    <Content Include="Content\plugin\jshashes-master\bin\hashes" />
-    <Content Include="Content\plugin\jshashes-master\bower.json" />
-    <Content Include="Content\plugin\jshashes-master\component.json" />
-    <Content Include="Content\plugin\jshashes-master\LICENSE" />
-    <Content Include="Content\plugin\jshashes-master\Makefile" />
-    <Content Include="Content\plugin\jshashes-master\package.json" />
-    <Content Include="Content\plugin\jshashes-master\README.md" />
-    <Content Include="Content\plugin\jshashes-master\test\mocha.opts" />
     <Content Include="Content\plugin\webuploader\README.md" />
   </ItemGroup>
   <ItemGroup>
