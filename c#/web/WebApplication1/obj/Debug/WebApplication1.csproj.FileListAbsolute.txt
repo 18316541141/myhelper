@@ -323,6 +323,7 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Iden
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
+E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Guess.xml
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\ApplicationInsights.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.config
@@ -446,6 +447,5 @@ E:\git_projects\myhelper\c#\web\WebApplication1\bin\zh-Hans\System.Web.WebPages.
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\zh-CHT\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Identity.Owin.resources.dll
-E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb

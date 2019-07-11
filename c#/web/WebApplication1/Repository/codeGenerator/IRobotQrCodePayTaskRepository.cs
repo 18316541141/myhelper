@@ -4,10 +4,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
+using WebApplication1.Entity.Common;
 using WebApplication1.MyExtensions;
+using WebApplication1.MyExtensions.Common;
 using WebApplication1.Params;
-using WebApplication1.Params.codeGenerator;
-
+using WebApplication1.OrderBy;
 namespace WebApplication1.Repository
 {
     public partial class IRobotQrCodePayTaskRepository : BaseRepository<IRobotQrCodePayTask>

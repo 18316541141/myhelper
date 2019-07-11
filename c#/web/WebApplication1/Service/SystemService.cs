@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
+using WebApplication1.Entity.Common;
 using WebApplication1.Repository;
 
 namespace WebApplication1.Service
