@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
     /// session都是只读的，不需要session锁，可以提高效率，但缺点就是不能改session，
     /// 在这里可以修改session
     /// </summary>
-    public class SessionController : Controller
+    public class SessionController : BaseController
     {
         SystemService _systemService;
 
@@ -55,6 +55,30 @@ namespace WebApplication1.Controllers
         {
             FormsAuthentication.SignOut();
             return Json(new Result { code = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 跨域登录，用于实现单点登录
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Sign]
+        public JsonResult JsonpLogin(string callback, string username,string signKey)
+        {
+            FormsAuthentication.SetAuthCookie(username, false);
+            string guid = Guid.NewGuid().ToString();
+            Session.Add("loginGuid", guid);
+            if (SingleUserAttribute.UserMap.ContainsKey(username))
+            {
+                SingleUserAttribute.UserMap[username] = guid;
+            }
+            else
+            {
+                SingleUserAttribute.UserMap.Add(username, guid);
+            }
+            return MyJson(callback, new Result { code = 0,msg="登录成功" });
         }
 
         /// <summary>

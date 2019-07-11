@@ -1,12 +1,95 @@
-﻿<html>
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-		
-        <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
-        <script type="text/javascript">
-			
-        </script>
-    </body>
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        #div1 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 150px;
+            height: 150px;
+            border: 1px red solid;
+            background: red;
+            cursor: pointer;
+        }
+    </style>
+    <script src="plugin/jquery.min.js" charset="utf-8"></script> 
+    <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script> 
+    <script type="text/javascript">
+
+        var m1 = angular.module('myApp', []);
+
+        // 指令是可以复用的
+        m1.directive('myDrag', function() {
+
+            // scope: 独立作用域, 只在当前标签起作用, 跟外面没有关系
+            // 自定义指令内部数据的绑定方式, 共享的
+            // @: 绑定的普通字符串 , = ：解析的是数据, &: 绑定的是父级函数的传递方式
+            // 属性指令跟模板没有太大的关系
+            return {
+                restrict: 'A',
+                scope: {
+                    perms:"="
+                },
+                link: function( scope, ele, attr ) {
+                    var disX = 0, disY = 0;
+                    debugger;
+                   attr.myDrag = angular.equals(attr.myDrag, 'true');
+                   // alert( typeof attr.myDrag);
+
+                   ele.on('mousedown', function(ev) {
+                        var This = this;
+
+                        disX = ev.pageX - $(this).offset().left;
+                        disY = ev.pageY - $(this).offset().top;
+
+                        if(attr.myDrag) {
+                            var $line = $('<div>');
+                            $line.css({ width : $(this).outerWidth() , height : $(this).outerHeight() , position : 'absolute' , left : $(this).offset().left , top : $(this).offset().top , border : '1px gray dotted'});
+                            $('body').append($line);
+                        }
+
+                        $(document).on('mousemove', function(ev) {
+                            // console.log($(this).get(0).tagName);
+                            //
+                            if(attr.myDrag) {
+                                $line.css('left',ev.pageX - disX);
+                                $line.css('top',ev.pageY - disY);
+
+                            } else {
+                                $(This).css('left', ev.pageX - disX);
+                                $(This).css('top', ev.pageY - disY);
+                            }
+
+                        });
+
+                        $(document).on('mouseup', function() {
+                            $(document).off();
+                             if(attr.myDrag) {
+                                $(This).css('left',$line.offset().left);
+                                $(This).css('top',$line.offset().top);
+                                $line.remove();
+                            }
+                        });
+
+                        return false;
+                   });
+
+                }
+
+            };
+
+        });
+        m1.controller('tab', ['$scope', function($scope) {
+             // $scope.age = 101;
+            $scope.perms = {'aaa':'bbb'};
+        }]);
+
+    </script>
+</head>
+<body ng-controller="tab">
+    <div id="div1" my-drag="true"></div>
+</body>
 </html>

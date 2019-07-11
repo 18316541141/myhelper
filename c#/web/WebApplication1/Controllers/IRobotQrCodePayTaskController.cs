@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
         public JsonResult Page(IRobotQrCodePayTaskParams param, int currentPageIndex = 1, int pageSize = 20)
         {
             IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            return MyJson(new Result {code=0,data= irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) },JsonRequestBehavior.AllowGet);
+            return MyJson(new Result {code=0,data= irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) });
         }
 
         /// <summary>
@@ -63,20 +63,20 @@ namespace WebApplication1.Controllers
         {
             IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
             irobotQrCodePayTaskService.Del(irTaskID);
-            return MyJson(new Result { code = 0}, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0});
         }
 
         public JsonResult DelBatch(List<int?> irTaskIds)
         {
             IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
             irobotQrCodePayTaskService.DelBatch(irTaskIds);
-            return MyJson(new Result { code = 0 }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0 });
         }
 
         public JsonResult Load(int irTaskID)
         {
             IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            return MyJson(new Result { code = 0, data = irobotQrCodePayTaskService.Load(irTaskID) }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = irobotQrCodePayTaskService.Load(irTaskID) });
         }
     }
 }

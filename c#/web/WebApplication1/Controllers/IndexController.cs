@@ -23,7 +23,7 @@ using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
 {
-    public class IndexController : BaseController
+    public class IndexController : FastController
     {
         SystemService _systemService;
         RealTimeInitService _realTimeInitService;
@@ -47,7 +47,7 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public JsonResult LoadLeftMenus()
         {
-            return MyJson(new Result { code = 0, data = _systemService.LoadLeftMenus() }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = _systemService.LoadLeftMenus() });
         }
 
         
@@ -88,7 +88,7 @@ namespace WebApplication1.Controllers
         public JsonResult LoadNewsAlarm()
         {
             SystemService systemService = new SystemService();
-            return MyJson(new Result { code = 0, data = systemService.LoadNewsAlarm() }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = systemService.LoadNewsAlarm() });
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace WebApplication1.Controllers
                 id = "33",
                 name = "陳邨"
             });
-            return MyJson(new Result { code = 0, data = treeNodeList }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = treeNodeList });
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace WebApplication1.Controllers
                 }
                 catch
                 {
-                    return MyJson(new Result { code = -1, msg = "上传的文件可能不是图片文件，无法处理。" }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = -1, msg = "上传的文件可能不是图片文件，无法处理。" });
                 }
                 try
                 {
@@ -158,18 +158,18 @@ namespace WebApplication1.Controllers
                         using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
                         {
                             string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
-                            return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } }, JsonRequestBehavior.AllowGet);
+                            return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } });
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    return MyJson(new Result { code = -1, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = -1, msg = ex.Message });
                 }
             }
             else
             {
-                return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" }, JsonRequestBehavior.AllowGet);
+                return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" });
             }
         }
 
@@ -184,11 +184,11 @@ namespace WebApplication1.Controllers
         {
             if (_allowPath.Contains(pathName))
             {
-                return MyJson(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}") }, JsonRequestBehavior.AllowGet);
+                return MyJson(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}") });
             }
             else
             {
-                return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" }, JsonRequestBehavior.AllowGet);
+                return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" });
             }
         }
 
@@ -215,7 +215,7 @@ namespace WebApplication1.Controllers
                 }
                 catch
                 {
-                    return MyJson(new Result { code = -1, msg = "该文件可能不是图片文件，切割失败！" }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = -1, msg = "该文件可能不是图片文件，切割失败！" });
                 }
                 try
                 {
@@ -234,19 +234,19 @@ namespace WebApplication1.Controllers
                                         thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
                                         imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}")
                                     }
-                                }, JsonRequestBehavior.AllowGet);
+                                });
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    return MyJson(new Result { code = -1, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = -1, msg = ex.Message });
                 }
             }
             else
             {
-                return MyJson(new Result { code = -1, msg = "图片不存在，切割失败！" }, JsonRequestBehavior.AllowGet);
+                return MyJson(new Result { code = -1, msg = "图片不存在，切割失败！" });
             }
         }
 
@@ -281,7 +281,7 @@ namespace WebApplication1.Controllers
         public JsonResult AreaSelect()
         {
             SystemService systemService = new SystemService();
-            return MyJson(new Result { code = 0, data = systemService.LoadAreaTree() }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0, data = systemService.LoadAreaTree() });
         }
 
         /// <summary>

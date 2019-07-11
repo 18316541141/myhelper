@@ -16,6 +16,11 @@ namespace WebApplication1.Entity
         public string FormateStr { get; set; }
 
         /// <summary>
+        /// 回调函数名称，当该属性不为空时，则认为是跨域请求
+        /// </summary>
+        public string Callback { get; set; }
+
+        /// <summary>
         /// 重写执行视图
         /// </summary>
         /// <param name="context">上下文</param>
@@ -28,13 +33,20 @@ namespace WebApplication1.Entity
 
             HttpResponseBase response = context.HttpContext.Response;
 
-            if (string.IsNullOrEmpty(this.ContentType))
+            if (string.IsNullOrEmpty(Callback))
             {
-                response.ContentType = this.ContentType;
+                if (string.IsNullOrEmpty(this.ContentType))
+                {
+                    response.ContentType = this.ContentType;
+                }
+                else
+                {
+                    response.ContentType = "application/json";
+                }
             }
             else
             {
-                response.ContentType = "application/json";
+                response.ContentType = "application/javascript";
             }
 
             if (this.ContentEncoding != null)
@@ -50,8 +62,14 @@ namespace WebApplication1.Entity
                 MatchEvaluator matchEvaluator = new MatchEvaluator(this.ConvertJsonDateToDateString);
                 Regex reg = new Regex(p);
                 jsonString = reg.Replace(jsonString, matchEvaluator);
-
-                response.Write(jsonString);
+                if (string.IsNullOrEmpty(Callback))
+                {
+                    response.Write(jsonString);
+                }
+                else
+                {
+                    response.Write($"{Callback}({jsonString})");
+                }
             }
         }
 

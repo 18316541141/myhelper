@@ -13,6 +13,7 @@ namespace WebApplication1
             SingleUserAttribute singleUserAttribute = new SingleUserAttribute();
             singleUserAttribute.IgnoreRequests.Add("/session/verificationCode".ToLower());
             singleUserAttribute.IgnoreRequests.Add("/session/login".ToLower());
+            singleUserAttribute.IgnoreRequests.Add("/session/jsonpLogin".ToLower());
             filters.Add(singleUserAttribute);
             CompressAttribute compressAttribute = new CompressAttribute();
             compressAttribute.IgnoreRequests.Add("/index/showImage".ToLower());

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -45,6 +46,7 @@ namespace WebApplication1.filter
                 {
                     FormsAuthentication.SignOut();
                     HttpResponseBase response = httpContextBase.Response;
+                    response.ContentEncoding = Encoding.UTF8;
                     response.ContentType = "application/json;charset=UTF-8";
                     response.StatusCode = 200;
                     response.Write(JsonConvert.SerializeObject(new Result {

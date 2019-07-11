@@ -3,6 +3,19 @@
 </fieldset>
 <div ng-controller="upload-files">
     <form class="layui-form">
-        <div upload-files name="tdgfbvcvb" file-desc-max-width="200" path="test"></div>
+        <!--
+            upload-files 是一个批量上传多个文件的控件
+            id：当前上传控件的唯一id
+            file-desc-max-width：上传文件的名称显示列的最大宽度
+            path：上传路径
+            files：这是和父controller共用的数据，里面包含：
+                fileDesc：文件本身的名称
+                fileName：文件上传后，在后台管理系统的名称，用于保存到数据库
+                typeImg：文件图标，用于根据文件类型显示一个图标
+                progress：文件上传进度，仅在上传时区分每个文件的进度
+                isFinish：是否上传完毕
+                id：文件id，文件上传插件区分每个文件。
+        -->
+        <div upload-files id="tdgfbvcvb" file-desc-max-width="200" path="test" files="files"></div>
     </form>
 </div>

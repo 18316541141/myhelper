@@ -123,11 +123,28 @@ var layuiLaypage = layui.laypage;
                 $.get(url, data, myCallback(callback), 'json');
             }
         },
-        //自定义的ajax，和原版的$.ajax用法一致
-        "myAjax": function (settings) {
-            settings.success = myCallback(settings.success);
-            $.ajax(url, settings);
-        }
+        //自定义同步post，和原版的$.post用法一致
+        'syncPost': function (url, data, callback) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: 'json',
+                async: false,
+                data: $.type(data) === 'object' ? data : {},
+                success: myCallback($.type(data) === 'function'?data:callback)
+            });
+        },
+        //自定义同步get，和原版的$.get用法一致
+        'syncGet': function () {
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                async: false,
+                data: $.type(data) === 'object' ? data : {},
+                success: myCallback($.type(data) === 'function' ? data : callback)
+            });
+        },
     });
 }());
 
@@ -577,13 +594,19 @@ myApp.factory('$realTime', function ($http) {
                 ret.success(myCallback(callback));
             };
             return ret;
+        },
+        jsonp: function (url, params) {
+            var ret=$http.jsonp(url + '?callback=JSON_CALLBACK&' + $.param(params));
+            ret.mySuccess = function (callback) {
+                ret.success(callback);
+            };
         }
     };
 }).directive('uploadExcel', function () {
     return {
         restrict: 'EA',
         template: $('#uploadExcelTemplate').html(),
-        scope: { name: "@",url:"@",postData:"=",type:"@" },
+        scope: { name: "@", url: "@", type: "@", postData: "=" },
         controller: function ($scope, $timeout) {
             if ($scope.postData === undefined) {
                 $scope.postData = {};
@@ -736,71 +759,64 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#areaSelectTemplate').html(),
-        scope: { type: "@", deep: "@", required: "@", provinceVal: "@", cityVal: "@", countyVal: "@",townVal:"@" },
-        controller: function ($scope, $myHttp,$timeout) {
-            $scope.ie8 = navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/8./i) == "8.";
+        scope: { id:"@",type: "@", deep: "@"},
+        controller: function ($scope, $myHttp, $timeout) {
+            $scope.$on('renderSelect', function (event, provinceVal, cityVal, countyVal, townVal) {
+                $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
+                    return val.parentValue == provinceVal;
+                }).get());
+                $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
+                    return val.parentValue == cityVal;
+                }).get());
+                $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
+                    return val.parentValue == countyVal;
+                }).get());
+                $timeout(function () {
+                    setSelectVal($('[lay-filter="province-select-' + $scope.id + '"]'), provinceVal);
+                    setSelectVal($('[lay-filter="city-select-' + $scope.id + '"]'), cityVal);
+                    setSelectVal($('[lay-filter="county-select-' + $scope.id + '"]'), countyVal);
+                    setSelectVal($('[lay-filter="town-select-' + $scope.id + '"]'), townVal);
+                    layuiForm.render('select');
+                });
+            });
+            $scope.$on('getSelectVal', function (event, retVal) {
+                retVal.provinceVal=$('[lay-filter="province-select-' + $scope.id + '"]').val();
+                retVal.cityVal=$('[lay-filter="city-select-' + $scope.id + '"]').val();
+                retVal.countyVal=$('[lay-filter="county-select-' + $scope.id + '"]').val();
+                retVal.townVal = $('[lay-filter="town-select-' + $scope.id + '"]').val();
+            });
             $myHttp.getCache('/index/areaSelect').mySuccess(function (result) {
                 $scope.data = result.data;
                 $scope.provinces = [{ name: '请选择省', value: '' }].concat($scope.data['provinces']);
                 $scope.cities = [{ name: '请选择市', value: '' }];
                 $scope.counties = [{ name: '请选择区', value: '' }];
                 $scope.towns = [{name: '请选择镇', value: '' }];
-                if ($scope.deep >= 1 && $scope.provinceVal !== undefined) {
-                    $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
-                        return val.parentValue == $scope.provinceVal;
-                    }).get());
-                }
-                if ($scope.deep >= 2 && $scope.cityVal !== undefined) {
-                    $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
-                        return val.parentValue == $scope.cityVal;
-                    }).get());
-                }
-                if ($scope.deep >= 3 && $scope.countyVal !== undefined) {
-                    $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
-                        return val.parentValue == $scope.countyVal;
-                    }).get());
-                }
                 $timeout(function () {
-                    if ($scope.deep >= 2) {
-                        layuiForm.on('select(province-select)', function (data) {
-                            $scope.provinceVal = $scope.provinces[parseInt(data.value)].value;
-                            $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
-                                return val.parentValue == $scope.provinceVal;
-                            }).get());
-                            $scope.counties = [{ name: '请选择区', value: '' }];
-                            $scope.towns = [{ name: '请选择镇', value: '' }];
-                            $scope.cityVal = "";
-                            $scope.countyVal = "";
-                            $scope.townVal = "";
-                            $scope.$apply();
-                            layuiForm.render('select');
-                        });
-                    }
-                    if ($scope.deep >= 2) {
-                        layuiForm.on('select(city-select)', function (data) {
-                            $scope.cityVal = $scope.cities[parseInt(data.value)].value;
-                            $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
-                                return val.parentValue == $scope.cityVal;
-                            }).get());
-                            $scope.towns = [{ name: '请选择镇', value: '' }];
-                            $scope.countyVal = "";
-                            $scope.townVal = "";
-                            $scope.$apply();
-                            layuiForm.render('select');
-                        });
-                    }
-                    if ($scope.deep >= 3) {
-                        layuiForm.on('select(county-select)', function (data) {
-                            $scope.townVal = $scope.towns[parseInt(data.value)].value;
-                            $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
-                                return val.parentValue == $scope.countyVal;
-                            }).get());
-                            $scope.townVal = "";
-                            $scope.$apply();
-                            layuiForm.render('select');
-                        });
-                    }
                     layuiForm.render('select');
+                    layuiForm.on('select(province-select-' + $scope.id+ ')', function (data) {
+                        $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
+                            return val.parentValue == data.value;
+                        }).get());
+                        $scope.counties = [{ name: '请选择区', value: '' }];
+                        $scope.towns = [{ name: '请选择镇', value: '' }];
+                        $scope.$apply();
+                        layuiForm.render('select');
+                    });
+                    layuiForm.on('select(city-select-' + $scope.id + ')', function (data) {
+                        $scope.counties = [{ name: '请选择区', value: '' }].concat($($scope.data['counties']).filter(function (index, val) {
+                            return val.parentValue == data.value;
+                        }).get());
+                        $scope.towns = [{ name: '请选择镇', value: '' }];
+                        $scope.$apply();
+                        layuiForm.render('select');
+                    });
+                    layuiForm.on('select(county-select-' + $scope.id + ')', function (data) {
+                        $scope.towns = [{ name: '请选择镇', value: '' }].concat($($scope.data['towns']).filter(function (index, val) {
+                            return val.parentValue == data.value;
+                        }).get());
+                        $scope.$apply();
+                        layuiForm.render('select');
+                    });
                 });
             });
         }
@@ -809,9 +825,8 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadImageTemplate').html(),
-        scope: { id: "@", path: "@", cut: "@", imgName: "=", thumbnailName:"="},
+        scope: { id: "@", path: "@", cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
         controller: function ($scope, layer, $timeout, $myHttp) {
-            debugger;
             $scope.isUploaded = false;
             $scope.showProgress = false;
             $scope.crop = function () {
@@ -861,6 +876,7 @@ myApp.factory('$realTime', function ($http) {
                     if (response.code === 0) {
                         var data = response.data;
                         $scope.imgName = data.imgName;
+                        $scope.thumbnailName = data.thumbnailName;
                         if ($scope.cut === 'true') {
                             $scope.cropLayer = layer.ngOpen({
                                 type: 1,
@@ -876,8 +892,13 @@ myApp.factory('$realTime', function ($http) {
                                     $scope.img=document.getElementById($scope.id + '-crop');
                                     $scope.img.onload = function () {
                                         layuiLayer.close(wait);
-                                        $(this).Jcrop({ allowSelect: false }, function () {
-                                            this.setSelect([0, 0, 250, 300]);
+                                        var widthOverHeight=parseFloat($scope.widthOverHeight);
+                                        var minWidth = parseFloat($scope.minWidth);
+                                        var minHeight=minWidth/widthOverHeight;
+                                        var maxWidth =parseFloat($scope.maxWidth);
+                                        var maxHeight = maxWidth / widthOverHeight;
+                                        $(this).Jcrop({ allowSelect: false, aspectRatio: widthOverHeight, minSize: [minWidth, minHeight], maxSize: [maxWidth, maxHeight] }, function () {
+                                            this.setSelect([0, 0, minWidth + (maxWidth - minWidth) / 2, minHeight + (maxHeight - minHeight) / 2]);
                                             $scope.jcropApi = this
                                         });
                                     };
@@ -914,7 +935,7 @@ myApp.factory('$realTime', function ($http) {
                         type: 'pie'
                     },
                     title: {
-                        text: $scope.title//'2018 年浏览器市场份额'
+                        text: $scope.title
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -932,25 +953,7 @@ myApp.factory('$realTime', function ($http) {
                     series: [{
                         name: 'Brands',
                         colorByPoint: true,
-                        data:$scope.pieData /*[{
-                            name: 'Chrome',
-                            y: 61.41
-                        }, {
-                            name: 'Internet Explorer',
-                            y: 11.84
-                        }, {
-                            name: 'Firefox',
-                            y: 10.85
-                        }, {
-                            name: 'Edge',
-                            y: 4.67
-                        }, {
-                            name: 'Safari',
-                            y: 4.18
-                        }, {
-                            name: 'Other',
-                            y: 7.05
-                        }]*/
+                        data:$scope.pieData
                     }]
                 });
             });
@@ -968,12 +971,10 @@ myApp.factory('$realTime', function ($http) {
                         type: 'column'
                     },
                     title: {
-                        text: $scope.title//'月平均降雨量'
+                        text: $scope.title
                     },
                     xAxis: {
-                        categories: $scope.rowAxisTitle/*[
-                            '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
-                        ]*/,
+                        categories: $scope.rowAxisTitle,
                         crosshair: true
                     },
                     yAxis: {
@@ -996,19 +997,7 @@ myApp.factory('$realTime', function ($http) {
                             borderWidth: 0
                         }
                     },
-                    series: $scope.histogramData /*[{
-                        name: '东京',
-                        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-                    }, {
-                        name: '纽约',
-                        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-                    }, {
-                        name: '伦敦',
-                        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-                    }, {
-                        name: '柏林',
-                        data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-                    }]*/
+                    series: $scope.histogramData
                 });
             });
         }
@@ -1079,10 +1068,12 @@ myApp.factory('$realTime', function ($http) {
                         },
                         callback: {
                             onClick: function (event, treeId, treeNode) {
-                                $scope.$emit('onClick',event, treeId, treeNode);
+                                $scope.$emit('onClick',treeNode);
                             },
-                            onDrop: function (event, treeId, treeNodes, targetNode, moveType, isCopy) {
-                                $scope.$emit('onDrop', event, treeId, treeNodes, targetNode, moveType, isCopy);
+                            beforeDrop: function (treeId, treeNodes, targetNode, moveType) {
+                                var retObj = {ret:true};
+                                $scope.$emit('beforeDrop', treeNodes, targetNode, moveType, retObj);
+                                return retObj.ret;
                             }
                         }
                     }, result.data);
@@ -1097,7 +1088,7 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadFilesTemplate').html(),
-        scope: { name: "@", fileDescMaxWidth: "@", path: "@" },
+        scope: { id: "@", fileDescMaxWidth: "@", path: "@", files:"=" },
         controller: function ($scope, $timeout, $myHttp) {
             $scope.files = [];
             var tipIndex;
@@ -1158,7 +1149,7 @@ myApp.factory('$realTime', function ($http) {
                     auto: true,//拖动后自动上传
                     duplicate: true,//对每一个文件添加唯一hash值，用于区分文件操作进度条
                     server: '/index/uploadFiles',//统一上传的控制器
-                    pick: { id: '#' + $scope.name + 'Id' },//上传域的id
+                    pick: { id: '#uploadFiles' + $scope.id},//上传域的id
                     fileVal: 'fileUploads',//上传流文件的参数名
                     formData: {
                         pathName: $scope.path //上传时的路径参数
@@ -1180,6 +1171,20 @@ myApp.factory('$realTime', function ($http) {
         }
     };
 });
+
+/**
+ * 设置下拉菜单的值
+ * @$select：jquery对象，下拉菜单
+ * @val：设置的值
+ */
+function setSelectVal($select, val) {
+    $select.find('option').each(function (i) {
+        if ($(this).val() == val) {
+            $select.get(0).selectedIndex = i;
+            return false;
+        }
+    });
+}
 
 /**
  * 下载excel，如果excel过大，则分批下载，否则一次下载完
@@ -1342,6 +1347,15 @@ function logoutCallback() {
     layuiLayer.closeAll();
 }
 
+function picViewer($range) {
+    $range.viewer({
+        url: 'data-original',
+        built: function () {
+            $('.layui-layout-body').append($('.viewer-container'));
+        },
+    });
+}
+
 /**
  * 使用post的方式打开一个新窗口
  * @url：新窗口的url地址
@@ -1385,12 +1399,13 @@ function postOpenWin(url, params, searchParam) {
 //--------------------------分割线-------------------------------
 myApp.controller('testTreeForm', function ($scope, $myHttp) {
     //监听树菜单点击事件
-    $scope.$on('onClick', function (event, treeId, treeNode) {
+    $scope.$on('onClick', function (event, treeNode) {
         alert('点击');
     });
     //监听树菜单的拖动事件
-    $scope.$on('onDrop', function (event, treeId, treeNodes, targetNode, moveType, isCopy) {
+    $scope.$on('beforeDrop', function (event, treeNodes, targetNode, moveType, retObj) {
         alert('拖动结束');
+        retObj.ret = true;
     });
     $scope.del = function () {
         $scope.$broadcast('delNode', '01');
@@ -1412,12 +1427,7 @@ myApp.controller('upload-files', function ($scope) {
 });
 myApp.controller('big-img-ctrl',function($scope,$timeout){
     $timeout(function(){
-        $('.xxx-table').viewer({
-            url: 'data-original',
-            built: function () {
-                $('.layui-layout-body').append($('.viewer-container'));
-            },
-        });
+        picViewer($('.xxx-table'));
     });
 });
 myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp, layer) {
@@ -1521,6 +1531,16 @@ myApp.controller('addNewAlaram', function ($scope,$realTime) {
         $realTime.getUpdate('/NewAlarm/add', {}, ['newsAlarm']).mySuccess(function () {
 
         });
+    };
+});
+myApp.controller('testAreaSelect', function ($scope,$timeout) {
+    //$timeout(function () {
+    //    $scope.$broadcast('renderSelect', "19", "202", "1787");
+    //},1000);
+    $scope.showSelect = function () {
+        var retVal = {};
+        $scope.$broadcast('getSelectVal', retVal);
+        console.log(retVal.provinceVal + ":" + retVal.cityVal + ":" + retVal.countyVal);
     };
 });
 myApp.controller('testCharts', function ($scope) {

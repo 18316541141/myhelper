@@ -211,8 +211,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\FastController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\IRobotQrCodePayTaskController.cs" />
+    <Compile Include="Controllers\JsonpController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\NewAlarmController.cs" />
     <Compile Include="Entity\AreaTree.cs" />
@@ -233,6 +235,7 @@
     <Compile Include="filter\CompressAttribute.cs" />
     <Compile Include="filter\LoginAuthorizeAttribute.cs" />
     <Compile Include="filter\PermAuthorizeAttribute.cs" />
+    <Compile Include="filter\SignAttribute.cs" />
     <Compile Include="filter\SingleUserAttribute.cs" />
     <Compile Include="filter\SizeFilterAttribute.cs" />
     <Compile Include="filter\UpdateVersionAttribute.cs" />
@@ -869,6 +872,7 @@
     <Content Include="Content\plugin\Highcharts-7.1.2\code\themes\sunset.src.js" />
     <Content Include="Content\plugin\ng-layer.js" />
     <Content Include="Content\plugin\webuploader\webuploader.css" />
+    <Content Include="Content\test.html" />
     <Content Include="Content\zTree_v3-master\api\apiCss\api.js" />
     <Content Include="Content\zTree_v3-master\api\apiCss\common.css" />
     <Content Include="Content\zTree_v3-master\api\apiCss\common_ie6.css" />
@@ -1260,22 +1264,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="index.aspx" />
-    <Content Include="Content\angular-1.2.30\angular-animate.js" />
     <Content Include="Content\angular-1.2.30\angular-animate.min.js" />
-    <Content Include="Content\angular-1.2.30\angular-cookies.js" />
     <Content Include="Content\angular-1.2.30\angular-cookies.min.js" />
     <Content Include="Content\angular-1.2.30\angular-csp.css" />
-    <Content Include="Content\angular-1.2.30\angular-loader.js" />
     <Content Include="Content\angular-1.2.30\angular-loader.min.js" />
-    <Content Include="Content\angular-1.2.30\angular-mocks.js" />
-    <Content Include="Content\angular-1.2.30\angular-resource.js" />
     <Content Include="Content\angular-1.2.30\angular-resource.min.js" />
-    <Content Include="Content\angular-1.2.30\angular-route.js" />
     <Content Include="Content\angular-1.2.30\angular-route.min.js" />
-    <Content Include="Content\angular-1.2.30\angular-sanitize.js" />
     <Content Include="Content\angular-1.2.30\angular-sanitize.min.js" />
-    <Content Include="Content\angular-1.2.30\angular-scenario.js" />
-    <Content Include="Content\angular-1.2.30\angular-touch.js" />
     <Content Include="Content\angular-1.2.30\angular-touch.min.js" />
     <Content Include="Content\angular-1.2.30\angular.js" />
     <Content Include="Content\angular-1.2.30\angular.min.js" />
@@ -3277,7 +3272,6 @@
     <Content Include="Content\angular-1.2.30\i18n\angular-locale_zh.js" />
     <Content Include="Content\angular-1.2.30\i18n\angular-locale_zu-za.js" />
     <Content Include="Content\angular-1.2.30\i18n\angular-locale_zu.js" />
-    <Content Include="Content\angular-1.2.30\version.txt" />
     <Content Include="Content\layui\layui.all.js" />
     <Content Include="Content\layui\layui.js" />
     <Content Include="Content\layui\lay\modules\carousel.js" />
@@ -3405,14 +3399,6 @@
     <Content Include="Content\layui\font\iconfont.woff2" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\angular-1.2.30\angular-animate.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular-cookies.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular-loader.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular-resource.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular-route.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular-sanitize.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular-touch.min.js.map" />
-    <Content Include="Content\angular-1.2.30\angular.min.js.map" />
     <Content Include="Content\angular-1.2.30\docs\components\bootstrap-3.1.1\css\bootstrap-theme.css.map" />
     <Content Include="Content\angular-1.2.30\docs\components\bootstrap-3.1.1\css\bootstrap.css.map" />
     <Content Include="Content\angular-1.2.30\docs\components\bootstrap-3.1.1\fonts\glyphicons-halflings-regular.eot" />
@@ -3593,8 +3579,6 @@
     <Content Include="Content\angular-1.2.30\docs\js\docs.min.js.map" />
     <Content Include="Content\angular-1.2.30\docs\js\search-data.json" />
     <Content Include="Content\angular-1.2.30\docs\js\search-worker.min.js.map" />
-    <Content Include="Content\angular-1.2.30\errors.json" />
-    <Content Include="Content\angular-1.2.30\version.json" />
     <Content Include="Content\plugin\jshashes-master\.editorconfig" />
     <Content Include="Content\plugin\jshashes-master\.travis.yml" />
     <Content Include="Content\plugin\jshashes-master\bin\hashes" />

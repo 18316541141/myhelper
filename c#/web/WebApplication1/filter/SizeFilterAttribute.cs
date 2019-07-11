@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Entity;
@@ -44,6 +45,7 @@ namespace WebApplication1.filter
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             HttpResponseBase Response = filterContext.HttpContext.Response;
+            Response.ContentEncoding = Encoding.UTF8;
             Response.ContentType = "application/json;charset=UTF-8";
             Response.StatusCode = 200;
             string jsonStr = JsonConvert.SerializeObject(new Result

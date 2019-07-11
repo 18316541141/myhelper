@@ -134,6 +134,16 @@ namespace WebApplication1.Service
         }
 
         /// <summary>
+        /// 根据key查询签名密钥
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string FindSecretByKey(string key)
+        {
+            return "sdgsdfsdfsdfsdf";
+        }
+
+        /// <summary>
         /// 加载左侧菜单
         /// </summary>
         /// <returns></returns>

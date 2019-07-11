@@ -151,7 +151,10 @@ namespace CommonHelper.Helper
             byte[] str2 = sha1.ComputeHash(str1);
             sha1.Clear();
             (sha1 as IDisposable).Dispose();
-            return Convert.ToBase64String(str2);
+            StringBuilder sc = new StringBuilder();
+            for (int i = 0; i < str2.Length; i++)
+                sc.Append(str2[i].ToString("x2"));
+            return sc.ToString();
         }
 
         /// <summary>
