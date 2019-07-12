@@ -35,6 +35,19 @@
         .el-tabs--bottom .el-tabs__item.is-bottom:nth-child(2), .el-tabs--bottom .el-tabs__item.is-top:nth-child(2), .el-tabs--top .el-tabs__item.is-bottom:nth-child(2), .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
             padding-left: 20px;
         }
+        .login-content{
+            position:absolute;
+            left:0;
+            width:100%;
+            bottom:0;
+            top:0;
+            background:#909399;
+            z-index:99;
+        }
+        .login-form-content{
+            width:300px;
+            margin:auto;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +133,25 @@
                 <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
             </el-tabs>
         </div>
+        <div class="login-content">
+            <div class="login-form-content">
+                <el-form ref="form" model="form" label-width="0">
+                    <el-form-item>
+                        <el-input placeholder="请输入用户名" v-model="input" prefix-icon="el-icon-user-solid"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input placeholder="请输入密码" v-model="input" show-password prefix-icon="el-icon-unlock"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-row>
+                            <el-col span="12"><el-input placeholder="验证码" v-model="input"></el-input></el-col>
+                            <el-col span="12"><div style="text-align:right;"><img src="/session/verificationCode" /></div></el-col>
+                        </el-row>
+                    </el-form-item>
+                    <el-button type="primary">登录</el-button>
+                </el-form>
+            </div>
+        </div>
     </div>
     <script src="vue/vue.js" charset="utf-8"></script>
     <script src="element-ui/index.js" charset="utf-8"></script>
@@ -129,7 +161,8 @@
                 return {
                     activeIndex: '1',
                     activeIndex2: '1',
-                    activeName: 'second'
+                    activeName: 'second',
+                    input:'',
                 };
             },
             methods: {
