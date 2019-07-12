@@ -25,7 +25,10 @@ namespace CommonHelper.Helper
             doc.Load($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html", Encoding.UTF8);
             HtmlNode node = doc.DocumentNode;
             node.SelectSingleNode("//div[@ng-include]").SetAttributeValue("ng-include", $"x.url+'?v={version}'");
-            node.SelectSingleNode("//script[starts-with(@src,'my-js/project.js')]").SetAttributeValue("src", $"my-js/project.js?v={version}");
+            foreach (HtmlNode script in node.SelectNodes("//script[starts-with(@src,'my-js/')]"))
+            {
+                script.SetAttributeValue("src", $"{FindDataHelper.FindDataBySuffix(script.GetAttributeValue("src", ""), "?")}?v={version}");
+            }
             doc.Save($"{webRootPath}Content{Path.DirectorySeparatorChar}index.html", Encoding.UTF8);
         }
     }

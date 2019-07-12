@@ -617,9 +617,9 @@ myApp.factory('$realTime', function ($http) {
                     } else {
                         ctrl.$setValidity('required', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = { required: '该字段不能为空' };
+                            ctrl.$messages = { required:attrs.ngRequired2Msg===undefined? '该字段不能为空': attrs.ngRequired2Msg};
                         } else {
-                            ctrl.$messages['required'] = '该字段不能为空';
+                            ctrl.$messages['required'] = attrs.ngRequired2Msg === undefined ? '该字段不能为空' : attrs.ngRequired2Msg;
                         }
                     }
                 } else {
@@ -647,9 +647,9 @@ myApp.factory('$realTime', function ($http) {
                     } else {
                         ctrl.$setValidity('length', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = {length:'该字段长度必须是'+len+'个字符'};
+                            ctrl.$messages = { length: attrs.ngLengthMsg === undefined ? '该字段长度必须是' + len + '个字符' : attrs.ngLengthMsg };
                         } else {
-                            ctrl.$messages['length'] = '该字段长度必须是' + len + '个字符';
+                            ctrl.$messages['length'] = attrs.ngLengthMsg === undefined ? '该字段长度必须是' + len + '个字符' : attrs.ngLengthMsg;
                         }
                     }
                 } else {
@@ -672,9 +672,9 @@ myApp.factory('$realTime', function ($http) {
                     } else {
                         ctrl.$setValidity('minlength2', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = { minlength2: '该字段长度不能少于' + len + '个字符' };
+                            ctrl.$messages = { minlength2:attrs.ngMinlength2Msg === undefined ? '该字段长度不能少于' + len + '个字符': attrs.ngMinlength2Msg};
                         } else {
-                            ctrl.$messages['minlength2'] = '该字段长度不能少于' + len + '个字符';
+                            ctrl.$messages['minlength2'] = attrs.ngMinlength2Msg === undefined ? '该字段长度不能少于' + len + '个字符' : attrs.ngMinlength2Msg;
                         }
                     }
                 } else {
@@ -697,9 +697,9 @@ myApp.factory('$realTime', function ($http) {
                     } else {
                         ctrl.$setValidity('maxlength2', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = { maxlength2: '该字段长度不能超过' + len + '个字符' };
+                            ctrl.$messages = { maxlength2: attrs.ngMaxlength2Msg === undefined ? '该字段长度不能超过' + len + '个字符' : attrs.ngMaxlength2Msg };
                         } else {
-                            ctrl.$messages['maxlength2'] = '该字段长度不能超过' + len + '个字符';
+                            ctrl.$messages['maxlength2'] = attrs.ngMaxlength2Msg === undefined ? '该字段长度不能超过' + len + '个字符' : attrs.ngMaxlength2Msg;
                         }
                     }
                 } else {
@@ -729,9 +729,9 @@ myApp.factory('$realTime', function ($http) {
                         if (val < minDouble) {
                             ctrl.$setValidity('minDouble', false);
                             if (ctrl.$messages === undefined) {
-                                ctrl.$messages = { minDouble: '该字段值不能小于' + minDouble };
+                                ctrl.$messages = { minDouble: attrs.ngMinDoubleMsg === undefined ?'该字段值不能小于' + minDouble:attrs.ngMinDoubleMsg };
                             } else {
-                                ctrl.$messages['minDouble'] = '该字段值不能小于' + minDouble;
+                                ctrl.$messages['minDouble'] = attrs.ngMinDoubleMsg === undefined ? '该字段值不能小于' + minDouble : attrs.ngMinDoubleMsg;
                             }
                         } else {
                             ctrl.$setValidity('minDouble', true);
@@ -764,9 +764,9 @@ myApp.factory('$realTime', function ($http) {
                         if (val > maxDouble) {
                             ctrl.$setValidity('maxDouble', false);
                             if (ctrl.$messages === undefined) {
-                                ctrl.$messages = { maxDouble: '该字段值不能大于' + maxDouble };
+                                ctrl.$messages = { maxDouble: attrs.ngMaxDoubleMsg === undefined ? '该字段值不能大于' + maxDouble : attrs.ngMaxDoubleMsg };
                             } else {
-                                ctrl.$messages['maxDouble'] = '该字段值不能大于' + maxDouble;
+                                ctrl.$messages['maxDouble'] = attrs.ngMaxDoubleMsg === undefined ? '该字段值不能大于' + maxDouble : attrs.ngMaxDoubleMsg;
                             }
                         } else {
                             ctrl.$setValidity('maxDouble', true);
@@ -790,9 +790,9 @@ myApp.factory('$realTime', function ($http) {
                     } else {
                         ctrl.$setValidity('url', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = { url: '字段格式错误，必须是一个http开头的url'};
+                            ctrl.$messages = { url: attrs.ngUrlMsg===undefined?'字段格式错误，必须是一个http开头的url':attrs.ngUrlMsg};
                         } else {
-                            ctrl.$messages['url'] = '字段格式错误，必须是一个http开头的url';
+                            ctrl.$messages['url'] = attrs.ngUrlMsg===undefined?'字段格式错误，必须是一个http开头的url':attrs.ngUrlMsg;
                         }
                     }
                 } else {
@@ -813,9 +813,9 @@ myApp.factory('$realTime', function ($http) {
                     } else {
                         ctrl.$setValidity('mobile', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = { mobile: '字段格式错误，必须是合法的移动电话号码' };
+                            ctrl.$messages = { mobile: attrs.ngMobileMsg === undefined ? '字段格式错误，必须是合法的移动电话号码' : attrs.ngMobileMsg };
                         } else {
-                            ctrl.$messages['mobile'] = '字段格式错误，必须是合法的移动电话号码';
+                            ctrl.$messages['mobile'] = attrs.ngMobileMsg === undefined ? '字段格式错误，必须是合法的移动电话号码' : attrs.ngMobileMsg;
                         }
                     }
                 } else {
@@ -833,6 +833,7 @@ myApp.factory('$realTime', function ($http) {
                 if (ctrl.$modelValue === attrs.ngEqualTo) {
                     ctrl.$setValidity('equalTo', true);
                 } else {
+                    ctrl.$setValidity('equalTo', false);
                     if (ctrl.$messages === undefined) {
                         ctrl.$messages = { equalTo: attrs.ngEqualToMsg };
                     } else {
@@ -854,9 +855,9 @@ myApp.factory('$realTime', function ($http) {
                     if (isNaN(ival) || fval>ival) {
                         ctrl.$setValidity('isInt', false);
                         if (ctrl.$messages === undefined) {
-                            ctrl.$messages = { isInt: '该字段必须是整数' };
+                            ctrl.$messages = { isInt: attrs.ngIsIntMsg === undefined?'该字段必须是整数':attrs.ngIsIntMsg };
                         } else {
-                            ctrl.$messages['isInt'] = '该字段必须是整数';
+                            ctrl.$messages['isInt'] = attrs.ngIsIntMsg === undefined ? '该字段必须是整数' : attrs.ngIsIntMsg;
                         }
                     } else {
                         ctrl.$setValidity('isInt', true);
@@ -1690,189 +1691,3 @@ function postOpenWin(url, params, searchParam) {
     $('#' + times).submit();
     $('#' + times).remove();
 }
-
-//--------------------------分割线-------------------------------
-//上面的代码不能改，下面的代码可以改
-//--------------------------分割线-------------------------------
-myApp.controller('testTreeForm', function ($scope, $myHttp) {
-    //监听树菜单点击事件
-    $scope.$on('onClick', function (event, treeNode) {
-        alert('点击');
-    });
-    //监听树菜单的拖动事件
-    $scope.$on('beforeDrop', function (event, treeNodes, targetNode, moveType, retObj) {
-        alert('拖动结束');
-        retObj.ret = true;
-    });
-    $scope.del = function () {
-        $scope.$broadcast('delNode', '01');
-    };
-    $scope.refresh = function () {
-        $scope.$broadcast('reloadTree');
-    };
-    $scope.rename = function () {
-        $scope.$broadcast('rename', '01','新名称');
-    };
-});
-myApp.controller("upload-image", function ($scope) {
-    $scope.testImg = function () {
-        console.log($scope.imgName + ':' + $scope.thumbnailName);
-    };
-});
-myApp.controller('upload-files', function ($scope) {
-
-});
-myApp.controller('big-img-ctrl',function($scope,$timeout){
-    $timeout(function(){
-        picViewer($('.xxx-table'));
-    });
-});
-myApp.controller('pageTableTest2', function ($scope, $timeout, $myHttp, layer) {
-    /**
-     * 表格列设置，field：字段名、title：表格标题、sort：是否显示排序按钮
-     */
-    $scope.cols = [
-        { field: 'irOrderNo', title: 'irOrderNo', sort: true },
-        { field: 'irWeiXinNickName', title: 'irWeiXinNickName', sort: true },
-        { field: 'irWeiXinHeaderImage', title: 'irWeiXinHeaderImage', sort: true },
-        { field: 'irQrCodeImagePath', title: 'irQrCodeImagePath', sort: true },
-        { field: 'irHandleState', title: 'irHandleState', sort: true },
-        { field: 'irHandleMessage', title: 'irHandleMessage', sort: true },
-        { field: 'irHandleTime', title: 'irHandleTime', sort: true },
-        { field: 'irCreateTime', title: 'irCreateTime', sort: true },
-        { field: 'irReportPicPathJson', title: 'irReportPicPathJson', sort: true },
-        { field: 'irTakeMoney', title: 'irTakeMoney', sort: true },
-        { field: 'irRobotId', title: 'irRobotId', sort: true },
-        { field: 'irRemark', title: 'irRemark', sort: true },
-        { field: 'irPushState', title: 'irPushState', sort: true },
-        { field: 'irPushTime', title: 'irPushTime', sort: true },
-        { field: 'irScanPayNotifyRet', title: 'irScanPayNotifyRet', sort: true }
-    ];
-    $scope.perms = {
-        enabled :true,
-        disabled :true,
-        add:true,
-        'export':true,
-        delBatch:true,
-        del:true,
-        edit: true
-    };
-    $scope.search = function () {
-        $scope.$broadcast('searchPage');
-    };
-    $scope.refresh = function () {
-        for (var key in $scope.postData) {
-            if ($scope.postData.hasOwnProperty(key)) {
-                $scope.postData[key] = null;
-            }
-        }
-        $scope.$broadcast('searchPage');
-    };
-    $scope.$on('tableOper', function (event, type, data) {
-        if (type === 'export') {
-            downExcel('/IRobotQrCodePayTask/export', '测试excel', $scope.postData, $scope.count)
-        } else if (type === 'delBatch') {
-            var postData={};
-            for (var i = 0,len=data.length;i<len ;i++){
-                postData['irTaskIds[' + i + ']'] = data[i].irTaskID;
-            }
-            $myHttp.post('/IRobotQrCodePayTask/delBatch', postData).mySuccess(function (result) {
-                $scope.search();
-            });
-        }
-    });
-    $scope.$on('rowOper', function (event, type, data) {
-        if (type === 'edit') {
-            $scope.edit = {
-                type: 'edit',
-                data: data
-            };
-            layer.ngOpen({
-                type: 1,
-                area: ['600px','400px'],
-                contentUrl: 'menus/testMenus1/edit1.html',
-                scope: $scope,
-                title: '修改'
-            });
-        }else if(type === 'del'){
-            $myHttp.post('/IRobotQrCodePayTask/del', { irTaskID: data.irTaskID }).mySuccess(function (result) {
-                $scope.search();
-            });
-        }
-    });
-    $scope.$on('done', function (event,res, curr, count) {
-        if (count === 0) {
-            $('#pageTableTest2 [lay-event="enabled"],#pageTableTest2 [lay-event="disabled"],#pageTableTest2 [lay-event="export"],#pageTableTest2 [lay-event="delBatch"]').hide();
-        } else {
-            $('#pageTableTest2 [lay-event="enabled"],#pageTableTest2 [lay-event="disabled"],#pageTableTest2 [lay-event="export"],#pageTableTest2 [lay-event="delBatch"]').show();
-        }
-        $scope.count=count;
-    });
-});
-myApp.controller('testEdit1', function ($scope, $myHttp) {
-    $myHttp.get('/IRobotQrCodePayTask/load', { irTaskID: $scope.edit.data.irTaskID }).mySuccess(function (result) {
-        $scope.edit.postData = result.data;
-    });
-    $scope.edit.save = function () {
-
-    };
-});
-myApp.controller('testUploadExcel', function ($scope) {
-    $scope.postData = { otherData: 'asdasdasd' };
-    $scope.upload = function () {
-        $scope.$broadcast('submit');
-    }
-});
-myApp.controller('addNewAlaram', function ($scope,$realTime) {
-    $scope.adddd = function () {
-        $realTime.getUpdate('/NewAlarm/add', {}, ['newsAlarm']).mySuccess(function () {
-
-        });
-    };
-});
-myApp.controller('testAreaSelect', function ($scope,$timeout) {
-    //$timeout(function () {
-    //    $scope.$broadcast('renderSelect', "19", "202", "1787");
-    //},1000);
-    $scope.showSelect = function () {
-        var retVal = {};
-        $scope.$broadcast('getSelectVal', retVal);
-        console.log(retVal.provinceVal + ":" + retVal.cityVal + ":" + retVal.countyVal);
-    };
-});
-myApp.controller('testCharts', function ($scope) {
-    $scope.rowAxisTitle = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
-    $scope.yAxisTitle = ['金额（元）'];
-    $scope.histogramData = [{
-        name: '乐车邦',
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-    }, {
-        name: '好车帮',
-        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-    }, {
-        name: '中国人寿',
-        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-    }, {
-        name: '法国人寿',
-        data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-    }];
-    $scope.pieData = [{
-        name: '乐车邦',
-        y: 61.41
-    }, {
-        name: '好车帮',
-        y: 11.84
-    }, {
-        name: '豪车邦',
-        y: 10.85
-    }, {
-        name: '4S店',
-        y: 4.67
-    }, {
-        name: '5S店',
-        y: 4.18
-    }, {
-        name: '美国交警网',
-        y: 7.05
-    }];
-});

@@ -405,6 +405,16 @@
     <Content Include="Content\menus\testMenus1\uploadExcel.html" />
     <Content Include="Content\menus\testMenus1\uploadFiles.html" />
     <Content Include="Content\menus\testMenus1\uploadImage.html" />
+    <Content Include="Content\my-js\menus\testMenus1\areaSelect.js" />
+    <Content Include="Content\my-js\menus\testMenus1\bigImg.js" />
+    <Content Include="Content\my-js\menus\testMenus1\charts.js" />
+    <Content Include="Content\my-js\menus\testMenus1\edit1.js" />
+    <Content Include="Content\my-js\menus\testMenus1\pageTable2.js" />
+    <Content Include="Content\my-js\menus\testMenus1\testNewAlarm.js" />
+    <Content Include="Content\my-js\menus\testMenus1\treeForm.js" />
+    <Content Include="Content\my-js\menus\testMenus1\uploadExcel.js" />
+    <Content Include="Content\my-js\menus\testMenus1\uploadFiles.js" />
+    <Content Include="Content\my-js\menus\testMenus1\uploadImage.js" />
     <Content Include="Content\plugin-animate\animate.css" />
     <Content Include="Content\plugin\Highcharts-7.1.2\code\css\annotations\popup.css" />
     <Content Include="Content\plugin\Highcharts-7.1.2\code\css\highcharts.css" />
@@ -2080,7 +2090,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\my-js\menus\" />
     <Folder Include="Content\plugin\jshashes-master\bin\" />
     <Folder Include="Content\plugin\jshashes-master\examples\client\" />
     <Folder Include="Content\plugin\jshashes-master\examples\server\" />
