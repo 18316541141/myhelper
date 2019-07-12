@@ -456,20 +456,20 @@
       <h2 style="color:white;">测试后台</h2> 
       <p style="color:white;">xxxxxxxxx运营商后台</p> 
      </div> 
-     <form class="layadmin-user-login-box layadmin-user-login-body layui-form" ng-submit="login();"> 
+     <form class="layadmin-user-login-box layadmin-user-login-body layui-form" ng-submit="login();" novalidate> 
       <div class="layui-form-item"> 
        <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label> 
-       <input type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
+       <input ng-required type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
       </div> 
       <div class="layui-form-item"> 
        <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label> 
-       <input type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
+       <input ng-required type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
       </div> 
       <div class="layui-form-item"> 
        <div class="layui-row"> 
         <div class="layui-col-xs7"> 
          <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label> 
-         <input type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
+         <input ng-required type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
         </div> 
         <div class="layui-col-xs5"> 
          <div style="margin-left: 10px;"> 
