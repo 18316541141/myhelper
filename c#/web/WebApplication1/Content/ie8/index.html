@@ -173,6 +173,15 @@
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
+
+.files-list.ng-leave.ng-leave-active,.files-list.ng-enter {
+	opacity: 0;
+	max-height: 0;
+}
+.files-list.ng-leave, .files-list.ng-enter.ng-enter-active {
+	opacity: 1;
+	max-height: 40px;
+}
 </style>
   <script type="text/template" id="cropTemplate">
             <div class="layer-body">
@@ -208,13 +217,13 @@
                     <div id="uploadImage{{id}}">选择图片</div>
                 </div>
             </div>
-            <div ng-show="isUploaded" class="layui-form-item show-image">
+            <div ng-if="isUploaded" class="layui-form-item show-image">
                 <label class="layui-form-label">预览</label>
                 <div class="layui-input-block">
-                    <img style="max-width:100%;" ng-src="{{'/index/showImage?pathName='+path+'&imgName='+imgName}}" class="thumbnail-img"/>
+                    <img style="max-width:100%;" ng-src="{{src}}" class="thumbnail-img"/>
                 </div>
             </div>
-            <div ng-show="showProgress">
+            <div ng-if="showProgress">
                 <label class="layui-form-label">进度</label>
                 <div class="layui-input-block">
                     <div class="layui-progress" lay-showPercent="yes" style="top:16px;" lay-filter="upload-img-progress">
@@ -348,7 +357,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="x in files">
+                        <tr ng-repeat="x in files" class="files-list">
                             <td class="auto-col-width"><img width="36px" ng-src="{{x.typeImg}}"></td>
                             <td class="auto-col-width" style="max-width:{{fileDescMaxWidth}}px;" ng-mouseover="showTip($event,x.fileDesc)" ng-mouseleave="hideTip();">
                                 {{x.fileDesc}}
@@ -439,7 +448,7 @@
       <li ng-repeat="x in menus" data-menu-id="{{x.id}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190711113329'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132742'"></div> 
      </div> 
     </div> 
    </div> 
@@ -456,20 +465,20 @@
       <h2 style="color:white;">测试后台</h2> 
       <p style="color:white;">xxxxxxxxx运营商后台</p> 
      </div> 
-     <form class="layadmin-user-login-box layadmin-user-login-body layui-form" ng-submit="login();" name="loginForm" novalidate> 
+     <form class="layadmin-user-login-box layadmin-user-login-body layui-form" ng-submit="login();" name="loginForm" novalidate=""> 
       <div class="layui-form-item"> 
        <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label> 
-       <input ng-required2 ng-maxlength2="20" type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
+       <input ng-required2="" ng-maxlength2="20" type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
       </div> 
       <div class="layui-form-item"> 
        <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label> 
-       <input ng-required2 ng-maxlength2="20" type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
+       <input ng-required2="" ng-maxlength2="20" type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
       </div> 
       <div class="layui-form-item"> 
        <div class="layui-row"> 
         <div class="layui-col-xs7"> 
          <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label> 
-         <input ng-required2  ng-length="4" type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
+         <input ng-required2="" ng-length="4" type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
         </div> 
         <div class="layui-col-xs5"> 
          <div style="margin-left: 10px;"> 
@@ -497,6 +506,7 @@
   <script src="zTree_v3-master/js/jquery.ztree.exhide.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular-sanitize.min.js"></script> 
+  <script src="angular-1.2.30/angular-animate.min.js"></script> 
   <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
   <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
@@ -508,16 +518,16 @@
      <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
     <![endif]-->
-  <script src="my-js/project.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/areaselect.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/bigimg.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/charts.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/edit1.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/treeform.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190711113329" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190711113329" charset="utf-8"></script> 
+  <script src="my-js/project.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/charts.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/edit1.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/treeform.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190712132742" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190712132742" charset="utf-8"></script> 
  </body>
 </html>

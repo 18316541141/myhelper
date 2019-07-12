@@ -229,7 +229,7 @@ layuiTable.set({
     }
 });
 
-var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('main-body', function ($scope, $myHttp, $timeout, $realTime) {
+var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).controller('main-body', function ($scope, $myHttp, $timeout, $realTime) {
     $scope.newAlarm = function () {
         layuiLayer.open({
             type: 1,
@@ -1143,6 +1143,7 @@ myApp.factory('$realTime', function ($http) {
                         var data = response.data;
                         $scope.imgName = data.imgName;
                         $scope.thumbnailName = data.thumbnailName;
+                        $scope.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
                         if ($scope.cut === 'true') {
                             $scope.cropLayer = layer.ngOpen({
                                 type: 1,
