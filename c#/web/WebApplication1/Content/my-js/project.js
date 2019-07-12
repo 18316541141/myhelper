@@ -386,35 +386,37 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer']).controller('mai
             $.cookie('password', null);
             $.cookie('rememberPassword', null);
         }
-        $scope.loginData.password = new Hashes.SHA1().hex($scope.loginData.password);
-        $myHttp.post('/session/login', $scope.loginData).mySuccess(function (result) {
-            if (result.code === -1) {
-                $scope.loginData.rNum = Math.random();
-                $scope.loginData.password = '';
-                $scope.loginData.vercode = '';
-            } else if (result.code == 0) {
-                $scope.menus = [];
-                $scope.leftMenus = result.data.leftMenus;
-                var username = $.cookie('username');
-                var password = $.cookie('password');
-                $scope.loginData = {
-                    rNum: Math.random(),
-                    username: username == 'null' ? '' : username,
-                    password: password == 'null' ? '' : password,
-                    vercode: "",
-                    rememberPassword: $.cookie('rememberPassword') === 'true'
-                };
-                $timeout(function () {
-                    $('.layui-nav-bar').remove();
-                    layuiElement.render('nav');
-                    $('#login-page').removeClass('logout');
-                });
-                $realTime.regPool('newsAlarm', function () {
-                    $scope.newAlarm();
-                    layuiTable.reload('20190703120431-checked', {});
-                });
-            }
-        });
+        if (validate($scope.loginForm)) {
+            $scope.loginData.password = new Hashes.SHA1().hex($scope.loginData.password);
+            $myHttp.post('/session/login', $scope.loginData).mySuccess(function (result) {
+                if (result.code === -1) {
+                    $scope.loginData.rNum = Math.random();
+                    $scope.loginData.password = '';
+                    $scope.loginData.vercode = '';
+                } else if (result.code == 0) {
+                    $scope.menus = [];
+                    $scope.leftMenus = result.data.leftMenus;
+                    var username = $.cookie('username');
+                    var password = $.cookie('password');
+                    $scope.loginData = {
+                        rNum: Math.random(),
+                        username: username == 'null' ? '' : username,
+                        password: password == 'null' ? '' : password,
+                        vercode: "",
+                        rememberPassword: $.cookie('rememberPassword') === 'true'
+                    };
+                    $timeout(function () {
+                        $('.layui-nav-bar').remove();
+                        layuiElement.render('nav');
+                        $('#login-page').removeClass('logout');
+                    });
+                    $realTime.regPool('newsAlarm', function () {
+                        $scope.newAlarm();
+                        layuiTable.reload('20190703120431-checked', {});
+                    });
+                }
+            });
+        }
     }
 });
 /**
@@ -600,6 +602,269 @@ myApp.factory('$realTime', function ($http) {
             ret.mySuccess = function (callback) {
                 ret.success(callback);
             };
+        }
+    };
+    //自定义表单必填校验，由于内置的校验不够完善，所以只能自定义一个
+}).directive('ngRequired2', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if ($.type(ctrl.$modelValue) === 'string') {
+                    if (ctrl.$modelValue.length > 0) {
+                        ctrl.$setValidity('required', true);
+                    } else {
+                        ctrl.$setValidity('required', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { required: '该字段不能为空' };
+                        } else {
+                            ctrl.$messages['required'] = '该字段不能为空';
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('required', false);
+                    if (ctrl.$messages === undefined) {
+                        ctrl.$messages = { required: '该字段不能为空' };
+                    } else {
+                        ctrl.$messages['required'] = '该字段不能为空';
+                    }
+                }
+            });
+        }
+    };
+    //自定义表单长度校验，由于内置的校验不够完善，所以只能自定义一个
+}).directive('ngLength', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                var len = parseInt(attrs.ngLength);
+                if ($.type(ctrl.$modelValue) === 'string') {
+                    if (len === ctrl.$modelValue.length || ctrl.$modelValue.length === 0) {
+                        ctrl.$setValidity('length', true);
+                    } else {
+                        ctrl.$setValidity('length', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = {length:'该字段长度必须是'+len+'个字符'};
+                        } else {
+                            ctrl.$messages['length'] = '该字段长度必须是' + len + '个字符';
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('length', true);
+                }
+            });
+        }
+    };
+    //自定义表单最小长度校验，由于内置的校验不够完善，所以只能自定义一个
+}).directive('ngMinlength2', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                var len = parseInt(attrs.ngMinlength2);
+                if ($.type(ctrl.$modelValue) === 'string') {
+                    if (len <= ctrl.$modelValue.length || ctrl.$modelValue.length === 0) {
+                        ctrl.$setValidity('minlength2', true);
+                    } else {
+                        ctrl.$setValidity('minlength2', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { minlength2: '该字段长度不能少于' + len + '个字符' };
+                        } else {
+                            ctrl.$messages['minlength2'] = '该字段长度不能少于' + len + '个字符';
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('minlength2', true);
+                }
+            });
+        }
+    };
+    //自定义表单最大长度校验，由于内置的校验不够完善，所以只能自定义一个
+}).directive('ngMaxlength2', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                var len = parseInt(attrs.ngMaxlength2);
+                if ($.type(ctrl.$modelValue) === 'string') {
+                    if (len >= ctrl.$modelValue.length || ctrl.$modelValue.length === 0) {
+                        ctrl.$setValidity('maxlength2', true);
+                    } else {
+                        ctrl.$setValidity('maxlength2', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { maxlength2: '该字段长度不能超过' + len + '个字符' };
+                        } else {
+                            ctrl.$messages['maxlength2'] = '该字段长度不能超过' + len + '个字符';
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('maxlength2', true);
+                }
+            });
+        }
+    };
+    //自定义表单最小值（可以是浮点数，可以是整数）校验，由于内置的校验不够完善，所以只能自定义一个
+}).directive('ngMinDouble', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if ($.type(ctrl.$modelValue) === 'string' && ctrl.$modelValue.length > 0) {
+                    var val=parseFloat(ctrl.$modelValue);
+                    if (isNaN(val)) {
+                        ctrl.$setValidity('minDouble', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { minDouble: '该字段必须是数字' };
+                        } else {
+                            ctrl.$messages['minDouble'] = '该字段必须是数字';
+                        }
+                    } else {
+                        var minDouble = parseFloat(attrs.ngMinDouble);
+                        if (val < minDouble) {
+                            ctrl.$setValidity('minDouble', false);
+                            if (ctrl.$messages === undefined) {
+                                ctrl.$messages = { minDouble: '该字段值不能小于' + minDouble };
+                            } else {
+                                ctrl.$messages['minDouble'] = '该字段值不能小于' + minDouble;
+                            }
+                        } else {
+                            ctrl.$setValidity('minDouble', true);
+                        }
+                    }
+                }else {
+                    ctrl.$setValidity('minDouble', true);
+                }
+            });
+        }
+    };
+    //自定义表单最大值（可以是浮点数，可以是整数）校验，由于内置的校验不够完善，所以只能自定义一个
+}).directive('ngMaxDouble', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if ($.type(ctrl.$modelValue) === 'string' && ctrl.$modelValue.length > 0) {
+                    var val = parseFloat(ctrl.$modelValue);
+                    if (isNaN(val)) {
+                        ctrl.$setValidity('maxDouble', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { maxDouble: '该字段必须是数字' };
+                        } else {
+                            ctrl.$messages['maxDouble'] = '该字段必须是数字';
+                        }
+                    } else {
+                        var maxDouble = parseFloat(attrs.ngMaxDouble);
+                        if (val > maxDouble) {
+                            ctrl.$setValidity('maxDouble', false);
+                            if (ctrl.$messages === undefined) {
+                                ctrl.$messages = { maxDouble: '该字段值不能大于' + maxDouble };
+                            } else {
+                                ctrl.$messages['maxDouble'] = '该字段值不能大于' + maxDouble;
+                            }
+                        } else {
+                            ctrl.$setValidity('maxDouble', true);
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('maxDouble', true);
+                }
+            });
+        }
+    };
+}).directive('ngUrl', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if ($.type(ctrl.$modelValue) === 'string' && ctrl.$modelValue.length > 0) {
+                    if (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@@)|\/|\?)*)?$/i.test(ctrl.$modelValue)) {
+                        ctrl.$setValidity('url', true);
+                    } else {
+                        ctrl.$setValidity('url', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { url: '字段格式错误，必须是一个http开头的url'};
+                        } else {
+                            ctrl.$messages['url'] = '字段格式错误，必须是一个http开头的url';
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('url', true);
+                }
+            });
+        }
+    };
+}).directive('ngMobile', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if ($.type(ctrl.$modelValue) === 'string' && ctrl.$modelValue.length > 0) {
+                    if (/^1[3|4|5|8][0-9]\d{4,8}$/.test(ctrl.$modelValue)) {
+                        ctrl.$setValidity('mobile', true);
+                    } else {
+                        ctrl.$setValidity('mobile', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { mobile: '字段格式错误，必须是合法的移动电话号码' };
+                        } else {
+                            ctrl.$messages['mobile'] = '字段格式错误，必须是合法的移动电话号码';
+                        }
+                    }
+                } else {
+                    ctrl.$setValidity('mobile', true);
+                }
+            });
+        }
+    };
+}).directive('ngEqualTo', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if (ctrl.$modelValue === attrs.ngEqualTo) {
+                    ctrl.$setValidity('equalTo', true);
+                } else {
+                    if (ctrl.$messages === undefined) {
+                        ctrl.$messages = { equalTo: attrs.ngEqualToMsg };
+                    } else {
+                        ctrl.$messages['equalTo'] = attrs.ngEqualToMsg;
+                    }
+                }
+            });
+        }
+    };
+}).directive('ngIsInt', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, el, attrs, ctrl) {
+            scope.$watch(attrs.ngModel, function () {
+                if ($.type(ctrl.$modelValue) === 'string' && ctrl.$modelValue.length > 0) {
+                    var fval=parseFloat(ctrl.$modelValue)
+                    var ival = parseInt(ctrl.$modelValue);
+                    if (isNaN(ival) || fval>ival) {
+                        ctrl.$setValidity('isInt', false);
+                        if (ctrl.$messages === undefined) {
+                            ctrl.$messages = { isInt: '该字段必须是整数' };
+                        } else {
+                            ctrl.$messages['isInt'] = '该字段必须是整数';
+                        }
+                    } else {
+                        ctrl.$setValidity('isInt', true);
+                    }
+                } else {
+                    ctrl.$setValidity('isInt', true);
+                }
+            });
         }
     };
 }).directive('uploadExcel', function () {
@@ -1171,6 +1436,38 @@ myApp.factory('$realTime', function ($http) {
         }
     };
 });
+
+/**
+ * 表单校验
+ * @formObj angularjs的表单对象
+ * @return 返回true校验通过，否则校验不过
+ */
+function validate(formObj) {
+    if (formObj.$invalid) {
+        var formName = formObj.$name;
+        for (var key1 in formObj) {
+            if (formObj.hasOwnProperty(key1) && key1.indexOf('$') != 0) {
+                if (formObj[key1].$invalid) {
+                    var error = formObj[key1].$error;
+                    var messages = formObj[key1].$messages;
+                    for (var key2 in error) {
+                        if (error.hasOwnProperty(key2) && error[key2] === true) {
+                            var tipIndex = layuiLayer.tips(messages[key2], $('[name="' + formName + '"] [name="' + key1 + '"]'), {
+                                tips: 1,
+                                time: 3000
+                            });
+                            $('[name="' + formName + '"] [name="' + key1 + '"]').one('blur', function () {
+                                layuiLayer.close(tipIndex);
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
 
 /**
  * 设置下拉菜单的值
