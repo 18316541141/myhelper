@@ -58,15 +58,16 @@ namespace WindowsFormsApplication1.Service
             foreach (DataRow cl in dataTable.Rows)
             {
                 string colName = (string)cl.ItemArray[3];
-                string dbType = (string)cl.ItemArray[7];
+                string dbType = (string)cl.ItemArray[SqlInfo.ColTypeInfoIndex()];
                 string srcPropName = NameTrans.ColNameToPropName(colName);
                 entity.PropList.Add(new Prop
                 {
+                    IsKey= colName==keyCol,
                     ColName = colName,
                     SrcPropName= srcPropName,
                     PropName = srcPropName,
                     PropType = DbTypeTrans.SqlType2EntityType(dbType),
-                    PropNotes = commentMap[colName],
+                    PropNotes = commentMap.ContainsKey(colName)?commentMap[colName]:"",
                     ParamsType= "equal",
                 });
                 string paramsType= DbTypeTrans.SqlType2ParamsType(dbType);
@@ -74,20 +75,22 @@ namespace WindowsFormsApplication1.Service
                 {
                     entity.PropList.Add(new Prop
                     {
+                        IsKey = colName == keyCol,
                         ColName = colName,
                         SrcPropName= srcPropName,
                         PropName = srcPropName + "Start",
                         PropType = DbTypeTrans.SqlType2EntityType(dbType),
-                        PropNotes = commentMap[colName],
+                        PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",
                         ParamsType="rangeStart"
                     });
                     entity.PropList.Add(new Prop
                     {
+                        IsKey = colName == keyCol,
                         ColName = colName,
                         SrcPropName= srcPropName,
                         PropName = srcPropName + "End",
                         PropType = DbTypeTrans.SqlType2EntityType(dbType),
-                        PropNotes = commentMap[colName],
+                        PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",
                         ParamsType = "rangeEnd"
                     });
                 }
@@ -95,11 +98,12 @@ namespace WindowsFormsApplication1.Service
                 {
                     entity.PropList.Add(new Prop
                     {
+                        IsKey = colName == keyCol,
                         ColName = colName,
                         SrcPropName= srcPropName,
                         PropName = srcPropName + "Like",
                         PropType = DbTypeTrans.SqlType2EntityType(dbType),
-                        PropNotes = commentMap[colName],
+                        PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",
                         ParamsType = "like"
                     });
                 }

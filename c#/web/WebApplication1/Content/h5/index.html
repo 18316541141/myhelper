@@ -43,10 +43,11 @@
             top:0;
             background:#909399;
             z-index:99;
+            overflow:hidden;
         }
         .login-form-content{
-            width:300px;
-            margin:auto;
+            width:320px;
+            margin:130px auto auto;
         }
     </style>
 </head>
@@ -135,7 +136,9 @@
         </div>
         <div class="login-content">
             <div class="login-form-content">
-                <el-form ref="form" model="form" label-width="0">
+                <h2 style="color:white;text-align:center;">测试后台</h2>
+                <p style="color:white;text-align:center;">xxxxxxxxx运营商后台</p> 
+                <el-form ref="form" model="form" label-width="0" @keyup.enter.native="login();">
                     <el-form-item>
                         <el-input placeholder="请输入用户名" v-model="input" prefix-icon="el-icon-user-solid"></el-input>
                     </el-form-item>
@@ -145,24 +148,47 @@
                     <el-form-item>
                         <el-row>
                             <el-col span="12"><el-input placeholder="验证码" v-model="input"></el-input></el-col>
-                            <el-col span="12"><div style="text-align:right;"><img src="/session/verificationCode" /></div></el-col>
+                            <el-col span="12" style="text-align:right;"><img src="/session/verificationCode" /></el-col>
                         </el-row>
                     </el-form-item>
-                    <el-button type="primary">登录</el-button>
+                    <el-button type="primary" style="width:100%" v-on:click="login();">登录</el-button>
                 </el-form>
             </div>
         </div>
     </div>
     <script src="vue/vue.js" charset="utf-8"></script>
+    <script src="vue/axios.min.js" charset="utf-8"></script>
     <script src="element-ui/index.js" charset="utf-8"></script>
     <script type="text/javascript">
+        //初始化axios的拦截器
+        (function () {
+            //使用缓存的url，部分url数据是需要使用缓存的，统一在这里配置
+            var cacheUrls = [
+                '/index/areaSelect',//加载省、市、区、镇列表，基本不怎么变化，所以使用缓存
+            ];
+            axios.interceptors.request.use(function (config) {
+                var cacheUrls2 = cacheUrls.filter(function (currentValue, index, arr) {
+                    return currentValue.indexOf(config.url) > -1;
+                });
+                if (cacheUrls2.length === 0) {
+                    if (config.data === undefined) {
+                        config.data = {};
+                    }
+                    config.data['r'] = Math.random();//避免ie浏览器使用缓存
+                }
+                return config;
+            }, function (error) {
+                return Promise.reject(error);
+            });
+        }());
         var Main = {
             data() {
                 return {
                     activeIndex: '1',
                     activeIndex2: '1',
                     activeName: 'second',
-                    input:'',
+                    input: '',
+                    checked:false,
                 };
             },
             methods: {
@@ -177,6 +203,11 @@
                 },
                 handleClick(tab, event) {
                     console.log(tab, event);
+                },
+                login() {
+                    axios.post('/session/login').then(function (response) {
+                        console.log(response);
+                    });
                 }
             }
         }

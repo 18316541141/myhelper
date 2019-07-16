@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Params.codeGenerator
+namespace WebApplication1.Params
 {
-    public class $entity.EntityName$OrderBy
+    public partial class $entity.EntityName$OrderBy
     {
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 

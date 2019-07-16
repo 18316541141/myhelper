@@ -30,10 +30,10 @@ namespace WindowsFormsApplication1.Service
         public void EntityFrameworkCode(Entity entity)
         {
             string dateStr=DateTime.Now.ToString("yyyyMMddHHmmss");
-            string paramsPath = $@"GenTarget{s}{dateStr}{s}Params{s}codeGenerator{s}";
-            string entityPath = $@"GenTarget{s}{dateStr}{s}Entity{s}codeGenerator{s}";
-            string repositoryPath = $@"GenTarget{s}{dateStr}{s}Repository{s}codeGenerator{s}";
-            string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}codeGenerator{s}";
+            string paramsPath = $@"GenTarget{s}{dateStr}{s}Params{s}CodeGenerator{s}";
+            string entityPath = $@"GenTarget{s}{dateStr}{s}Entity{s}CodeGenerator{s}";
+            string repositoryPath = $@"GenTarget{s}{dateStr}{s}Repository{s}CodeGenerator{s}";
+            string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}CodeGenerator{s}";
             Directory.CreateDirectory(paramsPath);
             Directory.CreateDirectory(entityPath);
             Directory.CreateDirectory(repositoryPath);

@@ -25,6 +25,7 @@ E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Window
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\CommonHelper.exe
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\System.Data.SQLite.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Newtonsoft.Json.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Antlr3.StringTemplate.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\zxing.dll
@@ -33,9 +34,11 @@ E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\NPOI.O
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\HtmlAgilityPack.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WebDriver.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\SeleniumExtras.WaitHelpers.dll
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\ICSharpCode.SharpZipLib.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\NPOI.OpenXml4Net.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\NPOI.OpenXmlFormats.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\CommonHelper.pdb
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\System.Data.SQLite.xml
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Newtonsoft.Json.pdb
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Newtonsoft.Json.xml
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Antlr3.StringTemplate.pdb
@@ -44,6 +47,8 @@ E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\zxing.
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\HtmlAgilityPack.pdb
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\HtmlAgilityPack.xml
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WebDriver.xml
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\ICSharpCode.SharpZipLib.pdb
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\ICSharpCode.SharpZipLib.xml
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources

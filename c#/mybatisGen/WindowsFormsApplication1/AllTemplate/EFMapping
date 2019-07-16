@@ -8,11 +8,11 @@ using WebApplication1.Entity;
 
 namespace WebApplication1.Mapping
 {
-    public class $entity.EntityName$Map: EntityTypeConfiguration<$entity.EntityName$>
+    public partial class $entity.EntityName$Map: EntityTypeConfiguration<$entity.EntityName$>
     {
         public $entity.EntityName$Map()
         {
-            this.ToTable("$entity.EntityName$");
+            this.ToTable("$entity.TableName$");
             this.HasKey(u => u.$entity.KeyName$);
             this.Property(u => u.$entity.KeyName$).HasColumnName("$entity.KeyCol$").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 		$entity.PropList:{$if(it.ParamsTypeIsEqual)$

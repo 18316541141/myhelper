@@ -11,6 +11,12 @@ namespace WindowsFormsApplication1.Service
     public interface ISqlInfo
     {
         /// <summary>
+        /// 该数据库原型表中，描述列类型的所在列下标
+        /// </summary>
+        /// <returns></returns>
+        int ColTypeInfoIndex();
+
+        /// <summary>
         /// 根据表名，获取表注释
         /// </summary>
         /// <param name="tableName">表名</param>
