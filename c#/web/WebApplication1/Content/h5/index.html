@@ -36,14 +36,20 @@
             padding-left: 20px;
         }
         .login-content{
-            position:absolute;
-            left:0;
+            position:fixed;
+            left: 100%;
             width:100%;
             bottom:0;
             top:0;
             background:#909399;
             z-index:99;
             overflow:hidden;
+            opacity: 0;
+	        transition: all .4s linear;
+        }
+        .login-content.logout{
+            opacity: 1;
+	        left: 0%;
         }
         .login-form-content{
             width:320px;
@@ -52,11 +58,10 @@
     </style>
 </head>
 <body>
-    <div id="app">
+    <div id="myApp">
         <el-menu default-active="activeIndex2"
                  class="el-menu-demo"
                  mode="horizontal"
-                 @select="handleSelect"
                  background-color="#545c64"
                  text-color="#fff"
                  active-text-color="#ffd04b">
@@ -84,71 +89,48 @@
             <div class="left-menus-scroll">
                 <el-menu default-active="2"
                          class="el-menu-vertical-demo"
-                         @open="handleOpen"
-                         @close="handleClose"
                          background-color="#545c64"
                          text-color="#fff"
-                         active-text-color="#ffd04b">
-                    <el-submenu index="1">
+                         active-text-color="#ffd04b"
+                         v-on:select="leftNavSelect"
+                         v-bind:collapse="isCollapse">
+                    <el-submenu v-for="(x,xIndex) in leftMenus" v-bind:index="xIndex">
                         <template slot="title">
                             <i class="el-icon-location"></i>
-                            <span>导航一</span>
+                            <span v-text="x.title"></span>
                         </template>
-                        <el-menu-item-group>
-                            <template slot="title">
-                                分组一
-                            </template>
-                            <el-menu-item index="1-1">选项1</el-menu-item>
-                            <el-menu-item index="1-2">选项2</el-menu-item>
-                        </el-menu-item-group>
-                        <el-menu-item-group title="分组2">
-                            <el-menu-item index="1-3">选项3</el-menu-item>
-                        </el-menu-item-group>
-                        <el-submenu index="1-4">
-                            <template slot="title">
-                                选项4
-                            </template>
-                            <el-menu-item index="1-4-1">选项1</el-menu-item>
-                        </el-submenu>
+                        <el-menu-item v-for="(y,yIndex) in x.leftMenus" v-bind:index="y.id">
+                            <i class="el-icon-setting"></i>
+                            <span slot="title" v-text="y.title"></span>
+                        </el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="2">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">导航二</span>
-                    </el-menu-item>
-                    <el-menu-item index="3" disabled>
-                        <i class="el-icon-document"></i>
-                        <span slot="title">导航三</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">导航四</span>
-                    </el-menu-item>
                 </el-menu>
             </div>
         </div>
         <div class="main-content">
-            <el-tabs v-model="activeName" @tab-click="handleClick" closable>
-                <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-                <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-                <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-                <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+            <el-tabs v-model="menuActive" v-on:tab-remove="closeNavTab" closable>
+                <el-tab-pane v-for="(x) in menus" v-bind:label="x.title" v-bind:name="x.id">
+                    <keep-alive>
+                        <component v-bind:is="x.id" style="padding:0 8px;"></component>
+                    </keep-alive>
+                </el-tab-pane>
             </el-tabs>
         </div>
-        <div class="login-content">
+        <div class="login-content" v-bind:class="{'logout':isLogin===false}">
             <div class="login-form-content">
                 <h2 style="color:white;text-align:center;">测试后台</h2>
                 <p style="color:white;text-align:center;">xxxxxxxxx运营商后台</p> 
-                <el-form ref="form" model="form" label-width="0" @keyup.enter.native="login();">
+                <el-form ref="form" model="form" label-width="0" v-on:keyup.enter.native="login();" v-loading="loginLoading">
                     <el-form-item>
-                        <el-input placeholder="请输入用户名" v-model="input" prefix-icon="el-icon-user-solid"></el-input>
+                        <el-input placeholder="请输入用户名" v-model="loginData.username" prefix-icon="el-icon-user-solid"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-input placeholder="请输入密码" v-model="input" show-password prefix-icon="el-icon-unlock"></el-input>
+                        <el-input placeholder="请输入密码" v-model="loginData.password" show-password prefix-icon="el-icon-unlock"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-row>
-                            <el-col span="12"><el-input placeholder="验证码" v-model="input"></el-input></el-col>
-                            <el-col span="12" style="text-align:right;"><img src="/session/verificationCode" /></el-col>
+                            <el-col span="12"><el-input placeholder="验证码" v-model="loginData.vercode"></el-input></el-col>
+                            <el-col span="12" style="text-align:right;"><img v-bind:src="rVercode" v-on:click="refreshVercode();"/></el-col>
                         </el-row>
                     </el-form-item>
                     <el-button type="primary" style="width:100%" v-on:click="login();">登录</el-button>
@@ -156,62 +138,21 @@
             </div>
         </div>
     </div>
+    <script src="../plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
+    <script src="../plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
     <script src="vue/vue.js" charset="utf-8"></script>
     <script src="vue/axios.min.js" charset="utf-8"></script>
     <script src="element-ui/index.js" charset="utf-8"></script>
-    <script type="text/javascript">
-        //初始化axios的拦截器
-        (function () {
-            //使用缓存的url，部分url数据是需要使用缓存的，统一在这里配置
-            var cacheUrls = [
-                '/index/areaSelect',//加载省、市、区、镇列表，基本不怎么变化，所以使用缓存
-            ];
-            axios.interceptors.request.use(function (config) {
-                var cacheUrls2 = cacheUrls.filter(function (currentValue, index, arr) {
-                    return currentValue.indexOf(config.url) > -1;
-                });
-                if (cacheUrls2.length === 0) {
-                    if (config.data === undefined) {
-                        config.data = {};
-                    }
-                    config.data['r'] = Math.random();//避免ie浏览器使用缓存
-                }
-                return config;
-            }, function (error) {
-                return Promise.reject(error);
-            });
-        }());
-        var Main = {
-            data() {
-                return {
-                    activeIndex: '1',
-                    activeIndex2: '1',
-                    activeName: 'second',
-                    input: '',
-                    checked:false,
-                };
-            },
-            methods: {
-                handleSelect(key, keyPath) {
-                    console.log(key, keyPath);
-                },
-                handleOpen(key, keyPath) {
-                    console.log(key, keyPath);
-                },
-                handleClose(key, keyPath) {
-                    console.log(key, keyPath);
-                },
-                handleClick(tab, event) {
-                    console.log(tab, event);
-                },
-                login() {
-                    axios.post('/session/login').then(function (response) {
-                        console.log(response);
-                    });
-                }
-            }
-        }
-        new Vue(Main).$mount('#app');
-    </script>
+    <script src="my-js/project.js" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/charts.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/edit1.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/treeform.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190712132743" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190712132743" charset="utf-8"></script>
 </body>
 </html>

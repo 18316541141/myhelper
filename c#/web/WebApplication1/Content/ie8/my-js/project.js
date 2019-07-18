@@ -283,8 +283,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
     $scope.$on("$destroy", function () {
         $realTime.cancel('newsAlarm');
     });
-    $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
-        $scope.leftMenus = result.data;
+    $myHttp.get('/index/loadLoginData').mySuccess(function (result) {
+        var data=result.data;
+        $scope.leftMenus = data.leftMenus;
         $timeout(function () {
             $('.layui-nav-bar').remove();
             layuiElement.render('nav');

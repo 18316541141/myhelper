@@ -159,7 +159,7 @@ namespace WebApplication1.Service
             List<LeftMenu> leftMenuList11 = new List<LeftMenu>();
             LeftMenu leftMenuCharts = new LeftMenu
             {
-                id = "312",
+                id = "m312",
                 title = "统计图",
                 url = "menus/testMenus1/charts.html"
             };
