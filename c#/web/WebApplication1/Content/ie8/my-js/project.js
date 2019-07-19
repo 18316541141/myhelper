@@ -1,5 +1,4 @@
 'use strict';
-
 //标题移动效果
 (function(){	
 	var title=document.title;
@@ -179,7 +178,6 @@ var uploadCallback = function (callback) {
             }
             callback(file, response);
         }
-        callback = null;
     }
 };
 /**
@@ -873,8 +871,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadExcelTemplate').html(),
-        scope: { name: "@", url: "@", type: "@", postData: "=" },
+        scope: { url: "@", type: "@", postData: "=" },
         controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
             if ($scope.postData === undefined) {
                 $scope.postData = {};
             }
@@ -904,7 +903,7 @@ myApp.factory('$realTime', function ($http) {
                     formData: $scope.postData,//每次上传时上传的数据
                     duplicate: true,
                     pick: {
-                        id: '#' + $scope.name + 'ExcelId',//生成上传插件的位置
+                        id: '#uploadExcel' + $scope.id,//生成上传插件的位置
                         multiple: false //每次只能选一个文件
                     },
                     //允许上传的图片格式后缀
@@ -933,8 +932,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#pageDataTableTemplate').html(),
-        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", height:"@", postData: "=", cols: "=", perms: "=" },
+        scope: { url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", height:"@", postData: "=", cols: "=", perms: "=" },
         controller: function ($scope, $timeout, $myHttp) {
+            $scope.id = new UUID().id;
             if ($scope.cols === undefined) {
                 throw new Error('请设置cols的值');
             }
@@ -1026,8 +1026,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#areaSelectTemplate').html(),
-        scope: { id:"@",type: "@", deep: "@"},
+        scope: { type: "@", deep: "@"},
         controller: function ($scope, $myHttp, $timeout) {
+            $scope.id = new UUID().id;
             $scope.$on('renderSelect', function (event, provinceVal, cityVal, countyVal, townVal) {
                 $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
                     return val.parentValue == provinceVal;
@@ -1092,8 +1093,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadImageTemplate').html(),
-        scope: { id: "@", path: "@", cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
+        scope: { path: "@", cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
         controller: function ($scope, layer, $timeout, $myHttp) {
+            $scope.id = new UUID().id;
             $scope.isUploaded = false;
             $scope.showProgress = false;
             $scope.crop = function () {
@@ -1114,11 +1116,12 @@ myApp.factory('$realTime', function ($http) {
                     var data=response.data;
                     $scope.imgName = data.imgName;
                     $scope.thumbnailName = data.thumbnailName;
+                    $scope.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
                 });
             };
             $timeout(function () {
                 $scope.uploader = new WebUploader.Uploader({
-                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    swf: '../plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
                     auto: true,//选中文件后自动上传
                     server: '/index/uploadSingleImage',//处理上传文件的统一控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
@@ -1192,8 +1195,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#pieChartTemplate').html(),
-        scope: { id: "@",title:"@" ,pieData:"="},
+        scope: { title:"@" ,pieData:"="},
         controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
             $timeout(function () {
                 Highcharts.chart('pieChart' + $scope.id, {
                     chart: {
@@ -1231,8 +1235,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#histogramTemplate').html(),
-        scope: { id: "@", title: "@",unit:"@", rowAxisTitle: "=", yAxisTitle: "=", histogramData: "=" },
+        scope: { title: "@",unit:"@", rowAxisTitle: "=", yAxisTitle: "=", histogramData: "=" },
         controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
             $timeout(function () {
                 Highcharts.chart('histogram' + $scope.id, {
                     chart: {
@@ -1279,8 +1284,9 @@ myApp.factory('$realTime', function ($http) {
         restrict: 'EA',
         template: $('#treeFormTemplate').html(),
         transclude: true,
-        scope: { url: "@", id: "@",targetController:"@"},
+        scope: { url: "@",targetController:"@"},
         controller: function ($scope, $myHttp) {
+            $scope.id = new UUID().id;
             $scope.$on('delNode', function (event, id) {
                 var nodes = $scope.ztree.getNodesByParam("id", id, null);
                 if (nodes.length === 0)
@@ -1315,8 +1321,6 @@ myApp.factory('$realTime', function ($http) {
                     ztree.showNodes(ztree.getNodes());
                 }
             };
-            var $rightContent = $('#' + $scope.id + ' .right-content');
-            var $leftTree = $('#' + $scope.id + ' .left-tree');
             $scope.loadTree = function () {
                 $myHttp.get($scope.url).mySuccess(function (result) {
                     $scope.ztree = $.fn.zTree.init($('#tree-' + $scope.id), {
@@ -1346,7 +1350,7 @@ myApp.factory('$realTime', function ($http) {
                         }
                     }, result.data);
                     layuiForm.render();
-                    $leftTree.height($rightContent.height());
+                    $('#' + $scope.id + ' .left-tree').height($('#' + $scope.id + ' .right-content').height());
                 });
             };
             $scope.loadTree();
@@ -1356,8 +1360,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadFilesTemplate').html(),
-        scope: { id: "@", fileDescMaxWidth: "@", path: "@", files:"=" },
+        scope: { fileDescMaxWidth: "@", path: "@", files:"=" },
         controller: function ($scope, $timeout, $myHttp) {
+            $scope.id = new UUID().id;
             $scope.files = [];
             var tipIndex;
             /**

@@ -1,5 +1,26 @@
-﻿controller('m312', 'menus/testMenus1/charts.html', {}, function () {
-    myApp.redraw([{
+﻿controller('m312', 'menus/testMenus1/charts.html', { myPieData: [],myRowAxisTitle:[],myYAxisTitle:[],myHistogramData:[] }, function () {
+    this.myPieData = [{
+        name: '乐车邦',
+        y: 61.41
+    }, {
+        name: '好车帮',
+        y: 11.84
+    }, {
+        name: '豪车邦',
+        y: 10.85
+    }, {
+        name: '4S店',
+        y: 4.67
+    }, {
+        name: '5S店',
+        y: 4.18
+    }, {
+        name: '美国交警网',
+        y: 7.05
+    }];
+    this.myRowAxisTitle=['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+    this.myYAxisTitle=['金额（元）'];
+    this.myHistogramData = [{
         name: '乐车邦',
         data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
     }, {
@@ -11,5 +32,5 @@
     }, {
         name: '法国人寿',
         data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-    }]);
+    }];
 });

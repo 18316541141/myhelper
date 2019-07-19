@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>中国广东省佛山市顺德区大良镇后台管理系统 &nbsp;</title>
     <link rel="stylesheet" href="element-ui/index.css">
+    <link rel="stylesheet" href="../plugin/webuploader/webuploader.css" media="all"> 
     <style type="text/css">
         body{
             margin:0;
@@ -32,6 +33,15 @@
             right:0;
             bottom:0;
         }
+        .inner-container{
+            position: fixed;
+            left: 200px;
+            top: 115px;
+            right: 0;
+            bottom: 0;
+            padding: 0 8px;
+            overflow: auto;
+        }
         .el-tabs--bottom .el-tabs__item.is-bottom:nth-child(2), .el-tabs--bottom .el-tabs__item.is-top:nth-child(2), .el-tabs--top .el-tabs__item.is-bottom:nth-child(2), .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
             padding-left: 20px;
         }
@@ -55,10 +65,49 @@
             width:320px;
             margin:130px auto auto;
         }
+        #myApp{
+            position:absolute;
+            left:0;
+            top:0;
+            right:0;
+            bottom:0;
+        }
+        .webuploader-pick{
+            line-height: initial;
+        }
+        .webuploader-container {
+            height: 40px;
+        }
+        .el-dialog {
+            margin: 0 auto;
+        }
     </style>
+    <script type="x-template" id="uploadImageTemplate">
+        <div>
+            <el-form-item label="上传图片">
+                <div v-bind:id="'uploadImage'+id">选择图片</div>
+            </el-form-item>
+            <el-form-item label="预览" v-if="isUploaded">
+                <img style="max-width:100%;" v-bind:src="src" class="thumbnail-img" />
+            </el-form-item>
+            <el-progress v-if="showProgress" v-bind:percentage="percentage" v-on:format="format" v-bind:status="status"></el-progress>
+            <el-dialog title="裁剪图片" v-bind:visible.sync="cropDialog" top="25px" modal-append-to-body="true" append-to-body="true" v-bind:width="contentWidth">
+                <div v-bind:style="{width:'100%',contentHeight:contentHeight}">
+                    <el-image v-bind:src="src" v-on:load="imgLoadFinish">
+                        <div slot="error" class="image-slot">
+                            <i class="el-icon-picture-outline"></i>
+                        </div>
+                    </el-image>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" v-on:click="crop();">裁剪</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </script>
 </head>
 <body>
-    <div id="myApp">
+    <div id="myApp" v-loading="loading">
         <el-menu default-active="activeIndex2"
                  class="el-menu-demo"
                  mode="horizontal"
@@ -111,7 +160,7 @@
             <el-tabs v-model="menuActive" v-on:tab-remove="closeNavTab" closable>
                 <el-tab-pane v-for="(x) in menus" v-bind:label="x.title" v-bind:name="x.id">
                     <keep-alive>
-                        <component v-bind:is="x.id" style="padding:0 8px;"></component>
+                        <component v-bind:is="x.id" class="inner-container"></component>
                     </keep-alive>
                 </el-tab-pane>
             </el-tabs>
@@ -120,7 +169,7 @@
             <div class="login-form-content">
                 <h2 style="color:white;text-align:center;">测试后台</h2>
                 <p style="color:white;text-align:center;">xxxxxxxxx运营商后台</p> 
-                <el-form ref="form" model="form" label-width="0" v-on:keyup.enter.native="login();" v-loading="loginLoading">
+                <el-form ref="form" model="form" label-width="0" v-on:keyup.enter.native="login();">
                     <el-form-item>
                         <el-input placeholder="请输入用户名" v-model="loginData.username" prefix-icon="el-icon-user-solid"></el-input>
                     </el-form-item>
@@ -138,11 +187,15 @@
             </div>
         </div>
     </div>
+    <script src="../plugin/UUID.js" charset="utf-8"></script> 
+    <script src="../plugin/jquery.min.js" charset="utf-8"></script> 
+    <script src="../plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
     <script src="../plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
     <script src="../plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
     <script src="vue/vue.js" charset="utf-8"></script>
     <script src="vue/axios.min.js" charset="utf-8"></script>
     <script src="element-ui/index.js" charset="utf-8"></script>
+    <script src="../Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
     <script src="my-js/project.js" charset="utf-8"></script>
     <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132743" charset="utf-8"></script>
     <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132743" charset="utf-8"></script>

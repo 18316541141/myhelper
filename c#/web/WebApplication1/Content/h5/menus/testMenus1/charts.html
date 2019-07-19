@@ -3,5 +3,6 @@
         <el-breadcrumb-item>首页</el-breadcrumb-item>
         <el-breadcrumb-item>常用统计图</el-breadcrumb-item>
     </el-breadcrumb>
-    <pie-chart v-bind:id="'sadasdas'" v-bind:title="'车险收入'"></pie-chart>
+    <pie-chart v-bind:pie-data="myPieData" v-bind:title="'车险收入'" ref="test01"></pie-chart>
+    <histogram v-bind:title="'车险收入比例'" v-bind:unit="'元'" v-bind:row-axis-title="myRowAxisTitle" v-bind:y-axis-title="myYAxisTitle" v-bind:histogram-data="myHistogramData"></histogram>
 </div>

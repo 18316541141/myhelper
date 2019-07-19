@@ -1,4 +1,9 @@
-<el-breadcrumb separator-class="el-icon-arrow-right">
-    <el-breadcrumb-item>首页</el-breadcrumb-item>
-    <el-breadcrumb-item>上传图片</el-breadcrumb-item>
-</el-breadcrumb>
+<div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>首页</el-breadcrumb-item>
+        <el-breadcrumb-item>上传图片</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-form ref="form" v-bind:model="form" label-width="80px">
+        <upload-image path="test" v-bind:cut="true" v-bind:width-over-height="2" v-bind:min-width="100" v-bind:max-width="300" v-bind:img-name.sync="form.myImgName" v-bind:thumbnail-name.sync="form.myThumbnailName"></upload-image>
+    </el-form>
+</div>

@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="layui/css/layui.css" media="all"> 
   <link rel="stylesheet" href="layui/css/login.css" media="all"> 
   <link rel="stylesheet" href="../plugin-animate/animate.css" media="all"> 
-  <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all"> 
+  <link rel="stylesheet" href="../plugin/webuploader/webuploader.css" media="all"> 
   <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all"> 
   <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
   <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all"> 
@@ -196,11 +196,11 @@
             </div>
         </script>
      <script type="text/template" id="uploadExcelTemplate">
-         <div id="{{name}}ExcelId" ng-if="type == 'line'">上传Excel</div>
+         <div id="uploadExcel{{id}}" ng-if="type == 'line'">上传Excel</div>
          <div class="layui-form-item" ng-if="type == 'form'">
              <label class="layui-form-label">上传Excel</label>
              <div class="layui-input-block">
-                 <div id="{{name}}ExcelId">选择Excel</div>
+                 <div id="uploadExcel{{id}}">选择Excel</div>
              </div>
          </div>
          <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
@@ -210,7 +210,7 @@
              </div>
          </div>
      </script>
-  <script type="text/template" id="uploadImageTemplate">
+        <script type="text/template" id="uploadImageTemplate">
             <div class="layui-form-item">
                 <label class="layui-form-label">上传图片</label>
                 <div class="layui-input-block">
@@ -253,7 +253,7 @@
             <div id="data-table-{{id}}" lay-filter="dataTable{{id}}"></div>
         </script>
         <script type="text/template" id="treeFormTemplate">
-            <div class="tree-container">
+            <div class="tree-container" id="{{id}}">
                 <div class="left-tree">
                     <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()"/>
                     <div class="left-tree-contain">
@@ -448,7 +448,7 @@
       <li ng-repeat="x in menus" data-menu-id="{{x.id}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132742'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132743'"></div> 
      </div> 
     </div> 
    </div> 
@@ -498,7 +498,8 @@
     </div> 
    </div> 
   </div> 
-  <script src="plugin/jquery.min.js" charset="utf-8"></script> 
+    <script src="../plugin/UUID.js" charset="utf-8"></script> 
+  <script src="../plugin/jquery.min.js" charset="utf-8"></script> 
   <script src="layui/layui.all.js" charset="utf-8"></script> 
   <script src="../plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
   <script src="plugin/jquery.cookie.js" charset="utf-8"></script> 
@@ -507,9 +508,9 @@
   <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular-sanitize.min.js"></script> 
   <script src="angular-1.2.30/angular-animate.min.js"></script> 
-  <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
+  <script src="../plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
-  <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
+  <script src="../Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
   <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
     <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie-polyfills.js"></script>
