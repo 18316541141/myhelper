@@ -10,43 +10,244 @@
         title = null;
     }
 }());
+
+//异步加载静态图片素材
+(function () {
+    var images = [
+		//256x256的图标
+		"../images/256x256/accdb-256.png",
+		"../images/256x256/avi-256.png",
+		"../images/256x256/bmp-256.png",
+		"../images/256x256/css-256.png",
+		"../images/256x256/docx-256.png",
+		"../images/256x256/eml-256.png",
+		"../images/256x256/eps-256.png",
+		"../images/256x256/fla-256.png",
+		"../images/256x256/gif-256.png",
+		"../images/256x256/html-256.png",
+		"../images/256x256/ind-256.png",
+		"../images/256x256/ini-256.png",
+		"../images/256x256/jpeg-256.png",
+		"../images/256x256/jsf-256.png",
+		"../images/256x256/mdi-256.png",
+		"../images/256x256/mov-256.png",
+		"../images/256x256/mp3-256.png",
+		"../images/256x256/mpeg-256.png",
+		"../images/256x256/pdf-256.png",
+		"../images/256x256/png-256.png",
+		"../images/256x256/pptx-256.png",
+		"../images/256x256/proj-256.png",
+		"../images/256x256/psd-256.png",
+		"../images/256x256/pst-256.png",
+		"../images/256x256/pub-256.png",
+		"../images/256x256/rar-256.png",
+		"../images/256x256/read-256.png",
+		"../images/256x256/set-256.png",
+		"../images/256x256/tiff-256.png",
+		"../images/256x256/txt-256.png",
+		"../images/256x256/url-256.png",
+		"../images/256x256/vsd-256.png",
+		"../images/256x256/wav-256.png",
+		"../images/256x256/wma-256.png",
+		"../images/256x256/wmv-256.png",
+		"../images/256x256/xlsx-256.png",
+		"../images/256x256/zip-256.png"
+    ];
+    for (var i = 0, len = images.length; i < len; i++) {
+        new Image().src = images[i];
+    }
+}());
+
+Vue.component('area-select', {
+    template: '#areaSelectTemplate',
+    props: ['type', 'deep','province','city','county','town'],
+    data() {
+        return { id: new UUID().id, province: '', city: '', county: '', town: '', provinces: [], cities: [], counties: [], towns: [] };
+    },
+    watch: {
+        province() {
+            
+        },
+        city() {
+            
+        },
+        county() {
+            
+        }
+    },
+    methods: {
+        changeProvince() {
+            var thiz=this;
+            this.city = '';
+            this.county = '';
+            this.town = '';
+            this.cities = this.data['cities'].filter(function (val) {
+                return val.parentValue == thiz.province;
+            });
+            this.counties = [];
+            this.towns = [];
+        },
+        changeCity() {
+            var thiz = this;
+            this.county = '';
+            this.town = '';
+            this.counties = this.data['counties'].filter(function (val) {
+                return val.parentValue == thiz.city;
+            });
+            this.towns = [];
+        },
+        changeCounty() {
+            var thiz = this;
+            this.town = '';
+            this.towns = this.data['towns'].filter(function (val) {
+                return val.parentValue == thiz.county;
+            });
+        }
+    },
+    mounted() {
+        var thiz = this;
+        axios.get('/index/areaSelect').then(function (response) {
+            var result = response.data;
+            if (result.code === 0) {
+                thiz.data = result.data;
+                thiz.provinces = thiz.data['provinces'];
+                thiz.cities = [];
+                thiz.counties = [];
+                thiz.towns = [];
+            }
+        });
+    }
+});
+Vue.component('upload-excel', {
+    template: '#uploadExcelTemplate',
+    props: ['url', 'type', 'postData'],
+    data() {
+        return { id: new UUID().id, postData: {}, isUploaded :false};
+    },
+    methods:{
+        submit() {
+            this.uploader.upload();
+        }
+    },
+    mounted() {
+        var thiz = this;
+        this.uploader = new WebUploader.Uploader({
+            swf: '../plugin/webuploader/Uploader.swf',
+            auto: this.type === 'line',//选中文件后自动上传
+            server: this.url,//处理上传excel的控制器
+            fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
+            formData: this.postData,//每次上传时上传的数据
+            duplicate: true,
+            pick: {
+                id: '#uploadExcel' + this.id,//生成上传插件的位置
+                multiple: false //每次只能选一个文件
+            },
+            //允许上传的图片格式后缀
+            accept: {
+                title: 'excel',
+                extensions: 'xls,xlsx',
+                mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }
+        }).on('uploadStart', function (file) {
+
+        }).on('uploadSuccess', uploadCallback(function (file, response) {
+
+        })).on('error', function (type) {
+            if (type === 'Q_TYPE_DENIED') {
+                layuiLayer.msg('该文件类型可能不是Excel文件。', { icon: 5, anim: 6 });
+            }
+        }).on('beforeFileQueued', function (file) {
+            thiz.isUploaded = true;
+            thiz.excelFileName = file.name;
+        });
+    }
+});
+Vue.component('upload-files', {
+    template: '#uploadFilesTemplate',
+    props: ['fileDescWidth', 'path', 'files'],
+    data() {
+        return { id: new UUID().id, files: []};
+    },
+    methods: {
+        delFile(fileName) {
+            var files = this.files;
+            for (var i = 0, len = files.length; i < len; i++) {
+                if (files[i].fileName === fileName) {
+                    files.splice(i, 1);
+                    break;
+                }
+            }
+        },
+        downFile(row){
+            postOpenWin('/index/downFile', {
+                pathName: this.path,
+                fileName: row.fileName,
+                fileDesc: row.fileDesc
+            });
+        }
+    },
+    mounted() {
+        //记录每一个文件的进度
+        var fileMap = {};
+        var thiz = this;
+        new WebUploader.Uploader({
+            swf: '../plugin/webuploader/Uploader.swf',
+            auto: true,
+            duplicate: true,
+            server: '/index/uploadFiles',
+            pick: { id: '#uploadFiles' + this.id },
+            fileVal: 'fileUploads',
+            formData: {
+                pathName: this.path //上传时的路径参数
+            }
+        }).on('uploadStart', function (file) {
+            var files = thiz.files;
+            fileMap[file.id] = files.length;
+            files.push({ fileDesc: file.name, typeImg: typeImgByMime(file.ext), progress: 0, isFinish: false, id: file.id });
+        }).on('uploadProgress', function (file, percentage) {
+            thiz.files[fileMap[file.id]].percentage = parseInt(percentage * 100);
+        }).on('uploadSuccess', function (file, response) {
+            var fileObj = thiz.files[fileMap[file.id]];
+            fileObj.fileName = response.data;
+            fileObj.isFinish = true;
+        });
+    }
+});
 Vue.component('upload-image', {
     template: '#uploadImageTemplate',
     props: ['path', 'cut', 'widthOverHeight', 'minWidth', 'maxWidth', 'imgName', 'thumbnailName'],
     data() {
-        return { id: new UUID().id, percentage: 0, src: '', status: '', imgHeight: 0, imgWidth:0, cropDialog: false, isUploaded: false, showProgress: false };
+        return { id: new UUID().id, percentage: 0, src: '', status: '', contentHeight: 0, contentWidth: 0,imgWidth:0,imgHeight:0,cropDialog: false, isUploaded: false, showProgress: false };
     },
     methods: {
         format(percentage) {
             return percentage +'%'
         },
         imgLoadFinish(event) {
-            //this.img = event.target;
-            //var thiz = this;
-            //$(this.img).Jcrop({ allowSelect: false, aspectRatio: this.widthOverHeight, minSize: [this.minWidth, this.minHeight], maxSize: [this.maxWidth, this.maxHeight] }, function () {
-            //    this.setSelect([0, 0, thiz.minWidth + (thiz.maxWidth - thiz.minWidth) / 2, thiz.minHeight + (thiz.maxHeight - thiz.minHeight) / 2]);
-            //    thiz.jcropApi = this
-            //});
+            this.img = event.target;
+            var thiz = this;
+            $(this.img).Jcrop({ allowSelect: false, aspectRatio: this.widthOverHeight, minSize: [this.minWidth, this.minHeight], maxSize: [this.maxWidth, this.maxHeight] }, function () {
+                this.setSelect([0, 0, thiz.minWidth + (thiz.maxWidth - thiz.minWidth) / 2, thiz.minHeight + (thiz.maxHeight - thiz.minHeight) / 2]);
+                thiz.jcropApi = this
+            });
         },
         crop() {
             var select = this.jcropApi.tellSelect();
-            myApp.$data.loading = true;
+            var thiz = this;
             axios.post('/index/singleImageCrop', {
-                params: {
-                    pathName: this.path,
-                    imgName: this.imgName,
-                    imgWidth: this.img.width,
-                    imgHeight: this.img.height,
-                    x: select.x,
-                    y: select.y,
-                    w: select.w,
-                    h: select.h
-                }
+                pathName: this.path,
+                imgName: this.imgName,
+                imgWidth: this.img.width,
+                imgHeight: this.img.height,
+                x: select.x,
+                y: select.y,
+                w: select.w,
+                h: select.h
             }).then(function (response) {
-                myApp.$data.loading = false;
                 thiz.cropDialog = false;
-                var data = response.data;
-                if (data.code === 0) {
+                var result = response.data;
+                if (result.code === 0) {
+                    var data = result.data;
                     thiz.imgName = data.imgName;
                     thiz.thumbnailName = data.thumbnailName;
                     thiz.src = '/index/showImage?pathName=' + thiz.path + '&imgName=' + thiz.imgName;
@@ -76,7 +277,7 @@ Vue.component('upload-image', {
         }).on('uploadStart', function (file) {
             thiz.showProgress = true;
         }).on('uploadProgress', function (file, percentage) {
-            thiz.percentage = percentage * 100;
+            thiz.percentage = parseInt(percentage * 100);
         }).on('uploadSuccess', uploadCallback(function (file, response) {
             if (response.code === 0) {
                 var data = response.data;
@@ -84,16 +285,24 @@ Vue.component('upload-image', {
                 thiz.thumbnailName = data.thumbnailName;
                 thiz.src = '/index/showImage?pathName=' + thiz.path + '&imgName=' + thiz.imgName;
                 if (thiz.cut === true) {
-                    //data.imgWidth;
-                    //data.imgHeight;
-                    //thiz.imgWidth=;
-                    //var maxHeight=window.screen.height - 350;
-                    //if (maxHeight > data.imgHeight) {
-                    //    thiz.imgHeight = data.imgHeight + 'px';
-                    //}else{
-                    //    thiz.imgHeight = maxHeight+ 'px';
-                    //}
-                    //thiz.imgWidth = data.imgWidth;
+                    var maxWidth = window.screen.width - 60;
+                    var maxHeight = window.screen.height - 340;
+                    if (data.imgWidth >= maxWidth) {
+                        thiz.contentWidth = (window.screen.width - 20) + 'px';
+                    } else if (data.imgWidth <= 400) {
+                        thiz.contentWidth = 420 + 'px';
+                    } else {
+                        thiz.contentWidth = data.imgWidth + 'px';
+                    }
+                    if (data.imgHeight >= maxHeight) {
+                        thiz.contentHeight = (window.screen.height - 340) + 'px';
+                    } else if (data.imgHeight <= 300) {
+                        thiz.contentHeight = 300 + 'px';
+                    } else {
+                        thiz.contentHeight = data.imgHeight + 'px';
+                    }
+                    thiz.imgWidth = data.imgWidth + 'px';
+                    thiz.imgHeight = data.imgHeight + 'px';
                     thiz.cropDialog = true;
                 }
                 thiz.isUploaded = true;
@@ -202,7 +411,6 @@ var myApp = new Vue({
         leftMenus: [],
         menus: [],
         isLogin: true,
-        loading: false,
         isCollapse: false,
         menuActive: null,
         rVercode: '/session/verificationCode?r=' + Math.random(),
@@ -250,10 +458,8 @@ var myApp = new Vue({
         },
         login() {
             this.loginData.password = new Hashes.SHA1().hex(this.loginData.password);
-            this.loading = true;
             var thiz = this;
             axios.post('/session/login', this.loginData).then(function (response) {
-                thiz.loading = false;
                 var result = response.data;
                 if (result.code === 0) {
                     var data = result.data;
@@ -309,6 +515,7 @@ var uploadCallback = function (callback) {
     var cacheUrls = [
         '/index/areaSelect',//加载省、市、区、镇列表，基本不怎么变化，所以使用缓存
     ];
+    var loading;
     //请求拦截器
     axios.interceptors.request.use(function (config) {
         var cacheUrls2 = cacheUrls.filter(function (currentValue, index, arr) {
@@ -320,12 +527,19 @@ var uploadCallback = function (callback) {
             }
             config.params['r'] = Math.random();//避免ie浏览器使用缓存
         }
+        //loading = myApp.$loading({
+        //    lock: true,
+        //    text: 'Loading',
+        //    spinner: 'el-icon-loading',
+        //    background: 'rgba(0, 0, 0, 0.7)'
+        //});
         return config;
     }, function (error) {
         return Promise.reject(error);
     });
     //响应拦截器
     axios.interceptors.response.use(function (response) {
+        //loading.close();
         var data = response.data;
         //登录超时，退出登录
         if (data.code === -10 || data.code === -11) {
@@ -387,19 +601,153 @@ function getQueryVariable(variable) {
  * 控制器初始化
  * @id 必须和菜单的id对应
  * @url 模板的url
- * @initData 初始数据，模板上所需的数据都必须初始化
- * @callback 回调函数
+ * @initObj 用于初始化控件template以外的值
  */
-function controller(id,url,initData,callback) {
+function controller(id, url, initObj) {
     Vue.component(id, function (resolve, reject) {
-        axios.get(url, { params: { v: getQueryVariable('v')} }).then(function (response) {
-            resolve({
-                data() {
-                    return initData;
-                },
-                template: response.data,
-                mounted: callback
-            });
+        axios.get(url, { params: { v: getQueryVariable('v') } }).then(function (response) {
+            initObj.template = response.data;
+            resolve(initObj);
         });
     });
+}
+
+/**
+ * 对图片进行预览处理
+ * @rangeSelector  处理范围
+ */
+function picViewer(rangeSelector) {
+    setTimeout(function () {
+        $(rangeSelector).viewer({
+            url: 'data-original',
+            built: function () {
+                $('body').append($('.viewer-container'));
+            },
+        });
+    },100);
+}
+
+/**
+ * 根据附件的扩展名判断使用哪一种图片
+ * @param ext  附件的mime类型
+ */
+function typeImgByMime(ext) {
+    var basePath = '../images/256x256/';
+    ext = ext.toLowerCase();
+    if (ext === 'png') {
+        basePath += "png-256.png";
+    } else if (ext === 'ini') {
+        basePath += "ini-256.png";
+    } else if (ext === 'accdb') {
+        basePath += "accdb-256.png";
+    } else if (ext === 'avi') {
+        basePath += 'avi-256.png';
+    } else if (ext === 'bmp') {
+        basePath += 'bmp-256.png';
+    } else if (ext === 'css') {
+        basePath += 'css-256.png';
+    } else if (ext === 'docx') {
+        basePath += 'docx-256.png';
+    } else if (ext === 'eml') {
+        basePath += 'eml-256.png';
+    } else if (ext === 'eps') {
+        basePath += 'eps-256.png';
+    } else if (ext === 'fla') {
+        basePath += 'fla-256.png';
+    } else if (ext === 'gif') {
+        basePath += 'gif-256.png';
+    } else if (ext === 'html' || ext === 'htm') {
+        basePath += 'html-256.png';
+    } else if (ext === 'ind') {
+        basePath += 'ind-256.png';
+    } else if (ext === 'jpeg' || ext === 'jpg') {
+        basePath += 'jpeg-256.png';
+    } else if (ext === 'jsf') {
+        basePath += 'jsf-256.png';
+    } else if (ext === 'mdi') {
+        basePath += 'mdi-256.png';
+    } else if (ext === 'mov') {
+        basePath += 'mov-256.png';
+    } else if (ext === 'mp3') {
+        basePath += 'mp3-256.png';
+    } else if (ext === 'mpeg') {
+        basePath += 'mpeg-256.png';
+    } else if (ext === 'pdf') {
+        basePath += 'pdf-256.png';
+    } else if (ext === 'pptx' || ext === 'ppt') {
+        basePath += 'pptx-256.png';
+    } else if (ext === 'proj') {
+        basePath += 'proj-256.png';
+    } else if (ext === 'psd') {
+        basePath += 'psd-256.png';
+    } else if (ext === 'pst') {
+        basePath += 'pst-256.png';
+    } else if (ext === 'pub') {
+        basePath += 'pub-256.png';
+    } else if (ext === 'rar') {
+        basePath += 'rar-256.png';
+    } else if (ext === 'read') {
+        basePath += 'read-256.png';
+    } else if (ext === 'set') {
+        basePath += 'set-256.png';
+    } else if (ext === 'tiff') {
+        basePath += 'tiff-256.png';
+    } else if (ext === 'txt') {
+        basePath += 'txt-256.png';
+    } else if (ext === 'url') {
+        basePath += 'url-256.png';
+    } else if (ext === 'vsd') {
+        basePath += 'vsd-256.png';
+    } else if (ext === 'wav') {
+        basePath += 'wav-256.png';
+    } else if (ext === 'wma') {
+        basePath += 'wma-256.png';
+    } else if (ext === 'wmv') {
+        basePath += 'wmv-256.png';
+    } else if (ext === 'xlsx' || ext === 'xls') {
+        basePath += 'xlsx-256.png';
+    } else if (ext === 'zip') {
+        basePath += 'zip-256.png';
+    } else {
+        basePath += 'ini-256.png';
+    }
+    return basePath;
+}
+
+/**
+ * 使用post的方式打开一个新窗口
+ * @url：新窗口的url地址
+ * @params：post请求参数
+ * @searchParam：url上的参数
+ */
+function postOpenWin(url, params, searchParam) {
+    var times = new Date().getTime();
+    var input = '';
+    if (params) {
+        for (var key in params) {
+            if (params.hasOwnProperty(key))
+                input += '<textarea name="' + key + '"></textarea>';
+        }
+    }
+    if ($.type(searchParam) === 'object') {
+        for (var key in searchParam) {
+            if (searchParam.hasOwnProperty(key))
+                input += '<textarea name="' + key + '"></textarea>';
+        }
+    }
+    $('body').append('<form style="display:none;" id="' + times + '" method="post" target="_blank" action="' + url + '">' + input + '</form>');
+    if (params) {
+        for (var key in params) {
+            if (params.hasOwnProperty(key))
+                $('#' + times).find('textarea[name="' + key + '"]').val(params[key]);
+        }
+    }
+    if ($.type(searchParam) === 'object') {
+        for (var key in searchParam) {
+            if (searchParam.hasOwnProperty(key))
+                $('#' + times).find('textarea[name="' + key + '"]').val(searchParam[key]);
+        }
+    }
+    $('#' + times).submit();
+    $('#' + times).remove();
 }

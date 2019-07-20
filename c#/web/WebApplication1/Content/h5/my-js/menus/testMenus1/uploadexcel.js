@@ -1,7 +1,11 @@
-﻿Vue.component('m18', function (resolve, reject) {
-    axios.get('menus/testMenus1/uploadExcel.html').then(function (response) {
-        resolve({
-            template: response.data,
-        });
-    });
+﻿controller('m18', 'menus/testMenus1/uploadExcel.html', {
+    data() { return { myPostData: {} } },
+    methods:{
+        onSubmit() {
+            this.$refs.asdasdasd.submit();
+        }
+    },
+    mounted(){
+        
+    }
 });

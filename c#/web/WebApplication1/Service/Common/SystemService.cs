@@ -131,6 +131,7 @@ namespace WebApplication1.Service
             //        parentValue = town.DistrictID
             //    });
             //}
+            areaTreeMap.Add("towns",new List<AreaTree>());
             return areaTreeMap;
         }
 
