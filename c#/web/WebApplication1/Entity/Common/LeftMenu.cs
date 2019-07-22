@@ -11,6 +11,11 @@ namespace WebApplication1.Entity.Common
     public class LeftMenu
     {
         /// <summary>
+        /// 菜单序号
+        /// </summary>
+        public int sortIndex { set; get; }
+
+        /// <summary>
         /// 菜单标题
         /// </summary>
         public string title { set; get; }

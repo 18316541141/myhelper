@@ -152,31 +152,29 @@ namespace WebApplication1.Service
         public List<LeftMenu> LoadLeftMenus()
         {
             List<LeftMenu> leftMenuList = new List<LeftMenu>();
-            LeftMenu leftMenu1 = new LeftMenu
-            {
-                id = "m1",
-                title = "测试1"
-            };
             List<LeftMenu> leftMenuList11 = new List<LeftMenu>();
             LeftMenu leftMenuCharts = new LeftMenu
             {
                 id = "m312",
                 title = "统计图",
-                url = "menus/testMenus1/charts.html"
+                url = "menus/testMenus1/charts.html",
+                sortIndex = 3,
             };
             leftMenuList11.Add(leftMenuCharts);
             LeftMenu leftMenuNewAlarm = new LeftMenu
             {
                 id="n11",
                 title = "实时刷最新消息",
-                url = "menus/testMenus1/testNewAlarm.html"
+                url = "menus/testMenus1/testNewAlarm.html",
+                sortIndex = 4,
             };
             leftMenuList11.Add(leftMenuNewAlarm);
             LeftMenu leftMenu111 = new LeftMenu
             {
                 id="m11",
                 title= "测试1-1",
-                url= "menus/testMenus1/treeForm.html"
+                url= "menus/testMenus1/treeForm.html",
+                sortIndex = 5,
             };
             leftMenuList11.Add(leftMenu111);
 
@@ -184,7 +182,8 @@ namespace WebApplication1.Service
             {
                 id= "m12",
                 title= "测试1-2",
-                url= "menus/testMenus1/uploadImage.html"
+                url= "menus/testMenus1/uploadImage.html",
+                sortIndex = 6,
             };
             leftMenuList11.Add(leftMenu112);
 
@@ -192,7 +191,8 @@ namespace WebApplication1.Service
             {
                 id="m13",
                 title="测试1-3",
-                url = "menus/testMenus1/bigImg.html"
+                url = "menus/testMenus1/bigImg.html",
+                sortIndex = 7,
             };
             leftMenuList11.Add(leftMenu13);
 
@@ -200,7 +200,8 @@ namespace WebApplication1.Service
             {
                 id = "m14",
                 title = "测试1-4",
-                url = "menus/testMenus1/uploadFiles.html"
+                url = "menus/testMenus1/uploadFiles.html",
+                sortIndex = 8,
             };
             leftMenuList11.Add(leftMenu14);
 
@@ -208,7 +209,8 @@ namespace WebApplication1.Service
             {
                 id = "m15",
                 title = "测试1-5",
-                url = "menus/testMenus1/areaSelect.html"
+                url = "menus/testMenus1/areaSelect.html",
+                sortIndex = 9,
             };
             leftMenuList11.Add(leftMenu15);
 
@@ -216,7 +218,8 @@ namespace WebApplication1.Service
             {
                 id="m17",
                 title = "测试1-7",
-                url = "menus/testMenus1/pageTable2.html"
+                url = "menus/testMenus1/pageTable2.html",
+                sortIndex = 10,
             };
             leftMenuList11.Add(leftMenu17);
 
@@ -224,23 +227,31 @@ namespace WebApplication1.Service
             {
                 id = "m18",
                 title = "测试1-8",
-                url = "menus/testMenus1/uploadExcel.html"
+                url = "menus/testMenus1/uploadExcel.html",
+                sortIndex = 11,
             };
             leftMenuList11.Add(leftMenu18);
-
+            LeftMenu leftMenu1 = new LeftMenu
+            {
+                id = "m1",
+                title = "测试1",
+                sortIndex = 0,
+            };
             leftMenu1.leftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);
             LeftMenu leftMenu2 = new LeftMenu
             {
                 id="m2",
-                title= "测试2"
+                title= "测试2",
+                sortIndex=1,
             };
 
             leftMenuList.Add(leftMenu2);
             LeftMenu leftMenu3 = new LeftMenu
             {
                 id= "m3",
-                title= "测试3"
+                title= "测试3",
+                sortIndex = 2,
             };
 
             leftMenuList.Add(leftMenu3);
