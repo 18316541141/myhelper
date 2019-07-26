@@ -55,17 +55,7 @@ $entity.PropList:{{
 	<delete id="deleteByParams" parameterType="$entity.EntityName$Params">
 		delete from $entity.TableName$
 		<where>
-	$entity.PropList:{
-		$if(it.ParamsTypeIsEqual)$
-			<if test="$it.PropName$!=null">AND $it.ColName$=#{$it.PropName$}</if>
-		$elseif(it.ParamsTypeIsRangeStart)$
-			<if test="$it.PropName$!=null">AND $it.ColName$ &gt;= #{$it.PropName$}</if>
-		$elseif(it.ParamsTypeIsRangeEnd)$
-			<if test="$it.PropName$!=null">AND $it.ColName$ &lt;= #{$it.PropName$}</if>
-		$elseif(it.ParamsTypeIsLike)$
-			<if test="$it.PropName$!=null">AND $it.ColName$ like '%'+#{$it.PropName$}+'%'</if>
-		$endif$
-	}$
+      <include refid="selectWherePart"></include>
 		</where>
 	</delete>
 	
@@ -78,15 +68,24 @@ $entity.PropList:{{
 	<sql id="selectWherePart">
 $entity.PropList:{
 	$if(it.ParamsTypeIsEqual)$
-		<if test="$it.PropName$!=null">AND $it.ColName$=#{$it.PropName$}</if>
+		<if test="params.$it.PropName$!=null">AND $it.ColName$=#{params.$it.PropName$}</if>
 	$elseif(it.ParamsTypeIsRangeStart)$
-		<if test="$it.PropName$!=null">AND $it.ColName$ &gt;= #{$it.PropName$}</if>
+		<if test="params.$it.PropName$!=null">AND $it.ColName$ &gt;= #{params.$it.PropName$}</if>
 	$elseif(it.ParamsTypeIsRangeEnd)$
-		<if test="$it.PropName$!=null">AND $it.ColName$ &lt;= #{$it.PropName$}</if>
+		<if test="params.$it.PropName$!=null">AND $it.ColName$ &lt;= #{params.$it.PropName$}</if>
 	$elseif(it.ParamsTypeIsLike)$
-		<if test="$it.PropName$!=null and $it.PropName$!=''">AND $it.ColName$ like '%'+#{$it.PropName$}+'%'</if>
+		<if test="params.$it.PropName$!=null and params.$it.PropName$!=''">AND $it.ColName$ like '%'+#{params.$it.PropName$}+'%'</if>
 	$endif$
 }$
+    <if test="nparams!=null">
+      $entity.PropList:{
+      $if(it.ParamsTypeIsEqual)$
+      <if test="nparams.$it.PropName$!=null">AND $it.ColName$!=#{nparams.$it.PropName$}</if>
+      $elseif(it.ParamsTypeIsLike)$
+      <if test="nparams.$it.PropName$!=null and nparams.$it.PropName$!=''">AND $it.ColName$ not like '%'+#{nparams.$it.PropName$}+'%'</if>
+      $endif$
+      }$
+    </if>
 	</sql>
 	
 	<select id="findEntityByParams" resultMap="$entity.EntityName$Map">
@@ -204,17 +203,7 @@ $entity.PropList:{
 			) AS RowId
 			from $entity.TableName$
 			<where>
-				$entity.PropList:{
-					$if(it.ParamsTypeIsEqual)$
-						<if test="$it.PropName$!=null">AND $it.ColName$=#{params.$it.PropName$}</if>
-					$elseif(it.ParamsTypeIsRangeStart)$
-						<if test="$it.PropName$!=null">AND $it.ColName$ &gt;= #{params.$it.PropName$}</if>
-					$elseif(it.ParamsTypeIsRangeEnd)$
-						<if test="$it.PropName$!=null">AND $it.ColName$ &lt;= #{params.$it.PropName$}</if>
-					$elseif(it.ParamsTypeIsLike)$
-						<if test="$it.PropName$!=null and $it.PropName$!=''">AND $it.ColName$ like '%'+#{params.$it.PropName$}+'%'</if>
-					$endif$
-				}$
+        <include refid="selectWherePart"></include>
 			</where>) b
 			where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and #{currentPageIndex}*#{pageSize}
 		)

@@ -146,6 +146,5 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.xml
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb

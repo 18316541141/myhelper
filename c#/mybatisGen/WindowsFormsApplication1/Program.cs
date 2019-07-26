@@ -26,7 +26,7 @@ namespace WindowsFormsApplication1
                 DbTypeTrans = new SqliteToCSharpTrans(),
                 SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
             };
-            Entity entity=genEntityService.GenTemplateEntity("TICKET_ORDER");
+            Entity entity=genEntityService.GenTemplateEntity("t_ignoreStation");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
         }

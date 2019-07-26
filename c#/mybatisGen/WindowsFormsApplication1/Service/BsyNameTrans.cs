@@ -18,10 +18,9 @@ namespace WindowsFormsApplication1.Service
             _nameTransService = new NameTransService();
         }
 
-        public string ColNameToPropName(string colName)=>
-            _nameTransService.UnderlineToHump(colName);
+        public string ColNameToPropName(string colName)=>colName;
 
-        public string TableNameToEntityName(string tableName)=>
-            _nameTransService.UnderlineToBigHump(tableName);
+        public string TableNameToEntityName(string tableName) =>
+            _nameTransService.HumpToBigHump(tableName.Replace("t_", ""));
     }
 }
