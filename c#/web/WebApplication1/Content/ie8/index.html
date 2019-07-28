@@ -12,11 +12,11 @@
   <meta name="format-detection" content="telephone=no"> 
   <link rel="stylesheet" href="layui/css/layui.css" media="all"> 
   <link rel="stylesheet" href="layui/css/login.css" media="all"> 
-  <link rel="stylesheet" href="plugin-animate/animate.css" media="all"> 
-  <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all"> 
+  <link rel="stylesheet" href="../plugin-animate/animate.css" media="all"> 
+  <link rel="stylesheet" href="../plugin/webuploader/webuploader.css" media="all"> 
   <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all"> 
-  <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
-  <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all"> 
+  <link rel="stylesheet" href="../Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
+  <link rel="stylesheet" href="../jquery-viewer/dist/viewer.css" media="all"> 
   <style type="text/css">
       .news-alarm> .layui-border-box{
           margin:5px 5px 0;
@@ -196,21 +196,21 @@
             </div>
         </script>
      <script type="text/template" id="uploadExcelTemplate">
-         <div id="{{name}}ExcelId" ng-if="type == 'line'">上传Excel</div>
+         <div id="uploadExcel{{id}}" ng-if="type == 'line'">上传Excel</div>
          <div class="layui-form-item" ng-if="type == 'form'">
              <label class="layui-form-label">上传Excel</label>
              <div class="layui-input-block">
-                 <div id="{{name}}ExcelId">选择Excel</div>
+                 <div id="uploadExcel{{id}}">选择Excel</div>
              </div>
          </div>
          <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
              <label class="layui-form-label">预览</label>
              <div class="layui-input-block">
-                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="images/256x256/xlsx-256.png" width="96" class="thumbnail-img"/>
+                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="../images/256x256/xlsx-256.png" width="96" class="thumbnail-img"/>
              </div>
          </div>
      </script>
-  <script type="text/template" id="uploadImageTemplate">
+        <script type="text/template" id="uploadImageTemplate">
             <div class="layui-form-item">
                 <label class="layui-form-label">上传图片</label>
                 <div class="layui-input-block">
@@ -253,7 +253,7 @@
             <div id="data-table-{{id}}" lay-filter="dataTable{{id}}"></div>
         </script>
         <script type="text/template" id="treeFormTemplate">
-            <div class="tree-container">
+            <div class="tree-container" id="{{id}}">
                 <div class="left-tree">
                     <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()"/>
                     <div class="left-tree-contain">
@@ -276,7 +276,7 @@
             <div ng-if="type=='line'">
                 <div class="layui-inline" ng-show="deep >= 0">
                     <div class="layui-input-inline">
-                        <select name="city" lay-filter="province-select-{{id}}">
+                        <select name="province" lay-filter="province-select-{{id}}">
                             <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
                         </select>
                     </div>
@@ -290,14 +290,14 @@
                 </div>
                 <div class="layui-inline" ng-show="deep >= 2">
                     <div class="layui-input-inline">
-                        <select name="city" lay-filter="county-select-{{id}}">
+                        <select name="county" lay-filter="county-select-{{id}}">
                             <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline" ng-show="deep >= 3">
                     <div class="layui-input-inline">
-                        <select name="city" lay-filter="town-select-{{id}}">
+                        <select name="town" lay-filter="town-select-{{id}}">
                             <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
                         </select>
                     </div>
@@ -307,7 +307,7 @@
                 <div class="layui-form-item" ng-show="deep >= 0">
                     <label class="layui-form-label">请选择省</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-filter="province-select-{{id}}">
+                        <select name="province" lay-filter="province-select-{{id}}">
                             <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
                         </select>
                     </div>
@@ -323,7 +323,7 @@
                 <div class="layui-form-item" ng-show="deep >= 2">
                     <label class="layui-form-label">请选择区</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-filter="county-select-{{id}}">
+                        <select name="county" lay-filter="county-select-{{id}}">
                             <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
                         </select>
                     </div>
@@ -331,7 +331,7 @@
                 <div class="layui-form-item" ng-show="deep >= 3">
                     <label class="layui-form-label">请选择镇</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-filter="town-select-{{id}}">
+                        <select name="town" lay-filter="town-select-{{id}}">
                             <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
                         </select>
                     </div>
@@ -359,16 +359,14 @@
                     <tbody>
                         <tr ng-repeat="x in files" class="files-list">
                             <td class="auto-col-width"><img width="36px" ng-src="{{x.typeImg}}"></td>
-                            <td class="auto-col-width" style="max-width:{{fileDescMaxWidth}}px;" ng-mouseover="showTip($event,x.fileDesc)" ng-mouseleave="hideTip();">
-                                {{x.fileDesc}}
-                            </td>
+                            <td ng-bind="x.fileDesc" class="auto-col-width" style="max-width:{{fileDescMaxWidth}}px;" ng-mouseover="showTip($event,x.fileDesc)" ng-mouseleave="hideTip();"></td>
                             <td>
                                 <div class="layui-progress" lay-showPercent="yes" lay-filter="{{x.id}}">
                                     <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
                                 </div>
                             </td>
                             <td class="auto-col-width">
-                                <span style="color:#FF5722;">{{x.isFinish?'（上传完毕）':x.progress+'%'}}</span>
+                                <span style="color:#FF5722;" ng-bind="x.isFinish?'（上传完毕）':x.progress+'%'"></span>
                             </td>
                             <td class="auto-col-width">
                                 <button ng-mouseover="showTip($event,'删除文件')" ng-mouseleave="hideTip();" type="button" class="layui-btn layui-btn-sm layui-btn-danger" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]"  ng-disabled="!x.isFinish" ng-click="delFile(x.fileName);">
@@ -448,7 +446,7 @@
       <li ng-repeat="x in menus" data-menu-id="{{x.id}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132742'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132743'"></div> 
      </div> 
     </div> 
    </div> 
@@ -498,23 +496,24 @@
     </div> 
    </div> 
   </div> 
-  <script src="plugin/jquery.min.js" charset="utf-8"></script> 
+    <script src="../plugin/UUID.js" charset="utf-8"></script> 
+  <script src="../plugin/jquery.min.js" charset="utf-8"></script> 
   <script src="layui/layui.all.js" charset="utf-8"></script> 
-  <script src="plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
+  <script src="../plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
   <script src="plugin/jquery.cookie.js" charset="utf-8"></script> 
   <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script> 
   <script src="zTree_v3-master/js/jquery.ztree.exhide.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular-sanitize.min.js"></script> 
   <script src="angular-1.2.30/angular-animate.min.js"></script> 
-  <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
+  <script src="../plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
-  <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
-  <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
+  <script src="../Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
+  <script src="../jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
     <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie-polyfills.js"></script>
     <![endif]-->
-  <script src="plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
+  <script src="../plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
      <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
     <![endif]-->

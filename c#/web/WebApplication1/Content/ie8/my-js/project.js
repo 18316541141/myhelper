@@ -1,5 +1,4 @@
 'use strict';
-
 //标题移动效果
 (function(){	
 	var title=document.title;
@@ -16,43 +15,43 @@
 (function () {
     var images = [
 		//256x256的图标
-		"images/256x256/accdb-256.png",
-		"images/256x256/avi-256.png",
-		"images/256x256/bmp-256.png",
-		"images/256x256/css-256.png",
-		"images/256x256/docx-256.png",
-		"images/256x256/eml-256.png",
-		"images/256x256/eps-256.png",
-		"images/256x256/fla-256.png",
-		"images/256x256/gif-256.png",
-		"images/256x256/html-256.png",
-		"images/256x256/ind-256.png",
-		"images/256x256/ini-256.png",
-		"images/256x256/jpeg-256.png",
-		"images/256x256/jsf-256.png",
-		"images/256x256/mdi-256.png",
-		"images/256x256/mov-256.png",
-		"images/256x256/mp3-256.png",
-		"images/256x256/mpeg-256.png",
-		"images/256x256/pdf-256.png",
-		"images/256x256/png-256.png",
-		"images/256x256/pptx-256.png",
-		"images/256x256/proj-256.png",
-		"images/256x256/psd-256.png",
-		"images/256x256/pst-256.png",
-		"images/256x256/pub-256.png",
-		"images/256x256/rar-256.png",
-		"images/256x256/read-256.png",
-		"images/256x256/set-256.png",
-		"images/256x256/tiff-256.png",
-		"images/256x256/txt-256.png",
-		"images/256x256/url-256.png",
-		"images/256x256/vsd-256.png",
-		"images/256x256/wav-256.png",
-		"images/256x256/wma-256.png",
-		"images/256x256/wmv-256.png",
-		"images/256x256/xlsx-256.png",
-		"images/256x256/zip-256.png"
+		"../images/256x256/accdb-256.png",
+		"../images/256x256/avi-256.png",
+		"../images/256x256/bmp-256.png",
+		"../images/256x256/css-256.png",
+		"../images/256x256/docx-256.png",
+		"../images/256x256/eml-256.png",
+		"../images/256x256/eps-256.png",
+		"../images/256x256/fla-256.png",
+		"../images/256x256/gif-256.png",
+		"../images/256x256/html-256.png",
+		"../images/256x256/ind-256.png",
+		"../images/256x256/ini-256.png",
+		"../images/256x256/jpeg-256.png",
+		"../images/256x256/jsf-256.png",
+		"../images/256x256/mdi-256.png",
+		"../images/256x256/mov-256.png",
+		"../images/256x256/mp3-256.png",
+		"../images/256x256/mpeg-256.png",
+		"../images/256x256/pdf-256.png",
+		"../images/256x256/png-256.png",
+		"../images/256x256/pptx-256.png",
+		"../images/256x256/proj-256.png",
+		"../images/256x256/psd-256.png",
+		"../images/256x256/pst-256.png",
+		"../images/256x256/pub-256.png",
+		"../images/256x256/rar-256.png",
+		"../images/256x256/read-256.png",
+		"../images/256x256/set-256.png",
+		"../images/256x256/tiff-256.png",
+		"../images/256x256/txt-256.png",
+		"../images/256x256/url-256.png",
+		"../images/256x256/vsd-256.png",
+		"../images/256x256/wav-256.png",
+		"../images/256x256/wma-256.png",
+		"../images/256x256/wmv-256.png",
+		"../images/256x256/xlsx-256.png",
+		"../images/256x256/zip-256.png"
     ];
     for (var i = 0, len = images.length; i < len; i++) {
         new Image().src = images[i];
@@ -179,7 +178,6 @@ var uploadCallback = function (callback) {
             }
             callback(file, response);
         }
-        callback = null;
     }
 };
 /**
@@ -283,8 +281,9 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
     $scope.$on("$destroy", function () {
         $realTime.cancel('newsAlarm');
     });
-    $myHttp.get('/index/loadLeftMenus').mySuccess(function (result) {
-        $scope.leftMenus = result.data;
+    $myHttp.get('/index/loadLoginData').mySuccess(function (result) {
+        var data=result.data;
+        $scope.leftMenus = data.leftMenus;
         $timeout(function () {
             $('.layui-nav-bar').remove();
             layuiElement.render('nav');
@@ -872,8 +871,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadExcelTemplate').html(),
-        scope: { name: "@", url: "@", type: "@", postData: "=" },
+        scope: { url: "@", type: "@", postData: "=" },
         controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
             if ($scope.postData === undefined) {
                 $scope.postData = {};
             }
@@ -896,14 +896,14 @@ myApp.factory('$realTime', function ($http) {
             $timeout(function () {
                 var index;
                 $scope.uploader = new WebUploader.Uploader({
-                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    swf: '../plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
                     auto: $scope.type === 'line',//选中文件后自动上传
                     server: $scope.url,//处理上传excel的控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
                     formData: $scope.postData,//每次上传时上传的数据
                     duplicate: true,
                     pick: {
-                        id: '#' + $scope.name + 'ExcelId',//生成上传插件的位置
+                        id: '#uploadExcel' + $scope.id,//生成上传插件的位置
                         multiple: false //每次只能选一个文件
                     },
                     //允许上传的图片格式后缀
@@ -932,8 +932,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#pageDataTableTemplate').html(),
-        scope: { id: "@", url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", height:"@", postData: "=", cols: "=", perms: "=" },
+        scope: { url: "@", tableToolbar: "@", showCheckCol: "@", showDefaultOperCol: "@", height:"@", postData: "=", cols: "=", perms: "=" },
         controller: function ($scope, $timeout, $myHttp) {
+            $scope.id = new UUID().id;
             if ($scope.cols === undefined) {
                 throw new Error('请设置cols的值');
             }
@@ -1025,8 +1026,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#areaSelectTemplate').html(),
-        scope: { id:"@",type: "@", deep: "@"},
+        scope: { type: "@", deep: "@"},
         controller: function ($scope, $myHttp, $timeout) {
+            $scope.id = new UUID().id;
             $scope.$on('renderSelect', function (event, provinceVal, cityVal, countyVal, townVal) {
                 $scope.cities = [{ name: '请选择市', value: '' }].concat($($scope.data['cities']).filter(function (index, val) {
                     return val.parentValue == provinceVal;
@@ -1091,8 +1093,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadImageTemplate').html(),
-        scope: { id: "@", path: "@", cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
+        scope: { path: "@", cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
         controller: function ($scope, layer, $timeout, $myHttp) {
+            $scope.id = new UUID().id;
             $scope.isUploaded = false;
             $scope.showProgress = false;
             $scope.crop = function () {
@@ -1113,11 +1116,12 @@ myApp.factory('$realTime', function ($http) {
                     var data=response.data;
                     $scope.imgName = data.imgName;
                     $scope.thumbnailName = data.thumbnailName;
+                    $scope.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
                 });
             };
             $timeout(function () {
                 $scope.uploader = new WebUploader.Uploader({
-                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    swf: '../plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
                     auto: true,//选中文件后自动上传
                     server: '/index/uploadSingleImage',//处理上传文件的统一控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
@@ -1191,8 +1195,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#pieChartTemplate').html(),
-        scope: { id: "@",title:"@" ,pieData:"="},
+        scope: { title:"@" ,pieData:"="},
         controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
             $timeout(function () {
                 Highcharts.chart('pieChart' + $scope.id, {
                     chart: {
@@ -1230,8 +1235,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#histogramTemplate').html(),
-        scope: { id: "@", title: "@",unit:"@", rowAxisTitle: "=", yAxisTitle: "=", histogramData: "=" },
+        scope: { title: "@",unit:"@", rowAxisTitle: "=", yAxisTitle: "=", histogramData: "=" },
         controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
             $timeout(function () {
                 Highcharts.chart('histogram' + $scope.id, {
                     chart: {
@@ -1278,8 +1284,9 @@ myApp.factory('$realTime', function ($http) {
         restrict: 'EA',
         template: $('#treeFormTemplate').html(),
         transclude: true,
-        scope: { url: "@", id: "@",targetController:"@"},
+        scope: { url: "@",targetController:"@"},
         controller: function ($scope, $myHttp) {
+            $scope.id = new UUID().id;
             $scope.$on('delNode', function (event, id) {
                 var nodes = $scope.ztree.getNodesByParam("id", id, null);
                 if (nodes.length === 0)
@@ -1314,8 +1321,6 @@ myApp.factory('$realTime', function ($http) {
                     ztree.showNodes(ztree.getNodes());
                 }
             };
-            var $rightContent = $('#' + $scope.id + ' .right-content');
-            var $leftTree = $('#' + $scope.id + ' .left-tree');
             $scope.loadTree = function () {
                 $myHttp.get($scope.url).mySuccess(function (result) {
                     $scope.ztree = $.fn.zTree.init($('#tree-' + $scope.id), {
@@ -1345,7 +1350,7 @@ myApp.factory('$realTime', function ($http) {
                         }
                     }, result.data);
                     layuiForm.render();
-                    $leftTree.height($rightContent.height());
+                    $('#' + $scope.id + ' .left-tree').height($('#' + $scope.id + ' .right-content').height());
                 });
             };
             $scope.loadTree();
@@ -1355,8 +1360,9 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadFilesTemplate').html(),
-        scope: { id: "@", fileDescMaxWidth: "@", path: "@", files:"=" },
+        scope: { fileDescMaxWidth: "@", path: "@", files:"=" },
         controller: function ($scope, $timeout, $myHttp) {
+            $scope.id = new UUID().id;
             $scope.files = [];
             var tipIndex;
             /**
@@ -1412,7 +1418,7 @@ myApp.factory('$realTime', function ($http) {
                 var fileMap = {};
                 //创建一个上传插件
                 new WebUploader.Uploader({
-                    swf: 'plugin/webuploader/Uploader.swf',//插件所需的flash路径，用于兼容不支持XMLHttpWebRequest对象的浏览器
+                    swf: '../plugin/webuploader/Uploader.swf',//插件所需的flash路径，用于兼容不支持XMLHttpWebRequest对象的浏览器
                     auto: true,//拖动后自动上传
                     duplicate: true,//对每一个文件添加唯一hash值，用于区分文件操作进度条
                     server: '/index/uploadFiles',//统一上传的控制器
@@ -1525,7 +1531,7 @@ function downExcel(url,fileName,postData,totalCount) {
  * @param ext  附件的mime类型
  */
 function typeImgByMime(ext) {
-    var basePath = 'images/256x256/';
+    var basePath = '../images/256x256/';
     ext = ext.toLowerCase();
     if (ext === 'png') {
         basePath += "png-256.png";
@@ -1646,6 +1652,10 @@ function logoutCallback() {
     layuiLayer.closeAll();
 }
 
+/**
+ * 对图片进行预览处理
+ * @$range  处理范围
+ */
 function picViewer($range) {
     $range.viewer({
         url: 'data-original',

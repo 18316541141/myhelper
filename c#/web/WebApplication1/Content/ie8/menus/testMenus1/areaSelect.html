@@ -3,7 +3,12 @@
 </fieldset>
 <div ng-controller="testAreaSelect">
     <form class="layui-form">
-        <div area-select id="asdsadas" type="line" deep="2"></div>
+        <!-- 
+            地区选择控件 
+            type：控件类型，line单行类型、form表单类型
+            deep：深度，>=0（深入到省）、>=1（深入到市）、>=2（深入到区）、>=3（深入到镇）、
+        -->
+        <div area-select type="line" deep="2"></div>
     </form>
     <button type="button" class="layui-btn" ng-click="showSelect();">获取选中项</button>
 </div>

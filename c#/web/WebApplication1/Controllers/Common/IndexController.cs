@@ -43,12 +43,14 @@ namespace WebApplication1.Controllers.Common
         }
 
         /// <summary>
-        /// 加载左侧菜单
+        /// 加载登陆后数据
         /// </summary>
         /// <returns></returns>
-        public JsonResult LoadLeftMenus()
+        public JsonResult LoadLoginData()
         {
-            return MyJson(new Result { code = 0, data = _systemService.LoadLeftMenus() });
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("leftMenus", _systemService.LoadLeftMenus());
+            return MyJson(new Result { code = 0, data = data });
         }
 
         

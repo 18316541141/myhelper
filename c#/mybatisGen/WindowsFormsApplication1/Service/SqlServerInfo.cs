@@ -82,5 +82,10 @@ namespace WindowsFormsApplication1.Service
                 return Convert.ToString(sqlCommand.ExecuteScalar());
             }
         }
+
+        public int ColTypeInfoIndex()
+        {
+            return 7;
+        }
     }
 }

@@ -52,7 +52,19 @@ namespace CommonHelper.Helper
     /// <typeparam name="E"></typeparam>
     public interface CheckLogout
     {
+        /// <summary>
+        /// 前置检查，根据报文头推算出是否被踢出登录
+        /// </summary>
+        /// <param name="Response"></param>
+        /// <returns></returns>
         bool IsLogout(WebResponse Response);
+
+        /// <summary>
+        /// 后置检查，根据报文内容判断是否被踢出登录
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        bool IsLogoutAfter(string text);
     }
 
     /// <summary>
@@ -75,6 +87,8 @@ namespace CommonHelper.Helper
     public class DefaultCheckLogout : CheckLogout
     {
         public bool IsLogout(WebResponse Response) => false;
+
+        public bool IsLogoutAfter(string text) => false;
     }
 
     /// <summary>
@@ -308,21 +322,37 @@ namespace CommonHelper.Helper
         public static string GetText(this WebResponse Response)
         {
             if (DefaultCheckLogout.IsLogout(Response))
+            {
                 throw new Exception("已退出登录！(ERROR:-3)");
+            }
             else
+            {
+                string text;
                 using (Response)
                 {
                     string ContentEncoding = Response.Headers[HttpResponseHeader.ContentEncoding];
                     Encoding encoding = LoadResponseEncoding(Response.ResponseUri.ToString());
                     if (ContentEncoding == "gzip")
+                    {
                         using (Stream Stream = Response.GetResponseStream())
-                            return encoding.GetString(CompressHelper.GZipDecompress(Stream));
+                        {
+                            text = encoding.GetString(CompressHelper.GZipDecompress(Stream));
+                        }
+                    }
                     else
                     {
                         using (StreamReader Reader = new StreamReader(Response.GetResponseStream(), encoding))
-                            return Reader.ReadToEnd();
+                        {
+                            text = Reader.ReadToEnd();
+                        }
                     }
                 }
+                if (DefaultCheckLogout.IsLogoutAfter(text))
+                {
+                    throw new Exception("已退出登录！(ERROR:-3)");
+                }
+                return text;
+            }
         }
 
         /// <summary>

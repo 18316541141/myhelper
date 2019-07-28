@@ -82,6 +82,11 @@ namespace WindowsFormsApplication1.entity
         public string ParamsType { set; get; }
 
         /// <summary>
+        /// 是否为主键
+        /// </summary>
+        public bool IsKey { get; set; }
+
+        /// <summary>
         /// 参数类型是equal时为true，否则为false
         /// </summary>
         public bool ParamsTypeIsEqual { get { return ParamsType == "equal"; } }

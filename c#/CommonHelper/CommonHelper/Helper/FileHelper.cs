@@ -91,7 +91,16 @@ namespace CommonHelper.Helper
                 SHA1 = EncrypHelper.GetSha1FromStream(guidStream);
             }
             if (File.Exists(basePath + Path.DirectorySeparatorChar + SHA1))
-                File.Delete(basePath + Path.DirectorySeparatorChar + guid);
+            {
+                try
+                {
+                    File.Delete(basePath + Path.DirectorySeparatorChar + guid);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
             else
                 File.Move(basePath + Path.DirectorySeparatorChar + guid, basePath + Path.DirectorySeparatorChar + SHA1);
             return SHA1;

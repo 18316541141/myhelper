@@ -1,0 +1,12 @@
+﻿<div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>首页</el-breadcrumb-item>
+        <el-breadcrumb-item>上传单个excel</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-form v-bind:model="myPostData">
+        <upload-excel url="/IRobotQrCodePayTask/import" type="form" v-bind:post-data.sync="myPostData" ref="asdasdasd"></upload-excel>
+        <el-form-item>
+            <el-button type="primary" v-on:click="onSubmit">提交</el-button>
+        </el-form-item>
+    </el-form>
+</div>

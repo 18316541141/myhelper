@@ -1,0 +1,9 @@
+﻿<div>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item>首页</el-breadcrumb-item>
+        <el-breadcrumb-item>地区选择</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-form v-bind:model="form">
+        <area-select type="form" deep="3" v-bind:province.async="form.myProvince" v-bind:city.async="form.myCity" v-bind:county.async="form.myCounty"></area-select>
+    </el-form>
+</div>
