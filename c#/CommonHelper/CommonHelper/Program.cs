@@ -21,7 +21,8 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            WebProjectHelper.RefreshVersion(@"E:\git_projects\myhelper\c#\web\WebApplication1\");
+
+            //WebProjectHelper.RefreshVersion(@"E:\git_projects\myhelper\c#\web\WebApplication1\");
             //Random r = new Random();
             //SparseArray<int> sa = new SparseArray<int>(10000, 0);
             //int[] ia = new int[10000];
@@ -95,6 +96,8 @@ namespace PA_Robot
             //}
             //DataImageConvertHelper.TextToBarCodeImg("6070003452469",200,100).Save(@"C:\Users\Administrator\Desktop\差别\adasd.png");
             //Console.WriteLine();
+            
+
         }
     }
 }
