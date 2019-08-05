@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using log4net.Repository.Hierarchy;
+using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Filter;
 using WebApplication1.Filter.Common;
@@ -21,7 +22,8 @@ namespace WebApplication1
             compressAttribute.IgnoreRequests.Add("/session/verificationCode".ToLower());
             compressAttribute.IgnoreRequests.Add("/index/downFile".ToLower());
             filters.Add(compressAttribute);
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new MyErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());
         }
     }
 }

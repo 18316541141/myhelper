@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
+using System.Web.Security;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 
@@ -21,7 +23,7 @@ namespace WebApplication1.Filter.Common
         /// <param name="filterContext">过滤器上下文</param>
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            var s=filterContext.HttpContext.Request.Url;
+            var s = filterContext.HttpContext.Request.Url;
             object[] objs = filterContext.ActionDescriptor.GetCustomAttributes(false);
             bool OnlyLogin = true;
             foreach (object obj in objs)
@@ -44,7 +46,24 @@ namespace WebApplication1.Filter.Common
         /// <returns>如果已登录返回true，否则返回false</returns>
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
+#if debugger
+            string username = WebConfigurationManager.AppSettings["testUser"];
+            HttpSessionStateBase Session = httpContext.Session;
+            FormsAuthentication.SetAuthCookie(username, false);
+            string guid = Guid.NewGuid().ToString();
+            Session.Add("loginGuid", guid);
+            if (SingleUserAttribute.UserMap.ContainsKey(username))
+            {
+                SingleUserAttribute.UserMap[username] = guid;
+            }
+            else
+            {
+                SingleUserAttribute.UserMap.Add(username, guid);
+            }
+            return true;
+#else
             return httpContext.User.Identity.IsAuthenticated;
+#endif
         }
 
         /// <summary>

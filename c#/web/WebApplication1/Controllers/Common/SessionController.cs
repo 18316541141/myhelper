@@ -94,13 +94,10 @@ namespace WebApplication1.Controllers.Common
         {
             try
             {
-#if debugger
-#else
                 if (!Convert.ToString(Session["vercode"]).Equals(vercode, StringComparison.OrdinalIgnoreCase))
                 {
                     return Json(new Result { code = -1, msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
                 }
-#endif
                 Random random = new Random();
                 //zhang
                 string u = "zhang";
