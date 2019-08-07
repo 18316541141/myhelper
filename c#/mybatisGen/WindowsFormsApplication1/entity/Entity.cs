@@ -87,6 +87,21 @@ namespace WindowsFormsApplication1.entity
         public bool IsKey { get; set; }
 
         /// <summary>
+        /// 是否为long类型
+        /// </summary>
+        public bool IsLong { get { return PropType == "long" || PropType == "long?"; } }
+
+        /// <summary>
+        /// 是否为DateTime类型
+        /// </summary>
+        public bool IsDateTime { get { return PropType == "DateTime" || PropType == "DateTime?"; } }
+
+        /// <summary>
+        /// 是否为日期类型
+        /// </summary>
+        public bool IsDateTime { get; }
+
+        /// <summary>
         /// 参数类型是equal时为true，否则为false
         /// </summary>
         public bool ParamsTypeIsEqual { get { return ParamsType == "equal"; } }

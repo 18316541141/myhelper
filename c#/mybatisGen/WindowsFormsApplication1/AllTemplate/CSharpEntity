@@ -12,10 +12,11 @@ namespace WebApplication1.Entity
         public $entity.EntityName$() { }
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
-
 		/// <summary>
 		/// $it.PropNotes$
 		/// </summary>
+		$if(it.IsLong)$[JsonConverter(typeof(LongConverter))]$endif$
+		$if(it.IsDateTime)$[JsonConverter(typeof(IsoDateTimeConverter))]$endif$
 		public virtual $it.PropType$ $it.PropName$ { set; get; }
 	$endif$}$
     }

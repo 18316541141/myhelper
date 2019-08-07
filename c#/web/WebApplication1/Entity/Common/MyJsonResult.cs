@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -13,6 +15,22 @@ namespace WebApplication1.Entity.Common
     /// </summary>
     public class MyJsonResult:JsonResult
     {
+        static MyJsonResult()
+        {
+            JsonSerializerSettings setting = new JsonSerializerSettings();
+            JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
+            {
+                //日期类型默认格式化处理
+                setting.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
+                setting.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+
+                //空值处理
+                setting.NullValueHandling = NullValueHandling.Ignore;
+
+                return setting;
+            });
+        }
+
         /// <summary>
         /// 格式化字符串
         /// </summary>
@@ -57,14 +75,9 @@ namespace WebApplication1.Entity.Common
                 response.ContentEncoding = this.ContentEncoding;
             }
 
-            if (this.Data != null)
+            if (Data != null)
             {
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                string jsonString = jss.Serialize(Data);
-                string p = @"\\/Date\((\d+)\)\\/";
-                MatchEvaluator matchEvaluator = new MatchEvaluator(this.ConvertJsonDateToDateString);
-                Regex reg = new Regex(p);
-                jsonString = reg.Replace(jsonString, matchEvaluator);
+                string jsonString = JsonConvert.SerializeObject(Data);
                 if (string.IsNullOrEmpty(Callback))
                 {
                     response.Write(jsonString);
@@ -74,21 +87,6 @@ namespace WebApplication1.Entity.Common
                     response.Write($"{Callback}({jsonString})");
                 }
             }
-        }
-
-        /// <summary> 
-        /// 将Json序列化的时间由/Date(1294499956278)转为字符串 .
-        /// </summary> 
-        /// <param name="m">正则匹配</param>
-        /// <returns>格式化后的字符串</returns>
-        private string ConvertJsonDateToDateString(Match m)
-        {
-            string result = string.Empty;
-            DateTime dt = new DateTime(1970, 1, 1);
-            dt = dt.AddMilliseconds(long.Parse(m.Groups[1].Value));
-            dt = dt.ToLocalTime();
-            result = dt.ToString(FormateStr);
-            return result;
         }
     }
 }

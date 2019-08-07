@@ -88,14 +88,17 @@ public interface BaseMapper<T,P> {
 	public void updateChange(T entity);
 	
 	/**
-	 * 分页查询结果
+	 * 普通分页查询结果
 	 * @param params 分页查询参数
 	 * @param currentPageIndex 当前查询页码
-	 * @param pageSize 每页显示数据量
+	 * @param pageSize 每页显示数据量，当大于100时自动修正成100
 	 * @param nparams 不等查询产生
 	 * @return
 	 */
-	default  MyPagedList<T> pageList(P params,int currentPageIndex,int pageSize,P nparams){
+	default MyPagedList<T> pageList(P params,int currentPageIndex,int pageSize,P nparams){
+		if(pageSize>100){
+			pageSize=100;
+		}
 		long totalCount=count(params,nparams);
 		List<T> tList=findListByParams(params,currentPageIndex,pageSize,nparams);
 		MyPagedList<T> myPagedList=new MyPagedList<>();
@@ -107,5 +110,52 @@ public interface BaseMapper<T,P> {
 		myPagedList.setStartItemIndex((currentPageIndex-1)*pageSize+1);
 		myPagedList.setEndItemIndex(Math.min(totalCount, currentPageIndex*pageSize));
 		return myPagedList;
+	}
+
+	/**
+	 * 普通分页查询结果
+	 * @param params 分页查询参数
+	 * @param currentPageIndex 当前查询页码
+	 * @param pageSize 每页显示数据量，当大于100时自动修正成100
+	 * @return
+	 */
+	default MyPagedList<T> pageList(P params,int currentPageIndex,int pageSize){
+		return MyPagedList<T> pageList(params,currentPageIndex,pageSize,null);
+	}
+
+	/**
+	 * 大分页查询结果，该查询方法是用于导出功能或一些需要查询出大量数据的功能
+	 * @param params 分页查询参数
+	 * @param currentPageIndex 当前查询页码
+	 * @param pageSize 每页显示数据量，当大于10000时自动修正成10000
+	 * @param nparams 不等查询产生
+	 * @return
+	 */
+	default MyBigPagedList<T> pageList(P params,int currentPageIndex,int pageSize,P nparams){
+		if(pageSize>10000){
+			pageSize=10000;
+		}
+		long totalCount=count(params,nparams);
+		List<T> tList=findListByParams(params,currentPageIndex,pageSize,nparams);
+		MyPagedList<T> myPagedList=new MyPagedList<>();
+		myPagedList.setPageDataList(tList);
+		myPagedList.setPageSize(pageSize);
+		myPagedList.setTotalItemCount(totalCount);
+		myPagedList.setTotalPageCount(((totalCount-totalCount%pageSize)/pageSize)+1);
+		myPagedList.setCurrentPageIndex(currentPageIndex);
+		myPagedList.setStartItemIndex((currentPageIndex-1)*pageSize+1);
+		myPagedList.setEndItemIndex(Math.min(totalCount, currentPageIndex*pageSize));
+		return myPagedList;
+	}
+
+	/**
+	 * 大分页查询结果，该查询方法是用于导出功能或一些需要查询出大量数据的功能
+	 * @param params 分页查询参数
+	 * @param currentPageIndex 当前查询页码
+	 * @param pageSize 每页显示数据量，当大于10000时自动修正成10000
+	 * @return
+	 */
+	default MyBigPagedList<T> pageList(P params,int currentPageIndex,int pageSize){
+		return pageList(params,currentPageIndex,pageSize,null);
 	}
 }
