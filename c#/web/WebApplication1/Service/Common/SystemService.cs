@@ -5,13 +5,14 @@ using System.Web;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 using WebApplication1.Repository;
+using WebApplication1.Service.Common;
 
 namespace WebApplication1.Service
 {
     /// <summary>
     /// 绝大部分系统都用到的业务逻辑类
     /// </summary>
-    public class SystemService
+    public class SystemService: BaseService
     {
         static List<NewsAlarm> _newsAlarmList;
         static SystemService()

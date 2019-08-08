@@ -30,7 +30,7 @@ namespace WebApplication1.Filter.Common
             response.Write(JsonConvert.SerializeObject(new Result
             {
                 code = -1,
-                msg = "系统繁忙，请稍后重试..."
+                msg = exception.Message.Contains("(Error:-1)") ? exception.Message.Replace("(Error:-1)","") : "系统繁忙，请稍后重试..."
             }));
             log.Error(exception.Message, exception);
             filterContext.Result = new EmptyResult();
