@@ -256,6 +256,7 @@
     <Compile Include="MyDbContext.cs" />
     <Compile Include="MyExtensions\Common\MyPageExtensions.cs" />
     <Compile Include="MyJsonConverter\LongConverter.cs" />
+    <Compile Include="MyJsonConverter\StarStrConverter.cs" />
     <Compile Include="OrderBy\codeGenerator\IRobotQrCodePayTaskOrderBy.cs" />
     <Compile Include="Params\codeGenerator\IRobotQrCodePayTaskParams.cs" />
     <Compile Include="Params\ProvinceParams.cs" />

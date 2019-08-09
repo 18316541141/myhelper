@@ -1,0 +1,109 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using WebApplication1.Entity;
+using WebApplication1.MyExtensions;
+using WebApplication1.Params;
+namespace WebApplication1.Controllers
+{
+    public partial class $entity.EntityName$Controller : BaseController
+    {
+		/*抄考代码
+----------------------------------------------------------------------------------------------------------------------------
+		$entity.EntityName$ data = new $entity.EntityName$
+		{
+	$entity.PropList:{
+		$if(it.ParamsTypeIsEqual)$
+			$if(it.IsKey)$
+				$it.PropName$ = Next(),
+			$else$
+				$it.PropName$ = param.$it.PropName$,
+			$endif$
+		$endif$
+	}$
+		};
+----------------------------------------------------------------------------------------------------------------------------
+		$entity.EntityName$Params param = new $entity.EntityName$Params
+		{
+	$entity.PropList:{
+		$it.PropName$ = param.$it.PropName$,
+	}$
+		};
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 分页查询***模块，并返回查询结果
+        /// </summary>
+        /// <param name="param">查询参数</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页显示的数据量</param>
+        /// <returns>返回***模块的查询结果</returns>
+		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int pageIndex = 1,int pageSize = 20)
+		{
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			return repository.PageList(param, pageIndex, pageSize);
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 根据主键删除指定数据
+        /// </summary>
+        /// <param name="$entity.KeyName$">删除数据的主键</param>
+		public void Del(long $entity.KeyName$)
+		{
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			repository.Delete(a => a.$entity.KeyName$);
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 新增一条数据
+        /// </summary>
+        /// <param name="data">新增的数据</param>
+		public void Add($entity.EntityName$ data)
+		{
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			repository.Insert(data);
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 批量修改状态
+        /// </summary>
+        /// <param name="datas">修改状态的数据</param>
+		public void ChangeStatus($entity.EntityName$ datas)
+		{
+			List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
+			for($entity.EntityName$ data in datas)
+			{
+				updates.Add(new $entity.EntityName$
+				{
+					$entity.KeyName$ = data.$entity.KeyName$,
+					Status = data.Status
+				});
+			}
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			repository.UpdateChangeBatch(updates);
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 根据主键id查询数据实体
+        /// </summary>
+        /// <param name="$entity.KeyName$">主键id</param>
+		/// <returns>返回***模块的查询结果</returns>
+		public $entity.EntityName$ FindEntity(long $entity.KeyName$)
+		{
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			return repository.FindEntity($entity.KeyName$);
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 批量删除数据
+        /// </summary>
+        /// <param name="datas">批量删除的数据</param>
+		public void DelBatch($entity.EntityName$ datas)
+		{
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			repository.Delete(datas);
+		}
+		*/
+    }
+}

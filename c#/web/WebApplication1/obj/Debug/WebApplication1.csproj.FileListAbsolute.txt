@@ -323,3 +323,4 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Iden
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Snowflake.Net.dll
