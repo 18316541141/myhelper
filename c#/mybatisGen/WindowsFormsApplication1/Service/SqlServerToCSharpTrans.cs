@@ -16,7 +16,11 @@ namespace WindowsFormsApplication1.Service
         /// <returns></returns>
         public string SqlType2EntityType(string sqlType)
         {
-            if(sqlType == "int")
+            if (sqlType == "bigint")
+            {
+                return "long?";
+            }
+            else if(sqlType == "int")
             {
                 return "int?";
             }
@@ -24,7 +28,7 @@ namespace WindowsFormsApplication1.Service
             {
                 return "string";
             }
-            else if (sqlType == "datetime")
+            else if (sqlType == "datetime" || sqlType == "datetime2")
             {
                 return "DateTime?";
             }
@@ -46,7 +50,7 @@ namespace WindowsFormsApplication1.Service
             {
                 return "like";
             }
-            else if (sqlType == "datetime")
+            else if (sqlType == "datetime" || sqlType == "datetime2")
             {
                 return "range";
             }

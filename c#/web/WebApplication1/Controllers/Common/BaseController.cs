@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,12 @@ namespace WebApplication1.Controllers.Common
     /// </summary>
     public class BaseController : Controller
     {
+        protected ILog log;
+
+        public BaseController()
+        {
+            log = LogManager.GetLogger("Log4net.config");
+        }
 
         /// <summary>
         /// 返回JsonResult.24

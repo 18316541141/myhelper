@@ -72,12 +72,15 @@ namespace WebApplication1.Entity.Common
 
             if (this.ContentEncoding != null)
             {
-                response.ContentEncoding = this.ContentEncoding;
+                response.ContentEncoding = ContentEncoding;
             }
 
             if (Data != null)
             {
-                string jsonString = JsonConvert.SerializeObject(Data);
+                string jsonString = JsonConvert.SerializeObject(Data, new IsoDateTimeConverter
+                {
+                    DateTimeFormat = FormateStr
+                });
                 if (string.IsNullOrEmpty(Callback))
                 {
                     response.Write(jsonString);

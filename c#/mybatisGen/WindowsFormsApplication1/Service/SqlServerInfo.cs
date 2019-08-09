@@ -63,7 +63,7 @@ namespace WindowsFormsApplication1.Service
         public string KeyCol(string tableName)
         {
             using (SqlCommand sqlCommand = new SqlCommand(@"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME=@TABLE_NAME
-                and CONSTRAINT_NAME like 'PK_Tb_%'", _conn))
+                and CONSTRAINT_NAME like 'PK_%'", _conn))
             {
                 sqlCommand.Parameters.Add(new SqlParameter("@TABLE_NAME", SqlDbType.NVarChar)).Value = tableName;
                 return Convert.ToString(sqlCommand.ExecuteScalar());

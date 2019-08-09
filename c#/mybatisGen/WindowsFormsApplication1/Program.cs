@@ -19,14 +19,14 @@ namespace WindowsFormsApplication1
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-
+            //Data Source = 183.2.233.235; Initial Catalog = BusinessAssistantDB_Test; User ID = BusinessHeplerTestManager; Password = BusinessHeplerTestManager123; MultipleActiveResultSets = True
             GenEntityService genEntityService = new GenEntityService
             {
-                NameTrans = new BsyNameTrans(),
-                DbTypeTrans = new SqliteToCSharpTrans(),
-                SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
+                NameTrans = new RobotNameTrans(),
+                DbTypeTrans = new SqlServerToCSharpTrans(),
+                SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
             };
-            Entity entity=genEntityService.GenTemplateEntity("t_ignoreStation");
+            Entity entity=genEntityService.GenTemplateEntity("IRobot_User");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
         }

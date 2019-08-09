@@ -97,11 +97,6 @@ namespace WindowsFormsApplication1.entity
         public bool IsDateTime { get { return PropType == "DateTime" || PropType == "DateTime?"; } }
 
         /// <summary>
-        /// 是否为日期类型
-        /// </summary>
-        public bool IsDateTime { get; }
-
-        /// <summary>
         /// 参数类型是equal时为true，否则为false
         /// </summary>
         public bool ParamsTypeIsEqual { get { return ParamsType == "equal"; } }

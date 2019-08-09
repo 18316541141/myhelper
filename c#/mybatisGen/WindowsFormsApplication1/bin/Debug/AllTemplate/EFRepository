@@ -119,6 +119,10 @@ namespace WebApplication1.Repository
         /// <returns>返回分页查询结果</returns>
         public MyPagedList<$entity.EntityName$> BigPageList($entity.EntityName$Params eqArgs, int pageIndex, int pageSize, $entity.EntityName$Params neqArgs = null)
         {
+			if( pageSize > 10000 )
+			{
+				pageSize = 10000;
+			}
             using (MyDbContext myDbContext = new MyDbContext())
             {
                 IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
@@ -154,6 +158,10 @@ namespace WebApplication1.Repository
         /// <returns>返回分页查询结果</returns>
         public MyPagedList<$entity.EntityName$> PageList($entity.EntityName$Params eqArgs, int pageIndex, int pageSize,$entity.EntityName$Params neqArgs = null)
         {
+			if( pageSize > 100)
+			{
+				pageSize = 100;
+			}
             using (MyDbContext myDbContext = new MyDbContext())
             {
                 IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);

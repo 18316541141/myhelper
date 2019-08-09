@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Params
+namespace WebApplication1.OrderBy
 {
     public partial class $entity.EntityName$OrderBy
     {
