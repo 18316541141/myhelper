@@ -20,27 +20,27 @@ namespace WebApplication1.Service
             _newsAlarmList = new List<NewsAlarm>();
             _newsAlarmList.Add(new NewsAlarm
             {
-                createDate=DateTime.Now.AddDays(-1),
-                menuId= "n11",
-                readState=0,
-                receive="asdasd",
-                title="测试asdasd",
+                CreateDate=DateTime.Now.AddDays(-1),
+                MenuId= "n11",
+                ReadState=0,
+                Receive="asdasd",
+                Title="测试asdasd",
             });
             _newsAlarmList.Add(new NewsAlarm
             {
-                createDate = DateTime.Now.AddDays(-2),
-                menuId = "m11",
-                readState = 0,
-                receive = "asddasd",
-                title = "测试vvss",
+                CreateDate = DateTime.Now.AddDays(-2),
+                MenuId = "m11",
+                ReadState = 0,
+                Receive = "asddasd",
+                Title = "测试vvss",
             });
             _newsAlarmList.Add(new NewsAlarm
             {
-                createDate = DateTime.Now.AddDays(-2),
-                menuId = "m12",
-                readState = 0,
-                receive = "assdffsdd",
-                title = "测e4as试",
+                CreateDate = DateTime.Now.AddDays(-2),
+                MenuId = "m12",
+                ReadState = 0,
+                Receive = "assdffsdd",
+                Title = "测e4as试",
             });
         }
 
@@ -70,13 +70,13 @@ namespace WebApplication1.Service
         {
             return new MyPagedList<NewsAlarm>
             {
-                currentPageIndex=1,
-                startItemIndex=0,
-                endItemIndex=2,
-                pageDataList=_newsAlarmList,
-                pageSize=20,
-                totalItemCount=3,
-                totalPageCount=1
+                CurrentPageIndex=1,
+                StartItemIndex=0,
+                EndItemIndex=2,
+                PageDataList=_newsAlarmList,
+                PageSize=20,
+                TotalItemCount=3,
+                TotalPageCount=1
             };
         }
 
@@ -96,8 +96,8 @@ namespace WebApplication1.Service
             {
                 provinces.Add(new AreaTree
                 {
-                    name=province.provinceName,
-                    value=Convert.ToString(province.provinceID)
+                    Name=province.provinceName,
+                    Value=Convert.ToString(province.provinceID)
                 });
             }
             areaTreeMap.Add("provinces", provinces);
@@ -106,9 +106,9 @@ namespace WebApplication1.Service
             {
                 cities.Add(new AreaTree
                 {
-                    name = city.CityName,
-                    value = Convert.ToString(city.CityID),
-                    parentValue = Convert.ToString(city.ProvinceID)
+                    Name = city.CityName,
+                    Value = Convert.ToString(city.CityID),
+                    ParentValue = Convert.ToString(city.ProvinceID)
                 });
             }
             areaTreeMap.Add("cities", cities);
@@ -117,9 +117,9 @@ namespace WebApplication1.Service
             {
                 counties.Add(new AreaTree
                 {
-                    name = district.DistrictName,
-                    value = Convert.ToString(district.DistrictID),
-                    parentValue = Convert.ToString(district.CityID)
+                    Name = district.DistrictName,
+                    Value = Convert.ToString(district.DistrictID),
+                    ParentValue = Convert.ToString(district.CityID)
                 });
             }
             areaTreeMap.Add("counties", counties);
@@ -156,103 +156,103 @@ namespace WebApplication1.Service
             List<LeftMenu> leftMenuList11 = new List<LeftMenu>();
             LeftMenu leftMenuCharts = new LeftMenu
             {
-                id = "m312",
-                title = "统计图",
-                url = "menus/testMenus1/charts.html",
-                sortIndex = 3,
+                Id = "m312",
+                Title = "统计图",
+                Url = "menus/testMenus1/charts.html",
+                SortIndex = 3,
             };
             leftMenuList11.Add(leftMenuCharts);
             LeftMenu leftMenuNewAlarm = new LeftMenu
             {
-                id="n11",
-                title = "实时刷最新消息",
-                url = "menus/testMenus1/testNewAlarm.html",
-                sortIndex = 4,
+                Id="n11",
+                Title = "实时刷最新消息",
+                Url = "menus/testMenus1/testNewAlarm.html",
+                SortIndex = 4,
             };
             leftMenuList11.Add(leftMenuNewAlarm);
             LeftMenu leftMenu111 = new LeftMenu
             {
-                id="m101",
-                title= "测试1-1",
-                url= "menus/testMenus1/treeForm.html",
-                sortIndex = 5,
+                Id="m101",
+                Title= "测试1-1",
+                Url= "menus/testMenus1/treeForm.html",
+                SortIndex = 5,
             };
             leftMenuList11.Add(leftMenu111);
 
             LeftMenu leftMenu112 = new LeftMenu
             {
-                id= "m12",
-                title= "测试1-2",
-                url= "menus/testMenus1/uploadImage.html",
-                sortIndex = 6,
+                Id= "m12",
+                Title= "测试1-2",
+                Url= "menus/testMenus1/uploadImage.html",
+                SortIndex = 6,
             };
             leftMenuList11.Add(leftMenu112);
 
             LeftMenu leftMenu13 = new LeftMenu
             {
-                id="m13",
-                title="测试1-3",
-                url = "menus/testMenus1/bigImg.html",
-                sortIndex = 7,
+                Id="m13",
+                Title="测试1-3",
+                Url = "menus/testMenus1/bigImg.html",
+                SortIndex = 7,
             };
             leftMenuList11.Add(leftMenu13);
 
             LeftMenu leftMenu14 = new LeftMenu
             {
-                id = "m14",
-                title = "测试1-4",
-                url = "menus/testMenus1/uploadFiles.html",
-                sortIndex = 8,
+                Id = "m14",
+                Title = "测试1-4",
+                Url = "menus/testMenus1/uploadFiles.html",
+                SortIndex = 8,
             };
             leftMenuList11.Add(leftMenu14);
 
             LeftMenu leftMenu15 = new LeftMenu
             {
-                id = "m15",
-                title = "测试1-5",
-                url = "menus/testMenus1/areaSelect.html",
-                sortIndex = 9,
+                Id = "m15",
+                Title = "测试1-5",
+                Url = "menus/testMenus1/areaSelect.html",
+                SortIndex = 9,
             };
             leftMenuList11.Add(leftMenu15);
 
             LeftMenu leftMenu17 = new LeftMenu
             {
-                id="m17",
-                title = "测试1-7",
-                url = "menus/testMenus1/pageTable2.html",
-                sortIndex = 10,
+                Id="m17",
+                Title = "测试1-7",
+                Url = "menus/testMenus1/pageTable2.html",
+                SortIndex = 10,
             };
             leftMenuList11.Add(leftMenu17);
 
             LeftMenu leftMenu18 = new LeftMenu
             {
-                id = "m18",
-                title = "测试1-8",
-                url = "menus/testMenus1/uploadExcel.html",
-                sortIndex = 11,
+                Id = "m18",
+                Title = "测试1-8",
+                Url = "menus/testMenus1/uploadExcel.html",
+                SortIndex = 11,
             };
             leftMenuList11.Add(leftMenu18);
             LeftMenu leftMenu1 = new LeftMenu
             {
-                id = "m1",
-                title = "测试1",
-                sortIndex = 0,
+                Id = "m1",
+                Title = "测试1",
+                SortIndex = 0,
             };
-            leftMenu1.leftMenus=leftMenuList11;
+            leftMenu1.LeftMenus=leftMenuList11;
             leftMenuList.Add(leftMenu1);
             LeftMenu leftMenu2 = new LeftMenu
             {
-                id="m2",
-                title= "测试2",
-                sortIndex=1,
+                Id="m2",
+                Title= "测试2",
+                SortIndex=1,
             };
 
             leftMenuList.Add(leftMenu2);
             LeftMenu leftMenu3 = new LeftMenu
             {
-                id= "m3",
-                title= "测试3",
-                sortIndex = 2,
+                Id= "m3",
+                Title= "测试3",
+                SortIndex = 2,
             };
 
             leftMenuList.Add(leftMenu3);

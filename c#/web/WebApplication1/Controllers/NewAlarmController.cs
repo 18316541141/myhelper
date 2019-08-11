@@ -20,11 +20,11 @@ namespace WebApplication1.Controllers
             SystemService systemService = new SystemService();
             systemService.AddNewsAlarm(new NewsAlarm
             {
-                createDate=DateTime.Now,
-                menuId="m11",
-                readState=0,
-                receive="rfrefsdfsd",
-                title="测试001"
+                CreateDate=DateTime.Now,
+                MenuId="m11",
+                ReadState=0,
+                Receive="rfrefsdfsd",
+                Title="测试001"
             });
             return MyJson(new Result
             {

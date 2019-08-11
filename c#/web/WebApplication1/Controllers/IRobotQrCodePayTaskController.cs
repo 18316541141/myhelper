@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
             IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
             return new ExcelResult<IRobotQrCodePayTaskExcel>
             {
-                DataList= IRobotQrCodePayTaskExcel.NewExcelList(irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).pageDataList),
+                DataList= IRobotQrCodePayTaskExcel.NewExcelList(irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).PageDataList),
                 FileName = "测试excel.xlsx"
             };
         }

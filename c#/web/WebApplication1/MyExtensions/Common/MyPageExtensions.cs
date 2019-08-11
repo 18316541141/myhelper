@@ -26,13 +26,13 @@ namespace WebApplication1.MyExtensions.Common
             PagedList<T> pagedList = allItems.ToPagedList(pageIndex, pageSize);
             return new MyPagedList<T>
             {
-                pageDataList = pagedList.ToList(),
-                currentPageIndex = pagedList.CurrentPageIndex,
-                endItemIndex = pagedList.EndItemIndex,
-                pageSize = pagedList.PageSize,
-                startItemIndex = pagedList.StartItemIndex,
-                totalItemCount = pagedList.TotalItemCount,
-                totalPageCount = pagedList.TotalPageCount
+                PageDataList = pagedList.ToList(),
+                CurrentPageIndex = pagedList.CurrentPageIndex,
+                EndItemIndex = pagedList.EndItemIndex,
+                PageSize = pagedList.PageSize,
+                StartItemIndex = pagedList.StartItemIndex,
+                TotalItemCount = pagedList.TotalItemCount,
+                TotalPageCount = pagedList.TotalPageCount
             };
         }
     }

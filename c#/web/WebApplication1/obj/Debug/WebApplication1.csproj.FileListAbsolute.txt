@@ -261,6 +261,7 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\MySql.Data.Entity.EF6.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Newtonsoft.Json.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Oracle.ManagedDataAccess.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Oracle.ManagedDataAccess.EntityFramework.dll
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Snowflake.Net.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Data.SqlServerCe.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Web.Helpers.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Web.Mvc.dll
@@ -323,4 +324,3 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Iden
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
-D:\git_project\myhelper\c#\web\WebApplication1\bin\Snowflake.Net.dll

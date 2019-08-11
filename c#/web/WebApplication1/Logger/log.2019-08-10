@@ -1,0 +1,10 @@
+﻿2019-08-10 10:39:45,921 10 已添加了具有相同键的项。
+System.ArgumentException: 已添加了具有相同键的项。
+   在 System.ThrowHelper.ThrowArgumentException(ExceptionResource resource)
+   在 System.Collections.Generic.Dictionary`2.Insert(TKey key, TValue value, Boolean add)
+   在 System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   在 WebApplication1.Filter.Common.LoginAuthorizeAttribute.AuthorizeCore(HttpContextBase httpContext) 位置 D:\git_project\myhelper\c#\web\WebApplication1\Filter\Common\LoginAuthorizeAttribute.cs:行号 61
+   在 System.Web.Mvc.AuthorizeAttribute.OnAuthorization(AuthorizationContext filterContext)
+   在 WebApplication1.Filter.Common.LoginAuthorizeAttribute.OnAuthorization(AuthorizationContext filterContext) 位置 D:\git_project\myhelper\c#\web\WebApplication1\Filter\Common\LoginAuthorizeAttribute.cs:行号 39
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__19(AsyncCallback asyncCallback, Object asyncState)

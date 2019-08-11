@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,26 +14,31 @@ namespace WebApplication1.Entity
         /// <summary>
         /// 消息创建时间
         /// </summary>
-        public DateTime createDate { set; get; }
+        [JsonProperty("createDate")]
+        public DateTime CreateDate { set; get; }
 
         /// <summary>
         /// 消息摘要
         /// </summary>
-        public string title { set; get; }
+        [JsonProperty("title")]
+        public string Title { set; get; }
 
         /// <summary>
         /// 查看新消息的菜单页。
         /// </summary>
-        public string menuId { set; get; }
+        [JsonProperty("menuId")]
+        public string MenuId { set; get; }
 
         /// <summary>
         /// 新消息的接受者
         /// </summary>
-        public string receive { set; get; }
+        [JsonProperty("receive")]
+        public string Receive { set; get; }
 
         /// <summary>
         /// 消息的读取状态：0：未读，1：已读
         /// </summary>
-        public int readState { set; get; }
+        [JsonProperty("readState")]
+        public int ReadState { set; get; }
     }
 }

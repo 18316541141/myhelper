@@ -211,6 +211,26 @@ namespace WebApplication1.Controllers.Common
         }
 
         /// <summary>
+        /// 微信公众平台专用的图片上传功能
+        /// </summary>
+        /// <param name="serverId">微信图片服务器端ID</param>
+        /// <param name="pathName">图片保存的路径名称</param>
+        /// <returns></returns>
+        public JsonResult UploadSingleWxImage(string serverId, string pathName)
+        {
+            Image image=HttpWebRequestHelper.HttpGet($"http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=access_token&media_id={serverId}").GetImage();
+            string imgName = FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+            using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}"))
+            {
+                using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
+                {
+                    string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
+                    return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } });
+                }
+            }
+        }
+
+        /// <summary>
         /// 上传单张图片
         /// </summary>
         /// <returns></returns>

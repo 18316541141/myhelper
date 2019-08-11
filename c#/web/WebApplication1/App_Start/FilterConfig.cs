@@ -10,6 +10,7 @@ namespace WebApplication1
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            #region 这两个拦截器是常规的web应用登陆或鉴权使用的拦截器，当在微信平台开发时，需要注释掉。
             filters.Add(new LoginAuthorizeAttribute());
             filters.Add(new PermAuthorizeAttribute());
             SingleUserAttribute singleUserAttribute = new SingleUserAttribute();
@@ -17,6 +18,8 @@ namespace WebApplication1
             singleUserAttribute.IgnoreRequests.Add("/session/login".ToLower());
             singleUserAttribute.IgnoreRequests.Add("/session/jsonpLogin".ToLower());
             filters.Add(singleUserAttribute);
+            #endregion
+
             CompressAttribute compressAttribute = new CompressAttribute();
             compressAttribute.IgnoreRequests.Add("/index/showImage".ToLower());
             compressAttribute.IgnoreRequests.Add("/session/verificationCode".ToLower());

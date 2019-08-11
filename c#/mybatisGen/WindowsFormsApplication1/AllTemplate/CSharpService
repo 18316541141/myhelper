@@ -36,13 +36,13 @@ namespace WebApplication1.Service
         /// 分页查询***模块，并返回查询结果
         /// </summary>
         /// <param name="param">查询参数</param>
-        /// <param name="pageIndex">当前页码</param>
+        /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
-		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int pageIndex = 1,int pageSize = 20)
+		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.PageList(param, pageIndex, pageSize);
+			return repository.PageList(param, currentPageIndex, pageSize);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -66,10 +66,26 @@ namespace WebApplication1.Service
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
+        /// 新增多条数据
+        /// </summary>
+        /// <param name="datas">新增的数据</param>
+		public void AddBatch(List<$entity.EntityName$> datas)
+		{
+			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
+			foreach($entity.EntityName$ data in datas)
+			{
+				data.$entity.KeyName$ = Next();
+				data.CreateDate = DateTime.Now;
+				data.Status = 1;
+			}
+			repository.Insert(datas);
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public void ChangeStatus($entity.EntityName$ datas)
+		public int ChangeStatus($entity.EntityName$ datas)
 		{
 			List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
 			for($entity.EntityName$ data in datas)
@@ -81,7 +97,7 @@ namespace WebApplication1.Service
 				});
 			}
 			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.UpdateChangeBatch(updates);
+			return repository.UpdateChangeBatch(updates);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -89,7 +105,7 @@ namespace WebApplication1.Service
         /// </summary>
         /// <param name="$entity.KeyName$">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public $entity.EntityName$ FindEntity(long $entity.KeyName$)
+		public $entity.EntityName$ Load(long $entity.KeyName$)
 		{
 			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
 			return repository.FindEntity($entity.KeyName$);
@@ -99,10 +115,10 @@ namespace WebApplication1.Service
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public void DelBatch($entity.EntityName$ datas)
+		public int DelBatch($entity.EntityName$ datas)
 		{
 			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.Delete(datas);
+			return repository.Delete(datas);
 		}
 		*/
     }

@@ -225,13 +225,13 @@ namespace WebApplication1.Repository
                 }
                 return new MyPagedList<IRobotQrCodePayTask>
                 {
-                    currentPageIndex = pageIndex,
-                    pageDataList = pageDataList,
-                    totalItemCount = totalItemCount,
-                    pageSize = pageSize,
-                    totalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
-                    startItemIndex = (pageSize - 1) * pageIndex + 1,
-                    endItemIndex = pageSize * pageIndex
+                    CurrentPageIndex = pageIndex,
+                    PageDataList = pageDataList,
+                    TotalItemCount = totalItemCount,
+                    PageSize = pageSize,
+                    TotalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
+                    StartItemIndex = (pageSize - 1) * pageIndex + 1,
+                    EndItemIndex = pageSize * pageIndex
                 };
             }
         }

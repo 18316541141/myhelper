@@ -36,52 +36,85 @@ namespace WebApplication1.Controllers
         /// 分页查询***模块，并返回查询结果
         /// </summary>
         /// <param name="param">查询参数</param>
-        /// <param name="pageIndex">当前页码</param>
+        /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
-		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int pageIndex = 1,int pageSize = 20)
+		public JsonResult Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.PageList(param, pageIndex, pageSize);
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			return MyJson(new Result{code = 0, data = service.Page(param, currentPageIndex, pageSize)});
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 导出***模块，使用excel表保存
+        /// </summary>
+        /// <param name="param">查询参数</param>
+        /// <param name="currentPageIndex">当前页码</param>
+        /// <param name="pageSize">每页显示的数据量</param>
+        /// <returns>返回***模块的导出结果</returns>
+		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, int currentPageIndex = 1, int pageSize = 10000)
+		{
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			return new ExcelResult<$entity.EntityName$>
+			{
+				DataList = irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).pageDataList,
+				FileName = "测试excel.xlsx"
+			};
+		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 导入***模块数据
+        /// </summary>
+        /// <param name="param">查询参数</param>
+        /// <param name="currentPageIndex">当前页码</param>
+        /// <param name="pageSize">每页显示的数据量</param>
+        /// <returns>返回***模块的导出结果</returns>
+		public JsonResult Import(HttpPostedFileBase fileUpload,/* 其他参数... */)
+		{
+			List<$entity.EntityName$> $entity.EntityName$List;
+            if (fileUpload.FileName.EndsWith("xlsx"))
+            {
+                $entity.EntityName$List = ExcelHelper.ExcelXlsxToList<$entity.EntityName$>(fileUpload.InputStream);
+            }
+            else if (fileUpload.FileName.EndsWith("xls"))
+            {
+                $entity.EntityName$List = ExcelHelper.ExcelXlsToList<$entity.EntityName$>(fileUpload.InputStream);
+            }
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			service.AddBatch($entity.EntityName$List);
+			return MyJson(new Result { code = 0, msg = "导入成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 根据主键删除指定数据
         /// </summary>
         /// <param name="$entity.KeyName$">删除数据的主键</param>
-		public void Del(long $entity.KeyName$)
+		public JsonResult Del(long $entity.KeyName$)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.Delete(a => a.$entity.KeyName$);
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+            service.Del($entity.KeyName$);
+			return MyJson(new Result { code = 0, msg = "数据已删除。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 新增一条数据
         /// </summary>
         /// <param name="data">新增的数据</param>
-		public void Add($entity.EntityName$ data)
+		public JsonResult Add($entity.EntityName$ data)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.Insert(data);
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			service.Add(data);
+			return MyJson(new Result { code = 0, msg = "保存成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public void ChangeStatus($entity.EntityName$ datas)
+		public JsonResult ChangeStatus($entity.EntityName$ datas)
 		{
-			List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
-			for($entity.EntityName$ data in datas)
-			{
-				updates.Add(new $entity.EntityName$
-				{
-					$entity.KeyName$ = data.$entity.KeyName$,
-					Status = data.Status
-				});
-			}
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.UpdateChangeBatch(updates);
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			return MyJson(new Result { code = 0,msg=$"修改成功，共{service.ChangeStatus(datas)}条。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -89,20 +122,20 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="$entity.KeyName$">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public $entity.EntityName$ FindEntity(long $entity.KeyName$)
+		public JsonResult Load(long $entity.KeyName$)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.FindEntity($entity.KeyName$);
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			return MyJson(new Result { code = 0, data = service.Load($entity.KeyName$) });
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public void DelBatch($entity.EntityName$ datas)
+		public JsonResult DelBatch(List<$entity.EntityName$> datas)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.Delete(datas);
+			$entity.EntityName$Service service = new $entity.EntityName$Service();
+			return MyJson(new Result { code = 0 ,msg = $"删除成功，共{service.DelBatch(datas)}条。" });
 		}
 		*/
     }
