@@ -32,6 +32,10 @@ namespace WindowsFormsApplication1.Service
             {
                 return "DateTime?";
             }
+            else if (sqlType == "decimal")
+            {
+                return "double?";
+            }
             return "";
         }
 
@@ -50,7 +54,7 @@ namespace WindowsFormsApplication1.Service
             {
                 return "like";
             }
-            else if (sqlType == "datetime" || sqlType == "datetime2")
+            else if (sqlType == "datetime" || sqlType == "datetime2" || sqlType == "decimal")
             {
                 return "range";
             }

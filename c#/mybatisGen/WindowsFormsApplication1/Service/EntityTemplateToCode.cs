@@ -35,18 +35,21 @@ namespace WindowsFormsApplication1.Service
             string entityPath = $@"GenTarget{s}{dateStr}{s}Entity{s}CodeGenerator{s}";
             string repositoryPath = $@"GenTarget{s}{dateStr}{s}Repository{s}CodeGenerator{s}";
             string servicePath = $@"GenTarget{s}{dateStr}{s}Service{s}";
+            string controllersPath = $@"GenTarget{s}{dateStr}{s}Controllers{s}";
             string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}CodeGenerator{s}";
             Directory.CreateDirectory(paramsPath);
             Directory.CreateDirectory(orderByPath);
             Directory.CreateDirectory(entityPath);
             Directory.CreateDirectory(repositoryPath);
             Directory.CreateDirectory(servicePath);
+            Directory.CreateDirectory(controllersPath);
             Directory.CreateDirectory(mappingPath);
             File.WriteAllText($"{paramsPath}{entity.EntityName}Params.cs", _templateHelper.EntityToStr(entity, "CSharpParams"), Encoding.UTF8);
             File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.cs", _templateHelper.EntityToStr(entity, "CSharpOrderBy"), Encoding.UTF8);
             File.WriteAllText($"{entityPath}{entity.EntityName}.cs", _templateHelper.EntityToStr(entity, "CSharpEntity"), Encoding.UTF8);
             File.WriteAllText($"{repositoryPath}{entity.EntityName}Repository.cs", _templateHelper.EntityToStr(entity, "EFRepository"), Encoding.UTF8);
             File.WriteAllText($"{servicePath}{entity.EntityName}Service.cs", _templateHelper.EntityToStr(entity, "CSharpService"), Encoding.UTF8);
+            File.WriteAllText($"{controllersPath}{entity.EntityName}Controller.cs", _templateHelper.EntityToStr(entity, "CSharpController"), Encoding.UTF8);
             File.WriteAllText($"{mappingPath}{entity.EntityName}Map.cs", _templateHelper.EntityToStr(entity, "EFMapping"), Encoding.UTF8);
         }
 

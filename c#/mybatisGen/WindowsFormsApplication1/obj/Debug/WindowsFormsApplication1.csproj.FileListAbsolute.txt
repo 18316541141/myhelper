@@ -17,6 +17,8 @@ D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\Windows
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Guess.xml
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpOrderBy
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpParams
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpService
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpController
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpEntity
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\EFMapping
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\EFRepository

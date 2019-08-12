@@ -12,7 +12,7 @@
         /// <returns>返回属性名称</returns>
         public string ColNameToPropName(string colName)
         {
-            return colName.Replace("IR_", "ir");
+            return colName.Replace("_", "");
         }
 
         /// <summary>

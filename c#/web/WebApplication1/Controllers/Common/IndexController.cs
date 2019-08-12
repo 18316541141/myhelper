@@ -291,6 +291,16 @@ namespace WebApplication1.Controllers.Common
         }
 
         /// <summary>
+        /// 微信jssdk接口使用时，加载的配置信息。
+        /// </summary>
+        /// <param name="fullPath"></param>
+        /// <returns></returns>
+        public JsonResult WxCfg(string routerPath)
+        {
+            return MyJson(new Result { code = 0 });
+        }
+
+        /// <summary>
         /// 切割单张图片
         /// </summary>
         /// <param name="pathName">图片路径名称</param>

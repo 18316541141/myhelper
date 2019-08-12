@@ -137,13 +137,13 @@ namespace WebApplication1.Repository
                 }
                 return new MyPagedList<$entity.EntityName$>
                 {
-                    currentPageIndex = pageIndex,
-                    pageDataList = pageDataList,
-                    totalItemCount = totalItemCount,
-                    pageSize = pageSize,
-                    totalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
-                    startItemIndex = (pageSize - 1) * pageIndex + 1,
-                    endItemIndex = pageSize * pageIndex
+                    CurrentPageIndex = pageIndex,
+                    PageDataList = pageDataList,
+                    TotalItemCount = totalItemCount,
+                    PageSize = pageSize,
+                    TotalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
+                    StartItemIndex = (pageSize - 1) * pageIndex + 1,
+                    EndItemIndex = pageSize * pageIndex
                 };
             }
         }
@@ -205,7 +205,7 @@ namespace WebApplication1.Repository
         /// 修改变化值，把entity不为null的数据视为变化值
         /// </summary>
         /// <param name="entity">修改实体类，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
-        /// <returns></returns>
+        /// <returns>返回修改的数据行数</returns>
         public int UpdateChange($entity.EntityName$ entity)
         {
             using (MyDbContext myDbContext = new MyDbContext())
@@ -221,5 +221,29 @@ namespace WebApplication1.Repository
                 return myDbContext.SaveChanges();
             }
         }
+
+		/// <summary>
+        /// 批量修改变化值，把entity不为null的数据视为变化值
+        /// </summary>
+        /// <param name="entities">修改实体类集合，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
+        /// <returns>返回修改的数据行数</returns>
+		public int UpdateChangeBatch(List<$entity.EntityName$> entities)
+		{
+			using (MyDbContext myDbContext = new MyDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{
+					$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
+					myDbContext.$entity.EntityNames$.Attach(updateBefore);
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (entity.$it.PropName$ != null)
+					{
+						updateBefore.$it.PropName$ = entity.$it.PropName$;
+					}
+			$endif$$endif$}$
+				}
+				return myDbContext.SaveChanges();
+			}
+		}
     }
 }
