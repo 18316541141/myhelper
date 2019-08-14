@@ -96,16 +96,25 @@ public interface BaseMapper<T,P> {
 	 * @return
 	 */
 	default MyPagedList<T> pageList(P params,int currentPageIndex,int pageSize,P nparams){
+		if(currentPageIndex<=0){
+			currentPageIndex=1;
+		}
 		if(pageSize>100){
 			pageSize=100;
+		} else if(pageSize<=0){
+			pageSize=20;
 		}
 		long totalCount=count(params,nparams);
+		long totalPageCount=((totalCount-totalCount%pageSize)/pageSize)+1
+		if(currentPageIndex>=totalPageCount){
+			currentPageIndex=Math.max(totalPageCount-1,1);
+		}
 		List<T> tList=findListByParams(params,currentPageIndex,pageSize,nparams);
 		MyPagedList<T> myPagedList=new MyPagedList<>();
 		myPagedList.setPageDataList(tList);
 		myPagedList.setPageSize(pageSize);
 		myPagedList.setTotalItemCount(totalCount);
-		myPagedList.setTotalPageCount(((totalCount-totalCount%pageSize)/pageSize)+1);
+		myPagedList.setTotalPageCount(totalPageCount);
 		myPagedList.setCurrentPageIndex(currentPageIndex);
 		myPagedList.setStartItemIndex((currentPageIndex-1)*pageSize+1);
 		myPagedList.setEndItemIndex(Math.min(totalCount, currentPageIndex*pageSize));
@@ -132,16 +141,23 @@ public interface BaseMapper<T,P> {
 	 * @return
 	 */
 	default MyBigPagedList<T> pageList(P params,int currentPageIndex,int pageSize,P nparams){
-		if(pageSize>10000){
+		if(currentPageIndex<=0){
+			currentPageIndex=1;
+		}
+		if(pageSize>10000 || pageSize<=0){
 			pageSize=10000;
 		}
 		long totalCount=count(params,nparams);
+		long totalPageCount=((totalCount-totalCount%pageSize)/pageSize)+1;
+		if(currentPageIndex >= totalPageCount){
+			currentPageIndex = Math.max(totalPageCount-1,1);
+		}
 		List<T> tList=findListByParams(params,currentPageIndex,pageSize,nparams);
 		MyPagedList<T> myPagedList=new MyPagedList<>();
 		myPagedList.setPageDataList(tList);
 		myPagedList.setPageSize(pageSize);
 		myPagedList.setTotalItemCount(totalCount);
-		myPagedList.setTotalPageCount(((totalCount-totalCount%pageSize)/pageSize)+1);
+		myPagedList.setTotalPageCount(totalPageCount);
 		myPagedList.setCurrentPageIndex(currentPageIndex);
 		myPagedList.setStartItemIndex((currentPageIndex-1)*pageSize+1);
 		myPagedList.setEndItemIndex(Math.min(totalCount, currentPageIndex*pageSize));

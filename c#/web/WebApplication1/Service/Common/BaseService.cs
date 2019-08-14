@@ -1,10 +1,13 @@
 ﻿
 using log4net;
+using Newtonsoft.Json;
 using Snowflake.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebApplication1.Entity.Common;
+using WebApplication1.Filter.Common;
 
 namespace WebApplication1.Service.Common
 {
@@ -38,12 +41,16 @@ namespace WebApplication1.Service.Common
         }
 
         /// <summary>
-        /// 异常信息
+        /// 手动抛出异常信息，并交由异常处理器统一处理
         /// </summary>
-        /// <param name="msg"></param>
-        protected void Ex(string msg)
+        /// <param name="msg">异常信息</param>
+        /// <param name="code">错误码</param>
+        protected void Ex(string msg,short code=-1)
         {
-            throw new Exception(msg + "(Error:-1)");
+            throw new Exception(MyErrorAttribute.ErrorPrefix+ JsonConvert.SerializeObject(new Result {
+                msg = msg,
+                code = code,
+            }));
         }
     }
 }
