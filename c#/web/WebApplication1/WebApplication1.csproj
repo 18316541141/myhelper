@@ -237,6 +237,7 @@
     <Compile Include="Filter\Common\CompressAttribute.cs" />
     <Compile Include="Filter\Common\LoginAuthorizeAttribute.cs" />
     <Compile Include="Filter\Common\MyErrorAttribute.cs" />
+    <Compile Include="Filter\Common\OperIntervalAttribute.cs" />
     <Compile Include="Filter\Common\PermAuthorizeAttribute.cs" />
     <Compile Include="Filter\Common\SignAttribute.cs" />
     <Compile Include="Filter\Common\SingleUserAttribute.cs" />

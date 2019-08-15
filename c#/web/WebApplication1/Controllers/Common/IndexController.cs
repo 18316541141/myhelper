@@ -24,6 +24,9 @@ using WebApplication1.Service;
 
 namespace WebApplication1.Controllers.Common
 {
+    /// <summary>
+    /// 通用控制器
+    /// </summary>
     public class IndexController : FastController
     {
         SystemService _systemService;
@@ -32,14 +35,25 @@ namespace WebApplication1.Controllers.Common
         /// <summary>
         /// 上传文件所允许的路径
         /// </summary>
-        HashSet<string> _allowPath { set; get; }
+        public static HashSet<string> _allowPath { set; get; }
+
+        /// <summary>
+        /// 等待池表
+        /// </summary>
+        public static HashSet<string> WaitPoolSet;
+
+        static IndexController()
+        {
+            _allowPath = new HashSet<string>();
+            _allowPath.Add("test");
+
+            WaitPoolSet = new HashSet<string>();
+        }
 
         public IndexController()
         {
             _systemService = new SystemService();
             _realTimeInitService = new RealTimeInitService();
-            _allowPath = new HashSet<string>();
-            _allowPath.Add("test");
         }
 
         /// <summary>
@@ -56,30 +70,38 @@ namespace WebApplication1.Controllers.Common
         
 
         /// <summary>
-        /// 实时检测最新版本号
+        /// 实时检测最新版本号，如果发现版本号发生变化，则马上
+        /// 返回，如果没变化，则等待30秒或30秒内版本号发生变化后返回
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回结果</returns>
         public JsonResult RealTime()
         {
             string realTimePool = Convert.ToString(Request.Headers["Real-Time-Pool"]);
-            string realTimeVersion = Request.Headers["Real-Time-Version"];
-            Response.AddHeader("Real-Time-Pool", realTimePool);
-            string newestVersion;
-            bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
-            if (realTimeVersion == null)
+            if (WaitPoolSet.Contains(realTimePool))
             {
-                initRet = _realTimeInitService.Init(realTimePool, User.Identity.Name);
-            }
-            if (initRet)
-            {
-                ThreadHelper.BatchWait(realTimePool, 60000);
-                Response.AddHeader("Real-Time-Version", newestVersion);
-                return MyJson(new Result { code = 1 });
+                string realTimeVersion = Request.Headers["Real-Time-Version"];
+                Response.AddHeader("Real-Time-Pool", realTimePool);
+                string newestVersion;
+                bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
+                if (realTimeVersion == null)
+                {
+                    initRet = _realTimeInitService.Init(realTimePool, User.Identity.Name);
+                }
+                if (initRet)
+                {
+                    ThreadHelper.BatchWait(realTimePool, 60000);
+                    Response.AddHeader("Real-Time-Version", newestVersion);
+                    return MyJson(new Result { code = 1 });
+                }
+                else
+                {
+                    Response.AddHeader("Real-Time-Version", newestVersion);
+                    return MyJson(new Result { code = 0 });
+                }
             }
             else
             {
-                Response.AddHeader("Real-Time-Version", newestVersion);
-                return MyJson(new Result { code = 0 });
+                return MyJson(new Result { code = -1,msg = "该等待池未开放。" });
             }
         }
 

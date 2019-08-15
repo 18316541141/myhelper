@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AllTemplate\ElemntUIList.txt" />
     <Compile Include="Service\BsyNameTrans.cs" />
     <Compile Include="Service\EntityTemplateToCode.cs" />
     <Compile Include="Service\IDbTypeTrans.cs" />

@@ -47,7 +47,7 @@ namespace WebApplication1.Entity.Common
             }
             else
             {
-                throw new Exception("使用该返回结果时，fileName必须以xls或xlsx结尾");
+                throw new Exception("使用该返回结果时，fileName必须以xls或xlsx、csv结尾");
             }
         }
     }

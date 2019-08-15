@@ -16,9 +16,7 @@ namespace WebApplication1.Entity.Common
         public string msg { set; get; }
         /// <summary>
         /// 返回的消息码
-        /// 0：正确无误
-        /// -1：无种类错误，只用于区分正确和错误。
-        /// -2：用户已退出登录，登录失败！
+        /// 
         /// </summary>
         public short code { set; get; }
         /// <summary>

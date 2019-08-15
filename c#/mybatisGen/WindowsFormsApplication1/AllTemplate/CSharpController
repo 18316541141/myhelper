@@ -52,16 +52,17 @@ namespace WebApplication1.Controllers
         /// 导出***模块，使用excel表保存
         /// </summary>
         /// <param name="param">查询参数</param>
+		/// <param name="excelType">excel类型</param>
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的导出结果</returns>
-		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, int currentPageIndex = 1, int pageSize = 10000)
+		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
 		{
 			$entity.EntityName$Service service = new $entity.EntityName$Service();
 			return new ExcelResult<$entity.EntityName$>
 			{
 				DataList = irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).pageDataList,
-				FileName = "测试excel.xlsx"
+				FileName = "测试excel."+excelType
 			};
 		}
 ----------------------------------------------------------------------------------------------------------------------------
