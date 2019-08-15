@@ -42,6 +42,9 @@
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-form-item>
+			<el-form-item>
+                <el-button size="medium" v-on:click="add" icon="el-icon-plus">新增</el-button>
+            </el-form-item>
 			<transition name="fade">
                 <el-form-item v-show="checkedDatas.length>0">
                     <el-button size="medium" type="primary" v-on:click="enable" icon="el-icon-check">启用</el-button>
@@ -74,12 +77,22 @@
         </default-page>
 ------------------------------------------------------------------------------------------------------
 		编辑部分：
-		<el-dialog title="裁剪图片" top="25px" width="300px"
+		<el-dialog title="新增/编辑***模块" top="25px" width="300px"
 			v-bind:visible.sync="editDialog"
 			v-bind:modal-append-to-body="true"
 			v-bind:append-to-body="true">
 			<div style="width:100%;height:400px;overflow-y:auto;">
-				
+				<el-form ref="form" v-bind:model="formData" label-width="80px" v-on:keyup.enter.native="onSubmit">
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$			
+					<el-form-item label="活动名称">
+						<el-input v-model="formData.$it.PropName$"></el-input>
+					</el-form-item>
+				$endif$}$
+				</el-form>
+				<el-form-item>
+					<el-button type="primary" v-on:click="onSubmit">保存</el-button>
+					<el-button>取消</el-button>
+				</el-form-item>
 			</div>
 		</el-dialog>
         -->
@@ -91,19 +104,54 @@ export default {
         数据部分（和列表部分配合使用）：
         data(){
             return {
-                postData:{},
-                retData:{},
-                checkedDatas:[],
-				editDialog:false
+				formData:{},	//仅用于存放新增表单、编辑表单的数据
+                postData:{},	//仅用于存放查询参数的数据
+                retData:{},		//仅用于存放分页查询的返回结果
+                checkedDatas:[],	//仅用于存放当前分页表格勾选项
+				editDialog:false,	//编辑、新增表单的显示和隐藏
             };
         }
 ------------------------------------------------------------------------------------------------------
         methods:{
 			/**
+			 * 保存表单
+			 */
+			onSubmit(){
+				if(this.formData.$entity.KeyName$===null){
+					this.$post('/$entity.EntityName$/add',this.formData,function(result){
+						if(result.code===0){
+							this.editDialog=false;
+							this.$refs.table.refresh();
+						}
+					});
+				}else{
+					this.$post('/$entity.EntityName$/edit',this.formData,function(result){
+						if(result.code===0){
+							this.editDialog=false;
+							this.$refs.table.refresh();
+						}
+					});
+				}
+			},
+			/**
+			 * 新增一条数据
+			 */
+			add(){
+				for(var key in this.formData){
+					if(this.formData.hasOwnProperty(key)){
+						this.formData[key]=null;
+					}
+				}
+				this.editDialog = true;
+			},
+			/**
 			 * 编辑一条数据
 			 */
 			edit(key){
-				this.editDialog = true;
+				this.$get('/$entity.EntityName$/load',{$entity.KeyName$:key},function(result){
+					this.formData=result.data;
+					this.editDialog = true;
+				});
 			},
 			/**
 			 * 删除一条数据

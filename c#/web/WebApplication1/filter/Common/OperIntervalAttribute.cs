@@ -10,7 +10,7 @@ using WebApplication1.Entity.Common;
 namespace WebApplication1.Filter.Common
 {
     /// <summary>
-    /// 操作间隔拦截器，以session为单位，对每次操作的间隔时间
+    /// 操作间隔拦截器，以ip为标识，对每次操作的间隔时间
     /// 进行限制
     /// </summary>
     public class OperIntervalAttribute: ActionFilterAttribute
@@ -39,10 +39,15 @@ namespace WebApplication1.Filter.Common
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             HttpContextBase httpContextBase = filterContext.HttpContext;
-            HttpSessionStateBase session = httpContextBase.Session;
-            if (RecordMap.ContainsKey(session.SessionID))
+            string userHostAddress = httpContextBase.Request.UserHostAddress;
+            if (RecordMap.ContainsKey(userHostAddress))
             {
-                if((DateTime.Now-RecordMap[session.SessionID]).TotalMilliseconds> IntervalMillisecond)
+                bool temp;
+                lock (RecordMap)
+                {
+                    temp = (DateTime.Now - RecordMap[userHostAddress]).TotalMilliseconds > IntervalMillisecond;
+                }
+                if(temp)
                 {
                     base.OnActionExecuting(filterContext);
                 }
@@ -64,7 +69,7 @@ namespace WebApplication1.Filter.Common
             {
                 lock (RecordMap)
                 {
-                    RecordMap.Add(session.SessionID,DateTime.Now);
+                    RecordMap.Add(userHostAddress, DateTime.Now);
                 }
                 base.OnActionExecuting(filterContext);
                 if((DateTime.Now- LastClearDate).TotalSeconds > 60)
@@ -73,12 +78,16 @@ namespace WebApplication1.Filter.Common
                     {
                         lock (RecordMap)
                         {
-                            if ((DateTime.Now - RecordMap[key]).TotalMilliseconds > IntervalMillisecond)
+                            if (RecordMap.ContainsKey(key))
                             {
-                                RecordMap.Remove(key);
+                                if ((DateTime.Now - RecordMap[key]).TotalMilliseconds > IntervalMillisecond)
+                                {
+                                    RecordMap.Remove(key);
+                                }
                             }
                         }
                     }
+                    LastClearDate = DateTime.Now;
                 }
             }
         }
