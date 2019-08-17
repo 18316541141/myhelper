@@ -1,27 +1,13 @@
-﻿
-using CommonHelper.Helper;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using CommonHelper.Helper;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Mvc;
-using System.Web.Security;
-using System.Web.SessionState;
-using System.Web.UI;
-using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 using WebApplication1.Filter.Common;
-using WebApplication1.Params;
-using WebApplication1.Repository;
 using WebApplication1.Service;
-
 namespace WebApplication1.Controllers.Common
 {
     /// <summary>
@@ -29,8 +15,9 @@ namespace WebApplication1.Controllers.Common
     /// </summary>
     public class IndexController : FastController
     {
-        SystemService _systemService;
-        RealTimeInitService _realTimeInitService;
+        public SystemService SystemService { set; get; }
+
+        public RealTimeInitService RealTimeInitService { set; get; }
 
         /// <summary>
         /// 上传文件所允许的路径
@@ -48,12 +35,7 @@ namespace WebApplication1.Controllers.Common
             _allowPath.Add("test");
 
             WaitPoolSet = new HashSet<string>();
-        }
-
-        public IndexController()
-        {
-            _systemService = new SystemService();
-            _realTimeInitService = new RealTimeInitService();
+            WaitPoolSet.Add("newsAlarm");
         }
 
         /// <summary>
@@ -63,7 +45,7 @@ namespace WebApplication1.Controllers.Common
         public JsonResult LoadLoginData()
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("leftMenus", _systemService.LoadLeftMenus());
+            data.Add("leftMenus", SystemService.LoadLeftMenus());
             return MyJson(new Result { code = 0, data = data });
         }
 
@@ -85,7 +67,7 @@ namespace WebApplication1.Controllers.Common
                 bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
                 if (realTimeVersion == null)
                 {
-                    initRet = _realTimeInitService.Init(realTimePool, User.Identity.Name);
+                    initRet = RealTimeInitService.Init(realTimePool, User.Identity.Name);
                 }
                 if (initRet)
                 {
@@ -112,8 +94,7 @@ namespace WebApplication1.Controllers.Common
         /// <returns></returns>
         public JsonResult LoadNewsAlarm()
         {
-            SystemService systemService = new SystemService();
-            return MyJson(new Result { code = 0, data = systemService.LoadNewsAlarm() });
+            return MyJson(new Result { code = 0, data = SystemService.LoadNewsAlarm() });
         }
 
         /// <summary>
@@ -233,26 +214,6 @@ namespace WebApplication1.Controllers.Common
         }
 
         /// <summary>
-        /// 微信公众平台专用的图片上传功能
-        /// </summary>
-        /// <param name="serverId">微信图片服务器端ID</param>
-        /// <param name="pathName">图片保存的路径名称</param>
-        /// <returns></returns>
-        public JsonResult UploadSingleWxImage(string serverId, string pathName)
-        {
-            Image image=HttpWebRequestHelper.HttpGet($"http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=access_token&media_id={serverId}").GetImage();
-            string imgName = FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
-            using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}"))
-            {
-                using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
-                {
-                    string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
-                    return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } });
-                }
-            }
-        }
-
-        /// <summary>
         /// 上传单张图片
         /// </summary>
         /// <returns></returns>
@@ -310,16 +271,6 @@ namespace WebApplication1.Controllers.Common
             {
                 return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" });
             }
-        }
-
-        /// <summary>
-        /// 微信jssdk接口使用时，加载的配置信息。
-        /// </summary>
-        /// <param name="fullPath"></param>
-        /// <returns></returns>
-        public JsonResult WxCfg(string routerPath)
-        {
-            return MyJson(new Result { code = 0 });
         }
 
         /// <summary>
@@ -410,8 +361,7 @@ namespace WebApplication1.Controllers.Common
         [OutputCache(Duration = int.MaxValue)]
         public JsonResult AreaSelect()
         {
-            SystemService systemService = new SystemService();
-            return MyJson(new Result { code = 0, data = systemService.LoadAreaTree() });
+            return MyJson(new Result { code = 0, data = SystemService.LoadAreaTree() });
         }
 
         /// <summary>

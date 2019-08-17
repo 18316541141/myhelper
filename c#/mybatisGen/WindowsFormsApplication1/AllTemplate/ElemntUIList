@@ -43,7 +43,7 @@
                 </el-dropdown>
             </el-form-item>
 			<el-form-item>
-                <el-button size="medium" v-on:click="add" icon="el-icon-plus">新增</el-button>
+                <el-button size="medium" type="primary" v-on:click="add" icon="el-icon-plus">新增</el-button>
             </el-form-item>
 			<transition name="fade">
                 <el-form-item v-show="checkedDatas.length>0">
@@ -77,7 +77,7 @@
         </default-page>
 ------------------------------------------------------------------------------------------------------
 		编辑部分：
-		<el-dialog title="新增/编辑***模块" top="25px" width="300px"
+		<el-dialog v-bind:title="(formData.$entity.KeyName$===null?'新增':'编辑')+'***模块'" top="25px" width="300px"
 			v-bind:visible.sync="editDialog"
 			v-bind:modal-append-to-body="true"
 			v-bind:append-to-body="true">

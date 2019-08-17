@@ -39,13 +39,22 @@ namespace WebApplication1.Filter.Common
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             HttpContextBase httpContextBase = filterContext.HttpContext;
-            string userHostAddress = httpContextBase.Request.UserHostAddress;
-            if (RecordMap.ContainsKey(userHostAddress))
+            string key = httpContextBase.Request.UserHostAddress+ httpContextBase.Request.Path;
+            if (RecordMap.ContainsKey(key))
             {
                 bool temp;
                 lock (RecordMap)
                 {
-                    temp = (DateTime.Now - RecordMap[userHostAddress]).TotalMilliseconds > IntervalMillisecond;
+                    if (RecordMap.ContainsKey(key))
+                    {
+                        temp = (DateTime.Now - RecordMap[key]).TotalMilliseconds > IntervalMillisecond;
+                        RecordMap[key] = DateTime.Now;
+                    }
+                    else
+                    {
+                        RecordMap.Add(key, DateTime.Now);
+                        temp = false;
+                    }
                 }
                 if(temp)
                 {
@@ -69,21 +78,18 @@ namespace WebApplication1.Filter.Common
             {
                 lock (RecordMap)
                 {
-                    RecordMap.Add(userHostAddress, DateTime.Now);
+                    RecordMap.Add(key, DateTime.Now);
                 }
                 base.OnActionExecuting(filterContext);
-                if((DateTime.Now- LastClearDate).TotalSeconds > 60)
+                if ((DateTime.Now - LastClearDate).TotalSeconds > 60)
                 {
-                    foreach (string key in new HashSet<string>(RecordMap.Keys))
+                    lock (RecordMap)
                     {
-                        lock (RecordMap)
+                        foreach (string tkey in new HashSet<string>(RecordMap.Keys))
                         {
-                            if (RecordMap.ContainsKey(key))
+                            if (RecordMap.ContainsKey(tkey) && (DateTime.Now - RecordMap[tkey]).TotalMilliseconds > IntervalMillisecond)
                             {
-                                if ((DateTime.Now - RecordMap[key]).TotalMilliseconds > IntervalMillisecond)
-                                {
-                                    RecordMap.Remove(key);
-                                }
+                                RecordMap.Remove(tkey);
                             }
                         }
                     }

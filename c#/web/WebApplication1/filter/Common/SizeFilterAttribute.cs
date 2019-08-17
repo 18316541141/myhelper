@@ -11,7 +11,7 @@ using WebApplication1.Entity.Common;
 namespace WebApplication1.Filter.Common
 {
     /// <summary>
-    /// 附件大小过滤器
+    /// 报文大小过滤器
     /// </summary>
     public class SizeFilterAttribute: AuthorizeAttribute
     {
@@ -34,10 +34,8 @@ namespace WebApplication1.Filter.Common
         }
 
 
-        protected override bool AuthorizeCore(HttpContextBase httpContext)
-        {
-            return httpContext.Request.ContentLength <= Size;
-        }
+        protected override bool AuthorizeCore(HttpContextBase httpContext)=>
+            Size >= httpContext.Request.ContentLength;
 
         /// <summary>
         /// 超出大小时返回

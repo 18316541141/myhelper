@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 namespace CommonHelper.Helper
 {
+    /// <summary>
+    /// BigInteger扩展类
+    /// </summary>
     public static class BigIntegerHelper
     {
         /// <summary>

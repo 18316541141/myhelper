@@ -16,7 +16,13 @@ namespace WebApplication1.Entity.Common
         public string msg { set; get; }
         /// <summary>
         /// 返回的消息码
-        /// 
+        /// 1：实时更新时，如果没有变不需要刷新时返回
+        /// 0：成功
+        /// -1：常规错误
+        /// -8：用户未授权
+        /// -9：用户未授权，但有回调
+        /// -10：登录超时
+        /// -11：同一账户登录两次
         /// </summary>
         public short code { set; get; }
         /// <summary>

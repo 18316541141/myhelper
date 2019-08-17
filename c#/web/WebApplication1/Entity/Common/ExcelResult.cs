@@ -37,17 +37,17 @@ namespace WebApplication1.Entity.Common
             HttpResponseBase response = context.HttpContext.Response;
             response.AddHeader("Content-Disposition", "attachment;filename=" + FileName);
             response.ContentType = "application/vnd.ms-excel";
-            if (FileName.EndsWith("xls"))
+            if (FileName.EndsWith(".xls"))
             {
                 ExcelHelper.ListToExcelXls(DataList, response.OutputStream,GroupName);
             }
-            else if (FileName.EndsWith("xlsx"))
+            else if (FileName.EndsWith(".xlsx"))
             {
                 ExcelHelper.ListToExcelXlsx(DataList, response.OutputStream, GroupName);
             }
             else
             {
-                throw new Exception("使用该返回结果时，fileName必须以xls或xlsx、csv结尾");
+                throw new Exception("使用该返回结果时，fileName必须以.xls或.xlsx");
             }
         }
     }

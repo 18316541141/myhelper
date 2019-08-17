@@ -15,9 +15,7 @@ using WebApplication1.Service;
 namespace WebApplication1.Controllers.Common
 {
     /// <summary>
-    /// 所有操作session的请求都在这里处理，因为大多数请求
-    /// session都是只读的，不需要session锁，可以提高效率，但缺点就是不能改session，
-    /// 在这里可以修改session
+    /// 所有操作session的请求都在这里处理
     /// </summary>
     public class SessionController : BaseController
     {
@@ -27,7 +25,6 @@ namespace WebApplication1.Controllers.Common
         /// 上传文件所允许的路径
         /// </summary>
         HashSet<string> _allowPath { set; get; }
-        public object UUID { get; private set; }
 
         public SessionController()
         {

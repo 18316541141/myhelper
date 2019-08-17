@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using CommonHelper.Helper;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace WebApplication1.Controllers.Common
     /// <summary>
     /// 基础控制器
     /// </summary>
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected ILog log;
 
@@ -22,8 +23,9 @@ namespace WebApplication1.Controllers.Common
             log = LogManager.GetLogger("Log4net.config");
         }
 
+
         /// <summary>
-        /// 返回JsonResult.24
+        /// 返回JsonResult
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="format">json中dateTime类型的格式</param>
@@ -39,10 +41,10 @@ namespace WebApplication1.Controllers.Common
         }
 
         /// <summary>
-        /// 返回JsonResult.24
+        /// 返回JsonResult
         /// </summary>
         /// <param name="data">数据</param>
-        /// <param name="callback">回调函数</param>
+        /// <param name="callback">回调函数，当客户端发送的是jsonp请求时，需要用到回调函数</param>
         /// <param name="format">json中dateTime类型的格式</param>
         /// <returns>Json</returns>
         protected JsonResult MyJson(string callback, object data, string format = "yyyy-MM-dd HH:mm:ss")

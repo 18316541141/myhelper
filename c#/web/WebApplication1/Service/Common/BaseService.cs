@@ -45,9 +45,10 @@ namespace WebApplication1.Service.Common
         /// </summary>
         /// <param name="msg">异常信息</param>
         /// <param name="code">错误码</param>
-        protected void Ex(string msg,short code=-1)
+        protected void Ex(string msg, short code = -1)
         {
-            throw new Exception(MyErrorAttribute.ErrorPrefix+ JsonConvert.SerializeObject(new Result {
+            throw new Exception(MyErrorAttribute.ErrorPrefix + JsonConvert.SerializeObject(new Result
+            {
                 msg = msg,
                 code = code,
             }));
