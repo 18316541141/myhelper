@@ -9,17 +9,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-
 import javax.imageio.ImageIO;
-
 import org.apache.commons.io.FileUtils;
-
 public class FileHelper {
-	
 	/**
 	 * 保存输入流为sha1
 	 * @param inputStream
@@ -31,7 +24,7 @@ public class FileHelper {
 		try {
 			File uuidFile=new File(basePath+File.separator+UUID.randomUUID().toString());
 			FileUtils.copyInputStreamToFile(inputStream, uuidFile);
-			String sha1=EncrypHelper.getSha1FromInputStream(inputStream);
+			String sha1=EncrypHelper.getSha1FromFile(uuidFile);
 			File sha1File=new File(basePath+File.separator+sha1);
 			if(sha1File.exists()){
 				FileUtils.deleteQuietly(uuidFile);

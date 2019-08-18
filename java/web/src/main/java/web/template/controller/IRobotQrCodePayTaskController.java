@@ -3,9 +3,7 @@ package web.template.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import web.template.entity.Result;
-import web.template.entity.params.codeGenerator.IRobotQrCodePayTaskOrderBy;
 import web.template.entity.params.codeGenerator.IRobotQrCodePayTaskParams;
 import web.template.service.IRobotQrCodePayTaskService;
 

@@ -27,8 +27,21 @@ public class LeftMenu {
 	 */
 	private List<LeftMenu> leftMenus;
 	
+	/**
+	 * 菜单序号
+	 */
+	private Integer sortIndex;
+	
 	public LeftMenu(){
 		leftMenus=new ArrayList<LeftMenu>();
+	}
+
+	public Integer getSortIndex() {
+		return sortIndex;
+	}
+
+	public void setSortIndex(Integer sortIndex) {
+		this.sortIndex = sortIndex;
 	}
 
 	public String getTitle() {

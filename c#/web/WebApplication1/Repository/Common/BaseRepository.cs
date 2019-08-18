@@ -27,11 +27,11 @@ namespace WebApplication1.Repository
 
         public BaseRepository()
         {
-            if (ReadOnly == null)
+            if (_readOnly == null)
             {
                 lock (this)
                 {
-                    if (ReadOnly == null)
+                    if (_readOnly == null)
                     {
                         _readOnly = ReadOnly = new ReadOnlyRepository();
                     }

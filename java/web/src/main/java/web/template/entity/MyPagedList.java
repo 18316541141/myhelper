@@ -20,7 +20,7 @@ public class MyPagedList<T> {
     /**
      * 当前分页数据中，最后一条数据在所有数据中的索引
      */
-    private long endItemIndex;
+    private int endItemIndex;
 
     /**
      * 每页显示的数据量
@@ -35,12 +35,12 @@ public class MyPagedList<T> {
     /**
      * 数据总量
      */
-    private long totalItemCount;
+    private int totalItemCount;
     
     /**
      * 总页数
      */
-    private long totalPageCount;
+    private int totalPageCount;
 
 	public List<T> getPageDataList() {
 		return pageDataList;
@@ -58,11 +58,11 @@ public class MyPagedList<T> {
 		this.currentPageIndex = currentPageIndex;
 	}
 
-	public long getEndItemIndex() {
+	public int getEndItemIndex() {
 		return endItemIndex;
 	}
 
-	public void setEndItemIndex(long endItemIndex) {
+	public void setEndItemIndex(int endItemIndex) {
 		this.endItemIndex = endItemIndex;
 	}
 
@@ -82,19 +82,19 @@ public class MyPagedList<T> {
 		this.startItemIndex = startItemIndex;
 	}
 
-	public long getTotalItemCount() {
+	public int getTotalItemCount() {
 		return totalItemCount;
 	}
 
-	public void setTotalItemCount(long totalItemCount) {
+	public void setTotalItemCount(int totalItemCount) {
 		this.totalItemCount = totalItemCount;
 	}
 
-	public long getTotalPageCount() {
+	public int getTotalPageCount() {
 		return totalPageCount;
 	}
 
-	public void setTotalPageCount(long totalPageCount) {
+	public void setTotalPageCount(int totalPageCount) {
 		this.totalPageCount = totalPageCount;
 	}
 }

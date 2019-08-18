@@ -14,6 +14,14 @@ namespace WebApplication1.Service
     /// </summary>
     public class SystemService: BaseService
     {
+        public ProvinceRepository ProvinceRepository { set; get; }
+
+        public CityRepository CityRepository { set; get; }
+
+        public DistrictRepository DistrictRepository { set; get; }
+
+        public TownRepository TownRepository { set; get; }
+
         static List<NewsAlarm> _newsAlarmList;
         static SystemService()
         {
@@ -86,13 +94,9 @@ namespace WebApplication1.Service
         /// <returns></returns>
         public Dictionary<string, List<AreaTree>> LoadAreaTree()
         {
-            ProvinceRepository provinceRepository = new ProvinceRepository();
-            CityRepository cityRepository = new CityRepository();
-            DistrictRepository districtRepository = new DistrictRepository();
-            TownRepository townRepository = new TownRepository();
             Dictionary<string, List<AreaTree>> areaTreeMap = new Dictionary<string, List<AreaTree>>();
             List<AreaTree> provinces = new List<AreaTree>();
-            foreach (Province province in provinceRepository.ReadOnly.FindList())
+            foreach (Province province in ProvinceRepository.ReadOnly.FindList())
             {
                 provinces.Add(new AreaTree
                 {
@@ -102,7 +106,7 @@ namespace WebApplication1.Service
             }
             areaTreeMap.Add("provinces", provinces);
             List<AreaTree> cities = new List<AreaTree>();
-            foreach (City city in cityRepository.ReadOnly.FindList())
+            foreach (City city in CityRepository.ReadOnly.FindList())
             {
                 cities.Add(new AreaTree
                 {
@@ -113,7 +117,7 @@ namespace WebApplication1.Service
             }
             areaTreeMap.Add("cities", cities);
             List<AreaTree> counties = new List<AreaTree>();
-            foreach (District district in districtRepository.ReadOnly.FindList())
+            foreach (District district in DistrictRepository.ReadOnly.FindList())
             {
                 counties.Add(new AreaTree
                 {

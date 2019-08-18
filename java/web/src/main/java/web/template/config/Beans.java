@@ -13,11 +13,14 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
+import web.template.filter.UpdateVersionInterceptor;
 import web.template.shiro.MyFormAuthenticationFilter;
 import web.template.shiro.MyPermissionResolver;
 import web.template.shiro.MyPermissionsAuthorizationFilter;
@@ -101,5 +104,22 @@ public class Beans {
 		filterChainDefinitionMap.put("/index/loadLeftMenus", "authc");
 //		filterChainDefinitionMap.put("/user/teacher", "authc,perms[\"/user/teacher\"]");
 		return shiroFilterFactoryBean;
+	}
+	
+	/**
+	 * 这是整个web项目的拦截器配置
+	 * @return
+	 */
+	@Bean
+    public WebMvcConfigurer webMvcConfigurerAdapter(){
+		return new WebMvcConfigurer(){
+			@Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(new UpdateVersionInterceptor())
+                        .addPathPatterns(
+                        		"/newAlarm/add"
+                        );
+            }
+		};
 	}
 }

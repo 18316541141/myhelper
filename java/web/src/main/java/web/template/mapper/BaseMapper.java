@@ -55,7 +55,7 @@ public interface BaseMapper<T,P> {
 	 * @param nparams 不等查询条件
 	 * @return
 	 */
-	public long count(@Param("params")P params, @Param("nparams")P nparams);
+	public int count(@Param("params")P params, @Param("nparams")P nparams);
 	
 	/**
 	 * 根据条件查询所有符合条件的数据
@@ -104,8 +104,8 @@ public interface BaseMapper<T,P> {
 		} else if(pageSize<=0){
 			pageSize=20;
 		}
-		long totalCount=count(params,nparams);
-		long totalPageCount=((totalCount-totalCount%pageSize)/pageSize)+1
+		int totalCount=count(params,nparams);
+		int totalPageCount=((totalCount-totalCount%pageSize)/pageSize)+1;
 		if(currentPageIndex>=totalPageCount){
 			currentPageIndex=Math.max(totalPageCount-1,1);
 		}
@@ -129,7 +129,7 @@ public interface BaseMapper<T,P> {
 	 * @return
 	 */
 	default MyPagedList<T> pageList(P params,int currentPageIndex,int pageSize){
-		return MyPagedList<T> pageList(params,currentPageIndex,pageSize,null);
+		return pageList(params,currentPageIndex,pageSize,null);
 	}
 
 	/**
@@ -140,15 +140,15 @@ public interface BaseMapper<T,P> {
 	 * @param nparams 不等查询产生
 	 * @return
 	 */
-	default MyBigPagedList<T> pageList(P params,int currentPageIndex,int pageSize,P nparams){
+	default MyPagedList<T> bigPageList(P params,int currentPageIndex,int pageSize,P nparams){
 		if(currentPageIndex<=0){
 			currentPageIndex=1;
 		}
 		if(pageSize>10000 || pageSize<=0){
 			pageSize=10000;
 		}
-		long totalCount=count(params,nparams);
-		long totalPageCount=((totalCount-totalCount%pageSize)/pageSize)+1;
+		int totalCount=count(params,nparams);
+		int totalPageCount=((totalCount-totalCount%pageSize)/pageSize)+1;
 		if(currentPageIndex >= totalPageCount){
 			currentPageIndex = Math.max(totalPageCount-1,1);
 		}
@@ -171,7 +171,7 @@ public interface BaseMapper<T,P> {
 	 * @param pageSize 每页显示数据量，当大于10000时自动修正成10000
 	 * @return
 	 */
-	default MyBigPagedList<T> pageList(P params,int currentPageIndex,int pageSize){
+	default MyPagedList<T> bigPageList(P params,int currentPageIndex,int pageSize){
 		return pageList(params,currentPageIndex,pageSize,null);
 	}
 }

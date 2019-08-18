@@ -19,17 +19,12 @@ namespace WebApplication1.Controllers.Common
     /// </summary>
     public class SessionController : BaseController
     {
-        SystemService _systemService;
+        public SystemService SystemService { set; get; }
 
         /// <summary>
         /// 上传文件所允许的路径
         /// </summary>
         HashSet<string> _allowPath { set; get; }
-
-        public SessionController()
-        {
-            _systemService = new SystemService();
-        }
 
         /// <summary>
         /// 验证码获取
@@ -116,7 +111,7 @@ namespace WebApplication1.Controllers.Common
                     {
                         SingleUserAttribute.UserMap.Add(username, guid);
                     }
-                    return Json(new Result { code = 0, data = new { leftMenus = _systemService.LoadLeftMenus() } }, JsonRequestBehavior.AllowGet);
+                    return Json(new Result { code = 0, data = new { leftMenus = SystemService.LoadLeftMenus() } }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {

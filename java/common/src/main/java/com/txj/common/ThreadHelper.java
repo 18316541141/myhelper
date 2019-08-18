@@ -7,12 +7,10 @@ import java.util.UUID;
 
 public class ThreadHelper {
 	static Map<String, String> controllerVersionMap;
-	static Map<String, Object> waitMap;
 	static Map<String, UserEditLockVal> editLockMap;
 
 	static {
 		controllerVersionMap = new HashMap<String, String>();
-		waitMap = new HashMap<String, Object>();
 		editLockMap = new HashMap<String, UserEditLockVal>();
 	}
 
@@ -43,15 +41,15 @@ public class ThreadHelper {
 	 *            这是一个返回值，不论版本号有没有变化，都返回最新版本号
 	 * @return
 	 */
-	public static boolean compareControllerVersion(String controllerName, String userVersion, String newestVersion) {
+	public static boolean compareControllerVersion(String controllerName, String userVersion,final String[] newestVersion) {
 		controllerName = controllerName + "Version";
 		synchronized (controllerName.intern()) {
 			if (controllerVersionMap.containsKey(controllerName)) {
-				newestVersion = controllerVersionMap.get(controllerName);
+				newestVersion[0] = controllerVersionMap.get(controllerName);
 			} else {
-				controllerVersionMap.put(controllerName, newestVersion = UUID.randomUUID().toString());
+				controllerVersionMap.put(controllerName, newestVersion[0] = UUID.randomUUID().toString());
 			}
-			return newestVersion.equals(userVersion);
+			return newestVersion[0].equals(userVersion);
 		}
 	}
 
@@ -64,16 +62,13 @@ public class ThreadHelper {
 	 *            等待秒数
 	 */
 	public static void batchWait(String controllerName, long millisecondsTimeout) {
-		Object waitLock;
 		controllerName = controllerName + "Wait";
-		synchronized (controllerName.intern()) {
-			if (waitMap.containsKey(controllerName)) {
-				waitLock = waitMap.get(controllerName);
-			} else
-				waitMap.put(controllerName, waitLock = new Object());
+		Object waitLock=controllerName.intern();
+		synchronized (waitLock) {
 			try {
 				waitLock.wait(millisecondsTimeout);
 			} catch (Exception ex) {
+				System.out.println(ex);
 			}
 		}
 	}
@@ -86,12 +81,9 @@ public class ThreadHelper {
 	 */
 	public static void batchSet(String controllerName) {
 		controllerName = controllerName + "Wait";
-		if (waitMap.containsKey(controllerName)) {
-			synchronized (controllerName.intern()) {
-				if (waitMap.containsKey(controllerName)) {
-					waitMap.get(controllerName).notifyAll();
-				}
-			}
+		Object waitLock=controllerName.intern();
+		synchronized (waitLock) {
+			waitLock.notifyAll();
 		}
 	}
 

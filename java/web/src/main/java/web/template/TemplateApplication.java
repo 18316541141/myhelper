@@ -2,7 +2,9 @@ package web.template;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
@@ -17,6 +19,11 @@ public class TemplateApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TemplateApplication.class, args);
 //		refreshVersion();
+	}
+	
+	public static void adasdas(List<Integer> list){
+		list=new ArrayList<Integer>();
+		list.add(1);
 	}
 	
 	/**

@@ -17,12 +17,7 @@ namespace WebApplication1.Service.Common
     public abstract class BaseService
     {
 
-        protected ILog log;
-
-        public BaseService()
-        {
-            log = LogManager.GetLogger("Log4net.config");
-        }
+        public ILog log { set; get; }
 
         static IdWorker idWorker;
 

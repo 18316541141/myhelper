@@ -17,6 +17,8 @@ namespace WebApplication1.Controllers
 {
     public class IRobotQrCodePayTaskController : BaseController
     {
+        public IRobotQrCodePayTaskService IRobotQrCodePayTaskService { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -26,8 +28,7 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public JsonResult Page(IRobotQrCodePayTaskParams param, int currentPageIndex = 1, int pageSize = 20)
         {
-            IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            return MyJson(new Result {code=0,data= irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) });
+            return MyJson(new Result {code=0,data= IRobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) });
         }
 
         /// <summary>
@@ -39,10 +40,9 @@ namespace WebApplication1.Controllers
         /// <returns></returns>
         public ExcelResult<IRobotQrCodePayTaskExcel> Export(IRobotQrCodePayTaskParams param, int currentPageIndex = 1, int pageSize = 10000)
         {
-            IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
             return new ExcelResult<IRobotQrCodePayTaskExcel>
             {
-                DataList= IRobotQrCodePayTaskExcel.NewExcelList(irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).PageDataList),
+                DataList= IRobotQrCodePayTaskExcel.NewExcelList(IRobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).PageDataList),
                 FileName = "测试excel.xlsx"
             };
         }
@@ -64,22 +64,19 @@ namespace WebApplication1.Controllers
 
         public JsonResult Del(int irTaskID)
         {
-            IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            irobotQrCodePayTaskService.Del(irTaskID);
+            IRobotQrCodePayTaskService.Del(irTaskID);
             return MyJson(new Result { code = 0});
         }
 
         public JsonResult DelBatch(List<int?> irTaskIds)
         {
-            IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            irobotQrCodePayTaskService.DelBatch(irTaskIds);
+            IRobotQrCodePayTaskService.DelBatch(irTaskIds);
             return MyJson(new Result { code = 0 });
         }
 
         public JsonResult Load(int irTaskID)
         {
-            IRobotQrCodePayTaskService irobotQrCodePayTaskService = new IRobotQrCodePayTaskService();
-            return MyJson(new Result { code = 0, data = irobotQrCodePayTaskService.Load(irTaskID) });
+            return MyJson(new Result { code = 0, data = IRobotQrCodePayTaskService.Load(irTaskID) });
         }
     }
 }

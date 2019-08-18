@@ -1,7 +1,6 @@
 package web.template.controller;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
@@ -28,28 +26,64 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.code.kaptcha.Producer;
 import com.txj.common.FileHelper;
 import com.txj.common.ImageHandleHelper;
+import com.txj.common.ThreadHelper;
 
 import web.template.entity.Result;
 import web.template.entity.TreeFormNode;
+import web.template.service.RealTimeInitService;
 import web.template.service.SystemService;
 @RestController
 @RequestMapping("/index")
-public class IndexController {
-	
-	@Autowired
-	private Producer defaultKaptcha;
+public class IndexController extends BaseController {
 	
 	@Autowired
 	private SystemService systemService;
 	
+	@Autowired
+	private RealTimeInitService realTimeInitService;
+	
 	Set<String> allowPath;
+	
+	/**
+	 * 等待池表
+	 */
+	public static Set<String> WaitPoolSet;
+	
+	static{
+		WaitPoolSet=new HashSet<String>();
+		WaitPoolSet.add("newsAlarm");
+	}
+	
 	
 	public IndexController(){
 		allowPath=new HashSet<String>();
 		allowPath.add("test");
+	}
+	
+	@RequestMapping("/realTime")
+	public Result realTime(HttpServletRequest request,HttpServletResponse response){
+		String realTimePool=request.getHeader("Real-Time-Pool");
+		if(WaitPoolSet.contains(realTimePool)){
+			String realTimeVersion = request.getHeader("Real-Time-Version");
+			response.addHeader("Real-Time-Pool", realTimePool);
+			String[] newestVersion=new String[1];
+			boolean initRet = ThreadHelper.compareControllerVersion(realTimePool, realTimeVersion, newestVersion);
+			if (realTimeVersion == null){
+				initRet = realTimeInitService.init(realTimePool, username());
+			}
+			if (initRet){
+				ThreadHelper.batchWait(realTimePool, 60000);
+				response.addHeader("Real-Time-Version", newestVersion[0]);
+				return new Result(1,null,null);
+			}else{
+				response.addHeader("Real-Time-Version", newestVersion[0]);
+				return new Result(0,null,null);
+			}
+		}else{
+			return new Result(-1,"该等待池未开放。",null);
+		}
 	}
 	
 	/**
@@ -59,6 +93,28 @@ public class IndexController {
 	public Result areaSelect(){
 		return null;
 	}
+	
+	/**
+	 * 登陆后加载基础数据
+	 * @return
+	 */
+	@RequestMapping("/loadLoginData")
+	public Result loadLoginData(){
+		Map<String, Object> data = new HashMap<String, Object>();
+        data.put("leftMenus", systemService.loadLeftMenus(username()));
+		return new Result(0,null,data);
+	}
+	
+	/**
+	 * 加载最新消息提醒
+	 * @return
+	 */
+	@RequestMapping("/loadNewsAlarm")
+	public Result loadNewsAlarm()
+    {
+        return new Result(0,null,systemService.loadNewsAlarm());
+    }
+	
 	
 	/**
 	 * 登出功能
@@ -77,30 +133,7 @@ public class IndexController {
 	 */
 	@RequestMapping("/loadLeftMenus")
 	public Result loadLeftMenus(){
-		return new Result(0,"",systemService.loadLeftMenus((String)SecurityUtils.getSubject().getPrincipal()));
-	}
-	
-	/**
-	 * 获取验证码
-	 * @param response	验证码响应报文
-	 */
-	@RequestMapping("/verificationCode")
-	public void verificationCode(HttpServletResponse response){
-		response.setDateHeader("Expires", 0);
-		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		response.setHeader("Pragma", "no-cache");
-		response.setContentType("image/jpeg");
-		String text=defaultKaptcha.createText();
-		Subject subject=SecurityUtils.getSubject();
-		Session session=subject.getSession();
-		session.setAttribute("vercode", text);
-		BufferedImage bufferedImage=defaultKaptcha.createImage(text);
-		try {
-			ImageIO.write(bufferedImage, "jpg", response.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return new Result(0,"",systemService.loadLeftMenus(username()));
 	}
 	
 	/**
@@ -113,8 +146,8 @@ public class IndexController {
 		if(allowPath.contains(pathName)){
 			InputStream inputStream;
 			try {
-				String imgFile=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFilename();
-				if(new File(imgFile).exists()){
+				File imgFile=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFile();
+				if(imgFile.exists()){
 					inputStream = new FileInputStream(imgFile);
 					response.addHeader("Cache-control","max-age="+Integer.MAX_VALUE);
 					response.setContentType("image/jpeg");
@@ -141,7 +174,7 @@ public class IndexController {
 	 * @param y	左上角切点y坐标
 	 * @param w	切割宽度
 	 * @param h	切割高度
-	 * @return	返回切割结果
+	 * @return	返回切割结果，thumbnailName（切割图）、imgName（缩略图）、
 	 */
 	@RequestMapping("/singleImageCrop")
 	public Result singleImageCrop(String pathName, String imgName,int imgWidth,int imgHeight,int x,int y,int w,int h,HttpServletRequest request){
@@ -150,8 +183,10 @@ public class IndexController {
 			if(file.exists()){
 				Image scaleImage=ImageHandleHelper.scale(ImageIO.read(file), imgWidth, imgHeight);
 				Image cutImage=ImageHandleHelper.cutPicByRect(scaleImage, new Rectangle(x, y, w, h));
-				String sha1=FileHelper.SaveImageBySha1(cutImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getPath());
-				return new Result(0, null, sha1);
+				Map<String,String> data=new HashMap<String, String>();
+				data.put("thumbnailName", FileHelper.SaveImageBySha1(scaleImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getPath()));
+				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getPath()));
+				return new Result(0, null, data);
 			}else{
 				return new Result(-1,"图片不存在，切割失败！",null);
 			}

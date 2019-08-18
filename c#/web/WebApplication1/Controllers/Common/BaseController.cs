@@ -16,12 +16,7 @@ namespace WebApplication1.Controllers.Common
     /// </summary>
     public abstract class BaseController : Controller
     {
-        protected ILog log;
-
-        public BaseController()
-        {
-            log = LogManager.GetLogger("Log4net.config");
-        }
+        public ILog log { set; get; }
 
 
         /// <summary>

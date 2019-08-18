@@ -13,6 +13,8 @@ namespace WebApplication1.Controllers
 	/// </summary>
     public partial class $entity.EntityName$Controller : BaseController
     {
+		public $entity.EntityName$Service Service { set; get; }
+
 		/*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
 		$entity.EntityName$ data = new $entity.EntityName$
@@ -44,8 +46,7 @@ namespace WebApplication1.Controllers
         /// <returns>返回***模块的查询结果</returns>
 		public JsonResult Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-			return MyJson(new Result{code = 0, data = service.Page(param, currentPageIndex, pageSize)});
+			return MyJson(new Result{code = 0, data = Service.Page(param, currentPageIndex, pageSize)});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -59,10 +60,9 @@ namespace WebApplication1.Controllers
 		[OperInterval(IntervalMillisecond=10000)]
 		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
 			return new ExcelResult<$entity.EntityName$>
 			{
-				DataList = irobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize).pageDataList,
+				DataList = Service.Page(param, currentPageIndex, pageSize).pageDataList,
 				FileName = "测试excel."+excelType
 			};
 		}
@@ -85,8 +85,7 @@ namespace WebApplication1.Controllers
             {
                 $entity.EntityName$List = ExcelHelper.ExcelXlsToList<$entity.EntityName$>(fileUpload.InputStream);
             }
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-			service.AddBatch($entity.EntityName$List);
+			Service.AddBatch($entity.EntityName$List);
 			return MyJson(new Result { code = 0, msg = "导入成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
@@ -96,8 +95,7 @@ namespace WebApplication1.Controllers
         /// <param name="$entity.KeyName$">删除数据的主键</param>
 		public JsonResult Del(long $entity.KeyName$)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-            service.Del($entity.KeyName$);
+            Service.Del($entity.KeyName$);
 			return MyJson(new Result { code = 0, msg = "数据已删除。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
@@ -107,8 +105,7 @@ namespace WebApplication1.Controllers
         /// <param name="data">新增的数据</param>
 		public JsonResult Add($entity.EntityName$ data)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-			service.Add(data);
+			Service.Add(data);
 			return MyJson(new Result { code = 0, msg = "保存成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
@@ -118,8 +115,7 @@ namespace WebApplication1.Controllers
         /// <param name="datas">修改状态的数据</param>
 		public JsonResult ChangeStatus($entity.EntityName$ datas)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-			return MyJson(new Result { code = 0,msg=\$"修改成功，共{service.ChangeStatus(datas)}条。"});
+			return MyJson(new Result { code = 0,msg=\$"修改成功，共{Service.ChangeStatus(datas)}条。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -129,8 +125,7 @@ namespace WebApplication1.Controllers
 		/// <returns>返回***模块的查询结果</returns>
 		public JsonResult Load(long $entity.KeyName$)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-			return MyJson(new Result { code = 0, data = service.Load($entity.KeyName$) });
+			return MyJson(new Result { code = 0, data = Service.Load($entity.KeyName$) });
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -139,8 +134,7 @@ namespace WebApplication1.Controllers
         /// <param name="datas">批量删除的数据</param>
 		public JsonResult DelBatch(List<$entity.EntityName$> datas)
 		{
-			$entity.EntityName$Service service = new $entity.EntityName$Service();
-			return MyJson(new Result { code = 0 ,msg = \$"删除成功，共{service.DelBatch(datas)}条。" });
+			return MyJson(new Result { code = 0 ,msg = \$"删除成功，共{Service.DelBatch(datas)}条。" });
 		}
 		*/
     }

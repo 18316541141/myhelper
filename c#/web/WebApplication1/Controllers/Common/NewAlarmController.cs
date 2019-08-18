@@ -13,11 +13,12 @@ namespace WebApplication1.Controllers.Common
 {
     public class NewAlarmController:BaseController
     {
+        public SystemService SystemService { set; get; }
+
         [UpdateVersion]
         public JsonResult Add()
         {
-            SystemService systemService = new SystemService();
-            systemService.AddNewsAlarm(new NewsAlarm
+            SystemService.AddNewsAlarm(new NewsAlarm
             {
                 CreateDate=DateTime.Now,
                 MenuId="m11",

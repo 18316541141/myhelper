@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,10 @@ namespace WebApplication1.App_Start
         {
             //autofac容器工厂
             ContainerBuilder containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).Where(n => n.Name.EndsWith("Repository") && n.Name.EndsWith("Service")).AsSelf().PropertiesAutowired().SingleInstance();
-            containerBuilder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired().SingleInstance();
+            ILog log = LogManager.GetLogger("Log4net.config");
+            containerBuilder.RegisterInstance(log).As<ILog>().SingleInstance().PropertiesAutowired();
+            containerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")).SingleInstance().AsSelf().PropertiesAutowired();
+            containerBuilder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired().InstancePerRequest();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(containerBuilder.Build()));
         }
     }

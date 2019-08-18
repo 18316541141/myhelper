@@ -5,16 +5,17 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
-
 import javax.imageio.ImageIO;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.Sha1Hash;
@@ -81,39 +82,116 @@ public class EncrypHelper {
 	}
 	
 	/**
-	 * 把输入流转化为base64（注意：该方法不能用于处理超大文件，否则内存不足）
-	 * @param inputStream
-	 * @return
+	 * 把文件转化为sha1
+	 * @param file 文件
+	 * @return 返回sha1
 	 */
-	public static String getSha1FromInputStream(InputStream inputStream){
-		ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
+	public static String getSha1FromFile(File file){
+		FileInputStream fileInputStream=null;
 		try {
-			IOUtils.copy(inputStream, outputStream);
-			Sha1Hash sha1=new Sha1Hash();
-			sha1.setBytes(outputStream.toByteArray());
-			return sha1.toHex();
-		} catch (IOException e) {
+			return getSha1FromInputStream(fileInputStream=new FileInputStream(file));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+		}finally {
+			if(fileInputStream!=null){
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		return null;
 	}
 	
 	/**
-	 * 把输入流转化为MD5（注意：该方法不能用于处理超大文件，否则内存不足）
+	 * 把输入流转化为sha1，并关闭流
+	 * @param inputStream 输入流
+	 * @return
+	 */
+	public static String getSha1FromInputStream(InputStream inputStream){
+	    char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f'};
+	    try {
+	        MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+	        byte[] buff=new byte[2048];
+	        try {
+				for(int len;(len=inputStream.read(buff))>-1;){	        	
+					mdTemp.update(buff, 0, len);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+	        byte[] md = mdTemp.digest();
+	        int j = md.length;
+	        char[] buf = new char[j * 2];
+	        int k = 0;
+	        for (int i = 0; i < j; i++) {
+	            byte byte0 = md[i];
+	            buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
+	            buf[k++] = hexDigits[byte0 & 0xf];
+	        }
+	        return new String(buf);
+	    } catch (NoSuchAlgorithmException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	
+	/**
+	 * 把文件转化为MD5
+	 * @param file
+	 * @return
+	 */
+	public static String getMD5FromFile(File file){
+		FileInputStream fileInputStream=null;
+		try {
+			return getMD5FromInputStream(fileInputStream=new FileInputStream(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			if(fileInputStream!=null){
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 把输入流转化为MD5
 	 * @param inputStream
 	 * @return
 	 */
 	public static String getMD5FromInputStream(InputStream inputStream){
-		ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
 		try {
-			IOUtils.copy(inputStream, outputStream);
-			Md5Hash md5=new Md5Hash();
-			md5.setBytes(outputStream.toByteArray());
-			return md5.toHex();
-		} catch (IOException e) {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			byte[] buff=new byte[2048];
+	        try {
+				for(int len;(len=inputStream.read(buff))>-1;){	        	
+					m.update(buff, 0, len);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			byte s[] = m.digest();
+			String result = "";
+			for (int i = 0; i < s.length; i++) {
+				result += Integer.toHexString((0x000000FF & s[i]) | 0xFFFFFF00).substring(6);
+			}
+			return result;
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
+		return "";
 	}
 	
 	/**
@@ -129,17 +207,22 @@ public class EncrypHelper {
         ByteArrayOutputStream output=new ByteArrayOutputStream();
 		try {
 			ImageIO.write(bufferedImage, "jpeg", output);
-			Sha1Hash sha1=new Sha1Hash();
-			sha1.setBytes(output.toByteArray());
-			return sha1.toHex();
+			ByteArrayInputStream input=new ByteArrayInputStream(output.toByteArray());
+			return getSha1FromInputStream(input);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
+		}finally {
+			try {
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	/**
-	 * 获取图片的md5（注意：该方法不能用于处理超大文件，否则内存不足）
+	 * 获取图片的md5（base64格式）
 	 * @param image	
 	 * @return
 	 */
@@ -151,12 +234,17 @@ public class EncrypHelper {
         ByteArrayOutputStream output=new ByteArrayOutputStream();
 		try {
 			ImageIO.write(bufferedImage, "jpeg", output);
-			Md5Hash md5=new Md5Hash();
-			md5.setBytes(output.toByteArray());
-			return md5.toHex();
+			ByteArrayInputStream input=new ByteArrayInputStream(output.toByteArray());
+			return getMD5FromInputStream(input);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
+		}finally {
+			try {
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
