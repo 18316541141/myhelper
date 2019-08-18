@@ -184,8 +184,8 @@ public class IndexController extends BaseController {
 				Image scaleImage=ImageHandleHelper.scale(ImageIO.read(file), imgWidth, imgHeight);
 				Image cutImage=ImageHandleHelper.cutPicByRect(scaleImage, new Rectangle(x, y, w, h));
 				Map<String,String> data=new HashMap<String, String>();
-				data.put("thumbnailName", FileHelper.SaveImageBySha1(scaleImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getPath()));
-				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getPath()));
+//				data.put("thumbnailName", FileHelper.SaveImageBySha1(scaleImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getFile().getAbsolutePath()));
+				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getFile().getAbsolutePath()));
 				return new Result(0, null, data);
 			}else{
 				return new Result(-1,"图片不存在，切割失败！",null);
