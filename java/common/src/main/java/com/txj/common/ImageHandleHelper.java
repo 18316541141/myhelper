@@ -26,7 +26,7 @@ public class ImageHandleHelper {
 	public static Image scale(Image image, int width, int height) {
 		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics g = bufferedImage.getGraphics();
-		g.drawImage(image, 0, 0, null); // 绘制缩小后的图
+		g.drawImage(image, 0, 0,width,height, null); // 绘制缩小后的图
 		g.dispose();
 		return bufferedImage;
 	}
@@ -45,6 +45,6 @@ public class ImageHandleHelper {
 		Graphics g = bufferedImage.getGraphics();
 		g.drawImage(image, 0, 0, cutRect.width, cutRect.height, cutRect.x, cutRect.y, cutRect.x+cutRect.width, cutRect.y+cutRect.height, null);
 		g.dispose();
-		return image;
+		return bufferedImage;
 	}
 }

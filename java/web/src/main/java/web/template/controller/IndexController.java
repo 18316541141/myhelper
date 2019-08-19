@@ -146,7 +146,7 @@ public class IndexController extends BaseController {
 		if(allowPath.contains(pathName)){
 			InputStream inputStream;
 			try {
-				File imgFile=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFile();
+				File imgFile=realFile("/WEB-INF/uploadFiles/"+pathName+"/"+imgName);
 				if(imgFile.exists()){
 					inputStream = new FileInputStream(imgFile);
 					response.addHeader("Cache-control","max-age="+Integer.MAX_VALUE);
@@ -165,6 +165,21 @@ public class IndexController extends BaseController {
 	}
 	
 	/**
+	 * 下载文件
+	 * @param pathName
+	 * @param fileName
+	 * @param fileDesc
+	 */
+	public void downFile(String pathName, String fileName, String fileDesc,HttpServletResponse response){
+		File file=realFile("/WEB-INF/uploadFiles/"+pathName+"/"+fileName);
+		if(file.exists()){
+			
+		}else{
+			response.setStatus(404);
+		}
+	}
+	
+	/**
 	 * 切割单张图片
 	 * @param pathName	图片路径名称
 	 * @param imgName	图片名称
@@ -179,13 +194,14 @@ public class IndexController extends BaseController {
 	@RequestMapping("/singleImageCrop")
 	public Result singleImageCrop(String pathName, String imgName,int imgWidth,int imgHeight,int x,int y,int w,int h,HttpServletRequest request){
 		try {
-			File file=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/"+imgName).getFile();
+			File file=realFile("/WEB-INF/uploadFiles/"+pathName+"/"+imgName);
 			if(file.exists()){
 				Image scaleImage=ImageHandleHelper.scale(ImageIO.read(file), imgWidth, imgHeight);
 				Image cutImage=ImageHandleHelper.cutPicByRect(scaleImage, new Rectangle(x, y, w, h));
+				Image thumbnailImg=ImageHandleHelper.scale(cutImage, 150, cutImage.getHeight(null) * 150 / cutImage.getWidth(null));
 				Map<String,String> data=new HashMap<String, String>();
-//				data.put("thumbnailName", FileHelper.SaveImageBySha1(scaleImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getFile().getAbsolutePath()));
-				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName).getFile().getAbsolutePath()));
+				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, realPath("/WEB-INF/uploadFiles/"+pathName)));
+				data.put("thumbnailName", FileHelper.SaveImageBySha1(thumbnailImg, realPath("/WEB-INF/uploadFiles/"+pathName)));
 				return new Result(0, null, data);
 			}else{
 				return new Result(-1,"图片不存在，切割失败！",null);
@@ -209,13 +225,13 @@ public class IndexController extends BaseController {
 	public Result uploadSingleImage(@RequestParam("fileUpload")MultipartFile fileUpload,HttpServletRequest request,String pathName){
 		if(allowPath.contains(pathName)){			
 			try {
-				File target=new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
+				File target=realFile("/WEB-INF/uploadFiles/"+pathName+"/");
 				String sha1=FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
 				Image image=ImageIO.read(new File(target.getAbsoluteFile()+File.separator+sha1));
 				Image scaleImg=ImageHandleHelper.scale(image, 150, image.getHeight(null) * 150 / image.getWidth(null));
-				String scaleSha1=FileHelper.SaveImageBySha1(scaleImg, target.getAbsolutePath());
+				String thumbnailName=FileHelper.SaveImageBySha1(scaleImg, target.getAbsolutePath());
 				Map<String, Object> dataMap=new HashMap<>();
-				dataMap.put("thumbnailName", scaleSha1);
+				dataMap.put("thumbnailName", thumbnailName);
 				dataMap.put("imgName", sha1);
 				dataMap.put("imgWidth", image.getWidth(null));
 				dataMap.put("imgHeight", image.getHeight(null));
@@ -242,7 +258,7 @@ public class IndexController extends BaseController {
 		if (allowPath.contains(pathName))
         {
 			try {
-				File target = new ServletContextResource(request.getServletContext(), "/WEB-INF/uploadFiles/"+pathName+"/").getFile();
+				File target = realFile("/WEB-INF/uploadFiles/"+pathName+"/");
 				return new Result(0, null, FileHelper.SaveInputStreamBySha1(fileUploads.getInputStream(), target.getAbsolutePath()));
 			} catch (IOException e) {
 				e.printStackTrace();

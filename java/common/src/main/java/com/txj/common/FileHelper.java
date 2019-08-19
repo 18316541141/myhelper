@@ -55,10 +55,9 @@ public class FileHelper {
 			String sha1=EncrypHelper.getSha1FromImage(image);
 			new File(basePath+File.separator).mkdirs();
 			String filename=basePath+File.separator+sha1;
-			fileOutputStream = new FileOutputStream(filename);
-			bufferedOutputStream=new BufferedOutputStream(fileOutputStream);
-			File file=new File(filename);
-			if(!file.exists()){
+			if(!new File(filename).exists()){
+				fileOutputStream = new FileOutputStream(filename);
+				bufferedOutputStream=new BufferedOutputStream(fileOutputStream);
 				ImageIO.write(bufferedImage, "jpeg", bufferedOutputStream);				
 			}
 			return sha1;

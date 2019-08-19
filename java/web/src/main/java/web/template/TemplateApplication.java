@@ -1,10 +1,16 @@
 package web.template;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
@@ -12,11 +18,13 @@ import org.jsoup.nodes.Document;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.txj.common.ImageHandleHelper;
 @MapperScan(value="web.template.mapper")
 @SpringBootApplication
 public class TemplateApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		SpringApplication.run(TemplateApplication.class, args);
 //		refreshVersion();
 	}
