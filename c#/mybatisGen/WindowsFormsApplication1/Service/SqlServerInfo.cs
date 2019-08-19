@@ -21,7 +21,7 @@ namespace WindowsFormsApplication1.Service
         public SqlServerInfo(string dataSource,string initialCatalog ,string userId,string password)
         {
             DataSource=dataSource;
-            InitialCatalog = InitialCatalog;
+            InitialCatalog = initialCatalog;
             UserId = UserId;
             Password = password;
             _conn= new SqlConnection($"Data Source={dataSource};Initial Catalog={initialCatalog};User ID={userId};Password={password};MultipleActiveResultSets=True;");

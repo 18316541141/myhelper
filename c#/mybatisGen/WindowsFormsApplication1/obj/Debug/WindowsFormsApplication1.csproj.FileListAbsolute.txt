@@ -15,6 +15,8 @@ D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\Windows
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Guess.xml
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\ElemntUIList
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\EFDbContext
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpOrderBy
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpParams
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpService

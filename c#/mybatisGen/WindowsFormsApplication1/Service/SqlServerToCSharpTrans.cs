@@ -34,7 +34,7 @@ namespace WindowsFormsApplication1.Service
             }
             else if (sqlType == "decimal")
             {
-                return "double?";
+                return "decimal?";
             }
             return "";
         }
@@ -46,17 +46,13 @@ namespace WindowsFormsApplication1.Service
         /// <returns></returns>
         public string SqlType2ParamsType(string sqlType)
         {
-            if (sqlType == "int")
+            if (sqlType == "int" || sqlType == "datetime" || sqlType == "datetime2" || sqlType == "decimal")
             {
                 return "range";
             }
             else if (sqlType == "nvarchar" || sqlType == "varchar" || sqlType == "char")
             {
                 return "like";
-            }
-            else if (sqlType == "datetime" || sqlType == "datetime2" || sqlType == "decimal")
-            {
-                return "range";
             }
             return "";
         }

@@ -11,30 +11,75 @@ namespace WebApplication1.Controllers
 	/// <summary>
 	/// ***模块的控制器类
 	/// </summary>
-    public partial class $entity.EntityName$Controller : BaseController
+    public partial class IRobotErrorMsgController : BaseController
     {
-		public $entity.EntityName$Service Service { set; get; }
+		public IRobotErrorMsgService Service { set; get; }
 
 		/*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$ data = new $entity.EntityName$
+		IRobotErrorMsg data = new IRobotErrorMsg
 		{
-	$entity.PropList:{
-		$if(it.ParamsTypeIsEqual)$
-			$if(it.IsKey)$
-				$it.PropName$ = Next(),
-			$else$
-				$it.PropName$ = param.$it.PropName$,
-			$endif$
-		$endif$
-	}$
+
+					IEErrNo = Next(),
+		
+		
+					IECreateDate = param.IECreateDate,
+		
+		
+		
+					IEErrOrderNo = param.IEErrOrderNo,
+		
+		
+					IEErrRobotId = param.IEErrRobotId,
+		
+		
+					IEErrPic = param.IEErrPic,
+		
+		
+					IEErrContext = param.IEErrContext,
+		
+		
+					IEHandleStatus = param.IEHandleStatus,
+		
+		
+		
 		};
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$Params param = new $entity.EntityName$Params
+		IRobotErrorMsgParams param = new IRobotErrorMsgParams
 		{
-	$entity.PropList:{
-		$it.PropName$ = param.$it.PropName$,
-	}$
+
+			IEErrNo = param.IEErrNo,
+		
+			IEErrNoLike = param.IEErrNoLike,
+		
+			IECreateDate = param.IECreateDate,
+		
+			IECreateDateStart = param.IECreateDateStart,
+		
+			IECreateDateEnd = param.IECreateDateEnd,
+		
+			IEErrOrderNo = param.IEErrOrderNo,
+		
+			IEErrOrderNoLike = param.IEErrOrderNoLike,
+		
+			IEErrRobotId = param.IEErrRobotId,
+		
+			IEErrRobotIdLike = param.IEErrRobotIdLike,
+		
+			IEErrPic = param.IEErrPic,
+		
+			IEErrPicLike = param.IEErrPicLike,
+		
+			IEErrContext = param.IEErrContext,
+		
+			IEErrContextLike = param.IEErrContextLike,
+		
+			IEHandleStatus = param.IEHandleStatus,
+		
+			IEHandleStatusStart = param.IEHandleStatusStart,
+		
+			IEHandleStatusEnd = param.IEHandleStatusEnd,
+		
 		};
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -44,7 +89,7 @@ namespace WebApplication1.Controllers
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
-		public JsonResult Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
+		public JsonResult Page(IRobotErrorMsgParams param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			return MyJson(new Result{code = 0, data = Service.Page(param, currentPageIndex, pageSize)});
 		}
@@ -58,9 +103,9 @@ namespace WebApplication1.Controllers
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的导出结果</returns>
 		[OperInterval(IntervalMillisecond=10000)]
-		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
+		public ExcelResult<IRobotErrorMsg> Export(IRobotErrorMsgParams param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
 		{
-			return new ExcelResult<$entity.EntityName$>
+			return new ExcelResult<IRobotErrorMsg>
 			{
 				DataList = Service.Page(param, currentPageIndex, pageSize).pageDataList,
 				FileName = "测试excel."+excelType
@@ -76,26 +121,26 @@ namespace WebApplication1.Controllers
         /// <returns>返回***模块的导出结果</returns>
 		public JsonResult Import(HttpPostedFileBase fileUpload, 其他参数...)
 		{
-			List<$entity.EntityName$> $entity.EntityName$List;
+			List<IRobotErrorMsg> IRobotErrorMsgList;
             if (fileUpload.FileName.EndsWith("xlsx"))
             {
-                $entity.EntityName$List = ExcelHelper.ExcelXlsxToList<$entity.EntityName$>(fileUpload.InputStream);
+                IRobotErrorMsgList = ExcelHelper.ExcelXlsxToList<IRobotErrorMsg>(fileUpload.InputStream);
             }
             else if (fileUpload.FileName.EndsWith("xls"))
             {
-                $entity.EntityName$List = ExcelHelper.ExcelXlsToList<$entity.EntityName$>(fileUpload.InputStream);
+                IRobotErrorMsgList = ExcelHelper.ExcelXlsToList<IRobotErrorMsg>(fileUpload.InputStream);
             }
-			Service.AddBatch($entity.EntityName$List);
+			Service.AddBatch(IRobotErrorMsgList);
 			return MyJson(new Result { code = 0, msg = "导入成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 根据主键删除指定数据
         /// </summary>
-        /// <param name="$entity.KeyName$">删除数据的主键</param>
-		public JsonResult Del(long $entity.KeyName$)
+        /// <param name="IEErrNo">删除数据的主键</param>
+		public JsonResult Del(long IEErrNo)
 		{
-            Service.Del($entity.KeyName$);
+            Service.Del(IEErrNo);
 			return MyJson(new Result { code = 0, msg = "数据已删除。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
@@ -103,7 +148,7 @@ namespace WebApplication1.Controllers
         /// 新增一条数据
         /// </summary>
         /// <param name="data">新增的数据</param>
-		public JsonResult Add($entity.EntityName$ data)
+		public JsonResult Add(IRobotErrorMsg data)
 		{
 			Service.Add(data);
 			return MyJson(new Result { code = 0, msg = "保存成功。"});
@@ -113,28 +158,28 @@ namespace WebApplication1.Controllers
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public JsonResult ChangeStatus($entity.EntityName$ datas)
+		public JsonResult ChangeStatus(IRobotErrorMsg datas)
 		{
-			return MyJson(new Result { code = 0,msg=\$"修改成功，共{Service.ChangeStatus(datas)}条。"});
+			return MyJson(new Result { code = 0,msg=$"修改成功，共{Service.ChangeStatus(datas)}条。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 根据主键id查询***模块的数据实体
         /// </summary>
-        /// <param name="$entity.KeyName$">主键id</param>
+        /// <param name="IEErrNo">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public JsonResult Load(long $entity.KeyName$)
+		public JsonResult Load(long IEErrNo)
 		{
-			return MyJson(new Result { code = 0, data = Service.Load($entity.KeyName$) });
+			return MyJson(new Result { code = 0, data = Service.Load(IEErrNo) });
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public JsonResult DelBatch(List<$entity.EntityName$> datas)
+		public JsonResult DelBatch(List<IRobotErrorMsg> datas)
 		{
-			return MyJson(new Result { code = 0 ,msg = \$"删除成功，共{Service.DelBatch(datas)}条。" });
+			return MyJson(new Result { code = 0 ,msg = $"删除成功，共{Service.DelBatch(datas)}条。" });
 		}
 		*/
     }

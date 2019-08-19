@@ -243,6 +243,7 @@
     <Compile Include="Entity\Common\Result.cs" />
     <Compile Include="Entity\Town.cs" />
     <Compile Include="Entity\Common\TreeFormNode.cs" />
+    <Compile Include="Filter\Common\OperCountAttribute.cs" />
     <Compile Include="Filter\ExcelEntity\IRobotQrCodePayTaskExcel.cs" />
     <Compile Include="Filter\Common\CompressAttribute.cs" />
     <Compile Include="Filter\Common\LoginAuthorizeAttribute.cs" />

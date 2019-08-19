@@ -218,6 +218,7 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         /// <returns></returns>
         [SizeFilter(Size = 3145728, Msg = "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
+        [OperCount(CountLimit = 10,ClearMillisecond = 60000)]
         public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload, string pathName)
         {
             if (_allowPath.Contains(pathName))
@@ -261,6 +262,7 @@ namespace WebApplication1.Controllers.Common
         /// <param name="pathName"></param>
         /// <returns></returns>
         [SizeFilter(Size = 52428800, Msg = "上传文件大小不能超过50M，可通过压缩减少文件大小。")]
+        [OperCount(CountLimit = 100, ClearMillisecond = 60000)]
         public JsonResult UploadFiles(HttpPostedFileBase fileUploads, string pathName)
         {
             if (_allowPath.Contains(pathName))

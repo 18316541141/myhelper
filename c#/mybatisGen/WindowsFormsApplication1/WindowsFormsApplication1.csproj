@@ -52,7 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllTemplate\ElemntUIList" />
+    <None Include="AllTemplate\ElemntUIList">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AllTemplate\EFDbContext">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Service\BsyNameTrans.cs" />
     <Compile Include="Service\EntityTemplateToCode.cs" />
     <Compile Include="Service\IDbTypeTrans.cs" />

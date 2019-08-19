@@ -99,7 +99,11 @@ namespace WebApplication1.Repository
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
 				if (orderBy.$it.PropName$) { query = query.OrderByDescending(a => a.$it.PropName$); }
-			$endif$}$
+			$endif$};separator="else "$
+				else
+				{
+					query = query.OrderByDescending(a => a.$entity.KeyName$);
+				}
             }
             else
             {
@@ -117,9 +121,13 @@ namespace WebApplication1.Repository
         /// <param name="pageSize">每页显示数据量</param>
 		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回分页查询结果</returns>
-        public MyPagedList<$entity.EntityName$> BigPageList($entity.EntityName$Params eqArgs, int pageIndex, int pageSize, $entity.EntityName$Params neqArgs = null)
+        public MyPagedList<$entity.EntityName$> BigPageList($entity.EntityName$Params eqArgs, int pageIndex = 1, int pageSize = 10000, $entity.EntityName$Params neqArgs = null)
         {
-			if( pageSize > 10000 )
+			if( pageIndex <= 0 )
+			{
+				pageIndex = 1;
+			}
+			if( pageSize > 10000 || pageSize <= 0 )
 			{
 				pageSize = 10000;
 			}
@@ -129,6 +137,11 @@ namespace WebApplication1.Repository
                 query = OrderByAsc(query, eqArgs.orderByAsc);
                 query = OrderByDesc(query, eqArgs.orderByDesc);
                 int totalItemCount = query.Count();
+				int totalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1;
+				if( pageIndex >= totalPageCount)
+				{
+					pageIndex = Math.Max(totalPageCount - 1,1);
+				}
                 query = query.Skip((pageIndex-1) * pageSize);
                 List<$entity.EntityName$> pageDataList = new List<$entity.EntityName$>();
                 for (int i=0, partCount = (pageSize - pageSize % 1000) / pageSize + 1; i<partCount ;i++)
@@ -141,7 +154,7 @@ namespace WebApplication1.Repository
                     PageDataList = pageDataList,
                     TotalItemCount = totalItemCount,
                     PageSize = pageSize,
-                    TotalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
+                    TotalPageCount = totalPageCount,
                     StartItemIndex = (pageSize - 1) * pageIndex + 1,
                     EndItemIndex = pageSize * pageIndex
                 };
@@ -156,11 +169,19 @@ namespace WebApplication1.Repository
         /// <param name="pageSize">每页显示数据量</param>
 		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回分页查询结果</returns>
-        public MyPagedList<$entity.EntityName$> PageList($entity.EntityName$Params eqArgs, int pageIndex, int pageSize,$entity.EntityName$Params neqArgs = null)
+        public MyPagedList<$entity.EntityName$> PageList($entity.EntityName$Params eqArgs, int pageIndex = 1, int pageSize = 20,$entity.EntityName$Params neqArgs = null)
         {
+			if( pageIndex <= 0 )
+			{
+				pageIndex = 1;
+			}
 			if( pageSize > 100)
 			{
 				pageSize = 100;
+			} 
+			else if( pageSize <= 0)
+			{
+				pageSize = 20;
 			}
             using (MyDbContext myDbContext = new MyDbContext())
             {

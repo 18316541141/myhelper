@@ -8,28 +8,23 @@ using WebApplication1.MyExtensions;
 using WebApplication1.Params;
 namespace WebApplication1.Service
 {
+	/// <summary>
+        /// ***模块的业务类
+        /// </summary>
     public partial class $entity.EntityName$Service : BaseService
     {
+		public $entity.EntityName$Repository Repository { set; get; }
+
 		/*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
 		$entity.EntityName$ data = new $entity.EntityName$
 		{
-	$entity.PropList:{
-		$if(it.ParamsTypeIsEqual)$
-			$if(it.IsKey)$
-				$it.PropName$ = Next(),
-			$else$
-				$it.PropName$ = param.$it.PropName$,
-			$endif$
-		$endif$
-	}$
+	$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = param.$it.PropName$,$endif$$endif$}$
 		};
 ----------------------------------------------------------------------------------------------------------------------------
 		$entity.EntityName$Params param = new $entity.EntityName$Params
 		{
-	$entity.PropList:{
-		$it.PropName$ = param.$it.PropName$,
-	}$
+	$entity.PropList:{$it.PropName$ = param.$it.PropName$,}$
 		};
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -41,8 +36,7 @@ namespace WebApplication1.Service
         /// <returns>返回***模块的查询结果</returns>
 		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.PageList(param, currentPageIndex, pageSize);
+			return Repository.PageList(param, currentPageIndex, pageSize);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -51,8 +45,7 @@ namespace WebApplication1.Service
         /// <param name="$entity.KeyName$">删除数据的主键</param>
 		public void Del(long $entity.KeyName$)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.Delete(a => a.$entity.KeyName$);
+			Repository.Delete(a => a.$entity.KeyName$);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -61,8 +54,7 @@ namespace WebApplication1.Service
         /// <param name="data">新增的数据</param>
 		public void Add($entity.EntityName$ data)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			repository.Insert(data);
+			Repository.Insert(data);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -71,14 +63,13 @@ namespace WebApplication1.Service
         /// <param name="datas">新增的数据</param>
 		public void AddBatch(List<$entity.EntityName$> datas)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
 			foreach($entity.EntityName$ data in datas)
 			{
-				data.$entity.KeyName$ = Next();
+				data.$entity.KeyName$ = NextId();
 				data.CreateDate = DateTime.Now;
 				data.Status = 1;
 			}
-			repository.Insert(datas);
+			Repository.Insert(datas);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -96,19 +87,17 @@ namespace WebApplication1.Service
 					Status = data.Status
 				});
 			}
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.UpdateChangeBatch(updates);
+			return Repository.UpdateChangeBatch(updates);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
-        /// 根据主键id查询数据实体
+        /// 根据主键id查询***模块的数据实体
         /// </summary>
         /// <param name="$entity.KeyName$">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
 		public $entity.EntityName$ Load(long $entity.KeyName$)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.FindEntity($entity.KeyName$);
+			return Repository.FindEntity($entity.KeyName$);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -117,9 +106,20 @@ namespace WebApplication1.Service
         /// <param name="datas">批量删除的数据</param>
 		public int DelBatch($entity.EntityName$ datas)
 		{
-			$entity.EntityName$Repository repository = new $entity.EntityName$Repository();
-			return repository.Delete(datas);
+			return Repository.Delete(datas);
 		}
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
+        /// 对“****”方法的入参进行校验基础（只校验是否为空，格式，长度，大小，不涉及
+	/// 数据库查询、流读取等其他复杂操作），校验不通过时，异常往外抛出
+        /// </summary>
+        /// <param name="param">待校验参数</param>
+        public void Check****($entity.EntityName$Params param)
+        {
+            if(...){
+		Ex(...,...);
+	    }
+        }
 		*/
     }
 }

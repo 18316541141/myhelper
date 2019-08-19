@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using WebApplication1.MyJsonConverter;
 
 namespace WebApplication1.Entity.Common
 {
@@ -15,20 +16,20 @@ namespace WebApplication1.Entity.Common
     /// </summary>
     public class MyJsonResult:JsonResult
     {
+        /// <summary>
+        /// long类型数据转字符串
+        /// </summary>
+        public static LongConverter LongConverter;
+
+        /// <summary>
+        /// 日期类型数据转换器
+        /// </summary>
+        public static Dictionary<string, IsoDateTimeConverter> IsoDateTimeConverterMap;
+
         static MyJsonResult()
         {
-            JsonSerializerSettings setting = new JsonSerializerSettings();
-            JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
-            {
-                //日期类型默认格式化处理
-                setting.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
-                setting.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-
-                //空值处理
-                setting.NullValueHandling = NullValueHandling.Ignore;
-
-                return setting;
-            });
+            LongConverter = new LongConverter();
+            IsoDateTimeConverterMap = new Dictionary<string, IsoDateTimeConverter>();
         }
 
         /// <summary>
@@ -77,10 +78,20 @@ namespace WebApplication1.Entity.Common
 
             if (Data != null)
             {
-                string jsonString = JsonConvert.SerializeObject(Data, new IsoDateTimeConverter
+                if (!IsoDateTimeConverterMap.ContainsKey(FormateStr))
                 {
-                    DateTimeFormat = FormateStr
-                });
+                    lock (IsoDateTimeConverterMap)
+                    {
+                        if (!IsoDateTimeConverterMap.ContainsKey(FormateStr))
+                        {
+                            IsoDateTimeConverterMap.Add(FormateStr, new IsoDateTimeConverter
+                            {
+                                DateTimeFormat = FormateStr
+                            });
+                        }
+                    }
+                }
+                string jsonString = JsonConvert.SerializeObject(Data, IsoDateTimeConverterMap[FormateStr], LongConverter);
                 if (string.IsNullOrEmpty(Callback))
                 {
                     response.Write(jsonString);

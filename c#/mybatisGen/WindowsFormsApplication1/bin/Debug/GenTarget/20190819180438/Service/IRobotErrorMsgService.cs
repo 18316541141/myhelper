@@ -11,20 +11,20 @@ namespace WebApplication1.Service
 	/// <summary>
         /// ***模块的业务类
         /// </summary>
-    public partial class $entity.EntityName$Service : BaseService
+    public partial class IRobotErrorMsgService : BaseService
     {
-		public $entity.EntityName$Repository Repository { set; get; }
+		public IRobotErrorMsgRepository Repository { set; get; }
 
 		/*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$ data = new $entity.EntityName$
+		IRobotErrorMsg data = new IRobotErrorMsg
 		{
-	$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = param.$it.PropName$,$endif$$endif$}$
+	IEErrNo = NextId(),IECreateDate = param.IECreateDate,IEErrOrderNo = param.IEErrOrderNo,IEErrRobotId = param.IEErrRobotId,IEErrPic = param.IEErrPic,IEErrContext = param.IEErrContext,IEHandleStatus = param.IEHandleStatus,
 		};
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$Params param = new $entity.EntityName$Params
+		IRobotErrorMsgParams param = new IRobotErrorMsgParams
 		{
-	$entity.PropList:{$it.PropName$ = param.$it.PropName$,}$
+	IEErrNo = param.IEErrNo,IEErrNoLike = param.IEErrNoLike,IECreateDate = param.IECreateDate,IECreateDateStart = param.IECreateDateStart,IECreateDateEnd = param.IECreateDateEnd,IEErrOrderNo = param.IEErrOrderNo,IEErrOrderNoLike = param.IEErrOrderNoLike,IEErrRobotId = param.IEErrRobotId,IEErrRobotIdLike = param.IEErrRobotIdLike,IEErrPic = param.IEErrPic,IEErrPicLike = param.IEErrPicLike,IEErrContext = param.IEErrContext,IEErrContextLike = param.IEErrContextLike,IEHandleStatus = param.IEHandleStatus,IEHandleStatusStart = param.IEHandleStatusStart,IEHandleStatusEnd = param.IEHandleStatusEnd,
 		};
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -34,7 +34,7 @@ namespace WebApplication1.Service
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
-		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
+		public MyPagedList<IRobotErrorMsg> Page(IRobotErrorMsgParams param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			return Repository.PageList(param, currentPageIndex, pageSize);
 		}
@@ -42,17 +42,17 @@ namespace WebApplication1.Service
 		/// <summary>
         /// 根据主键删除指定数据
         /// </summary>
-        /// <param name="$entity.KeyName$">删除数据的主键</param>
-		public void Del(long $entity.KeyName$)
+        /// <param name="IEErrNo">删除数据的主键</param>
+		public void Del(long IEErrNo)
 		{
-			Repository.Delete(a => a.$entity.KeyName$);
+			Repository.Delete(a => a.IEErrNo);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 新增一条数据
         /// </summary>
         /// <param name="data">新增的数据</param>
-		public void Add($entity.EntityName$ data)
+		public void Add(IRobotErrorMsg data)
 		{
 			Repository.Insert(data);
 		}
@@ -61,11 +61,11 @@ namespace WebApplication1.Service
         /// 新增多条数据
         /// </summary>
         /// <param name="datas">新增的数据</param>
-		public void AddBatch(List<$entity.EntityName$> datas)
+		public void AddBatch(List<IRobotErrorMsg> datas)
 		{
-			foreach($entity.EntityName$ data in datas)
+			foreach(IRobotErrorMsg data in datas)
 			{
-				data.$entity.KeyName$ = NextId();
+				data.IEErrNo = NextId();
 				data.CreateDate = DateTime.Now;
 				data.Status = 1;
 			}
@@ -76,14 +76,14 @@ namespace WebApplication1.Service
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public int ChangeStatus($entity.EntityName$ datas)
+		public int ChangeStatus(IRobotErrorMsg datas)
 		{
-			List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
-			for($entity.EntityName$ data in datas)
+			List<IRobotErrorMsg> updates = new List<IRobotErrorMsg>();
+			for(IRobotErrorMsg data in datas)
 			{
-				updates.Add(new $entity.EntityName$
+				updates.Add(new IRobotErrorMsg
 				{
-					$entity.KeyName$ = data.$entity.KeyName$,
+					IEErrNo = data.IEErrNo,
 					Status = data.Status
 				});
 			}
@@ -93,18 +93,18 @@ namespace WebApplication1.Service
 		/// <summary>
         /// 根据主键id查询***模块的数据实体
         /// </summary>
-        /// <param name="$entity.KeyName$">主键id</param>
+        /// <param name="IEErrNo">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public $entity.EntityName$ Load(long $entity.KeyName$)
+		public IRobotErrorMsg Load(long IEErrNo)
 		{
-			return Repository.FindEntity($entity.KeyName$);
+			return Repository.FindEntity(IEErrNo);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public int DelBatch($entity.EntityName$ datas)
+		public int DelBatch(IRobotErrorMsg datas)
 		{
 			return Repository.Delete(datas);
 		}
@@ -114,7 +114,7 @@ namespace WebApplication1.Service
 	/// 数据库查询、流读取等其他复杂操作），校验不通过时，异常往外抛出
         /// </summary>
         /// <param name="param">待校验参数</param>
-        public void Check****($entity.EntityName$Params param)
+        public void Check****(IRobotErrorMsgParams param)
         {
             if(...){
 		Ex(...,...);

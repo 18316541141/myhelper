@@ -99,7 +99,11 @@ namespace WebApplication1.Repository
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
 				if (orderBy.$it.PropName$) { query = query.OrderByDescending(a => a.$it.PropName$); }
-			$endif$}$
+			$endif$};separator="else "$
+				else
+				{
+					query = query.OrderByDescending(a => a.$entity.KeyName$);
+				}
             }
             else
             {

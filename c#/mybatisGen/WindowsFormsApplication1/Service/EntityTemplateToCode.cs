@@ -37,6 +37,7 @@ namespace WindowsFormsApplication1.Service
             string servicePath = $@"GenTarget{s}{dateStr}{s}Service{s}";
             string controllersPath = $@"GenTarget{s}{dateStr}{s}Controllers{s}";
             string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}CodeGenerator{s}";
+            string basePath = $@"GenTarget{s}{dateStr}{s}";
             Directory.CreateDirectory(paramsPath);
             Directory.CreateDirectory(orderByPath);
             Directory.CreateDirectory(entityPath);
@@ -44,6 +45,7 @@ namespace WindowsFormsApplication1.Service
             Directory.CreateDirectory(servicePath);
             Directory.CreateDirectory(controllersPath);
             Directory.CreateDirectory(mappingPath);
+            Directory.CreateDirectory(basePath);
             File.WriteAllText($"{paramsPath}{entity.EntityName}Params.cs", _templateHelper.EntityToStr(entity, "CSharpParams"), Encoding.UTF8);
             File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.cs", _templateHelper.EntityToStr(entity, "CSharpOrderBy"), Encoding.UTF8);
             File.WriteAllText($"{entityPath}{entity.EntityName}.cs", _templateHelper.EntityToStr(entity, "CSharpEntity"), Encoding.UTF8);
@@ -51,6 +53,8 @@ namespace WindowsFormsApplication1.Service
             File.WriteAllText($"{servicePath}{entity.EntityName}Service.cs", _templateHelper.EntityToStr(entity, "CSharpService"), Encoding.UTF8);
             File.WriteAllText($"{controllersPath}{entity.EntityName}Controller.cs", _templateHelper.EntityToStr(entity, "CSharpController"), Encoding.UTF8);
             File.WriteAllText($"{mappingPath}{entity.EntityName}Map.cs", _templateHelper.EntityToStr(entity, "EFMapping"), Encoding.UTF8);
+            File.WriteAllText($"{basePath}ElemntUIList.vue", _templateHelper.EntityToStr(entity, "ElemntUIList"), Encoding.UTF8);
+            File.WriteAllText($"{basePath}EFDbContext.txt", _templateHelper.EntityToStr(entity, "EFDbContext"), Encoding.UTF8);
         }
 
         /// <summary>

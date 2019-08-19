@@ -39,7 +39,8 @@ namespace WebApplication1.Filter.Common
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             HttpContextBase httpContextBase = filterContext.HttpContext;
-            string key = httpContextBase.Request.UserHostAddress+ httpContextBase.Request.Path;
+            HttpRequestBase request = httpContextBase.Request;
+            string key = request.UserHostAddress + request.Path;
             if (RecordMap.ContainsKey(key))
             {
                 bool temp;
@@ -81,20 +82,20 @@ namespace WebApplication1.Filter.Common
                     RecordMap.Add(key, DateTime.Now);
                 }
                 base.OnActionExecuting(filterContext);
-                if ((DateTime.Now - LastClearDate).TotalSeconds > 60)
+            }
+            if ((DateTime.Now - LastClearDate).TotalSeconds > 60)
+            {
+                lock (RecordMap)
                 {
-                    lock (RecordMap)
+                    foreach (string tkey in new HashSet<string>(RecordMap.Keys))
                     {
-                        foreach (string tkey in new HashSet<string>(RecordMap.Keys))
+                        if (tkey.EndsWith(request.Path) && RecordMap.ContainsKey(tkey) && (DateTime.Now - RecordMap[tkey]).TotalMilliseconds > IntervalMillisecond)
                         {
-                            if (RecordMap.ContainsKey(tkey) && (DateTime.Now - RecordMap[tkey]).TotalMilliseconds > IntervalMillisecond)
-                            {
-                                RecordMap.Remove(tkey);
-                            }
+                            RecordMap.Remove(tkey);
                         }
                     }
-                    LastClearDate = DateTime.Now;
                 }
+                LastClearDate = DateTime.Now;
             }
         }
     }

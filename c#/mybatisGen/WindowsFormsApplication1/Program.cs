@@ -26,7 +26,7 @@ namespace WindowsFormsApplication1
                 DbTypeTrans = new SqlServerToCSharpTrans(),
                 SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
             };
-            Entity entity=genEntityService.GenTemplateEntity("IRobot_RobotManager");
+            Entity entity=genEntityService.GenTemplateEntity("IRobot_ErrorMsg");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
         }
