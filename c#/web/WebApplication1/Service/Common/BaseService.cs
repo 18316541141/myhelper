@@ -1,9 +1,11 @@
 ﻿
 using log4net;
+using ModelsLib.API.ReceiveBSY.Response;
 using Newtonsoft.Json;
 using Snowflake.Net;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity.Common;
@@ -16,14 +18,25 @@ namespace WebApplication1.Service.Common
     /// </summary>
     public abstract class BaseService
     {
-
+        /// <summary>
+        /// 日志输出类
+        /// </summary>
         public ILog log { set; get; }
 
+        /// <summary>
+        /// 分布式雪花id生成器
+        /// </summary>
         static IdWorker idWorker;
+
+        /// <summary>
+        /// 跨平台的斜杠
+        /// </summary>
+        protected static char s;
 
         static BaseService()
         {
             idWorker = new IdWorker(1, 1);
+            s = Path.DirectorySeparatorChar;
         }
 
         /// <summary>

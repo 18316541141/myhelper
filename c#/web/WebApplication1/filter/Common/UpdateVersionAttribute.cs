@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.Controllers.Common;
 
 namespace WebApplication1.Filter.Common
 {
@@ -19,11 +20,20 @@ namespace WebApplication1.Filter.Common
         /// <param name="filterContext"></param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            string realTimePools = Convert.ToString(filterContext.HttpContext.Request.Headers["Real-Time-Pool"]);
+            HttpContextBase httpContext = filterContext.HttpContext;
+            string realTimePools = Convert.ToString(httpContext.Request.Headers["Real-Time-Pool"]);
             base.OnActionExecuted(filterContext);
             foreach(string realTimePool in realTimePools.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 ThreadHelper.EditControllerVersion(realTimePool);
+                string usernameAndPoolKey = httpContext.User.Identity.Name + realTimePool;
+                if (IndexController.UsernameAndPoolSet.Contains(usernameAndPoolKey))
+                {
+                    lock (IndexController.UsernameAndPoolSet)
+                    {
+                        IndexController.UsernameAndPoolSet.Remove(usernameAndPoolKey);
+                    }
+                }
                 ThreadHelper.BatchSet(realTimePool);
             }
         }

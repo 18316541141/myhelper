@@ -27,7 +27,12 @@ namespace WebApplication1.Controllers.Common
         /// <summary>
         /// 等待池表
         /// </summary>
-        public static HashSet<string> WaitPoolSet;
+        public static HashSet<string> WaitPoolSet { set; get; }
+
+        /// <summary>
+        /// 用户和等待池表，确保每个用户只能在同一个等待池上等待。
+        /// </summary>
+        public static HashSet<string> UsernameAndPoolSet { set; get; }
 
         static IndexController()
         {
@@ -36,6 +41,8 @@ namespace WebApplication1.Controllers.Common
 
             WaitPoolSet = new HashSet<string>();
             WaitPoolSet.Add("newsAlarm");
+
+            UsernameAndPoolSet = new HashSet<string>();
         }
 
         /// <summary>
@@ -71,6 +78,25 @@ namespace WebApplication1.Controllers.Common
                 }
                 if (initRet)
                 {
+                    string usernameAndPoolKey = User.Identity.Name + realTimePool;
+                    if (UsernameAndPoolSet.Contains(usernameAndPoolKey))
+                    {
+                        return MyJson(new Result { code = -1, msg = "当前用户已有线程在等待池中，无法向等待池放入新线程。" });
+                    }
+                    else
+                    {
+                        lock (UsernameAndPoolSet)
+                        {
+                            if (UsernameAndPoolSet.Contains(usernameAndPoolKey))
+                            {
+                                return MyJson(new Result { code = -1, msg = "当前用户已有线程在等待池中，无法向等待池放入新线程。" });
+                            }
+                            else
+                            {
+                                UsernameAndPoolSet.Add(usernameAndPoolKey);
+                            }
+                        }
+                    }
                     ThreadHelper.BatchWait(realTimePool, 60000);
                     Response.AddHeader("Real-Time-Version", newestVersion);
                     return MyJson(new Result { code = 1 });

@@ -12,6 +12,27 @@ namespace CommonHelper.Helper
     /// </summary>
     public class StreamHelper
     {
+		/// <summary>
+        /// 输入流转化为字符，并关闭流
+        /// </summary>
+        /// <param name="input">输入流</param>
+        /// <param name="encoding">编码方式，默认是utf-8</param>
+        /// <returns></returns>
+        public static string StreamToString(Stream input,Encoding encoding = null)
+        {
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+            using (input)
+            {
+                using (StreamReader streamReader = new StreamReader(input, encoding))
+                {
+                    return streamReader.ReadToEnd();
+                }
+            }
+        }
+
         /// <summary>
         /// 拷贝流，这里直接使用参数传入的流进行拷贝操作，效率可能比不上使用缓冲流。
         /// </summary>
