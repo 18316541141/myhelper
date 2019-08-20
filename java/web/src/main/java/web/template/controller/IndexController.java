@@ -3,6 +3,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.support.ServletContextResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.txj.common.FileHelper;
@@ -170,10 +172,19 @@ public class IndexController extends BaseController {
 	 * @param fileName
 	 * @param fileDesc
 	 */
+	@RequestMapping("/downFile")
 	public void downFile(String pathName, String fileName, String fileDesc,HttpServletResponse response){
 		File file=realFile("/WEB-INF/uploadFiles/"+pathName+"/"+fileName);
 		if(file.exists()){
-			
+			try (FileInputStream fileInputStream=new FileInputStream(file)){
+				response.setContentType("application/octet-stream");
+				response.setHeader("Content-disposition", "attachment; filename="+ new String(fileDesc.getBytes("utf-8"), "ISO8859-1"));
+				IOUtils.copy(fileInputStream, response.getOutputStream());
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}else{
 			response.setStatus(404);
 		}
@@ -254,6 +265,7 @@ public class IndexController extends BaseController {
 	 * @param pathName	路径名称
 	 * @return
 	 */
+	@RequestMapping("/uploadFiles")
 	public Result uploadFiles(@RequestParam("fileUploads")MultipartFile fileUploads, HttpServletRequest request,String pathName){
 		if (allowPath.contains(pathName))
         {
