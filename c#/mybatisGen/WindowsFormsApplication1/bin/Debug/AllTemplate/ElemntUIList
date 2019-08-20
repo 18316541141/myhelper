@@ -12,19 +12,30 @@
         查询参数表单：
 		<br>
         <el-form v-bind:inline="true" v-bind:model="postData">
+            <el-form-item>
+              <el-date-picker size="medium" value-format="yyyy-MM-dd" type="date" placeholder="日期提取框" v-model="postData.日期字段"></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-select size="medium" v-model="postData.下拉框字段" placeholder="下拉框" clearable>
+                <el-option :key="0" :label="'选项1'" :value="0"></el-option>
+                <el-option :key="1" :label="'选项2'" :value="1"></el-option>
+                <el-option :key="2" :label="'选项3'" :value="2"></el-option>
+                ....
+              </el-select>
+            </el-form-item>
 		$entity.PropList:{$if(it.ParamsTypeIsLike)$
             <el-form-item>
-                <el-input size="medium" v-model="postData.$it.PropName$" placeholder="$it.PropNotes$"></el-input>
+                <el-input size="medium" v-model="postData.$it.PropName$" placeholder="$it.PropNotes$" clearable></el-input>
             </el-form-item>
 		$endif$}$
 		$entity.PropList:{$if(it.ParamsTypeIsRangeStart)$
             <el-form-item>
-                <el-input size="medium" v-model="postData.$it.PropName$" placeholder="$it.PropNotes$"></el-input>
+                <el-input size="medium" v-model="postData.$it.PropName$" placeholder="$it.PropNotes$" clearable></el-input>
             </el-form-item>
 		$endif$}$
 		$entity.PropList:{$if(it.ParamsTypeIsRangeEnd)$
             <el-form-item>
-                <el-input size="medium" v-model="postData.$it.PropName$" placeholder="$it.PropNotes$"></el-input>
+                <el-input size="medium" v-model="postData.$it.PropName$" placeholder="$it.PropNotes$" clearable></el-input>
             </el-form-item>
 		$endif$}$
             <el-form-item>

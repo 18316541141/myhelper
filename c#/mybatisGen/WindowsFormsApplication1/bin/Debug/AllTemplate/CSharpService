@@ -58,6 +58,18 @@ namespace WebApplication1.Service
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
+        /// 修改***模块的数据
+        /// </summary>
+        /// <param name="data">修改数据，不为null才会被修改，主键必须不为null</param>
+        public void Update($entity.EntityName$ data)
+        {
+            Repository.UpdateChange(new $entity.EntityName$
+            {
+                $entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = param.$it.PropName$,$endif$$endif$}$
+            });
+        }
+----------------------------------------------------------------------------------------------------------------------------
+		/// <summary>
         /// 新增多条数据
         /// </summary>
         /// <param name="datas">新增的数据</param>

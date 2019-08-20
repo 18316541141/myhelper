@@ -18,12 +18,16 @@ namespace WindowsFormsApplication1.Service
             {
                 return "string";
             }
+            else if(sqlType == "long")
+            {
+                return "long?";
+            }
             return "string";
         }
 
         public string SqlType2ParamsType(string sqlType)
         {
-            if (sqlType == "integer")
+            if (sqlType == "integer" || sqlType == "long")
             {
                 return "range";
             }

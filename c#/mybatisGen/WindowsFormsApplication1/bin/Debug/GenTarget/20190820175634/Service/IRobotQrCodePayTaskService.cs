@@ -11,20 +11,20 @@ namespace WebApplication1.Service
 	/// <summary>
         /// ***模块的业务类
         /// </summary>
-    public partial class $entity.EntityName$Service : BaseService
+    public partial class IRobotQrCodePayTaskService : BaseService
     {
-		public $entity.EntityName$Repository Repository { set; get; }
+		public IRobotQrCodePayTaskRepository Repository { set; get; }
 
 		/*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$ data = new $entity.EntityName$
+		IRobotQrCodePayTask data = new IRobotQrCodePayTask
 		{
-	$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = param.$it.PropName$,$endif$$endif$}$
+	IRTaskID = NextId(),IROrderNo = param.IROrderNo,IRTakeMoney = param.IRTakeMoney,IRPushState = param.IRPushState,IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,IRScanPayNotifyRet = param.IRScanPayNotifyRet,IRHandleState = param.IRHandleState,
 		};
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$Params param = new $entity.EntityName$Params
+		IRobotQrCodePayTaskParams param = new IRobotQrCodePayTaskParams
 		{
-	$entity.PropList:{$it.PropName$ = param.$it.PropName$,}$
+	IRTaskID = param.IRTaskID,IRTaskIDStart = param.IRTaskIDStart,IRTaskIDEnd = param.IRTaskIDEnd,IROrderNo = param.IROrderNo,IROrderNoLike = param.IROrderNoLike,IRTakeMoney = param.IRTakeMoney,IRTakeMoneyStart = param.IRTakeMoneyStart,IRTakeMoneyEnd = param.IRTakeMoneyEnd,IRPushState = param.IRPushState,IRPushStateStart = param.IRPushStateStart,IRPushStateEnd = param.IRPushStateEnd,IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,IRScanPayNotifyUrlLike = param.IRScanPayNotifyUrlLike,IRScanPayNotifyRet = param.IRScanPayNotifyRet,IRScanPayNotifyRetLike = param.IRScanPayNotifyRetLike,IRHandleState = param.IRHandleState,IRHandleStateStart = param.IRHandleStateStart,IRHandleStateEnd = param.IRHandleStateEnd,
 		};
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -34,7 +34,7 @@ namespace WebApplication1.Service
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
-		public MyPagedList<$entity.EntityName$> Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
+		public MyPagedList<IRobotQrCodePayTask> Page(IRobotQrCodePayTaskParams param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			return Repository.PageList(param, currentPageIndex, pageSize);
 		}
@@ -42,17 +42,17 @@ namespace WebApplication1.Service
 		/// <summary>
         /// 根据主键删除指定数据
         /// </summary>
-        /// <param name="$entity.KeyName$">删除数据的主键</param>
-		public void Del(long $entity.KeyName$)
+        /// <param name="IRTaskID">删除数据的主键</param>
+		public void Del(long IRTaskID)
 		{
-			Repository.Delete(a => a.$entity.KeyName$);
+			Repository.Delete(a => a.IRTaskID);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 新增一条数据
         /// </summary>
         /// <param name="data">新增的数据</param>
-		public void Add($entity.EntityName$ data)
+		public void Add(IRobotQrCodePayTask data)
 		{
 			Repository.Insert(data);
 		}
@@ -61,11 +61,11 @@ namespace WebApplication1.Service
         /// 修改***模块的数据
         /// </summary>
         /// <param name="data">修改数据，不为null才会被修改，主键必须不为null</param>
-        public void Update($entity.EntityName$ data)
+        public void Update(IRobotQrCodePayTask data)
         {
-            Repository.UpdateChange(new $entity.EntityName$
+            Repository.UpdateChange(new IRobotQrCodePayTask
             {
-                $entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = param.$it.PropName$,$endif$$endif$}$
+                IRTaskID = NextId(),IROrderNo = param.IROrderNo,IRTakeMoney = param.IRTakeMoney,IRPushState = param.IRPushState,IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,IRScanPayNotifyRet = param.IRScanPayNotifyRet,IRHandleState = param.IRHandleState,
             });
         }
 ----------------------------------------------------------------------------------------------------------------------------
@@ -73,11 +73,11 @@ namespace WebApplication1.Service
         /// 新增多条数据
         /// </summary>
         /// <param name="datas">新增的数据</param>
-		public void AddBatch(List<$entity.EntityName$> datas)
+		public void AddBatch(List<IRobotQrCodePayTask> datas)
 		{
-			foreach($entity.EntityName$ data in datas)
+			foreach(IRobotQrCodePayTask data in datas)
 			{
-				data.$entity.KeyName$ = NextId();
+				data.IRTaskID = NextId();
 				data.CreateDate = DateTime.Now;
 				data.Status = 1;
 			}
@@ -88,14 +88,14 @@ namespace WebApplication1.Service
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public int ChangeStatus($entity.EntityName$ datas)
+		public int ChangeStatus(IRobotQrCodePayTask datas)
 		{
-			List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
-			for($entity.EntityName$ data in datas)
+			List<IRobotQrCodePayTask> updates = new List<IRobotQrCodePayTask>();
+			for(IRobotQrCodePayTask data in datas)
 			{
-				updates.Add(new $entity.EntityName$
+				updates.Add(new IRobotQrCodePayTask
 				{
-					$entity.KeyName$ = data.$entity.KeyName$,
+					IRTaskID = data.IRTaskID,
 					Status = data.Status
 				});
 			}
@@ -105,18 +105,18 @@ namespace WebApplication1.Service
 		/// <summary>
         /// 根据主键id查询***模块的数据实体
         /// </summary>
-        /// <param name="$entity.KeyName$">主键id</param>
+        /// <param name="IRTaskID">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public $entity.EntityName$ Load(long $entity.KeyName$)
+		public IRobotQrCodePayTask Load(long IRTaskID)
 		{
-			return Repository.FindEntity($entity.KeyName$);
+			return Repository.FindEntity(IRTaskID);
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public int DelBatch($entity.EntityName$ datas)
+		public int DelBatch(IRobotQrCodePayTask datas)
 		{
 			return Repository.Delete(datas);
 		}
@@ -126,7 +126,7 @@ namespace WebApplication1.Service
 	/// 数据库查询、流读取等其他复杂操作），校验不通过时，异常往外抛出
         /// </summary>
         /// <param name="param">待校验参数</param>
-        public void Check****($entity.EntityName$Params param)
+        public void Check****(IRobotQrCodePayTaskParams param)
         {
             if(...){
 		Ex(...,...);
