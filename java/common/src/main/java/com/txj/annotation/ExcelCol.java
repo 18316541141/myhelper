@@ -18,17 +18,17 @@ public @interface ExcelCol {
 	 * 列名称
 	 * @return
 	 */
-	String colName();
+	String[] colNames();
 
 	/**
 	 * 列索引，从0开始
 	 * @return
 	 */
-    int colIndex();
+    int[] colIndexs();
 
     /**
      * 组名称
      * @return
      */
-    String groupName();
+    String[] groupNames();
 }

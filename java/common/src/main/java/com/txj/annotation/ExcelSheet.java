@@ -17,10 +17,10 @@ public @interface ExcelSheet {
 	 * Sheet名称
 	 * @return
 	 */
-	String sheetName() default "";
+	String[] sheetNames() default "";
 	/**
 	 * 组名称
 	 * @return
 	 */
-	String groupName() default "";
+	String[] groupNames() default "";
 }
