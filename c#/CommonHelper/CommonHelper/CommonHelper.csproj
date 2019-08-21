@@ -133,6 +133,7 @@
     <Compile Include="Helper\PasswordHelper.cs" />
     <Compile Include="Helper\PhysicsHelper.cs" />
     <Compile Include="Helper\SeleniumHelper.cs" />
+    <Compile Include="Helper\MySignHelper.cs" />
     <Compile Include="Helper\SparseArray.cs" />
     <Compile Include="Helper\SparseMatrix.cs" />
     <Compile Include="Helper\StreamHelper.cs" />

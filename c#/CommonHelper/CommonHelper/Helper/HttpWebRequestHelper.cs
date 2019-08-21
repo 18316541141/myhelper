@@ -231,6 +231,7 @@ namespace CommonHelper.Helper
             DefaultProxyIp = new DefaultProxyIp();
             DefaultCheckLogout = new DefaultCheckLogout();
             DefaultTryExceptionHandle = new DefaultTryExceptionHandle();
+            PoolVersionMap = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -394,6 +395,63 @@ namespace CommonHelper.Helper
         /// </summary>
         static XmlDocument _httpCfg;
 
+        #region 这里是实时获取信息机制专用的http请求方法和属性
+
+        /// <summary>
+        /// 记录等待池版本号
+        /// </summary>
+        public static Dictionary<string,string> PoolVersionMap { set; get; }
+
+        /// <summary>
+        /// 检测版本变化
+        /// </summary>
+        /// <param name="requestUrl">请求的url</param>
+        /// <param name="query">get请求参数</param>
+        /// <param name="poolName">等待池名称</param>
+        /// <returns></returns>
+        public static bool VersionChange(string requestUrl, Dictionary<string, string> query, string poolName)
+        {
+            return VersionChange(requestUrl+"?"+ QueryParamsMapToStr(query), poolName);
+        }
+
+        /// <summary>
+        /// 检测版本变化
+        /// </summary>
+        /// <param name="requestUrl">请求的url</param>
+        /// <param name="poolName">等待池名称</param>
+        /// <returns></returns>
+        public static bool VersionChange(string requestUrl,string poolName)
+        {
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(requestUrl);
+            req.Method = "GET";
+            req.Headers.Add("Real-Time-Pool", poolName);
+            if (PoolVersionMap.ContainsKey(poolName))
+            {
+                req.Headers.Add("Real-Time-Version", PoolVersionMap[poolName]);
+            }
+            try
+            {
+                WebResponse webResponse = req.GetResponse();
+                string realTimeVersion = webResponse.Headers["Real-Time-Version"];
+                if (PoolVersionMap.ContainsKey(poolName))
+                {
+                    PoolVersionMap[poolName] = realTimeVersion;
+                }
+                else
+                {
+                    PoolVersionMap.Add(poolName, realTimeVersion);
+                }
+                JObject jobject = webResponse.GetJsonObj();
+                return Convert.ToInt32(jobject["code"]) == 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// 发送既含有url参数，又含有表单参数的post请求，上传文件用
         /// </summary>
@@ -402,8 +460,8 @@ namespace CommonHelper.Helper
         /// <param name="Param">表单参数，上传文件用</param>
         /// <param name="CookieContainer">cookie容器</param>
         /// <returns>响应报文</returns>
-        public static WebResponse HttpPost(this string RequestUrl, Dictionary<string, string> Query, Dictionary<string, dynamic> Param, CookieContainer CookieContainer = null) =>
-            HttpPost(RequestUrl + "?" + QueryParamsMapToStr(Query, RequestUrl.LoadRequestEncoding()), Param, CookieContainer);
+        public static WebResponse HttpPost(this string requestUrl, Dictionary<string, string> Query, Dictionary<string, dynamic> Param, CookieContainer CookieContainer = null) =>
+            HttpPost(requestUrl + "?" + QueryParamsMapToStr(Query, requestUrl.LoadRequestEncoding()), Param, CookieContainer);
 
         /// <summary>
         /// 发送只含有表单参数的post请求，支持上传文件

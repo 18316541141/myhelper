@@ -19,3 +19,4 @@ c#/CommonHelper/packages/*
 c#/OpenCvHelper/packages/*
 c#/mybatisGen/packages/*
 c#/web/packages/*
+c#/crawler/packages/*

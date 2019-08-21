@@ -56,7 +56,18 @@ namespace WebApplication1.Controllers.Common
             return MyJson(new Result { code = 0, data = data });
         }
 
-        
+        /// <summary>
+        /// 匿名的实时检测最新版本号，如果发现版本号发生变化，则马上
+        /// 返回，如果没变化，则等待30秒或30秒内版本号发生变化后返回
+        /// （需要传入认证参数：createDate（yyyyMMddHHmmss）、r（随机字符串）、）
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Sign(new string[] {"createDate", "r" })]
+        public JsonResult AnonymousRealTime()
+        {
+            return RealTime();
+        }
 
         /// <summary>
         /// 实时检测最新版本号，如果发现版本号发生变化，则马上
@@ -357,6 +368,19 @@ namespace WebApplication1.Controllers.Common
             {
                 return MyJson(new Result { code = -1, msg = "图片不存在，切割失败！" });
             }
+        }
+
+		/// <summary>
+        /// 允许匿名访问的显示上传的图片
+        /// </summary>
+        /// <param name="pathName">图片路径名称</param>
+        /// <param name="imgName">图片名称</param>
+        [AllowAnonymous]
+        [Sign(new string[] { "createDate", "r" , "pathName", "imgName" })]
+        [OutputCache(Duration = int.MaxValue)]
+        public void AnonymousShowImage(string pathName, string imgName)
+        {
+            ShowImage(pathName, imgName);
         }
 
         /// <summary>

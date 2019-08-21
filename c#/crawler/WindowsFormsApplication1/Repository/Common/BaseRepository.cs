@@ -1,14 +1,11 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
-using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
-using WebApplication1.MyExtensions;
 using WebApplication1.MyExtensions.Common;
-using Webdiyer.WebControls.Mvc;
 
 namespace WebApplication1.Repository
 {
@@ -18,7 +15,7 @@ namespace WebApplication1.Repository
     /// <typeparam name="TEntity"></typeparam>
     public abstract class BaseRepository<TEntity> where TEntity : class
     {
-		public ILog Log { set; get; }
+        public ILog Log { set; get; }
 
         /// <summary>
         /// 只读数据操作
@@ -214,7 +211,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            using (MyDbContext2 dbContext = new MyDbContext2())
+            using (MyDbContext dbContext = new MyDbContext())
             {
                 var entitys = dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToList();
                 entitys.ForEach(m => dbContext.Entry(m).State = EntityState.Deleted);
@@ -229,7 +226,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public TEntity FindEntity(object id)
         {
-            using (MyDbContext2 dbContext = new MyDbContext2())
+            using (MyDbContext dbContext = new MyDbContext())
             {
                 return dbContext.Set<TEntity>().Find(id);
             }
