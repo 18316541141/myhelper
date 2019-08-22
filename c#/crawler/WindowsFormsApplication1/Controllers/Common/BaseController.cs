@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using WebApplication1.App_Start;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 
@@ -20,9 +21,15 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         static DateTime _lastHeartbeatDate { set; get; }
 
+		/// <summary>
+        /// 跨平台的斜杠
+        /// </summary>
+        protected static char s;
+
         static BaseController()
         {
             _lastHeartbeatDate = DateTime.Now;
+			s = Path.DirectorySeparatorChar;
         }
 
         /// <summary>
@@ -62,12 +69,12 @@ namespace WebApplication1.Controllers.Common
 
         public BaseController()
         {
-            MonitorServer = ConfigurationManager.AppSettings["MonitorServer"];
-            SignKey = ConfigurationManager.AppSettings["SignKey"];
-            SignSecret = ConfigurationManager.AppSettings["SignSecret"];
-            RobotId = ConfigurationManager.AppSettings["RobotId"];
+            MonitorServer = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.MonitorServer"];
+            SignKey = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.SignKey"];
+            SignSecret = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.SignSecret"];
+            RobotId = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.RobotId"];
             OpenIds = new List<string>();
-            foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings["OpenIds"]))
+            foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.OpenIds"]))
             {
                 OpenIds.Add(Convert.ToString(val));
             }

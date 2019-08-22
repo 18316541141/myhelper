@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;debugger</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -119,6 +119,7 @@
     <Compile Include="Helper\EmailHelper.cs" />
     <Compile Include="Helper\EncrypHelper.cs" />
     <Compile Include="Helper\EnumerableHelper.cs" />
+    <Compile Include="Helper\EnvironmentConfig.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\FileTypeEnum.cs" />

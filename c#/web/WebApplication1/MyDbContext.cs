@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using WebApplication1.App_Start;
 using WebApplication1.Entity;
 using WebApplication1.Mapping;
 
@@ -16,7 +17,7 @@ namespace WebApplication1
     /// </summary>
     public class MyDbContext: DbContext
     {
-        public MyDbContext() : base(new OracleConnection(WebConfigurationManager.ConnectionStrings["oracleConn"].ConnectionString),true){
+        public MyDbContext() : base(new OracleConnection(WebConfigurationManager.ConnectionStrings[$"{EnvironmentConfig.EnvironmentType}.oracleConn"].ConnectionString),true){
         }
 
         /// <summary>
