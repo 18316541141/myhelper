@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ExcelCol {
+	
 	/**
 	 * 列名称
 	 * @return
