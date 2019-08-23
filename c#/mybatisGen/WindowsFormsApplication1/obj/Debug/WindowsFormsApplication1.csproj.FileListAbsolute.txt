@@ -59,3 +59,4 @@ E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\Window
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\CSharpSetNullParams

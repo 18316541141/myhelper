@@ -20,5 +20,15 @@ namespace WindowsFormsApplication1.Forms
         /// 办事易微信报警类
         /// </summary>
         public BsyWarningHelper BsyWarningHelper { set; get; }
+
+		/// <summary>
+        /// 跨平台的斜杠
+        /// </summary>
+        protected static char s;
+
+        static BaseForm()
+        {
+            s = Path.DirectorySeparatorChar;
+        }
     }
 }

@@ -27,36 +27,55 @@ namespace WebApplication1.Controllers
 					IROrderNo = param.IROrderNo,
 		
 		
-					IRTakeMoney = param.IRTakeMoney,
+					IRWeiXinNickName = param.IRWeiXinNickName,
 		
 		
-		
-					IRPushState = param.IRPushState,
-		
+					IRWeiXinHeaderImage = param.IRWeiXinHeaderImage,
 		
 		
-					IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,
-		
-		
-					IRScanPayNotifyRet = param.IRScanPayNotifyRet,
+					IRQrCodeImagePath = param.IRQrCodeImagePath,
 		
 		
 					IRHandleState = param.IRHandleState,
 		
 		
 		
-					IRQrCodeImagePath = param.IRQrCodeImagePath,
+					IRHandleMessage = param.IRHandleMessage,
 		
 		
-					IRBsyNotifyState = param.IRBsyNotifyState,
-		
-		
-		
-					IRSendMoneyNotifyState = param.IRSendMoneyNotifyState,
+					IRHandleTime = param.IRHandleTime,
 		
 		
 		
-					IRReportPicPath = param.IRReportPicPath,
+					IRCreateTime = param.IRCreateTime,
+		
+		
+		
+					IRReportPicPathJson = param.IRReportPicPathJson,
+		
+		
+					IRTakeMoney = param.IRTakeMoney,
+		
+		
+		
+					IRRobotId = param.IRRobotId,
+		
+		
+					IRRemark = param.IRRemark,
+		
+		
+					IRPushState = param.IRPushState,
+		
+		
+		
+					IRPushTime = param.IRPushTime,
+		
+		
+		
+					IRScanPayNotifyRet = param.IRScanPayNotifyRet,
+		
+		
+					IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,
 		
 		
 		};
@@ -74,25 +93,17 @@ namespace WebApplication1.Controllers
 		
 			IROrderNoLike = param.IROrderNoLike,
 		
-			IRTakeMoney = param.IRTakeMoney,
+			IRWeiXinNickName = param.IRWeiXinNickName,
 		
-			IRTakeMoneyStart = param.IRTakeMoneyStart,
+			IRWeiXinNickNameLike = param.IRWeiXinNickNameLike,
 		
-			IRTakeMoneyEnd = param.IRTakeMoneyEnd,
+			IRWeiXinHeaderImage = param.IRWeiXinHeaderImage,
 		
-			IRPushState = param.IRPushState,
+			IRWeiXinHeaderImageLike = param.IRWeiXinHeaderImageLike,
 		
-			IRPushStateStart = param.IRPushStateStart,
+			IRQrCodeImagePath = param.IRQrCodeImagePath,
 		
-			IRPushStateEnd = param.IRPushStateEnd,
-		
-			IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,
-		
-			IRScanPayNotifyUrlLike = param.IRScanPayNotifyUrlLike,
-		
-			IRScanPayNotifyRet = param.IRScanPayNotifyRet,
-		
-			IRScanPayNotifyRetLike = param.IRScanPayNotifyRetLike,
+			IRQrCodeImagePathLike = param.IRQrCodeImagePathLike,
 		
 			IRHandleState = param.IRHandleState,
 		
@@ -100,25 +111,59 @@ namespace WebApplication1.Controllers
 		
 			IRHandleStateEnd = param.IRHandleStateEnd,
 		
-			IRQrCodeImagePath = param.IRQrCodeImagePath,
+			IRHandleMessage = param.IRHandleMessage,
 		
-			IRQrCodeImagePathLike = param.IRQrCodeImagePathLike,
+			IRHandleMessageLike = param.IRHandleMessageLike,
 		
-			IRBsyNotifyState = param.IRBsyNotifyState,
+			IRHandleTime = param.IRHandleTime,
 		
-			IRBsyNotifyStateStart = param.IRBsyNotifyStateStart,
+			IRHandleTimeStart = param.IRHandleTimeStart,
 		
-			IRBsyNotifyStateEnd = param.IRBsyNotifyStateEnd,
+			IRHandleTimeEnd = param.IRHandleTimeEnd,
 		
-			IRSendMoneyNotifyState = param.IRSendMoneyNotifyState,
+			IRCreateTime = param.IRCreateTime,
 		
-			IRSendMoneyNotifyStateStart = param.IRSendMoneyNotifyStateStart,
+			IRCreateTimeStart = param.IRCreateTimeStart,
 		
-			IRSendMoneyNotifyStateEnd = param.IRSendMoneyNotifyStateEnd,
+			IRCreateTimeEnd = param.IRCreateTimeEnd,
 		
-			IRReportPicPath = param.IRReportPicPath,
+			IRReportPicPathJson = param.IRReportPicPathJson,
 		
-			IRReportPicPathLike = param.IRReportPicPathLike,
+			IRReportPicPathJsonLike = param.IRReportPicPathJsonLike,
+		
+			IRTakeMoney = param.IRTakeMoney,
+		
+			IRTakeMoneyStart = param.IRTakeMoneyStart,
+		
+			IRTakeMoneyEnd = param.IRTakeMoneyEnd,
+		
+			IRRobotId = param.IRRobotId,
+		
+			IRRobotIdLike = param.IRRobotIdLike,
+		
+			IRRemark = param.IRRemark,
+		
+			IRRemarkLike = param.IRRemarkLike,
+		
+			IRPushState = param.IRPushState,
+		
+			IRPushStateStart = param.IRPushStateStart,
+		
+			IRPushStateEnd = param.IRPushStateEnd,
+		
+			IRPushTime = param.IRPushTime,
+		
+			IRPushTimeStart = param.IRPushTimeStart,
+		
+			IRPushTimeEnd = param.IRPushTimeEnd,
+		
+			IRScanPayNotifyRet = param.IRScanPayNotifyRet,
+		
+			IRScanPayNotifyRetLike = param.IRScanPayNotifyRetLike,
+		
+			IRScanPayNotifyUrl = param.IRScanPayNotifyUrl,
+		
+			IRScanPayNotifyUrlLike = param.IRScanPayNotifyUrlLike,
 		
 		};
 ----------------------------------------------------------------------------------------------------------------------------

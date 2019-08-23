@@ -49,15 +49,15 @@ namespace CommonHelper.Helper
         /// <param name="key"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public MySignHelper Add(string key,string val)
+        public MySignHelper Add(string key,object val)
         {
             if (KeyValItemMap.ContainsKey(key))
             {
-                KeyValItemMap[key] = val;
+                KeyValItemMap[key] = Convert.ToString(val);
             }
             else
             {
-                KeyValItemMap.Add(key, val);
+                KeyValItemMap.Add(key, Convert.ToString(val));
             }
             return this;
         }

@@ -58,6 +58,9 @@
     <None Include="AllTemplate\EFDbContext">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="AllTemplate\CSharpSetNullParams">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Service\BsyNameTrans.cs" />
     <Compile Include="Service\EntityTemplateToCode.cs" />
     <Compile Include="Service\IDbTypeTrans.cs" />

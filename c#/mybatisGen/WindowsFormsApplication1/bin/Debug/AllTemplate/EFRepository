@@ -266,5 +266,26 @@ namespace WebApplication1.Repository
 				return myDbContext.SaveChanges();
 			}
 		}
+
+		/// <summary>
+        /// 把指定字段值设置为null
+        /// </summary>
+        /// <param name="param">字段值</param>
+        /// <returns>返回修改的数据行数</returns>
+		public void SetNull($entity.EntityName$SetNullParams param)
+		{
+			 $entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
+			 using (MyDbContext myDbContext = new MyDbContext())
+             {
+				myDbContext.$entity.EntityNames$.Attach(updateBefore);
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+				if (param.$it.PropName$)
+				{
+					updateBefore.$it.PropName$ = null;
+				}
+				$endif$$endif$}$
+				myDbContext.SaveChanges();
+			 }
+		}
     }
 }

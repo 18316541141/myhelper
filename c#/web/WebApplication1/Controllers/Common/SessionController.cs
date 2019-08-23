@@ -57,7 +57,7 @@ namespace WebApplication1.Controllers.Common
         /// <param name="username"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [Sign]
+        [Sign(new string[] { "callback", "username", "signKey", "createDate", "r" })]
         public JsonResult JsonpLogin(string callback, string username,string signKey)
         {
             FormsAuthentication.SetAuthCookie(username, false);

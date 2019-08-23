@@ -47,6 +47,7 @@ namespace WindowsFormsApplication1.Service
             Directory.CreateDirectory(mappingPath);
             Directory.CreateDirectory(basePath);
             File.WriteAllText($"{paramsPath}{entity.EntityName}Params.cs", _templateHelper.EntityToStr(entity, "CSharpParams"), Encoding.UTF8);
+            File.WriteAllText($"{paramsPath}{entity.EntityName}SetNullParams.cs", _templateHelper.EntityToStr(entity, "CSharpSetNullParams"), Encoding.UTF8);
             File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.cs", _templateHelper.EntityToStr(entity, "CSharpOrderBy"), Encoding.UTF8);
             File.WriteAllText($"{entityPath}{entity.EntityName}.cs", _templateHelper.EntityToStr(entity, "CSharpEntity"), Encoding.UTF8);
             File.WriteAllText($"{repositoryPath}{entity.EntityName}Repository.cs", _templateHelper.EntityToStr(entity, "EFRepository"), Encoding.UTF8);

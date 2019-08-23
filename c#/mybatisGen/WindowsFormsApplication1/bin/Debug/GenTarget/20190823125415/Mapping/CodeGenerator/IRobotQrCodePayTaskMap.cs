@@ -18,15 +18,21 @@ namespace WebApplication1.Mapping
 
 					this.Property(u => u.IRTaskID).HasColumnName("IR_TaskID");
 					this.Property(u => u.IROrderNo).HasColumnName("IR_OrderNo");
-					this.Property(u => u.IRTakeMoney).HasColumnName("IR_TakeMoney");
-					this.Property(u => u.IRPushState).HasColumnName("IR_PushState");
-					this.Property(u => u.IRScanPayNotifyUrl).HasColumnName("IR_ScanPayNotifyUrl");
-					this.Property(u => u.IRScanPayNotifyRet).HasColumnName("IR_ScanPayNotifyRet");
-					this.Property(u => u.IRHandleState).HasColumnName("IR_HandleState");
+					this.Property(u => u.IRWeiXinNickName).HasColumnName("IR_WeiXinNickName");
+					this.Property(u => u.IRWeiXinHeaderImage).HasColumnName("IR_WeiXinHeaderImage");
 					this.Property(u => u.IRQrCodeImagePath).HasColumnName("IR_QrCodeImagePath");
-					this.Property(u => u.IRBsyNotifyState).HasColumnName("IR_BsyNotifyState");
-					this.Property(u => u.IRSendMoneyNotifyState).HasColumnName("IR_SendMoneyNotifyState");
-					this.Property(u => u.IRReportPicPath).HasColumnName("IR_ReportPicPath");
+					this.Property(u => u.IRHandleState).HasColumnName("IR_HandleState");
+					this.Property(u => u.IRHandleMessage).HasColumnName("IR_HandleMessage");
+					this.Property(u => u.IRHandleTime).HasColumnName("IR_HandleTime");
+					this.Property(u => u.IRCreateTime).HasColumnName("IR_CreateTime");
+					this.Property(u => u.IRReportPicPathJson).HasColumnName("IR_ReportPicPathJson");
+					this.Property(u => u.IRTakeMoney).HasColumnName("IR_TakeMoney");
+					this.Property(u => u.IRRobotId).HasColumnName("IR_RobotId");
+					this.Property(u => u.IRRemark).HasColumnName("IR_Remark");
+					this.Property(u => u.IRPushState).HasColumnName("IR_PushState");
+					this.Property(u => u.IRPushTime).HasColumnName("IR_PushTime");
+					this.Property(u => u.IRScanPayNotifyRet).HasColumnName("IR_ScanPayNotifyRet");
+					this.Property(u => u.IRScanPayNotifyUrl).HasColumnName("IR_ScanPayNotifyUrl");
         }
     }
 }
