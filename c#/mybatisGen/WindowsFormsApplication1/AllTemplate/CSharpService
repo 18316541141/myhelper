@@ -65,7 +65,7 @@ namespace WebApplication1.Service
         {
             Repository.UpdateChange(new $entity.EntityName$
             {
-                $entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = param.$it.PropName$,$endif$$endif$}$
+                $entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$$it.PropName$ = NextId(),$else$$it.PropName$ = data.$it.PropName$,$endif$$endif$}$
             });
         }
 ----------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ namespace WebApplication1.Service
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public int ChangeStatus($entity.EntityName$ datas)
+		public int ChangeStatus(List<$entity.EntityName$> datas)
 		{
 			List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
 			for($entity.EntityName$ data in datas)

@@ -22,15 +22,15 @@ namespace WindowsFormsApplication1
             //Data Source = 183.2.233.235; Initial Catalog = BusinessAssistantDB_Test; User ID = BusinessHeplerTestManager; Password = BusinessHeplerTestManager123; MultipleActiveResultSets = True
             GenEntityService genEntityService = new GenEntityService
             {
-                NameTrans = new RobotNameTrans(),
-                DbTypeTrans = new SqlServerToCSharpTrans(),
+                NameTrans = new RobotNameJavaTrans(),
+                DbTypeTrans = new SqlServerToJavaTrans(),
                 //DbTypeTrans = new SqliteToCSharpTrans(),
                 SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
                 //SqlInfo =new SqliteInfo(@"D:\sqlite\databases\test.db")
             };
             Entity entity=genEntityService.GenTemplateEntity("IRobot_QrCodePayTask");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
-            entityTemplateToCode.EntityFrameworkCode(entity);
+            entityTemplateToCode.MyBatisCode(entity);
         }
     }
 }

@@ -1,0 +1,116 @@
+﻿package web.template.service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import web.template.mapper.$entity.EntityName$Mapper;
+import web.template.service.common.BaseService;
+/**
+ * ***模块的业务类
+ * @author admin
+ */
+@Service
+public class $entity.EntityName$Service extends BaseService{
+	
+	@Autowired
+	private $entity.EntityName$Mapper mapper;
+	
+	/* 抄考代码
+	 ----------------------------------------------------------------------------------------------------------------------------
+	 $entity.EntityName$ data = new $entity.EntityName$();
+	 $entity.PropList:{$if(it.ParamsTypeIsEqual)$
+	 	$if(it.IsKey)$data.set$it.CapUpperPropName$(nextId());$else$data.set$it.CapUpperPropName$(param.get$it.CapUpperPropName$());$endif$
+ 	$endif$}$
+ 	----------------------------------------------------------------------------------------------------------------------------
+ 	$entity.EntityName$Params param = new $entity.EntityName$Params();
+	$entity.PropList:{param.set$it.CapUpperPropName$(param.get$it.CapUpperPropName$());}$
+	----------------------------------------------------------------------------------------------------------------------------
+	 * 分页查询***模块，并返回查询结果
+	 * @param param 查询参数
+	 * @param currentPageIndex 当前页码
+	 * @param pageSize 每页显示的数据量
+	public MyPagedList<$entity.EntityName$> export($entity.EntityName$Params param, int currentPageIndex,int pageSize) {
+		return mapper.bigPageList(param, currentPageIndex, pageSize);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 分页查询***模块，并返回查询结果
+	* @param param 查询参数
+	* @param currentPageIndex 当前页码
+	* @param pageSize 每页显示的数据量
+	public MyPagedList<$entity.EntityName$> page($entity.EntityName$Params param,int currentPageIndex,int pageSize){
+		return mapper.pageList(param, currentPageIndex, pageSize);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 分页查询***模块，并返回查询结果
+	* @param param 查询参数
+	* @param currentPageIndex 当前页码
+	* @param pageSize 每页显示的数据量
+	public MyPagedList<$entity.EntityName$> export($entity.EntityName$Params param,int currentPageIndex,int pageSize){
+		return mapper.bigPageList(param, currentPageIndex, pageSize);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 根据主键删除指定数据
+	* @param $entity.KeyName$ 删除数据的主键
+	public void del(long $entity.KeyName$){
+		mapper.delete($entity.KeyName$);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 新增一条数据
+	* @param data	新增的数据
+	public void add($entity.EntityName$ data){
+		mapper.insert(data);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 修改***模块的数据
+	* @param data	修改数据，不为null才会被修改，主键必须不为null
+	public void update($entity.EntityName$ data){
+		$entity.EntityName$ param=new $entity.EntityName$();
+        $entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(it.IsKey)$param.set$it.CapUpperPropName$(nextId());$else$param.set$it.CapUpperPropName$(data.get$it.CapUpperPropName$());$endif$$endif$}$
+        mapper.updateChange(param);
+    }
+    ----------------------------------------------------------------------------------------------------------------------------
+    * 新增多条数据
+    * @param datas	  新增的数据
+    public void addBatch(List<$entity.EntityName$> datas){
+    	List<$entity.EntityName$> insertDatas = new ArrayList<$entity.EntityName$>();
+		for($entity.EntityName$ data : datas){
+			
+			insertDatas.add();
+		}
+		mapper.insert(datas);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 批量修改状态
+	* @param datas  修改状态的数据
+	public int changeStatus(List<$entity.EntityName$> datas){
+		List<$entity.EntityName$> updates = new List<$entity.EntityName$>();
+		for($entity.EntityName$ data : datas){
+			$entity.EntityName$ update=new $entity.EntityName$();
+			update.set$entity.KeyName$(data.get$entity.KeyName$());
+			update.setStatus(data.getStatus());
+			updates.add(update);
+		}
+		return mapper.updateChangeBatch(updates);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 根据主键id查询***模块的数据实体
+	* @param $entity.KeyName$		主键id
+	* @return 返回***模块的查询结果
+	public $entity.EntityName$ load(long $entity.KeyName$){
+		return mapper.findEntity($entity.KeyName$);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 批量删除数据
+	* @param datas 批量删除的数据
+	public int delBatch(List<$entity.EntityName$> datas){
+		return mapper.deleteList(datas);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 对“****”方法的入参进行校验基础（只校验是否为空，格式，长度，大小，不涉及
+	* 数据库查询、流读取等其他复杂操作），校验不通过时，异常往外抛出
+	* @param param 待校验参数
+	public void check****($entity.EntityName$Params param){
+        if(...){
+			Ex(...,...);
+	    }
+    }
+	 */	
+}

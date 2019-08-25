@@ -37,6 +37,7 @@ namespace WindowsFormsApplication1.Service
         /// <returns></returns>
         public Entity GenTemplateEntity(string tableName)
         {
+            NameTransService nameTransService = new NameTransService();
             Dictionary<string, string> commentMap = SqlInfo.CommentMap(tableName);
             string tableNodes = SqlInfo.TableNodes(tableName);
             string keyCol = SqlInfo.KeyCol(tableName);
@@ -50,7 +51,7 @@ namespace WindowsFormsApplication1.Service
             {
                 TableName = tableName,
                 EntityName = entityName,
-                EntityNames = new NameTransService().SingleToComplex(entityName),
+                EntityNames = nameTransService.SingleToComplex(entityName),
                 EntityNotes = tableNodes,
                 KeyCol= keyCol,
                 KeyName = NameTrans.ColNameToPropName(keyCol)
@@ -66,6 +67,7 @@ namespace WindowsFormsApplication1.Service
                     ColName = colName,
                     SrcPropName= srcPropName,
                     PropName = srcPropName,
+                    CapUpperPropName= nameTransService.HumpToBigHump(srcPropName),
                     PropType = DbTypeTrans.SqlType2EntityType(dbType),
                     PropNotes = commentMap.ContainsKey(colName)?commentMap[colName]:"",
                     ParamsType= "equal",
@@ -78,6 +80,7 @@ namespace WindowsFormsApplication1.Service
                         IsKey = colName == keyCol,
                         ColName = colName,
                         SrcPropName= srcPropName,
+                        CapUpperPropName = nameTransService.HumpToBigHump(srcPropName + "Start"),
                         PropName = srcPropName + "Start",
                         PropType = DbTypeTrans.SqlType2EntityType(dbType),
                         PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",
@@ -88,6 +91,7 @@ namespace WindowsFormsApplication1.Service
                         IsKey = colName == keyCol,
                         ColName = colName,
                         SrcPropName= srcPropName,
+                        CapUpperPropName = nameTransService.HumpToBigHump(srcPropName + "End"),
                         PropName = srcPropName + "End",
                         PropType = DbTypeTrans.SqlType2EntityType(dbType),
                         PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",
@@ -101,6 +105,7 @@ namespace WindowsFormsApplication1.Service
                         IsKey = colName == keyCol,
                         ColName = colName,
                         SrcPropName= srcPropName,
+                        CapUpperPropName = nameTransService.HumpToBigHump(srcPropName + "Like"),
                         PropName = srcPropName + "Like",
                         PropType = DbTypeTrans.SqlType2EntityType(dbType),
                         PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",

@@ -9,22 +9,30 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.View;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import com.txj.common.SnowFlakeHelper;
 
 import web.template.filter.UpdateVersionInterceptor;
 import web.template.shiro.MyFormAuthenticationFilter;
 import web.template.shiro.MyPermissionResolver;
 import web.template.shiro.MyPermissionsAuthorizationFilter;
 import web.template.shiro.UserRealm;
+import web.template.view.MyExcelView;
 @Configuration
 public class Beans {
 	@Bean(name="defaultKaptcha")
@@ -43,6 +51,11 @@ public class Beans {
 		DefaultKaptcha defaultKaptcha=new DefaultKaptcha();
 		defaultKaptcha.setConfig(new Config(properties));
 		return defaultKaptcha;
+	}
+	
+	@Bean(name="snowFlakeHelper")
+	public SnowFlakeHelper snowFlakeHelper(){
+		return new SnowFlakeHelper(0,0);
 	}
 	
 	@Bean(name="modularRealmAuthorizer")

@@ -270,7 +270,7 @@ namespace WebApplication1.Repository
 		/// <summary>
         /// 把指定字段值设置为null
         /// </summary>
-        /// <param name="param">字段值</param>
+        /// <param name="param">设为null的字段参数，主键必须要传入，其他字段等于true则表示设置为null</param>
         /// <returns>返回修改的数据行数</returns>
 		public void SetNull($entity.EntityName$SetNullParams param)
 		{

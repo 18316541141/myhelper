@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApplication1.Service
 {
+    /// <summary>
+    /// sql Server字段类型转c#数据类型
+    /// </summary>
     public class SqlServerToCSharpTrans: IDbTypeTrans
     {
         /// <summary>

@@ -52,9 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllTemplate\ElemntUIList">
+    <Compile Include="Service\RobotNameJavaTrans.cs" />
+    <Compile Include="Service\SqlServerToJavaTrans.cs" />
+    <Content Include="AllTemplate\ElemntUIList.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="AllTemplate\EFDbContext">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -64,7 +66,7 @@
     <Compile Include="Service\BsyNameTrans.cs" />
     <Compile Include="Service\EntityTemplateToCode.cs" />
     <Compile Include="Service\IDbTypeTrans.cs" />
-    <Compile Include="Service\RobotNameTrans.cs" />
+    <Compile Include="Service\RobotNameCSharpTrans.cs" />
     <Compile Include="Service\SqliteInfo.cs" />
     <Compile Include="Service\SqliteToCSharpTrans.cs" />
     <Compile Include="Service\SqlServerInfo.cs" />
@@ -106,6 +108,18 @@
     <None Include="AllTemplate\CSharpController">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="AllTemplate\JavaService">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AllTemplate\JavaMapper">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AllTemplate\JavaController">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AllTemplate\JavaSetNullParams">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -142,13 +156,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllTemplate\MybatisMapper" />
+    <None Include="AllTemplate\MybatisMapper">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllTemplate\JavaParams" />
+    <None Include="AllTemplate\JavaParams">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllTemplate\JavaOrderBy" />
+    <None Include="AllTemplate\JavaOrderBy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets')" />

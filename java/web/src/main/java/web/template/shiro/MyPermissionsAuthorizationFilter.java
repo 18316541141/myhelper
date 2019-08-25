@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import web.template.entity.Result;
+
+import web.template.entity.common.Result;
 
 @Component("myPermissionsAuthorizationFilter")
 public class MyPermissionsAuthorizationFilter extends PermissionsAuthorizationFilter{

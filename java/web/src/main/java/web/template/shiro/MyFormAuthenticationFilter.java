@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import web.template.entity.LeftMenu;
-import web.template.entity.Result;
-import web.template.service.SystemService;
+import web.template.entity.common.LeftMenu;
+import web.template.entity.common.Result;
+import web.template.service.common.SystemService;
 
 /**
  * 重写登陆表单拦截器

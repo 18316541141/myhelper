@@ -140,7 +140,7 @@ namespace WebApplication1.Repository
 				int totalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1;
 				if( pageIndex >= totalPageCount)
 				{
-					pageIndex = Math.Max(totalPageCount - 1,1);
+					pageIndex = Math.Max(totalPageCount,1);
 				}
                 query = query.Skip((pageIndex-1) * pageSize);
                 List<$entity.EntityName$> pageDataList = new List<$entity.EntityName$>();

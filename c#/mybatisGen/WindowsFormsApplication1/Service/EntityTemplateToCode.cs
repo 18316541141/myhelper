@@ -65,14 +65,29 @@ namespace WindowsFormsApplication1.Service
         public void MyBatisCode(Entity entity)
         {
             string dateStr = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string javaMapperPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}mapper{s}";
+            string controllerPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}controller{s}";
+            string servicePath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}service{s}";
             string entityPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}entity{s}codeGenerator{s}";
-            string paramsPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}entity{s}params{s}codeGenerator{s}";
+            string paramsPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}params{s}codeGenerator{s}";
+            string setNullParamsPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}setNullParams{s}codeGenerator{s}";
+            string orderByPath = $@"GenTarget{s}{dateStr}{s}web{s}template{s}orderBy{s}codeGenerator{s}";
             string mapperPath = $@"GenTarget{s}{dateStr}{s}mapper{s}codeGenerator{s}";
+            Directory.CreateDirectory(javaMapperPath);
+            Directory.CreateDirectory(controllerPath);
+            Directory.CreateDirectory(servicePath);
             Directory.CreateDirectory(paramsPath);
             Directory.CreateDirectory(entityPath);
             Directory.CreateDirectory(mapperPath);
+            Directory.CreateDirectory(orderByPath);
+            Directory.CreateDirectory(orderByPath);
+            Directory.CreateDirectory(setNullParamsPath);
+            File.WriteAllText($"{controllerPath}{entity.EntityName}Controller.java", _templateHelper.EntityToStr(entity, "JavaController"), Encoding.UTF8);
+            File.WriteAllText($"{servicePath}{entity.EntityName}Service.java", _templateHelper.EntityToStr(entity, "JavaService"), Encoding.UTF8);
+            File.WriteAllText($"{javaMapperPath}{entity.EntityName}Mapper.java", _templateHelper.EntityToStr(entity, "JavaMapper"), Encoding.UTF8);
             File.WriteAllText($"{entityPath}{entity.EntityName}.java", _templateHelper.EntityToStr(entity, "JavaEntity"), Encoding.UTF8);
-            File.WriteAllText($"{paramsPath}{entity.EntityName}OrderBy.java", _templateHelper.EntityToStr(entity, "JavaOrderBy"), Encoding.UTF8);
+            File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.java", _templateHelper.EntityToStr(entity, "JavaOrderBy"), Encoding.UTF8);
+            File.WriteAllText($"{setNullParamsPath}{entity.EntityName}SetNullParams.java", _templateHelper.EntityToStr(entity, "JavaSetNullParams"), Encoding.UTF8);
             File.WriteAllText($"{paramsPath}{entity.EntityName}Params.java", _templateHelper.EntityToStr(entity, "JavaParams"), Encoding.UTF8);
             File.WriteAllText($"{mapperPath}{entity.EntityName}Mapper.xml", _templateHelper.EntityToStr(entity, "MybatisMapper"), Encoding.UTF8);
         }

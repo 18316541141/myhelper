@@ -61,6 +61,11 @@ namespace WindowsFormsApplication1.entity
         public string PropName { set; get; }
 
         /// <summary>
+        /// 首字母大写的属性名称
+        /// </summary>
+        public string CapUpperPropName { set; get; }
+
+        /// <summary>
         /// 当ParamsType不为equal时，需要提供PropName的原始属性名称，例如：nameLike是模糊搜索属性，
         /// 原始属性是name
         /// </summary>

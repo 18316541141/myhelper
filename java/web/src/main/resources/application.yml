@@ -8,6 +8,6 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 mybatis:
   mapper-locations: classpath:mapper/*.xml,classpath:mapper/codeGenerator/*.xml
-  type-aliases-package: web.template.entity
+  type-aliases-package: web.template.entity,web.template.params,web.template.orderBy,web.template.setNullParams
   configuration: 
     map-underscore-to-camel-case: true

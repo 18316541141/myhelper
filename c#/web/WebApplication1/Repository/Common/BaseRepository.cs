@@ -1,8 +1,10 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Transactions;
 using System.Web;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
@@ -152,7 +154,7 @@ namespace WebApplication1.Repository
         /// <returns>返回插入的数据数量</returns>
         public int Insert(TEntity entity)
         {
-            using (MyDbContext dbContext=new MyDbContext())
+            using (MyDbContext dbContext = new MyDbContext())
             {
                 dbContext.Entry(entity).State = EntityState.Added;
                 return dbContext.SaveChanges();
