@@ -1,12 +1,6 @@
 ﻿using CommonHelper.Helper;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-using WebApplication1.ExcelEntity;
-using WebApplication1.MyJsonConverter;
 
 namespace WebApplication1.Entity
 {
@@ -45,9 +39,5 @@ namespace WebApplication1.Entity
         public virtual DateTime? irPushTime { set; get; }
 
         public virtual string irScanPayNotifyRet { set; get; }
-
-        [NotMapped]
-        [JsonConverter(typeof(LongConverter))]
-        public virtual long Along { set { } get { return long.MaxValue; } }
     }
 }

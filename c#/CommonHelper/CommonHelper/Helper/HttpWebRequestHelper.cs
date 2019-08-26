@@ -409,10 +409,10 @@ namespace CommonHelper.Helper
         /// <param name="query">get请求参数</param>
         /// <param name="poolName">等待池名称</param>
         /// <returns></returns>
-        public static bool VersionChange(string requestUrl, Dictionary<string, string> query, string poolName)
-        {
-            return VersionChange(requestUrl+"?"+ QueryParamsMapToStr(query), poolName);
-        }
+        //public static bool VersionChange(string requestUrl, Dictionary<string, string> query)
+        //{
+        //    return VersionChange(requestUrl+"?"+ QueryParamsMapToStr(query), poolName);
+        //}
 
         /// <summary>
         /// 检测版本变化
@@ -420,28 +420,25 @@ namespace CommonHelper.Helper
         /// <param name="requestUrl">请求的url</param>
         /// <param name="poolName">等待池名称</param>
         /// <returns></returns>
-        public static bool VersionChange(string requestUrl,string poolName)
+        public static bool VersionChange(string requestUrl,string signKey,string signSecret,string realTimePool)
         {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(requestUrl);
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(requestUrl + "?" + QueryParamsMapToStr(MySignHelper.New(signKey, signSecret).Add("realTimePool", realTimePool).Add("realTimeVersion", "").Params()));
             req.Method = "GET";
-            req.Headers.Add("Real-Time-Pool", poolName);
-            if (PoolVersionMap.ContainsKey(poolName))
-            {
-                req.Headers.Add("Real-Time-Version", PoolVersionMap[poolName]);
-            }
             try
             {
                 WebResponse webResponse = req.GetResponse();
-                string realTimeVersion = webResponse.Headers["Real-Time-Version"];
-                if (PoolVersionMap.ContainsKey(poolName))
+                JObject jobject = webResponse.GetJsonObj();
+                JObject data= (JObject)jobject["data"];
+                realTimePool =Convert.ToString(data["realTimePool"]);
+                string realTimeVersion = Convert.ToString(data["realTimeVersion"]);
+                if (PoolVersionMap.ContainsKey(realTimePool))
                 {
-                    PoolVersionMap[poolName] = realTimeVersion;
+                    PoolVersionMap[realTimeVersion] = realTimeVersion;
                 }
                 else
                 {
-                    PoolVersionMap.Add(poolName, realTimeVersion);
+                    PoolVersionMap.Add(realTimeVersion, realTimeVersion);
                 }
-                JObject jobject = webResponse.GetJsonObj();
                 return Convert.ToInt32(jobject["code"]) == 0;
             }
             catch (Exception)

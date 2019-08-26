@@ -1,14 +1,10 @@
-﻿
+﻿using CommonHelper.Helper.CommonEntity;
 using log4net;
-using ModelsLib.API.ReceiveBSY.Response;
 using Newtonsoft.Json;
 using Snowflake.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
-using WebApplication1.Entity.Common;
 using WebApplication1.Filter.Common;
 
 namespace WebApplication1.Service.Common

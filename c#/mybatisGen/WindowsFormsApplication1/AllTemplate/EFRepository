@@ -131,9 +131,9 @@ namespace WebApplication1.Repository
 			{
 				pageSize = 10000;
 			}
-            using (MyDbContext myDbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
-                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
                 query = OrderByAsc(query, eqArgs.orderByAsc);
                 query = OrderByDesc(query, eqArgs.orderByDesc);
                 int totalItemCount = query.Count();
@@ -183,9 +183,9 @@ namespace WebApplication1.Repository
 			{
 				pageSize = 20;
 			}
-            using (MyDbContext myDbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
-                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
                 query = OrderByAsc(query, eqArgs.orderByAsc);
                 query = OrderByDesc(query, eqArgs.orderByDesc);
                 return query.ToMyPagedList(pageIndex, pageSize);
@@ -200,9 +200,9 @@ namespace WebApplication1.Repository
         /// <returns>返回符合查询条件的数据量</returns>
         public int Count($entity.EntityName$Params eqArgs = null, $entity.EntityName$Params neqArgs = null)
         {
-            using (MyDbContext myDbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
-                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
                 return query.Count();
             }
         }
@@ -215,9 +215,9 @@ namespace WebApplication1.Repository
         /// <returns>返回符合查询条件的数</returns>
         public List<$entity.EntityName$> FindList($entity.EntityName$Params eqArgs = null, $entity.EntityName$Params neqArgs = null)
         {
-            using (MyDbContext myDbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
-                IQueryable<$entity.EntityName$> query = Query(myDbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
                 return query.ToList();
             }
         }
@@ -229,17 +229,17 @@ namespace WebApplication1.Repository
         /// <returns>返回修改的数据行数</returns>
         public int UpdateChange($entity.EntityName$ entity)
         {
-            using (MyDbContext myDbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 $entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
-                myDbContext.$entity.EntityNames$.Attach(updateBefore);
+                dbContext.$entity.EntityNames$.Attach(updateBefore);
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 					if (entity.$it.PropName$ != null)
 					{
 						updateBefore.$it.PropName$ = entity.$it.PropName$;
 					}
 			$endif$$endif$}$
-                return myDbContext.SaveChanges();
+                return dbContext.SaveChanges();
             }
         }
 
@@ -250,12 +250,12 @@ namespace WebApplication1.Repository
         /// <returns>返回修改的数据行数</returns>
 		public int UpdateChangeBatch(List<$entity.EntityName$> entities)
 		{
-			using (MyDbContext myDbContext = new MyDbContext())
+			using (DbContext dbContext = CreateDbContext())
             {
 				foreach($entity.EntityName$ entity in entities)
 				{
 					$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
-					myDbContext.$entity.EntityNames$.Attach(updateBefore);
+					dbContext.$entity.EntityNames$.Attach(updateBefore);
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 					if (entity.$it.PropName$ != null)
 					{
@@ -263,7 +263,7 @@ namespace WebApplication1.Repository
 					}
 			$endif$$endif$}$
 				}
-				return myDbContext.SaveChanges();
+				return dbContext.SaveChanges();
 			}
 		}
 
@@ -275,17 +275,22 @@ namespace WebApplication1.Repository
 		public void SetNull($entity.EntityName$SetNullParams param)
 		{
 			 $entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
-			 using (MyDbContext myDbContext = new MyDbContext())
+			 using (DbContext dbContext = CreateDbContext())
              {
-				myDbContext.$entity.EntityNames$.Attach(updateBefore);
+				dbContext.$entity.EntityNames$.Attach(updateBefore);
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 				if (param.$it.PropName$)
 				{
 					updateBefore.$it.PropName$ = null;
 				}
 				$endif$$endif$}$
-				myDbContext.SaveChanges();
+				dbContext.SaveChanges();
 			 }
 		}
+
+		public override DbContext CreateDbContext()
+        {
+            return new MyDbContext2();
+        }
     }
 }

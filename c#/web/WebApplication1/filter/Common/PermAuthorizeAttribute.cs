@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommonHelper.Helper.CommonEntity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

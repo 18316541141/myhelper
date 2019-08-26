@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper;
+using CommonHelper.Helper.CommonEntity;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,24 +64,23 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
-        [Sign(new string[] {"createDate", "r" })]
-        public JsonResult AnonymousRealTime()
+        [Sign(new string[] { "realTimePool", "realTimeVersion", "createDate", "r" })]
+        public JsonResult AnonymousRealTime(string realTimePool, string realTimeVersion)
         {
-            return RealTime();
+            return RealTime(realTimePool, realTimeVersion);
         }
 
         /// <summary>
         /// 实时检测最新版本号，如果发现版本号发生变化，则马上
         /// 返回，如果没变化，则等待30秒或30秒内版本号发生变化后返回
         /// </summary>
+        /// <param name="realTimePool">等待池名称</param>
+        /// <param name="realTimeVersion">版本号</param>
         /// <returns>返回结果</returns>
-        public JsonResult RealTime()
+        public JsonResult RealTime(string realTimePool,string realTimeVersion)
         {
-            string realTimePool = Convert.ToString(Request.Headers["Real-Time-Pool"]);
             if (WaitPoolSet.Contains(realTimePool))
             {
-                string realTimeVersion = Request.Headers["Real-Time-Version"];
-                Response.AddHeader("Real-Time-Pool", realTimePool);
                 string newestVersion;
                 bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
                 if (realTimeVersion == null)
@@ -109,13 +109,25 @@ namespace WebApplication1.Controllers.Common
                         }
                     }
                     ThreadHelper.BatchWait(realTimePool, 60000);
-                    Response.AddHeader("Real-Time-Version", newestVersion);
-                    return MyJson(new Result { code = 1 });
+                    lock (UsernameAndPoolSet)
+                    {
+                        UsernameAndPoolSet.Remove(usernameAndPoolKey);
+                    }
+                    return MyJson(new Result { code = 1,data=new Dictionary<string, string>
+                        {
+                            ["realTimePool"]= realTimePool,
+                            ["realTimeVersion"]= newestVersion
+                        }
+                    });
                 }
                 else
                 {
-                    Response.AddHeader("Real-Time-Version", newestVersion);
-                    return MyJson(new Result { code = 0 });
+                    return MyJson(new Result { code = 0 ,data = new Dictionary<string, string>
+                        {
+                            ["realTimePool"] = realTimePool,
+                            ["realTimeVersion"] = newestVersion
+                        }
+                    });
                 }
             }
             else
@@ -143,109 +155,109 @@ namespace WebApplication1.Controllers.Common
             List<TreeFormNode> treeNodeList = new List<TreeFormNode>();
             treeNodeList.Add(new TreeFormNode
             {
-                id = "01",
-                name = "广东"
+                Id = "01",
+                Name = "广东"
             });
             treeNodeList.Add(new TreeFormNode
             {
-                id = "02",
-                name = "佛山"
+                Id = "02",
+                Name = "佛山"
             });
             TreeFormNode treeNode;
             treeNodeList.Add(treeNode = new TreeFormNode
             {
-                id = "03",
-                name = "顺德"
+                Id = "03",
+                Name = "顺德"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "31",
-                name = "陈村"
+                Id = "31",
+                Name = "陈村"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "32",
-                name = "陳村"
+                Id = "32",
+                Name = "陳村"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "33",
-                name = "陳邨"
+                Id = "33",
+                Name = "陳邨"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "34",
-                name = "陈村1"
+                Id = "34",
+                Name = "陈村1"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "35",
-                name = "陳村1"
+                Id = "35",
+                Name = "陳村1"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "36",
-                name = "陳邨1"
+                Id = "36",
+                Name = "陳邨1"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "37",
-                name = "陈村2"
+                Id = "37",
+                Name = "陈村2"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "38",
-                name = "陳村2"
+                Id = "38",
+                Name = "陳村2"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "39",
-                name = "陳邨2"
+                Id = "39",
+                Name = "陳邨2"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "40",
-                name = "陈村3"
+                Id = "40",
+                Name = "陈村3"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "41",
-                name = "陳村3"
+                Id = "41",
+                Name = "陳村3"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "42",
-                name = "陳邨3"
+                Id = "42",
+                Name = "陳邨3"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "43",
-                name = "陈村4"
+                Id = "43",
+                Name = "陈村4"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "44",
-                name = "陳村4"
+                Id = "44",
+                Name = "陳村4"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "45",
-                name = "陳邨4"
+                Id = "45",
+                Name = "陳邨4"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "46",
-                name = "陈村5"
+                Id = "46",
+                Name = "陈村5"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "47",
-                name = "陳村5"
+                Id = "47",
+                Name = "陳村5"
             });
-            treeNode.children.Add(new TreeFormNode
+            treeNode.Children.Add(new TreeFormNode
             {
-                id = "48",
-                name = "陳邨5"
+                Id = "48",
+                Name = "陳邨5"
             });
             return MyJson(new Result { code = 0, data = treeNodeList });
         }

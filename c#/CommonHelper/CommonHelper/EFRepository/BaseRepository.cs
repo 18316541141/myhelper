@@ -1,18 +1,11 @@
-﻿using log4net;
+﻿using CommonHelper.Helper.CommonExtensions;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Transactions;
-using System.Web;
-using WebApplication1.Entity;
+using System.Data.Entity;
 using WebApplication1.Entity.Common;
-using WebApplication1.MyExtensions;
-using WebApplication1.MyExtensions.Common;
-using Webdiyer.WebControls.Mvc;
-
-namespace WebApplication1.Repository
+namespace CommonHelper.Helper.EFRepository
 {
     /// <summary>
     /// 通用的数据操作基类
@@ -20,35 +13,21 @@ namespace WebApplication1.Repository
     /// <typeparam name="TEntity"></typeparam>
     public abstract class BaseRepository<TEntity> where TEntity : class
     {
-		public ILog Log { set; get; }
+        /// <summary>
+        /// 创建DbContext，为解决每张表可能不在同一个数据库内的问题，
+        /// 由子类决定创建哪一种DbContext
+        /// </summary>
+        /// <returns></returns>
+        public abstract DbContext CreateDbContext();
 
         /// <summary>
         /// 只读数据操作
         /// </summary>
         public ReadOnlyRepository ReadOnly { get; private set; }
 
-        static ReadOnlyRepository _readOnly { set; get; }
-
         public BaseRepository()
         {
-            if (_readOnly == null)
-            {
-                lock (this)
-                {
-                    if (_readOnly == null)
-                    {
-                        _readOnly = ReadOnly = new ReadOnlyRepository();
-                    }
-                    else
-                    {
-                        ReadOnly = _readOnly;
-                    }
-                }
-            }
-            else
-            {
-                ReadOnly=_readOnly;
-            }
+            ReadOnly = new ReadOnlyRepository(CreateDbContext());
         }
 
         public class ReadOnlyRepository
@@ -56,11 +35,11 @@ namespace WebApplication1.Repository
             /// <summary>
             /// 只读的dbContext，只用于查询只读数据，使用缓存提高效率
             /// </summary>
-            MyDbContext _readonlyDbContext { set; get; }
+            DbContext _readonlyDbContext { set; get; }
 
-            public ReadOnlyRepository()
+            public ReadOnlyRepository(DbContext dbContext)
             {
-                _readonlyDbContext = new MyDbContext();
+                _readonlyDbContext = dbContext;
             }
 
             /// <summary>
@@ -154,7 +133,7 @@ namespace WebApplication1.Repository
         /// <returns>返回插入的数据数量</returns>
         public int Insert(TEntity entity)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 dbContext.Entry(entity).State = EntityState.Added;
                 return dbContext.SaveChanges();
@@ -168,7 +147,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Insert(List<TEntity> entities)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 foreach (var entity in entities)
                 {
@@ -185,7 +164,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Delete(TEntity entity)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 dbContext.Entry(entity).State = EntityState.Deleted;
                 return dbContext.SaveChanges();
@@ -199,7 +178,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Delete(List<TEntity> entities)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 foreach (TEntity entity in entities)
                 {
@@ -216,7 +195,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            using (MyDbContext2 dbContext = new MyDbContext2())
+            using (DbContext dbContext = CreateDbContext())
             {
                 var entitys = dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToList();
                 entitys.ForEach(m => dbContext.Entry(m).State = EntityState.Deleted);
@@ -231,7 +210,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public TEntity FindEntity(object id)
         {
-            using (MyDbContext2 dbContext = new MyDbContext2())
+            using (DbContext dbContext = CreateDbContext())
             {
                 return dbContext.Set<TEntity>().Find(id);
             }
@@ -245,7 +224,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public TEntity FindEntity(Expression<Func<TEntity, bool>> predicate)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 var entity = dbContext.Set<TEntity>().AsNoTracking().FirstOrDefault(predicate);
                 return entity;
@@ -259,7 +238,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public bool Exist(Expression<Func<TEntity, bool>> predicate)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 return dbContext.Set<TEntity>().AsNoTracking().Where(predicate).Any();
             }
@@ -272,7 +251,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int UpdateAll(TEntity entity)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 dbContext.Entry(entity).State = EntityState.Modified;
                 return dbContext.SaveChanges();
@@ -286,7 +265,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public int Count(Expression<Func<TEntity, bool>> predicate)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 return dbContext.Set<TEntity>().AsNoTracking().Where(predicate).Count();
             }
@@ -299,7 +278,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public List<TEntity> FindList(string sql)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 var query = dbContext.Database.SqlQuery<TEntity>(sql);
                 if (query.Any()) { return query.ToList(); }
@@ -314,7 +293,7 @@ namespace WebApplication1.Repository
         /// <returns></returns>
         public List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate = null)
         {
-            using (MyDbContext dbContext = new MyDbContext())
+            using (DbContext dbContext = CreateDbContext())
             {
                 var query = dbContext.Set<TEntity>().AsNoTracking();
                 if (predicate == null)

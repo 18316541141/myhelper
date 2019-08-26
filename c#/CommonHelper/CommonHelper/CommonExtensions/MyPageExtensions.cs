@@ -5,8 +5,7 @@ using System.Web;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 using Webdiyer.WebControls.Mvc;
-
-namespace WebApplication1.MyExtensions.Common
+namespace CommonHelper.Helper.CommonExtensions
 {
     /// <summary>
     /// 自定义的page扩展类

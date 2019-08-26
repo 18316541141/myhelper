@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebApplication1.Entity.Common
+namespace Entity.Common
 {
     /// <summary>
     /// 下载excel的返回结果

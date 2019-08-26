@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.MyJsonConverter
+namespace CommonHelper.Helper.CommonJsonConverter
 {
     /// <summary>
     /// 全局统一转化long类型属性为string，避免前端使用long类型溢出。

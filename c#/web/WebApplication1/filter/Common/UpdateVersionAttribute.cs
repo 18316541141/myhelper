@@ -21,7 +21,7 @@ namespace WebApplication1.Filter.Common
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             HttpContextBase httpContext = filterContext.HttpContext;
-            string realTimePools = Convert.ToString(httpContext.Request.Headers["Real-Time-Pool"]);
+            string realTimePools = httpContext.Request.QueryString["realTimePools"];
             base.OnActionExecuted(filterContext);
             foreach(string realTimePool in realTimePools.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {

@@ -37,6 +37,14 @@
       <HintPath>..\..\web\packages\Antlr3.StringTemplate.3.4.1.9005\lib\net35\Antlr3.StringTemplate.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\..\web\packages\HtmlAgilityPack.1.11.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
@@ -89,6 +97,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Webdiyer.MvcPager, Version=3.0.2015.802, Culture=neutral, PublicKeyToken=f6872c5a09aed72c, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\Webdiyer.MvcPager.3.0.1.1\lib\Webdiyer.MvcPager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebDriver, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\web\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll</HintPath>
       <Private>True</Private>
@@ -103,6 +115,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonEntity\AreaTree.cs" />
+    <Compile Include="CommonEntity\LeftMenu.cs" />
+    <Compile Include="CommonEntity\MyPagedList.cs" />
+    <Compile Include="CommonEntity\Result.cs" />
+    <Compile Include="CommonEntity\TreeFormNode.cs" />
+    <Compile Include="CommonExtensions\MyPageExtensions.cs" />
+    <Compile Include="CommonJsonConverter\LongConverter.cs" />
+    <Compile Include="CommonJsonConverter\StarStrConverter.cs" />
+    <Compile Include="EFRepository\BaseRepository.cs" />
     <Compile Include="FindAttr\FindDataAttr.cs" />
     <Compile Include="FindAttr\FindDataConvertAttr.cs" />
     <Compile Include="Guess\GuessList.cs" />
@@ -164,6 +185,10 @@
     <None Include="http.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Log4net.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

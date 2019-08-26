@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Entity.Common
+namespace CommonHelper.Helper.CommonEntity
 {
     /// <summary>
     /// 地区树

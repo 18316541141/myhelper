@@ -13,6 +13,28 @@ namespace CommonHelper.Helper
     public static class CheckHelper
     {
         /// <summary>
+        /// 检查是否存在重复，用于校验一组数据是否重复
+        /// </summary>
+        /// <param name="stringList"></param>
+        /// <returns></returns>
+        public static bool CheckRepeat(List<string> stringList)
+        {
+            HashSet<string> hashSet = new HashSet<string>();
+            foreach (string str in stringList)
+            {
+                if (string.IsNullOrEmpty(str))
+                {
+                    hashSet.Add("");
+                }
+                else
+                {
+                    hashSet.Add(str.Trim());
+                }
+            }
+            return hashSet.Count < stringList.Count;
+        }
+
+        /// <summary>
         /// 检查是否为正确的url格式
         /// </summary>
         /// <param name="url">url字符串</param>

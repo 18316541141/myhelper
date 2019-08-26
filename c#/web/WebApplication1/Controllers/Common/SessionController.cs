@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper;
+using CommonHelper.Helper.CommonEntity;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,13 +64,16 @@ namespace WebApplication1.Controllers.Common
             FormsAuthentication.SetAuthCookie(username, false);
             string guid = Guid.NewGuid().ToString();
             Session.Add("loginGuid", guid);
-            if (SingleUserAttribute.UserMap.ContainsKey(username))
+            lock (SingleUserAttribute.UserMap)
             {
-                SingleUserAttribute.UserMap[username] = guid;
-            }
-            else
-            {
-                SingleUserAttribute.UserMap.Add(username, guid);
+                if (SingleUserAttribute.UserMap.ContainsKey(username))
+                {
+                    SingleUserAttribute.UserMap[username] = guid;
+                }
+                else
+                {
+                    SingleUserAttribute.UserMap.Add(username, guid);
+                }
             }
             return MyJson(callback, new Result { code = 0,msg="登录成功" });
         }
@@ -103,13 +107,16 @@ namespace WebApplication1.Controllers.Common
                     FormsAuthentication.SetAuthCookie(username, false);
                     string guid=Guid.NewGuid().ToString();
                     Session.Add("loginGuid", guid);
-                    if (SingleUserAttribute.UserMap.ContainsKey(username))
+                    lock (SingleUserAttribute.UserMap)
                     {
-                        SingleUserAttribute.UserMap[username] = guid;
-                    }
-                    else
-                    {
-                        SingleUserAttribute.UserMap.Add(username, guid);
+                        if (SingleUserAttribute.UserMap.ContainsKey(username))
+                        {
+                            SingleUserAttribute.UserMap[username] = guid;
+                        }
+                        else
+                        {
+                            SingleUserAttribute.UserMap.Add(username, guid);
+                        }
                     }
                     return Json(new Result { code = 0, data = new { leftMenus = SystemService.LoadLeftMenus() } }, JsonRequestBehavior.AllowGet);
                 }

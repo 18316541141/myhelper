@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommonHelper.Helper.CommonJsonConverter;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -6,10 +7,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using WebApplication1.MyJsonConverter;
 
-namespace WebApplication1.Entity.Common
+namespace Entity.Common
 {
     /// <summary>
     /// 自定义jsonResult，可以控制日期的格式化，以及是否使用jsonp跨域

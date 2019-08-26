@@ -5,10 +5,11 @@ using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
-using WebApplication1.MyExtensions;
-using WebApplication1.MyExtensions.Common;
 using WebApplication1.Params;
 using WebApplication1.OrderBy;
+using CommonHelper.Helper.CommonExtensions;
+using CommonHelper.Helper.EFRepository;
+
 namespace WebApplication1.Repository
 {
     public partial class IRobotQrCodePayTaskRepository : BaseRepository<IRobotQrCodePayTask>
@@ -337,6 +338,11 @@ namespace WebApplication1.Repository
                 }
                 return myDbContext2.SaveChanges();
             }
+        }
+
+        public override DbContext CreateDbContext()
+        {
+            return new MyDbContext2();
         }
     }
 }

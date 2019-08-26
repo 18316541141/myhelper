@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper;
+using Entity.Common;
 using log4net;
 using System;
 using System.Collections.Generic;

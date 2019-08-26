@@ -1,4 +1,6 @@
 ﻿using CommonHelper.Helper;
+using CommonHelper.Helper.CommonEntity;
+using Entity.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;

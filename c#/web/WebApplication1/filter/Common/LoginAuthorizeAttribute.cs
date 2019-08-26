@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommonHelper.Helper.CommonEntity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,13 +53,16 @@ namespace WebApplication1.Filter.Common
             FormsAuthentication.SetAuthCookie(username, false);
             string guid = Guid.NewGuid().ToString();
             Session.Add("loginGuid", guid);
-            if (SingleUserAttribute.UserMap.ContainsKey(username))
+            lock (SingleUserAttribute.UserMap)
             {
-                SingleUserAttribute.UserMap[username] = guid;
-            }
-            else
-            {
-                SingleUserAttribute.UserMap.Add(username, guid);
+                if (SingleUserAttribute.UserMap.ContainsKey(username))
+                {
+                    SingleUserAttribute.UserMap[username] = guid;
+                }
+                else
+                {
+                    SingleUserAttribute.UserMap.Add(username, guid);
+                }
             }
             return true;
 #else

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Entity.Common
+namespace CommonHelper.Helper.CommonEntity
 {
     /// <summary>
     /// 树表单节点
@@ -13,21 +14,24 @@ namespace WebApplication1.Entity.Common
         /// <summary>
         /// 节点id
         /// </summary>
-        public string id { set; get; }
+        [JsonProperty("id")]
+        public string Id { set; get; }
 
         /// <summary>
         /// 节点标题
         /// </summary>
-        public string name { set; get; }
+        [JsonProperty("name")]
+        public string Name { set; get; }
 
         /// <summary>
         /// 树节点的子节点
         /// </summary>
-        public List<TreeFormNode> children { set; get; }
+        [JsonProperty("children")]
+        public List<TreeFormNode> Children { set; get; }
 
         public TreeFormNode()
         {
-            children = new List<TreeFormNode>();
+            Children = new List<TreeFormNode>();
         }
     }
 }

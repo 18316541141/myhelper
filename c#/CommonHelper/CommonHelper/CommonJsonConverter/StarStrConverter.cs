@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-namespace WebApplication1.MyJsonConverter
+namespace CommonHelper.Helper.CommonJsonConverter
 {
     /// <summary>
     /// 屏蔽转换器，用于屏蔽隐私信息，例如：18316541141 => 183****1141（手机号码）

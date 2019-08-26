@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
-namespace WebApplication1.Entity.Common
+namespace CommonHelper.Helper.CommonEntity
 {
     /// <summary>
     /// 这是整个网站的后台和前端交互的返回值类
@@ -16,7 +15,7 @@ namespace WebApplication1.Entity.Common
         public string msg { set; get; }
         /// <summary>
         /// 返回的消息码
-        /// 1：实时更新时，如果没有变不需要刷新时返回
+        /// 1：成功，并表示版本号没有变化
         /// 0：成功，并表示版本号变化
         /// -1：常规错误
         /// -8：用户未授权
