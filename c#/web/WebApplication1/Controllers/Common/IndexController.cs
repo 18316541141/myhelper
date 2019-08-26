@@ -65,31 +65,25 @@ namespace WebApplication1.Controllers.Common
         /// <returns></returns>
         [AllowAnonymous]
         [Sign(new string[] { "realTimePool", "realTimeVersion", "createDate", "r" })]
-        public JsonResult AnonymousRealTime(string realTimePool, string realTimeVersion)
+        public JsonResult AnonymousRealTime(string realTimePool, string realTimeVersion,string signKey)
         {
-            return RealTime(realTimePool, realTimeVersion);
+            return RealTime(realTimePool, realTimeVersion,/*SystemService.LoadUsernameBySignKey(signKey)*/"zhang");
         }
 
-        /// <summary>
-        /// 实时检测最新版本号，如果发现版本号发生变化，则马上
-        /// 返回，如果没变化，则等待30秒或30秒内版本号发生变化后返回
-        /// </summary>
-        /// <param name="realTimePool">等待池名称</param>
-        /// <param name="realTimeVersion">版本号</param>
-        /// <returns>返回结果</returns>
-        public JsonResult RealTime(string realTimePool,string realTimeVersion)
-        {
-            if (WaitPoolSet.Contains(realTimePool))
+
+		private JsonResult RealTime(string realTimePool,string realTimeVersion,string username)
+		{
+			if (WaitPoolSet.Contains(realTimePool))
             {
                 string newestVersion;
                 bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
                 if (realTimeVersion == null)
                 {
-                    initRet = RealTimeInitService.Init(realTimePool, User.Identity.Name);
+                    initRet = RealTimeInitService.Init(realTimePool, username);
                 }
                 if (initRet)
                 {
-                    string usernameAndPoolKey = User.Identity.Name + realTimePool;
+                    string usernameAndPoolKey = username + realTimePool;
                     if (UsernameAndPoolSet.Contains(usernameAndPoolKey))
                     {
                         return MyJson(new Result { code = -1, msg = "当前用户已有线程在等待池中，无法向等待池放入新线程。" });
@@ -113,7 +107,8 @@ namespace WebApplication1.Controllers.Common
                     {
                         UsernameAndPoolSet.Remove(usernameAndPoolKey);
                     }
-                    return MyJson(new Result { code = 1,data=new Dictionary<string, string>
+					initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
+                    return MyJson(new Result { code = initRet?1:0,data=new Dictionary<string, string>
                         {
                             ["realTimePool"]= realTimePool,
                             ["realTimeVersion"]= newestVersion
@@ -134,6 +129,18 @@ namespace WebApplication1.Controllers.Common
             {
                 return MyJson(new Result { code = -1,msg = "该等待池未开放。" });
             }
+		}
+
+        /// <summary>
+        /// 实时检测最新版本号，如果发现版本号发生变化，则马上
+        /// 返回，如果没变化，则等待30秒或30秒内版本号发生变化后返回
+        /// </summary>
+        /// <param name="realTimePool">等待池名称</param>
+        /// <param name="realTimeVersion">版本号</param>
+        /// <returns>返回结果</returns>
+        public JsonResult RealTime(string realTimePool,string realTimeVersion)
+        {
+			return RealTime(realTimePool,realTimeVersion,User.Identity.Name);   
         }
 
         /// <summary>

@@ -12,12 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -51,41 +48,75 @@ public class IndexController extends BaseController {
 	/**
 	 * 等待池表
 	 */
-	public static Set<String> WaitPoolSet;
+	public Set<String> WaitPoolSet;
 	
-	static{
-		WaitPoolSet=new HashSet<String>();
-		WaitPoolSet.add("newsAlarm");
-	}
-	
+	/**
+	 * 用户和等待池表，确保每个用户只能在同一个等待池上等待。
+	 */
+	public HashSet<String> UsernameAndPoolSet;
 	
 	public IndexController(){
+		WaitPoolSet=new HashSet<String>();
+		WaitPoolSet.add("newsAlarm");
+		
 		allowPath=new HashSet<String>();
 		allowPath.add("test");
+		
+		UsernameAndPoolSet = new HashSet<String>();
 	}
 	
-	@RequestMapping("/realTime")
-	public Result realTime(HttpServletRequest request,HttpServletResponse response){
-		String realTimePool=request.getHeader("Real-Time-Pool");
+	/**
+	 * 
+	 * @param realTimePool
+	 * @param realTimeVersion
+	 * @param username
+	 * @return
+	 */
+	private Result realTime(String realTimePool,String realTimeVersion,String username){
 		if(WaitPoolSet.contains(realTimePool)){
-			String realTimeVersion = request.getHeader("Real-Time-Version");
-			response.addHeader("Real-Time-Pool", realTimePool);
 			String[] newestVersion=new String[1];
 			boolean initRet = ThreadHelper.compareControllerVersion(realTimePool, realTimeVersion, newestVersion);
 			if (realTimeVersion == null){
-				initRet = realTimeInitService.init(realTimePool, username());
+				initRet = realTimeInitService.init(realTimePool,username);
 			}
+			Map<String,String> data=new HashMap<String, String>();
 			if (initRet){
 				ThreadHelper.batchWait(realTimePool, 60000);
-				response.addHeader("Real-Time-Version", newestVersion[0]);
-				return new Result(1,null,null);
+				initRet = ThreadHelper.compareControllerVersion(realTimePool, realTimeVersion, newestVersion);
+				data.put("realTimePool", realTimePool);
+				data.put("realTimeVersion", newestVersion[0]);
+				return new Result(1,null,data);
 			}else{
-				response.addHeader("Real-Time-Version", newestVersion[0]);
-				return new Result(0,null,null);
+				data.put("realTimePool", realTimePool);
+				data.put("realTimeVersion", newestVersion[0]);
+				return new Result(0,null,data);
 			}
 		}else{
 			return new Result(-1,"该等待池未开放。",null);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param realTimePool
+	 * @param realTimeVersion
+	 * @param signKey
+	 * @return
+	 */
+	public Result anonymousRealTime(String realTimePool, String realTimeVersion, String signKey)
+    {
+        return realTime(realTimePool, realTimeVersion,/*systemService.LoadUsernameBySignKey(signKey)*/"zhang");
+    }
+	
+	/**
+	 * 
+	 * @param realTimePool
+	 * @param realTimeVersion
+	 * @return
+	 */
+	@RequestMapping("/realTime")
+	public Result realTime(String realTimePool,String realTimeVersion){
+		return realTime(realTimePool,realTimeVersion,username());
 	}
 	
 	/**
