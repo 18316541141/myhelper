@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+
 namespace CommonHelper.Helper
 {
     /// <summary>
@@ -90,19 +92,26 @@ namespace CommonHelper.Helper
             {
                 SHA1 = EncrypHelper.GetSha1FromStream(guidStream);
             }
-            if (File.Exists(basePath + Path.DirectorySeparatorChar + SHA1))
+            using (Mutex mutex = new Mutex(false, SHA1))
             {
-                try
+                mutex.WaitOne();
+                if (File.Exists(basePath + Path.DirectorySeparatorChar + SHA1))
                 {
-                    File.Delete(basePath + Path.DirectorySeparatorChar + guid);
-                }
-                catch (Exception)
-                {
+                    try
+                    {
+                        File.Delete(basePath + Path.DirectorySeparatorChar + guid);
+                    }
+                    catch (Exception)
+                    {
 
+                    }
                 }
+                else
+                {
+                    File.Move(basePath + Path.DirectorySeparatorChar + guid, basePath + Path.DirectorySeparatorChar + SHA1);
+                }
+                mutex.ReleaseMutex();
             }
-            else
-                File.Move(basePath + Path.DirectorySeparatorChar + guid, basePath + Path.DirectorySeparatorChar + SHA1);
             return SHA1;
         }
 

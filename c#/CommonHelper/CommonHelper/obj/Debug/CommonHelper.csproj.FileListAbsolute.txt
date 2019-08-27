@@ -120,8 +120,8 @@ D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Log4net.config
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Guess.xml
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.exe.config
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.exe
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll.config
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.dll
@@ -158,5 +158,5 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Web.Mvc.x
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb

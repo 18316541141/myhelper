@@ -329,12 +329,12 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Iden
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Log4net.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Guess.xml
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\ApplicationInsights.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.Debug.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.Release.config
-E:\git_projects\myhelper\c#\web\WebApplication1\bin\Log4net.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\csc.exe
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -22,6 +24,9 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
+            IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
+            Console.WriteLine(ipe.AddressList[4]);
+
             string text=HttpWebRequestHelper.HttpPost("http://183.2.233.235:16500/API/BusinessTaskHandle.ashx?action=ScanPay", JsonConvert.SerializeObject(new Dictionary<string, string> {
                 ["payId"]="5924758692242264067",
                 ["clientId"]= "9642959399A64D0DA6E19E63ADFD9FBC",

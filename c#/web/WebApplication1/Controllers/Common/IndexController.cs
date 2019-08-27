@@ -108,7 +108,7 @@ namespace WebApplication1.Controllers.Common
                         UsernameAndPoolSet.Remove(usernameAndPoolKey);
                     }
 					initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
-                    return MyJson(new Result { code = initRet?1:0,data=new Dictionary<string, string>
+                    return MyJson(new Result { code = (short)(initRet?1:0),data=new Dictionary<string, string>
                         {
                             ["realTimePool"]= realTimePool,
                             ["realTimeVersion"]= newestVersion
@@ -412,7 +412,7 @@ namespace WebApplication1.Controllers.Common
         {
             Response.ContentType = "image/jpeg";
             string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
-            if (System.IO.File.Exists(imgPath))
+            if (_allowPath.Contains(pathName) && System.IO.File.Exists(imgPath))
             {
                 using (Stream stream = System.IO.File.OpenRead(imgPath))
                 {
@@ -446,7 +446,7 @@ namespace WebApplication1.Controllers.Common
         public FilePathResult DownFile(string pathName, string fileName, string fileDesc)
         {
             string filePath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{fileName}";
-            if (System.IO.File.Exists(filePath))
+            if (_allowPath.Contains(pathName) && System.IO.File.Exists(filePath))
             {
                 return File(filePath, MimeMapping.GetMimeMapping(filePath), fileDesc);
             }

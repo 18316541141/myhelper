@@ -206,7 +206,7 @@ public class IndexController extends BaseController {
 	@RequestMapping("/downFile")
 	public void downFile(String pathName, String fileName, String fileDesc,HttpServletResponse response){
 		File file=realFile("/WEB-INF/uploadFiles/"+pathName+"/"+fileName);
-		if(file.exists()){
+		if(allowPath.contains(pathName) && file.exists()){
 			try (FileInputStream fileInputStream=new FileInputStream(file)){
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-disposition", "attachment; filename="+ new String(fileDesc.getBytes("utf-8"), "ISO8859-1"));
