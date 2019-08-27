@@ -24,5 +24,12 @@ namespace WindowsFormsApplication1.Service
         /// <param name="sqlType">数据库类型</param>
         /// <returns></returns>
         string SqlType2ParamsType(string sqlType);
+
+        /// <summary>
+        /// 根据sql类型判断是否为可通过+、-进行update的字段
+        /// </summary>
+        /// <param name="sqlType"></param>
+        /// <returns></returns>
+        bool SqlTypeIsChangeType(string sqlType);
     }
 }

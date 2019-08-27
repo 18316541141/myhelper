@@ -22,6 +22,19 @@ $entity.PropList:{
 		public $it.PropType$ get$it.CapUpperPropName$(){
 			return this.$it.PropName$;
 		}
+	$elseif(it.ParamsTypeIsChange)$
+		/**
+		 * $it.PropNotes$
+		 */
+		private $it.PropType$ $it.PropName$;
+
+		public void set$it.CapUpperPropName$($it.PropType$ $it.PropName$){
+			this.$it.PropName$=$it.PropName$;
+		}
+
+		public $it.PropType$ get$it.CapUpperPropName$(){
+			return this.$it.PropName$;
+		}
 	$endif$
 }$
 }

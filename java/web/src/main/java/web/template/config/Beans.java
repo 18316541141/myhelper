@@ -55,6 +55,7 @@ public class Beans {
 	
 	@Bean(name="snowFlakeHelper")
 	public SnowFlakeHelper snowFlakeHelper(){
+		
 		return new SnowFlakeHelper(0,0);
 	}
 	

@@ -34,6 +34,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
@@ -94,11 +95,17 @@ public class HttpClientHelper {
     	DefaultCheckLogout = new DefaultCheckLogout();
     	DefaultTryExceptionHandle = new DefaultTryExceptionHandle();
     	SAXReader reader=new SAXReader();
-    	try {
-    		HttpCfg = reader.read(new File("http.xml")).getRootElement();
-		} catch (DocumentException e) {
-			throw new RuntimeException(e);
-		}
+    	File file=new File("http.xml");
+    	if(file.exists()){    		
+    		try {
+    			HttpCfg = reader.read(file).getRootElement();
+    		} catch (DocumentException e) {
+    			throw new RuntimeException(e);
+    		}
+    	}else{
+    		Document doc=DocumentHelper.createDocument();
+    		HttpCfg = doc.addElement("Urls");
+    	}
     }
     
     private static TryExceptionHandle DefaultTryExceptionHandle;
@@ -572,54 +579,56 @@ public class HttpClientHelper {
 	 * @param requestUrl
 	 */
 	static void LoadConfig(HttpRequestBase reqBase, String requestUrl){
-		for (Object obj : HttpCfg.selectNodes("//Url")){        	
-        	Element ele=(Element)obj;
-        	for (String urlPrefix : ele.attribute("prefix").getText().split("\\s")){
-        		if (StringUtils.isNotBlank(urlPrefix.trim()) && requestUrl.startsWith(urlPrefix.trim()))
-        		{
-        			Node contentType= ele.selectSingleNode("ContentType");
-					if(contentType!=null){
-						reqBase.setHeader("Content-Type", contentType.getText());
+		List<?> list=HttpCfg.selectNodes("//Url");
+		if(list!=null){			
+			for (Object obj : list){        	
+				Element ele=(Element)obj;
+				for (String urlPrefix : ele.attribute("prefix").getText().split("\\s")){
+					if (StringUtils.isNotBlank(urlPrefix.trim()) && requestUrl.startsWith(urlPrefix.trim()))
+					{
+						Node contentType= ele.selectSingleNode("ContentType");
+						if(contentType!=null){
+							reqBase.setHeader("Content-Type", contentType.getText());
+						}
+						Node authorization= ele.selectSingleNode("Authorization");
+						if(authorization!=null){
+							reqBase.setHeader("Authorization", authorization.getText());
+						}
+						Node userAgent= ele.selectSingleNode("UserAgent");
+						if(userAgent!=null){
+							reqBase.setHeader("User-Agent", userAgent.getText());
+						}
+						Node accept= ele.selectSingleNode("Accept");
+						if(accept!=null){
+							reqBase.setHeader("Accept", accept.getText());
+						}
+						Node pragma=ele.selectSingleNode("Pragma");
+						if(pragma!=null){
+							reqBase.setHeader("Pragma", pragma.getText());
+						}
+						Node origin = ele.selectSingleNode("Origin");
+						if(origin!=null){
+							reqBase.setHeader("Origin", origin.getText());
+						}
+						Node referer = ele.selectSingleNode("Referer");
+						if(referer!=null){
+							reqBase.setHeader("Referer", referer.getText());
+						}
+						Node connection = ele.selectSingleNode("Connection");
+						if(connection!=null){
+							reqBase.setHeader("Connection ", connection.getText());
+						}
+						Node acceptEncoding = ele.selectSingleNode("AcceptEncoding");
+						if (acceptEncoding != null){
+							reqBase.setHeader("Accept-Encoding", acceptEncoding.getText());
+						}
+						Node acceptLanguage = ele.selectSingleNode("AcceptLanguage");
+						if (acceptLanguage != null){
+							reqBase.setHeader("Accept-Language", acceptLanguage.getText());
+						}
 					}
-					Node authorization= ele.selectSingleNode("Authorization");
-					if(authorization!=null){
-						reqBase.setHeader("Authorization", authorization.getText());
-					}
-					Node userAgent= ele.selectSingleNode("UserAgent");
-					if(userAgent!=null){
-						reqBase.setHeader("User-Agent", userAgent.getText());
-					}
-					Node accept= ele.selectSingleNode("Accept");
-					if(accept!=null){
-						reqBase.setHeader("Accept", accept.getText());
-					}
-					Node pragma=ele.selectSingleNode("Pragma");
-					if(pragma!=null){
-						reqBase.setHeader("Pragma", pragma.getText());
-					}
-					Node origin = ele.selectSingleNode("Origin");
-					if(origin!=null){
-						reqBase.setHeader("Origin", origin.getText());
-					}
-					Node referer = ele.selectSingleNode("Referer");
-					if(referer!=null){
-						reqBase.setHeader("Referer", referer.getText());
-					}
-					Node connection = ele.selectSingleNode("Connection");
-					if(connection!=null){
-						reqBase.setHeader("Connection ", connection.getText());
-					}
-					Node acceptEncoding = ele.selectSingleNode("AcceptEncoding");
-                    if (acceptEncoding != null){
-                    	reqBase.setHeader("Accept-Encoding", acceptEncoding.getText());
-                    }
-                    Node acceptLanguage = ele.selectSingleNode("AcceptLanguage");
-                    if (acceptLanguage != null){
-                    	reqBase.setHeader("Accept-Language", acceptLanguage.getText());
-                    }
-        		}
-        	}
-    	}
+				}
+			}
+		}
 	}
-	
 }

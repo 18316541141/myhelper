@@ -58,5 +58,15 @@ namespace WindowsFormsApplication1.Service
             }
             return "";
         }
+
+        /// <summary>
+        /// 根据sql类型判断是否为可通过+、-进行update的字段
+        /// </summary>
+        /// <param name="sqlType"></param>
+        /// <returns></returns>
+        public bool SqlTypeIsChangeType(string sqlType)
+        {
+            return sqlType == "int" || sqlType == "decimal";
+        }
     }
 }

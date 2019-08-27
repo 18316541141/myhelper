@@ -54,9 +54,9 @@
   <ItemGroup>
     <Compile Include="Service\RobotNameJavaTrans.cs" />
     <Compile Include="Service\SqlServerToJavaTrans.cs" />
-    <Content Include="AllTemplate\ElemntUIList.txt">
+    <None Include="AllTemplate\ElemntUIList">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="AllTemplate\EFDbContext">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

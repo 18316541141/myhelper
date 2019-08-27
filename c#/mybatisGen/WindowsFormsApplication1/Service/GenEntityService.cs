@@ -112,6 +112,19 @@ namespace WindowsFormsApplication1.Service
                         ParamsType = "like"
                     });
                 }
+                if (DbTypeTrans.SqlTypeIsChangeType(dbType))
+                {
+                    entity.PropList.Add(new Prop
+                    {
+                        ColName=colName,
+                        SrcPropName = srcPropName,
+                        CapUpperPropName = nameTransService.HumpToBigHump(srcPropName + "Change"),
+                        PropName = srcPropName + "Change",
+                        PropType = DbTypeTrans.SqlType2EntityType(dbType),
+                        PropNotes = commentMap.ContainsKey(colName) ? commentMap[colName] : "",
+                        ParamsType = "change"
+                    });
+                }
             }
             return entity;
         }

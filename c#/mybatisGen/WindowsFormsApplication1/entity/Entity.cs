@@ -112,6 +112,11 @@ namespace WindowsFormsApplication1.entity
         public bool ParamsTypeIsLike { get { return ParamsType == "like"; } }
 
         /// <summary>
+        /// 参数类型是change时为true，否则为false
+        /// </summary>
+        public bool ParamsTypeIsChange { get { return ParamsType == "change"; } }
+
+        /// <summary>
         /// 属性注释
         /// </summary>
         public string PropNotes { set; get; }

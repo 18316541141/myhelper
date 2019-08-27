@@ -43,7 +43,7 @@ public class IndexController extends BaseController {
 	@Autowired
 	private RealTimeInitService realTimeInitService;
 	
-	Set<String> allowPath;
+	private Set<String> allowPath;
 	
 	/**
 	 * 等待池表
