@@ -491,7 +491,7 @@ public class HttpClientHelper {
 					IOUtils.read(httpEntity.getContent(), new byte[Integer.MAX_VALUE]);
 					sb.append(new String(buffer, encoding));
 				}
-				IOUtils.read(httpEntity.getContent(), new byte[rest]);
+				IOUtils.read(httpEntity.getContent(), buffer=new byte[rest]);
 				sb.append(new String(buffer, encoding));
 			} catch (IOException e) {
 				throw new RuntimeException(e);

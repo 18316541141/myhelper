@@ -18,8 +18,6 @@ namespace WebApplication1.Mapping.Common
             this.ToTable("Distributed_Transaction_Main");
             this.HasKey(u => u.Id);
             this.Property(u => u.Id).HasColumnName("Id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            this.Property(u => u.TransactionServiceTag).HasColumnName("TransactionServiceTag");
-            this.Property(u => u.TransactionStatus).HasColumnName("TransactionStatus");
         }
     }
 }

@@ -257,7 +257,6 @@
     </Compile>
     <Compile Include="Mapping\AreaTreeMap.cs" />
     <Compile Include="Mapping\CityMap.cs" />
-    <Compile Include="Mapping\Common\DistributedTransactionMainDetailMap.cs" />
     <Compile Include="Mapping\Common\DistributedTransactionMainMap.cs" />
     <Compile Include="Mapping\Common\DistributedTransactionPartMap.cs" />
     <Compile Include="Mapping\DistrictMap.cs" />

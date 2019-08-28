@@ -25,9 +25,11 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
 import web.template.filter.UpdateVersionInterceptor;
+import web.template.service.common.SystemService;
 import web.template.shiro.MyFormAuthenticationFilter;
 import web.template.shiro.MyPermissionResolver;
 import web.template.shiro.MyPermissionsAuthorizationFilter;
@@ -55,8 +57,8 @@ public class Beans {
 	
 	@Bean(name="snowFlakeHelper")
 	public SnowFlakeHelper snowFlakeHelper(){
-		
-		return new SnowFlakeHelper(0,0);
+		int ipInt=IpHelper.ipToInt(IpHelper.getOuterNetIP());
+		return new SnowFlakeHelper(ipInt>>>27,ipInt & 31);
 	}
 	
 	@Bean(name="modularRealmAuthorizer")
@@ -77,20 +79,6 @@ public class Beans {
 		return defaultWebSecurityManager;
 	}
 	
-	/**
-	 * 创建一个自定义的登陆拦截器，如果有登陆，则执行拦截器责任链的下一环。
-	 * 如果没有登陆，则返回信息告知用户没有登陆
-	 * @return
-	 */
-	@Bean(name="myFormAuthenticationFilter")
-	public MyFormAuthenticationFilter myFormAuthenticationFilter(){
-		MyFormAuthenticationFilter myFormAuthenticationFilter=new MyFormAuthenticationFilter();
-		myFormAuthenticationFilter.setLoginUrl("/index/login");
-		myFormAuthenticationFilter.setUsernameParam("username");
-		myFormAuthenticationFilter.setPasswordParam("password");
-		return myFormAuthenticationFilter;
-	}
-	
 	@Bean
 	public FilterRegistrationBean<DelegatingFilterProxy> registerFilter() {
 		FilterRegistrationBean<DelegatingFilterProxy> filterRegistrationBean = new FilterRegistrationBean<>();
@@ -102,21 +90,26 @@ public class Beans {
 	}
 	
 	@Bean(name="shiroFilter")
-	public ShiroFilterFactoryBean shiroFilter(@Autowired SecurityManager securityManager,@Autowired MyFormAuthenticationFilter myFormAuthenticationFilter,@Autowired MyPermissionsAuthorizationFilter myPermissionsAuthorizationFilter){
+	public ShiroFilterFactoryBean shiroFilter(@Autowired SecurityManager securityManager,@Autowired MyPermissionsAuthorizationFilter myPermissionsAuthorizationFilter,@Autowired ObjectMapper objectMapper,@Autowired SystemService systemService){
 		ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
-		Map<String,Filter> filterMap=shiroFilterFactoryBean.getFilters();
-		filterMap.put("authc",myFormAuthenticationFilter);
-		filterMap.put("perms", myPermissionsAuthorizationFilter);
-		
-		filterMap=shiroFilterFactoryBean.getFilters();
 		
 		Map<String, String> filterChainDefinitionMap=shiroFilterFactoryBean.getFilterChainDefinitionMap();
-		filterChainDefinitionMap.put("/index/verificationCode", "anon");
-//		filterChainDefinitionMap.put("/index/logout", "logout");
-		filterChainDefinitionMap.put("/index/login", "authc");
-		filterChainDefinitionMap.put("/index/loadLeftMenus", "authc");
-//		filterChainDefinitionMap.put("/user/teacher", "authc,perms[\"/user/teacher\"]");
+		filterChainDefinitionMap.put("/session/verificationCode", "anon");
+		filterChainDefinitionMap.put("/index/anonymousRealTime", "anon");
+		
+		filterChainDefinitionMap.put("/**", "authc");
+		
+		Map<String,Filter> filterMap=shiroFilterFactoryBean.getFilters();
+		
+		MyFormAuthenticationFilter myFormAuthenticationFilter=new MyFormAuthenticationFilter();
+		myFormAuthenticationFilter.setLoginUrl("/session/login");
+		myFormAuthenticationFilter.setUsernameParam("username");
+		myFormAuthenticationFilter.setPasswordParam("password");
+		myFormAuthenticationFilter.setObjectMapper(objectMapper);
+		myFormAuthenticationFilter.setSystemService(systemService);
+		filterMap.put("authc",myFormAuthenticationFilter);
+		filterMap.put("perms", myPermissionsAuthorizationFilter);
 		return shiroFilterFactoryBean;
 	}
 	

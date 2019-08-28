@@ -15,15 +15,9 @@ namespace WebApplication1.EFDbContext.Common
         /// </summary>
         public DbSet<DistributedTransactionMain> DistributedTransactionMains { get; set; }
 
-        /// <summary>
-        /// 分布式总表
-        /// </summary>
-        public DbSet<DistributedTransactionMainDetail> DistributedTransactionMainDetails { get; set; }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new DistributedTransactionMainMap());
-            modelBuilder.Configurations.Add(new DistributedTransactionMainDetailMap());
 
             base.OnModelCreating(modelBuilder);
         }

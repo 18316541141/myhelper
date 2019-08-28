@@ -32,11 +32,9 @@ import web.template.service.common.SystemService;
  */
 public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 	
-	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 	
-	@Autowired
-	SystemService systemService;
+	private SystemService systemService;
 
 	/**
 	 * 当用户没权限或未登陆时触发该功能
@@ -102,6 +100,20 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 		session.setAttribute("vercode", UUID.randomUUID().toString());
 		return false;
 	}
-	
-	
+
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
+
+	public SystemService getSystemService() {
+		return systemService;
+	}
+
+	public void setSystemService(SystemService systemService) {
+		this.systemService = systemService;
+	}
 }

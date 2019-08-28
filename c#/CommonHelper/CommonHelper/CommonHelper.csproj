@@ -120,7 +120,6 @@
   <ItemGroup>
     <Compile Include="CommonEntity\AreaTree.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
-    <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
     <Compile Include="CommonEntity\LeftMenu.cs" />
     <Compile Include="CommonEntity\MyPagedList.cs" />
