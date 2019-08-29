@@ -6,7 +6,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Mapping.Common
+namespace CommonHelper.Helper.EFMap
 {
     public class DistributedTransactionPartMap : EntityTypeConfiguration<DistributedTransactionPart>
     {
@@ -20,6 +20,9 @@ namespace WebApplication1.Mapping.Common
             this.Property(u => u.TransactionStatus).HasColumnName("TransactionStatus");
             this.Property(u => u.TransPrimaryKey).HasColumnName("TransPrimaryKey");
             this.Property(u => u.TransTableName).HasColumnName("TransTableName");
+            this.Property(u => u.CreateDate).HasColumnName("CreateDate");
+            this.Property(u => u.InverseOperType).HasColumnName("InverseOperType");
+
         }
     }
 }

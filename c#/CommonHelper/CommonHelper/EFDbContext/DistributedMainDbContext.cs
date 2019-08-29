@@ -1,24 +1,30 @@
 ﻿using CommonHelper.CommonEntity;
+using CommonHelper.Helper.EFMap;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
-using WebApplication1.Mapping.Common;
 
-namespace WebApplication1.EFDbContext.Common
+namespace CommonHelper.Helper.EFDbContext
 {
     public class DistributedMainDbContext : DbContext
     {
         /// <summary>
-        /// 分布式总表
+        /// 分布式事务总表
         /// </summary>
         public DbSet<DistributedTransactionMain> DistributedTransactionMains { get; set; }
+
+        /// <summary>
+        /// 分布式事务总表关联表
+        /// </summary>
+        public DbSet<DistributedTransactionMainDetail> DistributedTransactionMainDetails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new DistributedTransactionMainMap());
-
+            modelBuilder.Configurations.Add(new DistributedTransactionMainDetailMap());
+            
             base.OnModelCreating(modelBuilder);
         }
     }

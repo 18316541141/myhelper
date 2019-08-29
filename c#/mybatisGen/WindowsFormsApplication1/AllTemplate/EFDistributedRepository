@@ -1,0 +1,206 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using WebApplication1.Entity;
+using WebApplication1.MyExtensions;
+using WebApplication1.Params;
+namespace WebApplication1.Repository
+{
+    public partial class Distributed$entity.EntityName$Repository
+    {
+		public IdWorker IdWorker{ set; get; }
+
+		protected static IsoDateTimeConverter TimeConverter{ set; get; }
+
+		static Distributed$entity.EntityName$Repository()
+		{
+			TimeConverter = new IsoDateTimeConverter();
+			TimeConverter.DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+		}
+
+		/// <summary>
+        /// 插入一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void Insert($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (Distributed$entity.EntityName$DbContext dbContext = new Distributed$entity.EntityName$DbContext())
+            {
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				dbContext.Entry(entity).State = EntityState.Added;
+				dbContext.Entry(new DistributedTransactionPart
+                {
+                    Id = IdWorker.NextId(),
+                    DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                    InverseOper = Convert.ToString(entity.$entity.KeyName$),
+					InverseOperType = "D",
+                    TransTableName = "$entity.TableName$",
+                    TransPrimaryKey = "$entity.KeyCol$",
+                    TransPrimaryKeyVal= entity.$entity.KeyName$,
+                    TransactionStatus = 0,
+                    CreateDate = DateTime.Now,
+                }).State = EntityState.Added;
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 把指定字段值设置为null，主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void SetNull($entity.EntityName$SetNullParams param)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (Distributed$entity.EntityName$DbContext dbContext = new Distributed$entity.EntityName$DbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.$EntityNames$.AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				if(beforeData!=null)
+				{
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.$entity.EntityNames$.Attach(beforeData);
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (param.$it.PropName$)
+					{
+						inverseData.$it.PropName$ = beforeData.$it.PropName$;
+						beforeData.$it.PropName$ = null;
+					}
+					$endif$$endif$}$
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+						InverseOperType = "N",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 部分更新数据，数据的主键不能为null，只更新不为null的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void UpdateChange($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (Distributed$entity.EntityName$DbContext dbContext = new Distributed$entity.EntityName$DbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.$EntityNames$.AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null)
+				{
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = entity.$entity.KeyName$};
+					dbContext.$entity.EntityNames$.Attach(updateBefore);
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+						if (entity.$it.PropName$ != null)
+						{
+							updateBefore.$it.PropName$ = entity.$it.PropName$;
+							inverseData.$it.PropName$ = beforeData.$it.PropName$;
+						}
+					$endif$$endif$}$
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+						InverseOperType = "C",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void UpdateAll($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (Distributed$entity.EntityName$DbContext dbContext = new Distributed$entity.EntityName$DbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.$EntityNames$.AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null)
+				{
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Entry(entity).State = EntityState.Modified;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+						InverseOperType = "A",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 插入一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void Delete($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (Distributed$entity.EntityName$DbContext dbContext = new Distributed$entity.EntityName$DbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.$EntityNames$.AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null){
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Entry(entity).State = EntityState.Deleted;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+						InverseOperType = "I",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+    }
+}

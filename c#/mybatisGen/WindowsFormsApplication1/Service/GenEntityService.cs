@@ -71,6 +71,7 @@ namespace WindowsFormsApplication1.Service
                     PropType = DbTypeTrans.SqlType2EntityType(dbType),
                     PropNotes = commentMap.ContainsKey(colName)?commentMap[colName]:"",
                     ParamsType= "equal",
+                    IsDeleteProp = DbTypeTrans.ColIsDeleteProp(colName)
                 });
                 string paramsType= DbTypeTrans.SqlType2ParamsType(dbType);
                 if (paramsType == "range")

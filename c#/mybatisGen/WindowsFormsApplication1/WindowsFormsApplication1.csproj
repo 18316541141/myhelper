@@ -54,6 +54,12 @@
   <ItemGroup>
     <Compile Include="Service\RobotNameJavaTrans.cs" />
     <Compile Include="Service\SqlServerToJavaTrans.cs" />
+    <None Include="AllTemplate\EFDistributedRepository">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="AllTemplate\EFInverseRepository">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="AllTemplate\ElemntUIList">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

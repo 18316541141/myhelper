@@ -12,6 +12,11 @@ namespace WindowsFormsApplication1.Service
     /// </summary>
     public class SqlServerToCSharpTrans: IDbTypeTrans
     {
+        public bool ColIsDeleteProp(string colName)
+        {
+            return colName.ToLower().EndsWith("isdelete");
+        }
+
         /// <summary>
         /// sql类型转实体类型
         /// </summary>
@@ -58,6 +63,11 @@ namespace WindowsFormsApplication1.Service
                 return "like";
             }
             return "";
+        }
+
+        public bool SqlTypeIsChangeType(string sqlType)
+        {
+            return sqlType == "int" || sqlType == "decimal";
         }
     }
 }

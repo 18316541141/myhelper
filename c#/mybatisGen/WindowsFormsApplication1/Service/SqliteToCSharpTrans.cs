@@ -8,6 +8,11 @@ namespace WindowsFormsApplication1.Service
 {
     public class SqliteToCSharpTrans : IDbTypeTrans
     {
+        public bool ColIsDeleteProp(string colName)
+        {
+            return colName.ToLower().EndsWith("isdelete");
+        }
+
         public string SqlType2EntityType(string sqlType)
         {
             if (sqlType == "integer")
@@ -36,6 +41,11 @@ namespace WindowsFormsApplication1.Service
                 return "like";
             }
             return "like";
+        }
+
+        public bool SqlTypeIsChangeType(string sqlType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

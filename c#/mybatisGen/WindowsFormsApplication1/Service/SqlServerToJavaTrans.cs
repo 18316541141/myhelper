@@ -11,6 +11,11 @@ namespace WindowsFormsApplication1.Service
     /// </summary>
     public class SqlServerToJavaTrans : IDbTypeTrans
     {
+        public bool ColIsDeleteProp(string colName)
+        {
+            return colName.ToLower().EndsWith("isdelete");
+        }
+
         /// <summary>
         /// sql类型转实体类型
         /// </summary>

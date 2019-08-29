@@ -91,6 +91,11 @@ namespace WindowsFormsApplication1.entity
         /// </summary>
         public bool IsKey { get; set; }
 
+        /// <summary>
+        /// 是否为软删除数据列，
+        /// </summary>
+        public bool IsDeleteProp { set; get; }
+
         /// <summary>E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\AllTemplate\EFRepository
         /// 参数类型是equal时为true，否则为false
         /// </summary>

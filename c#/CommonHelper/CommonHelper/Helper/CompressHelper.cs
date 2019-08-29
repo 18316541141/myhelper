@@ -139,6 +139,17 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 使用gzip方式对字符串进行压缩，并返回base64
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string GZipCompressString(string text)
+        {
+            MemoryStream ms = new MemoryStream(Encoding.GetEncoding("UTF-8").GetBytes(text));
+            return Convert.ToBase64String(GZipCompress(ms)); ;
+        }
+
+        /// <summary>
         /// 使用gzip方式压缩数据
         /// </summary>
         /// <param name="inputSteam">需要压缩的数据流</param>

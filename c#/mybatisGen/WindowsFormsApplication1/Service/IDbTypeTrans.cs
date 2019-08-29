@@ -31,5 +31,12 @@ namespace WindowsFormsApplication1.Service
         /// <param name="sqlType"></param>
         /// <returns></returns>
         bool SqlTypeIsChangeType(string sqlType);
+
+        /// <summary>
+        /// 根据列名称判断是否为软删除字典
+        /// </summary>
+        /// <param name="colName">列名称</param>
+        /// <returns></returns>
+        bool ColIsDeleteProp(string colName);
     }
 }

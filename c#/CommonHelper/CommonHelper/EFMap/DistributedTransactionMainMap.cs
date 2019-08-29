@@ -6,7 +6,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Mapping.Common
+namespace CommonHelper.Helper.EFMap
 {
     /// <summary>
     /// 事务总表
@@ -18,6 +18,7 @@ namespace WebApplication1.Mapping.Common
             this.ToTable("Distributed_Transaction_Main");
             this.HasKey(u => u.Id);
             this.Property(u => u.Id).HasColumnName("Id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            this.Property(u => u.TransactionStatus).HasColumnName("TransactionStatus");
         }
     }
 }
