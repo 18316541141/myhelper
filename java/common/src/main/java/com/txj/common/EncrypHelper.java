@@ -105,6 +105,38 @@ public class EncrypHelper {
 	}
 	
 	/**
+	 * 把字符串转化为sha1加密串
+	 * @param text
+	 * @return
+	 */
+	public static String getSha1FromString(String text){
+		char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f'};
+	    try {
+	        MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+	        byte[] buff;
+	        try {
+	        	buff=text.getBytes("UTF-8");
+				mdTemp.update(buff, 0, buff.length);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	        byte[] md = mdTemp.digest();
+	        int j = md.length;
+	        char[] buf = new char[j * 2];
+	        int k = 0;
+	        for (int i = 0; i < j; i++) {
+	            byte byte0 = md[i];
+	            buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
+	            buf[k++] = hexDigits[byte0 & 0xf];
+	        }
+	        return new String(buf);
+	    } catch (NoSuchAlgorithmException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	
+	/**
 	 * 把输入流转化为sha1，并关闭流
 	 * @param inputStream 输入流
 	 * @return

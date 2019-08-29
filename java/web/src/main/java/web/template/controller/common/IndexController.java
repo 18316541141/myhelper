@@ -170,18 +170,6 @@ public class IndexController extends BaseController {
 	}
 
 	/**
-	 * 登出功能
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/logout")
-	public Result logout() {
-		Subject subject = SecurityUtils.getSubject();
-		subject.logout();
-		return new Result(0, null, null);
-	}
-
-	/**
 	 * 获取左侧菜单
 	 * 
 	 * @return

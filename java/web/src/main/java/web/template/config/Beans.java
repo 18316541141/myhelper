@@ -28,6 +28,7 @@ import com.google.code.kaptcha.util.Config;
 import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
+import web.template.filter.SignInterceptor;
 import web.template.filter.UpdateVersionInterceptor;
 import web.template.service.common.SystemService;
 import web.template.shiro.MyFormAuthenticationFilter;
@@ -118,14 +119,16 @@ public class Beans {
 	 * @return
 	 */
 	@Bean
-    public WebMvcConfigurer webMvcConfigurerAdapter(){
+    public WebMvcConfigurer webMvcConfigurerAdapter(@Autowired ObjectMapper objectMapper){
 		return new WebMvcConfigurer(){
 			@Override
             public void addInterceptors(InterceptorRegistry registry) {
                 registry.addInterceptor(new UpdateVersionInterceptor())
-                        .addPathPatterns(
-                        		"/newAlarm/add"
-                        );
+                        .addPathPatterns("/newAlarm/add");
+                
+                SignInterceptor signInterceptor=new SignInterceptor();
+                signInterceptor.setObjectMapper(objectMapper);
+                registry.addInterceptor(signInterceptor);
             }
 		};
 	}

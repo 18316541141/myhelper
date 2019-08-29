@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.code.kaptcha.Producer;
 
+import web.template.entity.common.Result;
+
 @RestController
 @RequestMapping("/session")
 public class SessionController extends BaseController {
@@ -22,6 +24,18 @@ public class SessionController extends BaseController {
 	 */
 	@Autowired
 	private Producer defaultKaptcha;
+	
+	/**
+	 * 登出功能
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	public Result logout() {
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+		return new Result(0, null, null);
+	}
 	
 	/**
 	 * 获取验证码
