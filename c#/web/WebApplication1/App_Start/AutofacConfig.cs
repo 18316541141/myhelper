@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using CommonHelper.Helper;
 using log4net;
+using RabbitMQ.Client;
 using Snowflake.Net;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.AopInterceptor;
 
 namespace WebApplication1.App_Start
 {
@@ -37,8 +39,16 @@ namespace WebApplication1.App_Start
                 IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
                 ip = ipe.AddressList[4].ToString();
             }
-            long ipNum=Convert.ToInt32(ip.Replace(".", ""));
-            IdWorker idWorker = new IdWorker((ipNum>>5)&31, ipNum & 31);
+            int ipNum = 0;
+            string[] parts = ip.Split('.');
+            for (int i = 0, len = parts.Length; i < len; i++)
+            {
+                ipNum += Convert.ToInt32(parts[0]) << ((3 - i) * 8);
+            }
+            IdWorker idWorker = new IdWorker((ipNum >> 27) & 31, ipNum & 31);
+            ConnectionFactory factory = new ConnectionFactory { HostName = "hostname", UserName = "root", Password = "root001", VirtualHost = "hostserver" };
+            containerBuilder.RegisterInstance(factory.CreateConnection()).As<IConnection>().SingleInstance().PropertiesAutowired();
+            DistributedTransactionScan.IdWorker = idWorker;
             containerBuilder.RegisterInstance(idWorker).As<IdWorker>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")).SingleInstance().AsSelf().PropertiesAutowired();
             containerBuilder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired().InstancePerRequest();

@@ -1,15 +1,19 @@
 ﻿using Autofac;
+using CommonHelper.Helper;
 using CX_Task_Center.Code.Message;
 using log4net;
 using log4net.Config;
+using Snowflake.Net;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WebApplication1.AopInterceptor;
 using WindowsFormsApplication1.ServiceReference1;
 
 namespace WindowsFormsApplication1
@@ -30,6 +34,25 @@ namespace WindowsFormsApplication1
             ILog log = LogManager.GetLogger("Log4net.config");
             containerBuilder.RegisterType<MainForm>().As<MainForm>().SingleInstance();
             BsyWarningHelper bsyWarningHelper = new BsyWarningHelper();
+            string ip;
+            try
+            {
+                ip = IpHelper.GetOuterNetIP();
+            }
+            catch (Exception)
+            {
+                IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
+                ip = ipe.AddressList[4].ToString();
+            }
+            int ipNum = 0;
+            string[] parts=ip.Split('.');
+            for(int i=0,len= parts.Length;i<len ;i++)
+            {
+                ipNum += Convert.ToInt32(parts[0])<<((3-i)*8);
+            }
+            IdWorker idWorker = new IdWorker((ipNum >> 27) & 31, ipNum & 31);
+            DistributedTransactionScan.IdWorker = idWorker;
+            containerBuilder.RegisterInstance(idWorker).As<IdWorker>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterInstance(bsyWarningHelper).As<BsyWarningHelper>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterInstance(log).As<ILog>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(typeof(Program).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service") || n.Name.EndsWith("Controller")).SingleInstance().AsSelf().PropertiesAutowired();

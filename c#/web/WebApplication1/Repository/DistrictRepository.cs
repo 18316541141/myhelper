@@ -8,11 +8,16 @@ using WebApplication1.Entity;
 
 namespace WebApplication1.Repository
 {
-    public class DistrictRepository:BaseRepository<District>
+    public class DistrictRepository:BaseRepository<District, District, District>
     {
         public override DbContext CreateDbContext()
         {
             return new MyDbContext();
+        }
+
+        protected override IQueryable<District> Query(IQueryable<District> query, District paramz, District neqArgs)
+        {
+            throw new NotImplementedException();
         }
     }
 }

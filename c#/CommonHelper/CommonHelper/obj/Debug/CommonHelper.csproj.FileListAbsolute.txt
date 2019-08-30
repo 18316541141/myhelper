@@ -133,6 +133,9 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Castle.Core.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.SqlServer.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\HtmlAgilityPack.dll
@@ -143,12 +146,17 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OOXML.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXml4Net.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXmlFormats.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\SeleniumExtras.WaitHelpers.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Snowflake.Net.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Webdiyer.MvcPager.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\WebDriver.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Web.Mvc.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.pdb
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.xml
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.pdb
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.xml
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Castle.Core.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.SqlServer.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\HtmlAgilityPack.pdb
@@ -166,6 +174,6 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentati
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Web.Mvc.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache

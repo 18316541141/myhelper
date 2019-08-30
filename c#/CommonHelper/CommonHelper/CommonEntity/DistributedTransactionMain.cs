@@ -17,7 +17,7 @@ namespace CommonHelper.CommonEntity
         public virtual long Id { set; get; }
 
         /// <summary>
-        /// 事务状态，1（事务成功）、2（事务失败）
+        /// 事务状态，1：事务成功，2：事务失败
         /// </summary>
         public virtual sbyte TransactionStatus { set; get; }
     }

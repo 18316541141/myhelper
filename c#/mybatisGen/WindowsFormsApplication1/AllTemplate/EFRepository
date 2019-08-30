@@ -8,7 +8,7 @@ using WebApplication1.MyExtensions;
 using WebApplication1.Params;
 namespace WebApplication1.Repository
 {
-    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$>
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy>,InverseRepository
     {
 		/// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -18,7 +18,7 @@ namespace WebApplication1.Repository
         /// <param name="eqArgs">装载查询参数的实体类</param>
 		/// <param name="neqArgs">装载不等于查询参数的实体类</param>
         /// <returns>返回设置好查询参数的query对象</returns>
-        IQueryable<$entity.EntityName$> Query(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params eqArgs, $entity.EntityName$Params neqArgs = null)
+        protected override IQueryable<$entity.EntityName$> Query(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params eqArgs, $entity.EntityName$Params neqArgs = null)
         {
             if (eqArgs != null)
             {
@@ -62,6 +62,8 @@ namespace WebApplication1.Repository
 					query = query.Where(a => !a.$it.SrcPropName$.Contains(neqArgs.$it.PropName$));
 				}
 			$endif$$endif$}$
+				query = OrderByAsc(query, eqArgs.orderByAsc);
+                query = OrderByDesc(query, eqArgs.orderByDesc);
 			}
             return query;
         }
@@ -113,116 +115,6 @@ namespace WebApplication1.Repository
         }
 
 		/// <summary>
-        /// 查询pageSize超过1000的分页查询，因为pageSize过大会导致查询超时，为避免这种情况，
-		/// 必须使用该方法进行分页查询。
-        /// </summary>
-        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
-        /// <param name="pageIndex">查询页码</param>
-        /// <param name="pageSize">每页显示数据量</param>
-		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
-        /// <returns>返回分页查询结果</returns>
-        public MyPagedList<$entity.EntityName$> BigPageList($entity.EntityName$Params eqArgs, int pageIndex = 1, int pageSize = 10000, $entity.EntityName$Params neqArgs = null)
-        {
-			if( pageIndex <= 0 )
-			{
-				pageIndex = 1;
-			}
-			if( pageSize > 10000 || pageSize <= 0 )
-			{
-				pageSize = 10000;
-			}
-            using (DbContext dbContext = CreateDbContext())
-            {
-                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                query = OrderByAsc(query, eqArgs.orderByAsc);
-                query = OrderByDesc(query, eqArgs.orderByDesc);
-                int totalItemCount = query.Count();
-				int totalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1;
-				if( pageIndex >= totalPageCount)
-				{
-					pageIndex = Math.Max(totalPageCount,1);
-				}
-                query = query.Skip((pageIndex-1) * pageSize);
-                List<$entity.EntityName$> pageDataList = new List<$entity.EntityName$>();
-                for (int i=0, partCount = (pageSize - pageSize % 1000) / pageSize + 1; i<partCount ;i++)
-                {
-                    pageDataList.AddRange(query.Skip(i * 1000).Take(1000).ToList());
-                }
-                return new MyPagedList<$entity.EntityName$>
-                {
-                    CurrentPageIndex = pageIndex,
-                    PageDataList = pageDataList,
-                    TotalItemCount = totalItemCount,
-                    PageSize = pageSize,
-                    TotalPageCount = totalPageCount,
-                    StartItemIndex = (pageSize - 1) * pageIndex + 1,
-                    EndItemIndex = pageSize * pageIndex
-                };
-            }
-        }
-
-		/// <summary>
-        /// 普通的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
-        /// </summary>
-        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
-        /// <param name="pageIndex">查询页码</param>
-        /// <param name="pageSize">每页显示数据量</param>
-		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
-        /// <returns>返回分页查询结果</returns>
-        public MyPagedList<$entity.EntityName$> PageList($entity.EntityName$Params eqArgs, int pageIndex = 1, int pageSize = 20,$entity.EntityName$Params neqArgs = null)
-        {
-			if( pageIndex <= 0 )
-			{
-				pageIndex = 1;
-			}
-			if( pageSize > 100)
-			{
-				pageSize = 100;
-			} 
-			else if( pageSize <= 0)
-			{
-				pageSize = 20;
-			}
-            using (DbContext dbContext = CreateDbContext())
-            {
-                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                query = OrderByAsc(query, eqArgs.orderByAsc);
-                query = OrderByDesc(query, eqArgs.orderByDesc);
-                return query.ToMyPagedList(pageIndex, pageSize);
-            }
-        }
-
-		/// <summary>
-        /// 查询符合查询条件的数据量
-        /// </summary>
-        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
-		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
-        /// <returns>返回符合查询条件的数据量</returns>
-        public int Count($entity.EntityName$Params eqArgs = null, $entity.EntityName$Params neqArgs = null)
-        {
-            using (DbContext dbContext = CreateDbContext())
-            {
-                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                return query.Count();
-            }
-        }
-
-		/// <summary>
-        /// 查询符合查询条件的数据，数据不宜过大，如果数据过大建议使用分页查询
-        /// </summary>
-        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
-		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
-        /// <returns>返回符合查询条件的数</returns>
-        public List<$entity.EntityName$> FindList($entity.EntityName$Params eqArgs = null, $entity.EntityName$Params neqArgs = null)
-        {
-            using (DbContext dbContext = CreateDbContext())
-            {
-                IQueryable<$entity.EntityName$> query = Query(dbContext.$entity.EntityNames$.AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                return query.ToList();
-            }
-        }
-
-		/// <summary>
         /// 修改变化值，把entity不为null的数据视为变化值
         /// </summary>
         /// <param name="entity">修改实体类，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
@@ -232,7 +124,7 @@ namespace WebApplication1.Repository
             using (DbContext dbContext = CreateDbContext())
             {
                 $entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
-                dbContext.$entity.EntityNames$.Attach(updateBefore);
+                dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 					if (entity.$it.PropName$ != null)
 					{
@@ -255,7 +147,7 @@ namespace WebApplication1.Repository
 				foreach($entity.EntityName$ entity in entities)
 				{
 					$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
-					dbContext.$entity.EntityNames$.Attach(updateBefore);
+					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 					if (entity.$it.PropName$ != null)
 					{
@@ -277,7 +169,7 @@ namespace WebApplication1.Repository
 			 $entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
 			 using (DbContext dbContext = CreateDbContext())
              {
-				dbContext.$entity.EntityNames$.Attach(updateBefore);
+				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 				if (param.$it.PropName$)
 				{
@@ -286,6 +178,445 @@ namespace WebApplication1.Repository
 				$endif$$endif$}$
 				dbContext.SaveChanges();
 			 }
+		}
+
+		/// <summary>
+        /// 检查分布式事务是否已完成
+        /// </summary>
+        /// <param name="primaryKeyVal">主键的值</param>
+		public bool CheckTransactionFinish(long primaryKeyVal)
+		{
+			return CheckTransactionFinish(primaryKeyVal, "$entity.TableName$");
+		}
+
+		/// <summary>
+        /// 分布式插入数据的反操作。当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedInsertInverse(DistributedTransactionPart distributedTransactionPart)
+		{
+			using (DbContext dbContext = CreateDbContext())
+            {
+				DistributedTransactionPart updateBefore=new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
+				dbContext.Entry(new $entity.EntityName${ $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
+				dbContext.Attach(updateBefore);
+				updateBefore.TransactionStatus = 2;
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式插入一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedInsert($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				dbContext.Entry(entity).State = EntityState.Added;
+				dbContext.Entry(new DistributedTransactionPart
+                {
+                    Id = IdWorker.NextId(),
+                    DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                    InverseOper = Convert.ToString(entity.$entity.KeyName$),
+					InverseOperType = "D",
+                    TransTableName = "$entity.TableName$",
+                    TransPrimaryKey = "$entity.KeyCol$",
+                    TransPrimaryKeyVal= entity.$entity.KeyName$,
+                    TransactionStatus = 0,
+                    CreateDate = DateTime.Now,
+                }).State = EntityState.Added;
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式批量插入数据的反向操作。当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedInsertInverse(List<DistributedTransactionPart> distributedTransactionParts)
+		{
+			using (DbContext dbContext = CreateDbContext())
+            {
+				foreach(var distributedTransactionPart in distributedTransactionParts)
+				{
+					DistributedTransactionPart updateBefore=new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
+					dbContext.Entry(new $entity.EntityName${ $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
+					dbContext.Attach(updateBefore);
+					updateBefore.TransactionStatus = 2;
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式批量插入数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedInsert(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				foreach($entity.EntityName$ entity in entities)
+				{
+					dbContext.Entry(entity).State = EntityState.Added;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = Convert.ToString(entity.$entity.KeyName$),
+						InverseOperType = "D",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式setNull的逆操作，当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedSetNullInverse(DistributedTransactionPart distributedTransactionPart)
+		{
+			using (DbContext dbContext = CreateDbContext()
+            {
+				$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal };
+				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+				$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+				if (entity.$it.PropName$!=null)
+				{
+					updateBefore.$it.PropName$ = entity.$it.PropName$;
+				}
+				$endif$$endif$}$
+				DistributedTransactionPart beforePart = new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
+				dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
+				beforePart.TransactionStatus = 2;
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式把指定字段值设置为null，主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedSetNull($entity.EntityName$SetNullParams param)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext()
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				if(beforeData!=null)
+				{
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.$entity.EntityNames$.Attach(beforeData);
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (param.$it.PropName$)
+					{
+						inverseData.$it.PropName$ = beforeData.$it.PropName$;
+						beforeData.$it.PropName$ = null;
+					}
+					$endif$$endif$}$
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+						InverseOperType = "N",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式部分更新数据的逆操作，当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateChangeInverse(DistributedTransactionPart distributedTransactionPart)
+		{
+			DistributedSetNullInverse(entity);
+		}
+
+		/// <summary>
+        /// 分布式部分更新数据，数据的主键不能为null，只更新不为null的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateChange($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null)
+				{
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = entity.$entity.KeyName$};
+					dbContext.$entity.EntityNames$.Attach(updateBefore);
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+						if (entity.$it.PropName$ != null)
+						{
+							updateBefore.$it.PropName$ = entity.$it.PropName$;
+							inverseData.$it.PropName$ = beforeData.$it.PropName$;
+						}
+					$endif$$endif$}$
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+						InverseOperType = "C",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式全覆盖更新数据的逆操作，当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateAllInverse(DistributedTransactionPart distributedTransactionPart)
+		{
+			DistributedSetNullInverse(entity);
+		}
+
+		/// <summary>
+        /// 分布式全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateAll($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null)
+				{
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Entry(entity).State = EntityState.Modified;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+						InverseOperType = "A",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式批量全覆盖更新数据的逆操作，当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateAllBatchInverse(List<DistributedTransactionPart> distributedTransactionParts)
+		{
+			using (DbContext dbContext = CreateDbContext()
+            {
+				foreach(var distributedTransactionPart in distributedTransactionParts)
+				{
+					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal };
+					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+					$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (entity.$it.PropName$!=null)
+					{
+						updateBefore.$it.PropName$ = entity.$it.PropName$;
+					}
+					$endif$$endif$}$
+					DistributedTransactionPart beforePart = new DistributedTransactionPart{Id = distributedTransactionPart.Id};
+					dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
+					beforePart.TransactionStatus = 2;
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式批量全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateAllBatch(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{
+					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+					if(beforeData!=null)
+					{
+						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+						dbContext.Entry(entity).State = EntityState.Modified;
+						dbContext.Entry(new DistributedTransactionPart
+						{
+							Id = IdWorker.NextId(),
+							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+							InverseOperType = "A",
+							TransTableName = "$entity.TableName$",
+							TransPrimaryKey = "$entity.KeyCol$",
+							TransPrimaryKeyVal= entity.$entity.KeyName$,
+							TransactionStatus = 0,
+							CreateDate = DateTime.Now,
+						}).State = EntityState.Added;
+					}
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式删除数据的逆操作，当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedDeleteInverse(DistributedTransactionPart distributedTransactionPart)
+		{
+			using (DbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
+				dbContext.Entry(entity).State = EntityState.Added;
+				DistributedTransactionPart beforePart = new DistributedTransactionPart{Id = distributedTransactionPart.Id};
+				dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
+				beforePart.TransactionStatus = 2;
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式删除一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedDelete($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null){
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Entry(entity).State = EntityState.Deleted;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+						InverseOperType = "I",
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式删除批量数据的逆操作，当事务失败时调用
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedDeleteInverse(List<DistributedTransactionPart> distributedTransactionParts)
+		{
+			using (DbContext dbContext = CreateDbContext())
+            {
+				foreach(DistributedTransactionPart distributedTransactionPart in distributedTransactionParts)
+				{
+					$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
+					dbContext.Entry(entity).State = EntityState.Added;
+					DistributedTransactionPart beforePart = new DistributedTransactionPart{Id = distributedTransactionPart.Id};
+					dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
+					beforePart.TransactionStatus = 2;
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式删除一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedDelete(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (DbContext dbContext = CreateDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{				
+					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+					if(beforeData!=null){
+						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+						dbContext.Entry(entity).State = EntityState.Deleted;
+						dbContext.Entry(new DistributedTransactionPart
+						{
+							Id = IdWorker.NextId(),
+							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+							InverseOperType = "I",
+							TransTableName = "$entity.TableName$",
+							TransPrimaryKey = "$entity.KeyCol$",
+							TransPrimaryKeyVal= entity.$entity.KeyName$,
+							TransactionStatus = 0,
+							CreateDate = DateTime.Now,
+						}).State = EntityState.Added;
+					}
+				}
+				dbContext.SaveChanges();
+			}
 		}
 
 		public override DbContext CreateDbContext()

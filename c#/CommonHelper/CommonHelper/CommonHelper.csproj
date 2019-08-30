@@ -40,6 +40,18 @@
       <HintPath>..\..\web\packages\Antlr3.StringTemplate.3.4.1.9005\lib\net35\Antlr3.StringTemplate.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac, Version=4.0.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\Autofac.4.0.1\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Extras.DynamicProxy, Version=4.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\Autofac.Extras.DynamicProxy.4.5.0\lib\net45\Autofac.Extras.DynamicProxy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\web\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -80,6 +92,10 @@
       <HintPath>..\..\web\packages\DotNetSeleniumExtras.WaitHelpers.3.11.0\lib\net45\SeleniumExtras.WaitHelpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Snowflake.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\web\packages\Snowflake.Net.4.5.2\lib\Snowflake.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -118,6 +134,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AopInterceptor\DistributedTransactionScan.cs" />
+    <Compile Include="AopInterceptor\DistributedTransactionScope.cs" />
     <Compile Include="CommonEntity\AreaTree.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
@@ -125,6 +143,7 @@
     <Compile Include="CommonEntity\LeftMenu.cs" />
     <Compile Include="CommonEntity\MyPagedList.cs" />
     <Compile Include="CommonEntity\Result.cs" />
+    <Compile Include="CommonEntity\TransactionMsg.cs" />
     <Compile Include="CommonEntity\TreeFormNode.cs" />
     <Compile Include="CommonExtensions\MyPageExtensions.cs" />
     <Compile Include="CommonJsonConverter\LongConverter.cs" />
@@ -135,6 +154,7 @@
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />
     <Compile Include="EFRepository\BaseRepository.cs" />
+    <Compile Include="EFRepository\InverseRepository.cs" />
     <Compile Include="FindAttr\FindDataAttr.cs" />
     <Compile Include="FindAttr\FindDataConvertAttr.cs" />
     <Compile Include="Guess\GuessList.cs" />

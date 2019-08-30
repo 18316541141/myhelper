@@ -24,7 +24,7 @@ namespace WebApplication1.Service.Common
         /// <summary>
         /// 分布式雪花id生成器
         /// </summary>
-        static IdWorker idWorker;
+        public IdWorker IdWorker { set; get; }
 
         /// <summary>
         /// 跨平台的斜杠
@@ -33,7 +33,6 @@ namespace WebApplication1.Service.Common
 
         static BaseService()
         {
-            idWorker = new IdWorker(1, 1);
             s = Path.DirectorySeparatorChar;
         }
 
@@ -43,7 +42,7 @@ namespace WebApplication1.Service.Common
         /// <returns></returns>
         public long NextId()
         {
-            return idWorker.NextId();
+            return IdWorker.NextId();
         }
         
     }
