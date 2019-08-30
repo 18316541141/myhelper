@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -141,12 +142,37 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 使用gzip方式对字符串进行压缩，并返回base64
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">文本字符串</param>
+        /// <param name="encoding">编码方式</param>
         /// <returns></returns>
-        public static string GZipCompressString(string text)
+        public static string GZipCompressString(string text, Encoding encoding = null)
         {
-            MemoryStream ms = new MemoryStream(Encoding.GetEncoding("UTF-8").GetBytes(text));
-            return Convert.ToBase64String(GZipCompress(ms)); ;
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+            using (MemoryStream ms = new MemoryStream(encoding.GetBytes(text)))
+            {
+                return Convert.ToBase64String(GZipCompress(ms));
+            }
+        }
+
+        /// <summary>
+        /// 使用gzip方式对base64字符串进行解压，并返回解压后字符串
+        /// </summary>
+        /// <param name="text">文本字符串</param>
+        /// <param name="encoding">编码方式</param>
+        /// <returns></returns>
+        public static string GZipDecompressString(string text, Encoding encoding = null)
+        {
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(text)))
+            {
+                return encoding.GetString(GZipDecompress(ms));
+            }
         }
 
         /// <summary>

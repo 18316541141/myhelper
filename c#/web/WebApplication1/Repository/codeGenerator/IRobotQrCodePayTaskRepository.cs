@@ -12,7 +12,7 @@ using CommonHelper.Helper.EFRepository;
 
 namespace WebApplication1.Repository
 {
-    public partial class IRobotQrCodePayTaskRepository : BaseRepository<IRobotQrCodePayTask>
+    public partial class IRobotQrCodePayTaskRepository : BaseRepository<IRobotQrCodePayTask, IRobotQrCodePayTask, IRobotQrCodePayTask>
     {
         IQueryable<IRobotQrCodePayTask> Query(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTaskParams irobotQrCodePayTaskParams)
         {
@@ -154,6 +154,8 @@ namespace WebApplication1.Repository
                 {
                     query = query.Where(a => a.irScanPayNotifyRet.Contains(irobotQrCodePayTaskParams.irScanPayNotifyRetLike));
                 }
+                query = OrderByAsc(query, irobotQrCodePayTaskParams.orderByAsc);
+                query = OrderByDesc(query, irobotQrCodePayTaskParams.orderByDesc);
             }
             return query;
         }
@@ -214,9 +216,7 @@ namespace WebApplication1.Repository
         {
             using (MyDbContext2 myDbContext2 = new MyDbContext2())
             {
-                IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.IRobotQrCodePayTasks.AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
-                query = OrderByAsc(query, irobotQrCodePayTaskParams.orderByAsc);
-                query = OrderByDesc(query, irobotQrCodePayTaskParams.orderByDesc);
+                IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.Set<IRobotQrCodePayTask>().AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
                 int totalItemCount = query.Count();
                 query = query.Skip((pageIndex-1) * pageSize);
                 List<IRobotQrCodePayTask> pageDataList = new List<IRobotQrCodePayTask>();
@@ -242,8 +242,6 @@ namespace WebApplication1.Repository
             using (MyDbContext2 myDbContext2 = new MyDbContext2())
             {
                 IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.IRobotQrCodePayTasks.AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
-                query = OrderByAsc(query, irobotQrCodePayTaskParams.orderByAsc);
-                query = OrderByDesc(query, irobotQrCodePayTaskParams.orderByDesc);
                 return query.ToMyPagedList(pageIndex, pageSize);
             }
         }
@@ -343,6 +341,11 @@ namespace WebApplication1.Repository
         public override DbContext CreateDbContext()
         {
             return new MyDbContext2();
+        }
+
+        protected override IQueryable<IRobotQrCodePayTask> Query(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTask paramz, IRobotQrCodePayTask neqArgs)
+        {
+            throw new NotImplementedException();
         }
     }
 }
