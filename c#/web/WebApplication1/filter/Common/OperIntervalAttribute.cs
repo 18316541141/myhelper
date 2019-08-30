@@ -60,10 +60,6 @@ namespace WebApplication1.Filter.Common
                 }
                 if(temp)
                 {
-                    base.OnActionExecuting(filterContext);
-                }
-                else
-                {
                     HttpResponseBase response = httpContextBase.Response;
                     response.ContentEncoding = Encoding.UTF8;
                     response.ContentType = "application/json;charset=UTF-8";
@@ -74,6 +70,10 @@ namespace WebApplication1.Filter.Common
                         msg = "操作过于频繁、请稍后重试！",
                     }));
                     filterContext.Result = new EmptyResult();
+                }
+                else
+                {
+					base.OnActionExecuting(filterContext);
                 }
             }
             else

@@ -28,7 +28,7 @@ public class SignInterceptor  implements HandlerInterceptor {
                 response.setContentType("application/json;charset=UTF-8");
                 response.setStatus(200);
                 response.getWriter().write(objectMapper.writeValueAsString(new Result(-12,"签名错误，参数不完整，必须包含"+set.toString()+"参数！",null)));
-				return false;
+				return Boolean.FALSE;
 			}
 		}
 		List<String> keys=new ArrayList<String>(set);
@@ -50,7 +50,7 @@ public class SignInterceptor  implements HandlerInterceptor {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(200);
             response.getWriter().write(objectMapper.writeValueAsString(new Result(-12,"签名错误，signKey或signSecret错误！",null)));
-			return false;
+			return Boolean.FALSE;
 		}
 		if(!EncrypHelper.getSha1FromString(sb.append("&signKey=").append(signKeys[0]).append("&signSecret=").append(signSecrets[0]).toString()).equals(signChars[0])){
 			response.setCharacterEncoding("UTF-8");
@@ -58,7 +58,7 @@ public class SignInterceptor  implements HandlerInterceptor {
             response.setStatus(200);
             response.getWriter().write(objectMapper.writeValueAsString(new Result(-12,"签名错误！",null)));
 		}
-		return true;
+		return Boolean.TRUE;
 	}
 
 	public Map<String, Set<String>> getParamsMap() {
