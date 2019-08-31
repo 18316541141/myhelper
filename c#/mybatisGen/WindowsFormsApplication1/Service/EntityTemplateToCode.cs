@@ -51,6 +51,7 @@ namespace WindowsFormsApplication1.Service
             File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.cs", _templateHelper.EntityToStr(entity, "CSharpOrderBy"), Encoding.UTF8);
             File.WriteAllText($"{entityPath}{entity.EntityName}.cs", _templateHelper.EntityToStr(entity, "CSharpEntity"), Encoding.UTF8);
             File.WriteAllText($"{repositoryPath}{entity.EntityName}Repository.cs", _templateHelper.EntityToStr(entity, "EFRepository"), Encoding.UTF8);
+            File.WriteAllText($"{repositoryPath}{entity.EntityName}InverseRepository.cs", _templateHelper.EntityToStr(entity, "EFInverseRepository"), Encoding.UTF8);
             File.WriteAllText($"{servicePath}{entity.EntityName}Service.cs", _templateHelper.EntityToStr(entity, "CSharpService"), Encoding.UTF8);
             File.WriteAllText($"{controllersPath}{entity.EntityName}Controller.cs", _templateHelper.EntityToStr(entity, "CSharpController"), Encoding.UTF8);
             File.WriteAllText($"{mappingPath}{entity.EntityName}Map.cs", _templateHelper.EntityToStr(entity, "EFMapping"), Encoding.UTF8);

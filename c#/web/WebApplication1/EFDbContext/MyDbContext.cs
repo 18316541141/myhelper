@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using CommonHelper.Helper.EFDbContext;
+using MySql.Data.MySqlClient;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace WebApplication1
     /// <summary>
     /// 数据库访问器
     /// </summary>
-    public class MyDbContext: DbContext
+    public class MyDbContext: BaseDbContext
     {
         public MyDbContext() : base(new OracleConnection(WebConfigurationManager.ConnectionStrings[$"{EnvironmentConfig.EnvironmentType}.oracleConn"].ConnectionString),true){
         }

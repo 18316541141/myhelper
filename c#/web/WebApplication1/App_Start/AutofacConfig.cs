@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using CommonHelper.AopInterceptor;
 using CommonHelper.Helper;
 using log4net;
 using RabbitMQ.Client;
@@ -11,7 +12,6 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.AopInterceptor;
 
 namespace WebApplication1.App_Start
 {
@@ -46,8 +46,8 @@ namespace WebApplication1.App_Start
                 ipNum += Convert.ToInt32(parts[0]) << ((3 - i) * 8);
             }
             IdWorker idWorker = new IdWorker((ipNum >> 27) & 31, ipNum & 31);
-            ConnectionFactory factory = new ConnectionFactory { HostName = "hostname", UserName = "root", Password = "root001", VirtualHost = "hostserver" };
-            containerBuilder.RegisterInstance(factory.CreateConnection()).As<IConnection>().SingleInstance().PropertiesAutowired();
+            //ConnectionFactory factory = new ConnectionFactory { HostName = "hostname", UserName = "root", Password = "root001", VirtualHost = "hostserver" };
+            //containerBuilder.RegisterInstance(factory.CreateConnection()).As<IConnection>().SingleInstance().PropertiesAutowired();
             DistributedTransactionScan.IdWorker = idWorker;
             containerBuilder.RegisterInstance(idWorker).As<IdWorker>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")).SingleInstance().AsSelf().PropertiesAutowired();

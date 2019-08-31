@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
-
-namespace WebApplication1.AopInterceptor
+namespace CommonHelper.AopInterceptor
 {
     /// <summary>
     /// 分布式事务拦截器
@@ -26,9 +25,9 @@ namespace WebApplication1.AopInterceptor
         public static ThreadLocal<long?> TransactionIds { set; get; }
 
         /// <summary>
-        /// 事务的数据源，用于保存和该事务关联的数据源
+        /// 事务的数据源，用于保存和该事务关联的数据源和数据表
         /// </summary>
-        public static ThreadLocal<HashSet<string>> TransactionDataSources { set; get; }
+        public static ThreadLocal<Dictionary<string, HashSet<string>>> TransactionDataSources { set; get; }
 
         /// <summary>
         /// 进入次数，用于确定方法调用方法导致事务嵌套的深度。
@@ -37,7 +36,7 @@ namespace WebApplication1.AopInterceptor
 
         static DistributedTransactionScan()
         {
-            TransactionDataSources = new ThreadLocal<HashSet<string>>(()=> new HashSet<string>());
+            TransactionDataSources = new ThreadLocal<Dictionary<string, HashSet<string>>>(()=> new Dictionary<string, HashSet<string>>());
             TransactionIds = new ThreadLocal<long?>(()=>null);
             EnterTimes = new ThreadLocal<int>(()=>0);
         }
@@ -55,13 +54,17 @@ namespace WebApplication1.AopInterceptor
                     Id = (long)TransactionIds.Value,
                     TransactionStatus = transactionStatus
                 }).State = EntityState.Added;
-                foreach (string transactionDataSource in TransactionDataSources.Value)
+                foreach (var transactionDataSource in TransactionDataSources.Value)
                 {
-                    db.Entry(new DistributedTransactionMainDetail
+                    foreach (string tableName in transactionDataSource.Value)
                     {
-                        DistributedTransactionMainId = (long)TransactionIds.Value,
-                        TransactionDataSource = transactionDataSource,
-                    }).State = EntityState.Added;
+                        db.Entry(new DistributedTransactionMainDetail
+                        {
+                            DistributedTransactionMainId = (long)TransactionIds.Value,
+                            TransactionDataSource = transactionDataSource.Key,
+                            TransactionTable = tableName,
+                        }).State = EntityState.Added;
+                    }
                 }
                 db.SaveChanges();
             }

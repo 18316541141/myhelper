@@ -67,44 +67,21 @@ namespace WebApplication1.Filter.Common
         {
             HttpContextBase httpContextBase = filterContext.HttpContext;
             HttpRequestBase request = httpContextBase.Request;
-            string operKey = request.UserHostAddress + request.Path;
-            if (RecordMap.ContainsKey(operKey))
+            HttpResponseBase response = httpContextBase.Response;
+            string operKey = request.UserHostAddress + request.Path.ToLower();
+            OperRecord operRecord=null;
+            lock (RecordMap)
             {
-                OperRecord operRecord = RecordMap[operKey];
-                lock (RecordMap)
+                if (RecordMap.ContainsKey(operKey))
                 {
+                    operRecord = RecordMap[operKey];
                     long totalMilliseconds = Convert.ToInt64((DateTime.Now - operRecord.LastOperDate).TotalMilliseconds);
                     int count = Convert.ToInt32((totalMilliseconds - totalMilliseconds % ClearMillisecond) / ClearMillisecond);
                     operRecord.Count = operRecord.Count > count ? operRecord.Count - count : 0;
                 }
-                if (operRecord.Count >= CountLimit)
-                {
-                    HttpResponseBase response = httpContextBase.Response;
-                    response.ContentEncoding = Encoding.UTF8;
-                    response.ContentType = "application/json;charset=UTF-8";
-                    response.StatusCode = 200;
-                    response.Write(JsonConvert.SerializeObject(new Result
-                    {
-                        code = -1,
-                        msg = "操作过于频繁、请稍后重试！",
-                    }));
-                    filterContext.Result = new EmptyResult();
-                }
                 else
                 {
-                    lock (RecordMap)
-                    {
-                        operRecord.Count++;
-                        operRecord.LastOperDate = DateTime.Now;
-                    }
-                    base.OnActionExecuting(filterContext);
-                }
-            }
-            else
-            {
-                lock (RecordMap)
-                {
-                    RecordMap.Add(operKey, new OperRecord
+                    RecordMap.Add(operKey, operRecord = new OperRecord
                     {
                         Count = 1,
                         OperKey = operKey,
@@ -112,11 +89,31 @@ namespace WebApplication1.Filter.Common
                     });
                 }
             }
+            if (operRecord.Count >= CountLimit)
+            {
+                response.ContentEncoding = Encoding.UTF8;
+                response.ContentType = "application/json;charset=UTF-8";
+                response.StatusCode = 200;
+                response.Write(JsonConvert.SerializeObject(new Result
+                {
+                    code = -1,
+                    msg = "操作过于频繁、请稍后重试！",
+                }));
+                filterContext.Result = new EmptyResult();
+            }
+            else
+            {
+                lock (RecordMap)
+                {
+                    operRecord.Count++;
+                    operRecord.LastOperDate = DateTime.Now;
+                }
+                base.OnActionExecuting(filterContext);
+            }
             if ((DateTime.Now - LastClearDate).TotalSeconds > 60)
             {
                 lock (RecordMap)
                 {
-                    OperRecord operRecord;
                     long sumMillisecond = ClearMillisecond * CountLimit;
                     foreach (string tkey in new HashSet<string>(RecordMap.Keys))
                     {

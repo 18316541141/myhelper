@@ -283,7 +283,6 @@
     <Compile Include="Params\ProvinceParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CityRepository.cs" />
-    <Compile Include="Repository\codeGenerator\DistributedIRobotQrCodePayTaskRepository.cs" />
     <Compile Include="Repository\DistrictRepository.cs" />
     <Compile Include="Repository\codeGenerator\IRobotQrCodePayTaskRepository.cs" />
     <Compile Include="Repository\ProvinceRepository.cs" />

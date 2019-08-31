@@ -1,9 +1,7 @@
 ﻿using Autofac.Extras.DynamicProxy;
+using CommonHelper.AopInterceptor;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using WebApplication1.AopInterceptor;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 using WebApplication1.Params;

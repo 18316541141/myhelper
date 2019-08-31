@@ -14,11 +14,16 @@ namespace CommonHelper.CommonEntity
         /// <summary>
         /// 关联事务总表的主键
         /// </summary>
-        public virtual long DistributedTransactionMainId { set; get; }
+        public virtual long? DistributedTransactionMainId { set; get; }
 
         /// <summary>
-        /// 事务总表的数据源
+        /// 事务所在的数据源
         /// </summary>
         public virtual string TransactionDataSource { set; get; }
+
+        /// <summary>
+        /// 事务所在的数据表
+        /// </summary>
+        public virtual string TransactionTable { set; get; }
     }
 }

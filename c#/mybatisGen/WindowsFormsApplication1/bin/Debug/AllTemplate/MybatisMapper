@@ -175,7 +175,10 @@ $entity.PropList:{
 	$entity.PropList:{
 		$if(it.ParamsTypeIsEqual)$
 			<if test="$it.PropName$!=null">$it.ColName$=#{$it.PropName$},</if>
+		$elseif(it.ParamsTypeIsChange)$
+			<if test="$it.PropName$!=null">$it.ColName$+=#{$it.PropName$},</if>
 		$endif$
+
 	}$
 		</set>
 		where $entity.KeyCol$=#{$entity.KeyName$}

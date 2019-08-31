@@ -1,0 +1,491 @@
+﻿using System;
+using CommonHelper.CommonEntity;
+using CommonHelper.Helper;
+using CommonHelper.Helper.EFDbContext;
+using CommonHelper.Helper.EFRepository;
+using CommonHelper.AopInterceptor;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using WebApplication1.Entity;
+using WebApplication1.Params;
+namespace WebApplication1.Repository
+{
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy>
+    {
+		/// <summary>
+        /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
+		/// 满足项目中常用的模糊查询，分页查询等功能
+        /// </summary>
+        /// <param name="query">待设置参数的query对象</param>
+        /// <param name="eqArgs">装载查询参数的实体类</param>
+		/// <param name="neqArgs">装载不等于查询参数的实体类</param>
+        /// <returns>返回设置好查询参数的query对象</returns>
+        protected override IQueryable<$entity.EntityName$> Query(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params eqArgs, $entity.EntityName$Params neqArgs = null)
+        {
+            if (eqArgs != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (eqArgs.$it.PropName$ != null)
+				{
+					query = query.Where(a => a.$it.SrcPropName$ == eqArgs.$it.PropName$);
+				}
+			$elseif(it.ParamsTypeIsRangeStart)$$if(!it.IsKey)$
+
+				if (eqArgs.$it.PropName$ != null)
+                {
+                    query = query.Where(a => a.$it.SrcPropName$ >= eqArgs.$it.PropName$);
+                }
+			$endif$$elseif(it.ParamsTypeIsRangeEnd)$$if(!it.IsKey)$
+
+				if (eqArgs.$it.PropName$ != null)
+                {
+                    query = query.Where(a => a.$it.SrcPropName$ <= eqArgs.$it.PropName$);
+                }
+			$endif$$elseif(it.ParamsTypeIsLike)$$if(!it.IsKey)$
+
+				if (!string.IsNullOrEmpty(eqArgs.$it.PropName$))
+                {
+                    query = query.Where(a => a.$it.SrcPropName$.Contains(eqArgs.$it.PropName$));
+                }
+			$endif$$endif$}$
+            }
+			if(neqArgs != null){
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (neqArgs.$it.PropName$ != null)
+				{
+					query = query.Where(a => a.$it.SrcPropName$ != neqArgs.$it.PropName$);
+				}
+			$elseif(it.ParamsTypeIsLike)$$if(!it.IsKey)$
+
+				if (!string.IsNullOrEmpty(neqArgs.$it.PropName$))
+                {
+					query = query.Where(a => !a.$it.SrcPropName$.Contains(neqArgs.$it.PropName$));
+				}
+			$endif$$endif$}$
+				query = OrderByAsc(query, eqArgs.orderByAsc);
+                query = OrderByDesc(query, eqArgs.orderByDesc);
+			}
+            return query;
+        }
+
+		/// <summary>
+        /// 升序排序的查询参数设置，当对应字段的升序设置为true时才会对
+		/// 该字段升序。
+        /// </summary>
+        /// <param name="query">待设置升序参数的query对象</param>
+        /// <param name="orderBy">装载升序参数的实体类</param>
+        /// <returns>返回设置好升序参数的query对象</returns>
+        IQueryable<$entity.EntityName$> OrderByAsc(IQueryable<$entity.EntityName$> query, $entity.EntityName$OrderBy orderBy)
+        {
+            if (orderBy != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (orderBy.$it.PropName$) { query = query.OrderBy(a => a.$it.PropName$); }
+			$endif$}$
+            }
+            return query;
+        }
+
+		/// <summary>
+        /// 降序排序的查询参数设置，当对应字段的升序设置为true时才会对
+		/// 该字段降序。
+        /// </summary>
+        /// <param name="query">待设置降序参数的query对象</param>
+        /// <param name="orderBy">装载降序参数的实体类</param>
+        /// <returns>返回设置好降序参数的query对象</returns>
+        IQueryable<$entity.EntityName$> OrderByDesc(IQueryable<$entity.EntityName$> query, $entity.EntityName$OrderBy orderBy)
+        {
+            if (orderBy != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (orderBy.$it.PropName$) { query = query.OrderByDescending(a => a.$it.PropName$); }
+			$endif$};separator="else "$
+				else
+				{
+					query = query.OrderByDescending(a => a.$entity.KeyName$);
+				}
+            }
+            else
+            {
+                query = query.OrderByDescending(a => a.$entity.KeyName$);
+            }
+            return query;
+        }
+
+		/// <summary>
+        /// 修改变化值，把entity不为null的数据视为变化值
+        /// </summary>
+        /// <param name="entity">修改实体类，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
+        /// <returns>返回修改的数据行数</returns>
+        public int UpdateChange($entity.EntityName$ entity)
+        {
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                $entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
+                dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (entity.$it.PropName$ != null)
+					{
+						updateBefore.$it.PropName$ = entity.$it.PropName$;
+					}
+			$endif$$endif$}$
+                return dbContext.SaveChanges();
+            }
+        }
+
+		/// <summary>
+        /// 批量修改变化值，把entity不为null的数据视为变化值
+        /// </summary>
+        /// <param name="entities">修改实体类集合，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
+        /// <returns>返回修改的数据行数</returns>
+		public int UpdateChangeBatch(List<$entity.EntityName$> entities)
+		{
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{
+					$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
+					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (entity.$it.PropName$ != null)
+					{
+						updateBefore.$it.PropName$ = entity.$it.PropName$;
+					}
+			$endif$$endif$}$
+				}
+				return dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 把指定字段值设置为null
+        /// </summary>
+        /// <param name="param">设为null的字段参数，主键必须要传入，其他字段等于true则表示设置为null</param>
+        /// <returns>返回修改的数据行数</returns>
+		public void SetNull($entity.EntityName$SetNullParams param)
+		{
+			 $entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
+			 using (BaseDbContext dbContext = CreateDbContext())
+             {
+				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+				if (param.$it.PropName$)
+				{
+					updateBefore.$it.PropName$ = null;
+				}
+				$endif$$endif$}$
+				dbContext.SaveChanges();
+			 }
+		}
+
+		/// <summary>
+        /// 检查分布式事务是否已完成
+        /// </summary>
+        /// <param name="primaryKeyVal">主键的值</param>
+		public bool CheckTransactionFinish(long primaryKeyVal)
+		{
+			return CheckTransactionFinish(primaryKeyVal, "$entity.TableName$");
+		}
+
+		/// <summary>
+        /// 分布式插入一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedInsert($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				dbContext.Entry(entity).State = EntityState.Added;
+				dbContext.Entry(new DistributedTransactionPart
+                {
+                    Id = IdWorker.NextId(),
+                    DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                    InverseOper = Convert.ToString(entity.$entity.KeyName$),
+					InverseOperType = 'D',
+                    TransTableName = "$entity.TableName$",
+                    TransPrimaryKey = "$entity.KeyCol$",
+                    TransPrimaryKeyVal= entity.$entity.KeyName$,
+                    TransactionStatus = 0,
+                    CreateDate = DateTime.Now,
+                }).State = EntityState.Added;
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式批量插入数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedInsert(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				foreach($entity.EntityName$ entity in entities)
+				{
+					dbContext.Entry(entity).State = EntityState.Added;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = Convert.ToString(entity.$entity.KeyName$),
+						InverseOperType = 'D',
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式把指定字段值设置为null，主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedSetNull($entity.EntityName$SetNullParams param)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==param.$entity.KeyName$).FirstOrDefault();
+				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				if(beforeData!=null)
+				{
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = param.$entity.KeyName$};
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Set<$entity.EntityName$>().Attach(beforeData);
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+					if (param.$it.PropName$)
+					{
+						inverseData.$it.PropName$ = beforeData.$it.PropName$;
+						beforeData.$it.PropName$ = null;
+					}
+					$endif$$endif$}$
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+						InverseOperType = 'N',
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= param.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式部分更新数据，数据的主键不能为null，只更新不为null的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateChange($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null)
+				{
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = entity.$entity.KeyName$};
+					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+						if (entity.$it.PropName$ != null)
+						{
+							updateBefore.$it.PropName$ = entity.$it.PropName$;
+							inverseData.$it.PropName$ = beforeData.$it.PropName$;
+						}
+					$endif$$endif$}$
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+						InverseOperType = 'C',
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateAll($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null)
+				{
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Entry(entity).State = EntityState.Modified;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+						InverseOperType = 'A',
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式批量全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateAllBatch(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{
+					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+					if(beforeData!=null)
+					{
+						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+						dbContext.Entry(entity).State = EntityState.Modified;
+						dbContext.Entry(new DistributedTransactionPart
+						{
+							Id = IdWorker.NextId(),
+							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+							InverseOperType = 'A',
+							TransTableName = "$entity.TableName$",
+							TransPrimaryKey = "$entity.KeyCol$",
+							TransPrimaryKeyVal= entity.$entity.KeyName$,
+							TransactionStatus = 0,
+							CreateDate = DateTime.Now,
+						}).State = EntityState.Added;
+					}
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		/// <summary>
+        /// 分布式删除一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedDelete($entity.EntityName$ entity)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				if(beforeData!=null){
+					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+					dbContext.Entry(entity).State = EntityState.Deleted;
+					dbContext.Entry(new DistributedTransactionPart
+					{
+						Id = IdWorker.NextId(),
+						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+						InverseOperType = 'I',
+						TransTableName = "$entity.TableName$",
+						TransPrimaryKey = "$entity.KeyCol$",
+						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransactionStatus = 0,
+						CreateDate = DateTime.Now,
+					}).State = EntityState.Added;
+					dbContext.SaveChanges();
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式删除一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedDelete(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{				
+					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+					if(beforeData!=null){
+						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+						dbContext.Entry(entity).State = EntityState.Deleted;
+						dbContext.Entry(new DistributedTransactionPart
+						{
+							Id = IdWorker.NextId(),
+							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
+							InverseOperType = 'I',
+							TransTableName = "$entity.TableName$",
+							TransPrimaryKey = "$entity.KeyCol$",
+							TransPrimaryKeyVal= entity.$entity.KeyName$,
+							TransactionStatus = 0,
+							CreateDate = DateTime.Now,
+						}).State = EntityState.Added;
+					}
+				}
+				dbContext.SaveChanges();
+			}
+		}
+
+		public override BaseDbContext CreateDbContext()
+        {
+            return new MyDbContext2();
+        }
+    }
+}

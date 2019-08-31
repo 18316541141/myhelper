@@ -23,11 +23,6 @@ namespace WebApplication1.Controllers.Common
         public SystemService SystemService { set; get; }
 
         /// <summary>
-        /// 上传文件所允许的路径
-        /// </summary>
-        HashSet<string> _allowPath { set; get; }
-
-        /// <summary>
         /// 验证码获取
         /// </summary>
         [AllowAnonymous]

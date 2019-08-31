@@ -9,6 +9,7 @@ using WebApplication1.Params;
 using WebApplication1.OrderBy;
 using CommonHelper.Helper.CommonExtensions;
 using CommonHelper.Helper.EFRepository;
+using CommonHelper.Helper.EFDbContext;
 
 namespace WebApplication1.Repository
 {
@@ -338,7 +339,7 @@ namespace WebApplication1.Repository
             }
         }
 
-        public override DbContext CreateDbContext()
+        public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext2();
         }

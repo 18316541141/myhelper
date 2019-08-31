@@ -5,12 +5,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
+using CommonHelper.Helper.EFDbContext;
 
 namespace WebApplication1.Repository
 {
     public class CityRepository : BaseRepository<City, City, City>
     {
-        public override DbContext CreateDbContext()
+        public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext();
         }

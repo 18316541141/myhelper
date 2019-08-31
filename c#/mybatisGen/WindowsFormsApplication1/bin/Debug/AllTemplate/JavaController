@@ -47,7 +47,20 @@ public class $entity.EntityName$Controller extends BaseController{
 		return new Result(0,null,service.page(param, currentPageIndex, pageSize));
 	}
 	----------------------------------------------------------------------------------------------------------------------------
-	导出excel，待定...
+	* 导出***模块，使用excel表保存
+	* @param param 筛选参数
+	* @param excelType excel的后缀名、类型
+	* @param currentPageIndex 当前页码
+	* @param pageSize 每页显示的数据量
+	* @return 返回excel
+	@RequestMapping("/export")
+	public ModelAndView export($entity.EntityName$Params param, String excelType, int currentPageIndex, int pageSize){
+		Map<String,Object> model=new HashMap<String,Object>();
+		model.put(MyExcelView.EXCEL_DATA, service.export(param, currentPageIndex, pageSize).getPageDataList());
+		model.put(MyExcelView.EXCEL_NAME, "excel文件名称."+excelType);
+		model.put(MyExcelView.GROUP_NAME, "组名称");
+		return new ModelAndView(myExcelView, model);
+	}
 	----------------------------------------------------------------------------------------------------------------------------
 	@RequestMapping("/import")
 	public Result importExcel(@RequestParam("fileUpload")MultipartFile fileUpload, 其他参数...){

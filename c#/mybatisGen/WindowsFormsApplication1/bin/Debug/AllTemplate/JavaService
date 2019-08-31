@@ -23,12 +23,28 @@ public class $entity.EntityName$Service extends BaseService{
  	$entity.EntityName$Params param = new $entity.EntityName$Params();
 	$entity.PropList:{param.set$it.CapUpperPropName$(param.get$it.CapUpperPropName$());}$
 	----------------------------------------------------------------------------------------------------------------------------
+	 * 分页查询***模块，并返回查询结果
+	 * @param param 查询参数
+	 * @param currentPageIndex 当前页码
+	 * @param pageSize 每页显示的数据量
+	public MyPagedList<$entity.EntityName$> export($entity.EntityName$Params param, int currentPageIndex,int pageSize) {
+		return mapper.bigPageList(param, currentPageIndex, pageSize);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
 	* 分页查询***模块，并返回查询结果
 	* @param param 查询参数
 	* @param currentPageIndex 当前页码
 	* @param pageSize 每页显示的数据量
 	public MyPagedList<$entity.EntityName$> page($entity.EntityName$Params param,int currentPageIndex,int pageSize){
 		return mapper.pageList(param, currentPageIndex, pageSize);
+	}
+	----------------------------------------------------------------------------------------------------------------------------
+	* 分页查询***模块，并返回查询结果
+	* @param param 查询参数
+	* @param currentPageIndex 当前页码
+	* @param pageSize 每页显示的数据量
+	public MyPagedList<$entity.EntityName$> export($entity.EntityName$Params param,int currentPageIndex,int pageSize){
+		return mapper.bigPageList(param, currentPageIndex, pageSize);
 	}
 	----------------------------------------------------------------------------------------------------------------------------
 	* 根据主键删除指定数据

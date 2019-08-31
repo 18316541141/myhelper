@@ -1,14 +1,19 @@
 ﻿using System;
+using CommonHelper.CommonEntity;
+using CommonHelper.Helper;
+using CommonHelper.Helper.EFDbContext;
+using CommonHelper.Helper.EFRepository;
+using CommonHelper.AopInterceptor;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
-using WebApplication1.MyExtensions;
 using WebApplication1.Params;
 namespace WebApplication1.Repository
 {
-    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy>,InverseRepository
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy>
     {
 		/// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -121,7 +126,7 @@ namespace WebApplication1.Repository
         /// <returns>返回修改的数据行数</returns>
         public int UpdateChange($entity.EntityName$ entity)
         {
-            using (DbContext dbContext = CreateDbContext())
+            using (BaseDbContext dbContext = CreateDbContext())
             {
                 $entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
                 dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
@@ -142,7 +147,7 @@ namespace WebApplication1.Repository
         /// <returns>返回修改的数据行数</returns>
 		public int UpdateChangeBatch(List<$entity.EntityName$> entities)
 		{
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				foreach($entity.EntityName$ entity in entities)
 				{
@@ -167,7 +172,7 @@ namespace WebApplication1.Repository
 		public void SetNull($entity.EntityName$SetNullParams param)
 		{
 			 $entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
-			 using (DbContext dbContext = CreateDbContext())
+			 using (BaseDbContext dbContext = CreateDbContext())
              {
 				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
@@ -190,22 +195,6 @@ namespace WebApplication1.Repository
 		}
 
 		/// <summary>
-        /// 分布式插入数据的反操作。当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedInsertInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			using (DbContext dbContext = CreateDbContext())
-            {
-				DistributedTransactionPart updateBefore=new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
-				dbContext.Entry(new $entity.EntityName${ $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
-				dbContext.Attach(updateBefore);
-				updateBefore.TransactionStatus = 2;
-				dbContext.SaveChanges();
-			}
-		}
-
-		/// <summary>
         /// 分布式插入一条数据，数据的主键不能为null
         /// </summary>
         /// <param name="entity">实体对象</param>
@@ -215,42 +204,25 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
-				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 				dbContext.Entry(entity).State = EntityState.Added;
 				dbContext.Entry(new DistributedTransactionPart
                 {
                     Id = IdWorker.NextId(),
                     DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
                     InverseOper = Convert.ToString(entity.$entity.KeyName$),
-					InverseOperType = "D",
+					InverseOperType = 'D',
                     TransTableName = "$entity.TableName$",
                     TransPrimaryKey = "$entity.KeyCol$",
                     TransPrimaryKeyVal= entity.$entity.KeyName$,
                     TransactionStatus = 0,
                     CreateDate = DateTime.Now,
                 }).State = EntityState.Added;
-				dbContext.SaveChanges();
-			}
-		}
-
-		/// <summary>
-        /// 分布式批量插入数据的反向操作。当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedInsertInverse(List<DistributedTransactionPart> distributedTransactionParts)
-		{
-			using (DbContext dbContext = CreateDbContext())
-            {
-				foreach(var distributedTransactionPart in distributedTransactionParts)
+				if(dbContext.SaveChanges()>0)
 				{
-					DistributedTransactionPart updateBefore=new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
-					dbContext.Entry(new $entity.EntityName${ $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
-					dbContext.Attach(updateBefore);
-					updateBefore.TransactionStatus = 2;
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
 				}
-				dbContext.SaveChanges();
 			}
 		}
 
@@ -264,7 +236,7 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 				foreach($entity.EntityName$ entity in entities)
@@ -275,7 +247,7 @@ namespace WebApplication1.Repository
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = Convert.ToString(entity.$entity.KeyName$),
-						InverseOperType = "D",
+						InverseOperType = 'D',
 						TransTableName = "$entity.TableName$",
 						TransPrimaryKey = "$entity.KeyCol$",
 						TransPrimaryKeyVal= entity.$entity.KeyName$,
@@ -283,31 +255,10 @@ namespace WebApplication1.Repository
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
 				}
-				dbContext.SaveChanges();
-			}
-		}
-
-		/// <summary>
-        /// 分布式setNull的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedSetNullInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			using (DbContext dbContext = CreateDbContext()
-            {
-				$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal };
-				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
-				$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
-				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-				if (entity.$it.PropName$!=null)
+				if(dbContext.SaveChanges()>0)
 				{
-					updateBefore.$it.PropName$ = entity.$it.PropName$;
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
 				}
-				$endif$$endif$}$
-				DistributedTransactionPart beforePart = new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
-				dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
-				beforePart.TransactionStatus = 2;
-				dbContext.SaveChanges();
 			}
 		}
 
@@ -321,15 +272,15 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext()
+			using (BaseDbContext dbContext = CreateDbContext())
             {
-				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==param.$entity.KeyName$).FirstOrDefault();
 				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 				if(beforeData!=null)
 				{
-					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = param.$entity.KeyName$};
 					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
-					dbContext.$entity.EntityNames$.Attach(beforeData);
+					dbContext.Set<$entity.EntityName$>().Attach(beforeData);
 					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 					if (param.$it.PropName$)
 					{
@@ -342,25 +293,19 @@ namespace WebApplication1.Repository
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
-						InverseOperType = "N",
+						InverseOperType = 'N',
 						TransTableName = "$entity.TableName$",
 						TransPrimaryKey = "$entity.KeyCol$",
-						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransPrimaryKeyVal= param.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
 				}
 			}
-		}
-
-		/// <summary>
-        /// 分布式部分更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedUpdateChangeInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			DistributedSetNullInverse(entity);
 		}
 
 		/// <summary>
@@ -373,7 +318,7 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
 				if(beforeData!=null)
@@ -381,7 +326,7 @@ namespace WebApplication1.Repository
 					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
 					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = entity.$entity.KeyName$};
-					dbContext.$entity.EntityNames$.Attach(updateBefore);
+					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
 					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 						if (entity.$it.PropName$ != null)
 						{
@@ -394,25 +339,19 @@ namespace WebApplication1.Repository
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
-						InverseOperType = "C",
+						InverseOperType = 'C',
 						TransTableName = "$entity.TableName$",
 						TransPrimaryKey = "$entity.KeyCol$",
 						TransPrimaryKeyVal= entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
 				}
 			}
-		}
-
-		/// <summary>
-        /// 分布式全覆盖更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedUpdateAllInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			DistributedSetNullInverse(entity);
 		}
 
 		/// <summary>
@@ -425,7 +364,7 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
 				if(beforeData!=null)
@@ -437,42 +376,18 @@ namespace WebApplication1.Repository
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-						InverseOperType = "A",
+						InverseOperType = 'A',
 						TransTableName = "$entity.TableName$",
 						TransPrimaryKey = "$entity.KeyCol$",
 						TransPrimaryKeyVal= entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
-				}
-			}
-		}
-
-		/// <summary>
-        /// 分布式批量全覆盖更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedUpdateAllBatchInverse(List<DistributedTransactionPart> distributedTransactionParts)
-		{
-			using (DbContext dbContext = CreateDbContext()
-            {
-				foreach(var distributedTransactionPart in distributedTransactionParts)
-				{
-					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = distributedTransactionPart.TransPrimaryKeyVal };
-					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
-					$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
-					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-					if (entity.$it.PropName$!=null)
+					if(dbContext.SaveChanges()>0)
 					{
-						updateBefore.$it.PropName$ = entity.$it.PropName$;
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
 					}
-					$endif$$endif$}$
-					DistributedTransactionPart beforePart = new DistributedTransactionPart{Id = distributedTransactionPart.Id};
-					dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
-					beforePart.TransactionStatus = 2;
 				}
-				dbContext.SaveChanges();
 			}
 		}
 
@@ -486,21 +401,20 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				foreach($entity.EntityName$ entity in entities)
 				{
 					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
 					if(beforeData!=null)
 					{
-						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 						dbContext.Entry(entity).State = EntityState.Modified;
 						dbContext.Entry(new DistributedTransactionPart
 						{
 							Id = IdWorker.NextId(),
 							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-							InverseOperType = "A",
+							InverseOperType = 'A',
 							TransTableName = "$entity.TableName$",
 							TransPrimaryKey = "$entity.KeyCol$",
 							TransPrimaryKeyVal= entity.$entity.KeyName$,
@@ -509,24 +423,10 @@ namespace WebApplication1.Repository
 						}).State = EntityState.Added;
 					}
 				}
-				dbContext.SaveChanges();
-			}
-		}
-
-		/// <summary>
-        /// 分布式删除数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedDeleteInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			using (DbContext dbContext = CreateDbContext())
-            {
-				$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
-				dbContext.Entry(entity).State = EntityState.Added;
-				DistributedTransactionPart beforePart = new DistributedTransactionPart{Id = distributedTransactionPart.Id};
-				dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
-				beforePart.TransactionStatus = 2;
-				dbContext.SaveChanges();
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+				}
 			}
 		}
 
@@ -540,46 +440,28 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
 				if(beforeData!=null){
-					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 					dbContext.Entry(entity).State = EntityState.Deleted;
 					dbContext.Entry(new DistributedTransactionPart
 					{
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-						InverseOperType = "I",
+						InverseOperType = 'I',
 						TransTableName = "$entity.TableName$",
 						TransPrimaryKey = "$entity.KeyCol$",
 						TransPrimaryKeyVal= entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
 				}
-			}
-		}
-
-		/// <summary>
-        /// 分布式删除批量数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public void DistributedDeleteInverse(List<DistributedTransactionPart> distributedTransactionParts)
-		{
-			using (DbContext dbContext = CreateDbContext())
-            {
-				foreach(DistributedTransactionPart distributedTransactionPart in distributedTransactionParts)
-				{
-					$entity.EntityName$ entity =JsonConvert.DeserializeObject<$entity.EntityName$>(CompressHelper.GZipDecompressString(distributedTransactionPart.InverseOper));
-					dbContext.Entry(entity).State = EntityState.Added;
-					DistributedTransactionPart beforePart = new DistributedTransactionPart{Id = distributedTransactionPart.Id};
-					dbContext.Set<DistributedTransactionPart>().Attach(beforePart);
-					beforePart.TransactionStatus = 2;
-				}
-				dbContext.SaveChanges();
 			}
 		}
 
@@ -593,20 +475,19 @@ namespace WebApplication1.Repository
             {
                 throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
             }
-			using (DbContext dbContext = CreateDbContext())
+			using (BaseDbContext dbContext = CreateDbContext())
             {
 				foreach($entity.EntityName$ entity in entities)
 				{				
 					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
 					if(beforeData!=null){
-						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 						dbContext.Entry(entity).State = EntityState.Deleted;
 						dbContext.Entry(new DistributedTransactionPart
 						{
 							Id = IdWorker.NextId(),
 							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-							InverseOperType = "I",
+							InverseOperType = 'I',
 							TransTableName = "$entity.TableName$",
 							TransPrimaryKey = "$entity.KeyCol$",
 							TransPrimaryKeyVal= entity.$entity.KeyName$,
@@ -615,11 +496,14 @@ namespace WebApplication1.Repository
 						}).State = EntityState.Added;
 					}
 				}
-				dbContext.SaveChanges();
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+				}
 			}
 		}
 
-		public override DbContext CreateDbContext()
+		public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext2();
         }

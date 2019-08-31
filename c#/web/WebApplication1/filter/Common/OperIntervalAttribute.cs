@@ -41,48 +41,46 @@ namespace WebApplication1.Filter.Common
         {
             HttpContextBase httpContextBase = filterContext.HttpContext;
             HttpRequestBase request = httpContextBase.Request;
-            string key = request.UserHostAddress + request.Path;
-            if (RecordMap.ContainsKey(key))
+            string key = request.UserHostAddress + request.Path.ToLower();
+            bool temp = false;
+            lock (RecordMap)
             {
-                bool temp;
+                if (RecordMap.ContainsKey(key))
+                {
+                    temp = (DateTime.Now - RecordMap[key]).TotalMilliseconds > IntervalMillisecond;
+                }
+                else
+                {
+                    RecordMap.Add(key, DateTime.Now);
+                }
+            }
+            if (temp)
+            {
                 lock (RecordMap)
                 {
                     if (RecordMap.ContainsKey(key))
                     {
-                        temp = (DateTime.Now - RecordMap[key]).TotalMilliseconds > IntervalMillisecond;
                         RecordMap[key] = DateTime.Now;
                     }
                     else
                     {
                         RecordMap.Add(key, DateTime.Now);
-                        temp = false;
                     }
                 }
-                if(temp)
-                {
-                    HttpResponseBase response = httpContextBase.Response;
-                    response.ContentEncoding = Encoding.UTF8;
-                    response.ContentType = "application/json;charset=UTF-8";
-                    response.StatusCode = 200;
-                    response.Write(JsonConvert.SerializeObject(new Result
-                    {
-                        code = -1,
-                        msg = "操作过于频繁、请稍后重试！",
-                    }));
-                    filterContext.Result = new EmptyResult();
-                }
-                else
-                {
-					base.OnActionExecuting(filterContext);
-                }
+                base.OnActionExecuting(filterContext);
             }
             else
             {
-                lock (RecordMap)
+                HttpResponseBase response = httpContextBase.Response;
+                response.ContentEncoding = Encoding.UTF8;
+                response.ContentType = "application/json;charset=UTF-8";
+                response.StatusCode = 200;
+                response.Write(JsonConvert.SerializeObject(new Result
                 {
-                    RecordMap.Add(key, DateTime.Now);
-                }
-                base.OnActionExecuting(filterContext);
+                    code = -1,
+                    msg = "操作过于频繁、请稍后重试！",
+                }));
+                filterContext.Result = new EmptyResult();
             }
             if ((DateTime.Now - LastClearDate).TotalSeconds > 60)
             {

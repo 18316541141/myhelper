@@ -14,6 +14,7 @@ namespace CommonHelper.Helper.EFMap
             this.ToTable("Distributed_Transaction_Main_Detail");
             this.Property(u => u.DistributedTransactionMainId).HasColumnName("DistributedTransactionMainId");
             this.Property(u => u.TransactionDataSource).HasColumnName("TransactionDataSource");
+            this.Property(u => u.TransactionTable).HasColumnName("TransactionTable");
         }
     }
 }

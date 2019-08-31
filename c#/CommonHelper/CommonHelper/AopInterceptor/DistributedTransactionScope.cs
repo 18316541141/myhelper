@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.AopInterceptor
+namespace CommonHelper.AopInterceptor
 {
     /// <summary>
     /// 启用分布式事务的标记

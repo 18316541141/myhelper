@@ -10,6 +10,7 @@ using Newtonsoft.Json.Converters;
 using CommonHelper.Helper.EFDbContext;
 using CommonHelper.CommonEntity;
 using CommonHelper.EFRepository;
+using CommonHelper.AopInterceptor;
 
 namespace CommonHelper.Helper.EFRepository
 {
@@ -17,7 +18,7 @@ namespace CommonHelper.Helper.EFRepository
     /// 通用的数据操作基类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class BaseRepository<TEntity, TParams, TOrderBy>: InverseRepository where TEntity : class where TParams : class where TOrderBy : class
+    public abstract class BaseRepository<TEntity, TParams, TOrderBy> where TEntity : class where TParams : class where TOrderBy : class
     {
         /// <summary>
         /// 分布式雪花id生成器
@@ -37,49 +38,11 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
-        /// 根据事务id，查询事务未确定或未取消的分表信息。
-        /// </summary>
-        /// <param name="transactionId">事务id</param>
-        /// <returns></returns>
-        public List<DistributedTransactionPart> FindTransPartsById(long? transactionId=null)
-        {
-            using (DbContext dbContext = CreateDbContext())
-            {
-                var query = dbContext.Set<DistributedTransactionPart>().AsNoTracking().AsQueryable().Where(a => a.TransactionStatus == 0);
-                if (transactionId != null)
-                {
-                    query.Where(a=> a.DistributedTransactionMainId == transactionId);
-                }
-                return query.Select(a=>new DistributedTransactionPart { Id=a.Id,InverseOper=a.InverseOper,InverseOperType=a.InverseOperType,TransPrimaryKeyVal=a.TransPrimaryKeyVal })
-                    .ToList();
-            }
-        }
-
-        /// <summary>
-        /// 更新事务分表状态
-        /// </summary>
-        /// <param name="idList">事务分表的主键</param>
-        /// <param name="status">更新状态</param>
-        public void UpdateTransPartsStatus(List<long> idList, sbyte status)
-        {
-            using (DbContext dbContext = CreateDbContext())
-            {
-                foreach (long id in idList)
-                {
-                    DistributedTransactionPart updateBefore = new DistributedTransactionPart {Id=id };
-                    dbContext.Set<DistributedTransactionPart>().Attach(updateBefore);
-                    updateBefore.TransactionStatus = status;
-                    dbContext.SaveChanges();
-                }
-            }
-        }
-
-        /// <summary>
         /// 创建DbContext，为解决每张表可能不在同一个数据库内的问题，
         /// 由子类决定创建哪一种DbContext
         /// </summary>
         /// <returns></returns>
-        public abstract DbContext CreateDbContext();
+        public abstract BaseDbContext CreateDbContext();
 
         /// <summary>
         /// 只读数据操作
@@ -374,29 +337,56 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
-        /// 检查分布式事务是否已完成
+        /// 检查分布式事务是否为成功提交，只有提交成功才能继续操作，提交失败则无法继续操作
         /// </summary>
         /// <param name="primaryKeyVal">主键的值</param>
         /// <param name="transTableName">事务操作的表名称</param>
-		public bool CheckTransactionFinish(long primaryKeyVal, string transTableName)
+		public bool CheckTransactionFinish(long? primaryKeyVal, string transTableName)
         {
             using (DbContext dbContext = CreateDbContext())
             {
                 var query = dbContext.Set<DistributedTransactionPart>().AsNoTracking().AsQueryable().Where(a => a.TransTableName == transTableName && a.TransPrimaryKeyVal == primaryKeyVal && a.TransactionStatus == 0);
                 if (query.Any())
                 {
-                    long distributedTransactionMainId = query.Select(a => a.DistributedTransactionMainId).FirstOrDefault();
-                    var result=ReadOnlyMainDbContext.DistributedTransactionMains.AsNoTracking().AsQueryable().Where(a => a.Id == distributedTransactionMainId).Any();
-                    if (result)
+                    long? distributedTransactionMainId = query.Select(a => a.DistributedTransactionMainId).FirstOrDefault();
+                    var result=ReadOnlyMainDbContext.DistributedTransactionMains.AsNoTracking().AsQueryable().Where(a => a.Id == distributedTransactionMainId && a.TransactionStatus==1).Any();
+                    List<string> dataSrcs = ReadOnlyMainDbContext.DistributedTransactionMainDetails.AsNoTracking().AsQueryable().Where(a=>a.DistributedTransactionMainId== distributedTransactionMainId).Select(a=>a.TransactionDataSource).ToList();
+                    foreach (string dataSrc in dataSrcs)
                     {
-                        ///调用消息队列，通知确认事务
-                        return true;
+                        InverseRepository inverseRepository = RepositoryStatic.InverseRepositoryMap[dataSrc];
+                        List<DistributedTransactionPart> distributedTransactionPartList = inverseRepository.FindTransPartsById(distributedTransactionMainId);
+                        if (result)
+                        {
+                            inverseRepository.UpdateTransPartsStatus(distributedTransactionPartList.Select(a => a.Id).ToList(), 1);
+                        }
+                        else
+                        {
+                            foreach (DistributedTransactionPart distributedTransactionPart in distributedTransactionPartList)
+                            {
+                                if (distributedTransactionPart.InverseOperType == 'D')
+                                {
+                                    inverseRepository.DistributedDeleteInverse(distributedTransactionPart);
+                                }
+                                else if (distributedTransactionPart.InverseOperType == 'I')
+                                {
+                                    inverseRepository.DistributedInsertInverse(distributedTransactionPart);
+                                }
+                                else if (distributedTransactionPart.InverseOperType == 'A')
+                                {
+                                    inverseRepository.DistributedUpdateAllInverse(distributedTransactionPart);
+                                }
+                                else if (distributedTransactionPart.InverseOperType == 'C')
+                                {
+                                    inverseRepository.DistributedUpdateChangeInverse(distributedTransactionPart);
+                                }
+                                else if (distributedTransactionPart.InverseOperType == 'N')
+                                {
+                                    inverseRepository.DistributedSetNullInverse(distributedTransactionPart);
+                                }
+                            }
+                        }
                     }
-                    else
-                    {
-                        ///调用消息队列，通知取消事务
-                        return false;
-                    }
+                    return result;
                 }
                 else
                 {
@@ -521,14 +511,24 @@ namespace CommonHelper.Helper.EFRepository
             }
         }
 
-        public virtual void DistributedInsertInverse(DistributedTransactionPart distributedTransactionPart) { }
-        public virtual void DistributedInsertInverse(List<DistributedTransactionPart> distributedTransactionParts) { }
-        public virtual void DistributedSetNullInverse(DistributedTransactionPart distributedTransactionPart) { }
-        public virtual void DistributedUpdateChangeInverse(DistributedTransactionPart distributedTransactionPart) { }
-        public virtual void DistributedUpdateAllInverse(DistributedTransactionPart distributedTransactionPart) { }
-        public virtual void DistributedUpdateAllBatchInverse(List<DistributedTransactionPart> distributedTransactionParts) { }
-        public virtual void DistributedDeleteInverse(DistributedTransactionPart distributedTransactionPart) { }
-        public virtual void DistributedDeleteInverse(List<DistributedTransactionPart> distributedTransactionParts) { }
-        
+        /// <summary>
+        /// 记录分布式事务操作时涉及到的表和数据源
+        /// </summary>
+        /// <param name="dataSrc">记录的数据源</param>
+        /// <param name="tableName">记录的表</param>
+        protected void RecordDistribute(string dataSrc,string tableName)
+        {
+            var dataSrcMap = DistributedTransactionScan.TransactionDataSources.Value;
+            if (dataSrcMap.ContainsKey(dataSrc))
+            {
+                dataSrcMap[dataSrc].Add(tableName);
+            }
+            else
+            {
+                HashSet<string> tableNameSet = new HashSet<string>();
+                dataSrcMap.Add(dataSrc, tableNameSet);
+                tableNameSet.Add(tableName);
+            }
+        }
     }
 }
