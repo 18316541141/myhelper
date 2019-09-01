@@ -1,4 +1,4 @@
-package web.template.filter;
+package web.template.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;

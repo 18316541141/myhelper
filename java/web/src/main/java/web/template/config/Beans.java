@@ -28,8 +28,8 @@ import com.google.code.kaptcha.util.Config;
 import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
-import web.template.filter.SignInterceptor;
-import web.template.filter.UpdateVersionInterceptor;
+import web.template.interceptor.SignInterceptor;
+import web.template.interceptor.UpdateVersionInterceptor;
 import web.template.service.common.SystemService;
 import web.template.shiro.MyFormAuthenticationFilter;
 import web.template.shiro.MyPermissionResolver;

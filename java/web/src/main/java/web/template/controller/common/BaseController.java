@@ -9,18 +9,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.ServletContextResource;
 
 import com.txj.common.SnowFlakeHelper;
 
+import web.template.entity.common.Result;
+import web.template.exception.ResultException;
 import web.template.view.MyExcelView;
 
 /**
  * 基础控制器，所有控制器必须基础该控制器。
  * @author admin
  */
+@RestController
 public abstract class BaseController {
 	
 	@Autowired
@@ -45,6 +50,21 @@ public abstract class BaseController {
 	
 	public BaseController(){
 		logger=LogManager.getLogger(this.getClass());
+	}
+	
+	/**
+	 * 
+	 * @param throwable
+	 * @return
+	 */
+	@ExceptionHandler(Throwable.class)
+	public Result handleException(Throwable throwable){
+		if(throwable instanceof ResultException){
+			ResultException resultException=(ResultException)throwable;
+			return resultException.getResult();
+		}else{
+			return new Result(-1, "系统繁忙，请稍后重试...", null);
+		}		
 	}
 	
 	/**

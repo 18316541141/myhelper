@@ -1,4 +1,4 @@
-package web.template.filter;
+package web.template.interceptor;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package web.template.filter;
+package web.template.interceptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
