@@ -1,0 +1,7 @@
+﻿/// <summary>
+/// 微信商务助手二维码支付任务表
+/// </summary>
+public DbSet<IRobotQrCodePayTask> IRobotQrCodePayTasks { set; get; }
+
+
+modelBuilder.Configurations.Add(new IRobotQrCodePayTaskMap());

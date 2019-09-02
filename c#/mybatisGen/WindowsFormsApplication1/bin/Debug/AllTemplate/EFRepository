@@ -13,7 +13,7 @@ using WebApplication1.Entity;
 using WebApplication1.Params;
 namespace WebApplication1.Repository
 {
-    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy>
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy,$entity.EntityName$SetNullParams>
     {
 		/// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -120,78 +120,46 @@ namespace WebApplication1.Repository
         }
 
 		/// <summary>
-        /// 修改变化值，把entity不为null的数据视为变化值
+        /// 修改变化值的部分共用代码，这里抽取出来简化结构
         /// </summary>
-        /// <param name="entity">修改实体类，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
-        /// <returns>返回修改的数据行数</returns>
-        public int UpdateChange($entity.EntityName$ entity)
-        {
-            using (BaseDbContext dbContext = CreateDbContext())
-            {
-                $entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
-                dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
-			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-					if (entity.$it.PropName$ != null)
-					{
-						updateBefore.$it.PropName$ = entity.$it.PropName$;
-					}
-			$endif$$endif$}$
-                return dbContext.SaveChanges();
-            }
-        }
-
-		/// <summary>
-        /// 批量修改变化值，把entity不为null的数据视为变化值
-        /// </summary>
-        /// <param name="entities">修改实体类集合，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
-        /// <returns>返回修改的数据行数</returns>
-		public int UpdateChangeBatch(List<$entity.EntityName$> entities)
+        /// <param name="updateBefore"></param>
+        /// <param name="entity"></param>
+        protected override void UpdateChange(BaseDbContext dbContext, $entity.EntityName$ entity)
 		{
-			using (BaseDbContext dbContext = CreateDbContext())
-            {
-				foreach($entity.EntityName$ entity in entities)
-				{
-					$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
-					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+			$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
+			dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-					if (entity.$it.PropName$ != null)
-					{
-						updateBefore.$it.PropName$ = entity.$it.PropName$;
-					}
-			$endif$$endif$}$
-				}
-				return dbContext.SaveChanges();
+			if (entity.$it.PropName$ != null)
+			{
+				updateBefore.$it.PropName$ = entity.$it.PropName$;
 			}
+			$endif$$endif$}$
 		}
 
 		/// <summary>
-        /// 把指定字段值设置为null
+        /// 把指定字段值设置为null的部分共用代码，这里抽取出来简化结构
         /// </summary>
-        /// <param name="param">设为null的字段参数，主键必须要传入，其他字段等于true则表示设置为null</param>
-        /// <returns>返回修改的数据行数</returns>
-		public void SetNull($entity.EntityName$SetNullParams param)
+        /// <param name="dbContext"></param>
+        /// <param name="param"></param>
+        protected override void SetNull(BaseDbContext dbContext, $entity.EntityName$SetNullParams param)
 		{
-			 $entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
-			 using (BaseDbContext dbContext = CreateDbContext())
-             {
-				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
-				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-				if (param.$it.PropName$)
-				{
-					updateBefore.$it.PropName$ = null;
-				}
-				$endif$$endif$}$
-				dbContext.SaveChanges();
-			 }
+			$entity.EntityName$ updateBefore = FindEntity(param.$entity.KeyName$);
+			dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+			if (param.$it.PropName$)
+			{
+				updateBefore.$it.PropName$ = null;
+			}
+			$endif$$endif$}$
 		}
 
 		/// <summary>
         /// 检查分布式事务是否已完成
         /// </summary>
         /// <param name="primaryKeyVal">主键的值</param>
-		public bool CheckTransactionFinish(long primaryKeyVal)
+		public void CheckTransactionFinish(long primaryKeyVal)
 		{
-			return CheckTransactionFinish(primaryKeyVal, "$entity.TableName$");
+			CheckTransactionFinish(primaryKeyVal, "$entity.TableName$");
 		}
 
 		/// <summary>
@@ -206,21 +174,22 @@ namespace WebApplication1.Repository
             }
 			using (BaseDbContext dbContext = CreateDbContext())
             {
-				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 				dbContext.Entry(entity).State = EntityState.Added;
 				dbContext.Entry(new DistributedTransactionPart
                 {
                     Id = IdWorker.NextId(),
                     DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
                     InverseOper = Convert.ToString(entity.$entity.KeyName$),
-					InverseOperType = 'D',
+					InverseOperType = 'd',
                     TransTableName = "$entity.TableName$",
-                    TransPrimaryKey = "$entity.KeyCol$",
-                    TransPrimaryKeyVal= entity.$entity.KeyName$,
+					TransPrimaryKeyVal = entity.$entity.KeyName$,
                     TransactionStatus = 0,
                     CreateDate = DateTime.Now,
                 }).State = EntityState.Added;
-				dbContext.SaveChanges();
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+				}
 			}
 		}
 
@@ -236,7 +205,6 @@ namespace WebApplication1.Repository
             }
 			using (BaseDbContext dbContext = CreateDbContext())
             {
-				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 				foreach($entity.EntityName$ entity in entities)
 				{
 					dbContext.Entry(entity).State = EntityState.Added;
@@ -247,13 +215,15 @@ namespace WebApplication1.Repository
 						InverseOper = Convert.ToString(entity.$entity.KeyName$),
 						InverseOperType = 'D',
 						TransTableName = "$entity.TableName$",
-						TransPrimaryKey = "$entity.KeyCol$",
-						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransPrimaryKeyVal = entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
 				}
-				dbContext.SaveChanges();
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+				}
 			}
 		}
 
@@ -269,12 +239,10 @@ namespace WebApplication1.Repository
             }
 			using (BaseDbContext dbContext = CreateDbContext())
             {
-				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==param.$entity.KeyName$).FirstOrDefault();
-				DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
+				$entity.EntityName$ beforeData= FindEntity(param.$entity.KeyName$);
 				if(beforeData!=null)
 				{
 					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = param.$entity.KeyName$};
-					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 					dbContext.Set<$entity.EntityName$>().Attach(beforeData);
 					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
 					if (param.$it.PropName$)
@@ -288,14 +256,16 @@ namespace WebApplication1.Repository
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
-						InverseOperType = 'N',
+						InverseOperType = 'u',
 						TransTableName = "$entity.TableName$",
-						TransPrimaryKey = "$entity.KeyCol$",
-						TransPrimaryKeyVal= param.$entity.KeyName$,
+						TransPrimaryKeyVal = param.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
 				}
 			}
 		}
@@ -312,33 +282,85 @@ namespace WebApplication1.Repository
             }
 			using (BaseDbContext dbContext = CreateDbContext())
             {
-				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				$entity.EntityName$ beforeData = FindEntity(entity.$entity.KeyName$);
 				if(beforeData!=null)
 				{
 					$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
-					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
-					$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = entity.$entity.KeyName$};
-					dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
-					$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-						if (entity.$it.PropName$ != null)
-						{
-							updateBefore.$it.PropName$ = entity.$it.PropName$;
-							inverseData.$it.PropName$ = beforeData.$it.PropName$;
-						}
-					$endif$$endif$}$
+					DistributedUpdateChange(beforeData, inverseData, entity, dbContext);
 					dbContext.Entry(new DistributedTransactionPart
 					{
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
-						InverseOperType = 'C',
+						InverseOperType = 'u',
 						TransTableName = "$entity.TableName$",
-						TransPrimaryKey = "$entity.KeyCol$",
-						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransPrimaryKeyVal = entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
+				}
+			}
+		}
+
+		/// <summary>
+        /// 分布式更新部分数据的共用代码，
+        /// </summary>
+        /// <param name="beforeData"></param>
+        /// <param name="inverseData"></param>
+        /// <param name="entity"></param>
+        /// <param name="dbContext"></param>
+        void DistributedUpdateChange(IRobotQrCodePayTask beforeData, IRobotQrCodePayTask inverseData, IRobotQrCodePayTask entity, BaseDbContext dbContext)
+        {
+			$entity.EntityName$ updateBefore = new $entity.EntityName$ { $entity.KeyName$ = entity.$entity.KeyName$};
+			dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+				if (entity.$it.PropName$ != null)
+				{
+					updateBefore.$it.PropName$ = entity.$it.PropName$;
+					inverseData.$it.PropName$ = beforeData.$it.PropName$;
+				}
+			$endif$$endif$}$
+		}
+
+		/// <summary>
+        /// 分布式批量的部分更新数据，数据的主键不能为null，只更新不为null的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+		public void DistributedUpdateChange(List<$entity.EntityName$> entities)
+		{
+			if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+			using (BaseDbContext dbContext = CreateDbContext())
+            {
+				foreach($entity.EntityName$ entity in entities)
+				{
+					$entity.EntityName$ beforeData = FindEntity(entity.$entity.KeyName$);
+					if(beforeData!=null)
+					{
+						$entity.EntityName$ inverseData = new $entity.EntityName${ $entity.KeyName$ = entity.$entity.KeyName$};
+						DistributedUpdateChange(beforeData, inverseData, entity, dbContext);
+						dbContext.Entry(new DistributedTransactionPart
+						{
+							Id = IdWorker.NextId(),
+							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData,TimeConverter)),
+							InverseOperType = 'U',
+							TransTableName = "$entity.TableName$",
+							TransPrimaryKeyVal = entity.$entity.KeyName$,
+							TransactionStatus = 0,
+							CreateDate = DateTime.Now,
+						}).State = EntityState.Added;
+					}
+				}
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
 				}
 			}
 		}
@@ -355,24 +377,25 @@ namespace WebApplication1.Repository
             }
 			using (BaseDbContext dbContext = CreateDbContext())
             {
-				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				$entity.EntityName$ beforeData = FindEntity(entity.$entity.KeyName$);
 				if(beforeData!=null)
 				{
-					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 					dbContext.Entry(entity).State = EntityState.Modified;
 					dbContext.Entry(new DistributedTransactionPart
 					{
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-						InverseOperType = 'A',
+						InverseOperType = 'u',
 						TransTableName = "$entity.TableName$",
-						TransPrimaryKey = "$entity.KeyCol$",
-						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransPrimaryKeyVal = entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
 				}
 			}
 		}
@@ -391,26 +414,27 @@ namespace WebApplication1.Repository
             {
 				foreach($entity.EntityName$ entity in entities)
 				{
-					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+					$entity.EntityName$ beforeData = FindEntity(entity.$entity.KeyName$);
 					if(beforeData!=null)
 					{
-						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 						dbContext.Entry(entity).State = EntityState.Modified;
 						dbContext.Entry(new DistributedTransactionPart
 						{
 							Id = IdWorker.NextId(),
 							DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-							InverseOperType = 'A',
+							InverseOperType = 'U',
 							TransTableName = "$entity.TableName$",
-							TransPrimaryKey = "$entity.KeyCol$",
-							TransPrimaryKeyVal= entity.$entity.KeyName$,
+							TransPrimaryKeyVal = entity.$entity.KeyName$,
 							TransactionStatus = 0,
 							CreateDate = DateTime.Now,
 						}).State = EntityState.Added;
 					}
 				}
-				dbContext.SaveChanges();
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+				}
 			}
 		}
 
@@ -426,26 +450,28 @@ namespace WebApplication1.Repository
             }
 			using (BaseDbContext dbContext = CreateDbContext())
             {
-				$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				$entity.EntityName$ beforeData = FindEntity(entity.$entity.KeyName$);
 				if(beforeData!=null){
-					DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 					dbContext.Entry(entity).State = EntityState.Deleted;
 					dbContext.Entry(new DistributedTransactionPart
 					{
 						Id = IdWorker.NextId(),
 						DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
 						InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
-						InverseOperType = 'I',
+						InverseOperType = 'i',
 						TransTableName = "$entity.TableName$",
-						TransPrimaryKey = "$entity.KeyCol$",
-						TransPrimaryKeyVal= entity.$entity.KeyName$,
+						TransPrimaryKeyVal = entity.$entity.KeyName$,
 						TransactionStatus = 0,
 						CreateDate = DateTime.Now,
 					}).State = EntityState.Added;
-					dbContext.SaveChanges();
+					if(dbContext.SaveChanges()>0)
+					{
+						RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+					}
 				}
 			}
 		}
+
 
 		/// <summary>
         /// 分布式删除一条数据，数据的主键不能为null
@@ -460,10 +486,9 @@ namespace WebApplication1.Repository
 			using (BaseDbContext dbContext = CreateDbContext())
             {
 				foreach($entity.EntityName$ entity in entities)
-				{				
-					$entity.EntityName$ beforeData=dbContext.Set<$entity.EntityName$>().AsNoTracking().AsQueryable().Where(a=>a.$entity.KeyName$==entity.$entity.KeyName$).FirstOrDefault();
+				{
+					$entity.EntityName$ beforeData = FindEntity(entity.$entity.KeyName$);
 					if(beforeData!=null){
-						DistributedTransactionScan.TransactionDataSources.Value.Add(dbContext.TransactionDataSource);
 						dbContext.Entry(entity).State = EntityState.Deleted;
 						dbContext.Entry(new DistributedTransactionPart
 						{
@@ -472,14 +497,16 @@ namespace WebApplication1.Repository
 							InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData,TimeConverter)),
 							InverseOperType = 'I',
 							TransTableName = "$entity.TableName$",
-							TransPrimaryKey = "$entity.KeyCol$",
-							TransPrimaryKeyVal= entity.$entity.KeyName$,
+							TransPrimaryKeyVal = entity.$entity.KeyName$,
 							TransactionStatus = 0,
 							CreateDate = DateTime.Now,
 						}).State = EntityState.Added;
 					}
 				}
-				dbContext.SaveChanges();
+				if(dbContext.SaveChanges()>0)
+				{
+					RecordDistribute(dbContext.TransactionDataSource,"$entity.TableName$");
+				}
 			}
 		}
 

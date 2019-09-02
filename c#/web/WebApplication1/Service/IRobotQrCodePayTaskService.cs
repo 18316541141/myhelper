@@ -38,12 +38,11 @@ namespace WebApplication1.Service
         
         public void Del(int irTaskID)
         {
-            IRobotQrCodePayTaskRepository.Delete(a=>a.irTaskID==irTaskID);
+            
         }
 
         public void DelBatch(List<int?> irTaskIds)
         {
-            IRobotQrCodePayTaskRepository.Delete(a=> irTaskIds.Contains(a.irTaskID));
         }
     }
 }

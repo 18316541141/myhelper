@@ -1,7 +1,0 @@
-﻿/// <summary>
-/// 支付机器人管理器
-/// </summary>
-public DbSet<IRobotRobotManager> IRobotRobotManagers { set; get; }
-
-
-modelBuilder.Configurations.Add(new IRobotRobotManagerMap());

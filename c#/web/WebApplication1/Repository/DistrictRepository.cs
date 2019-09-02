@@ -9,7 +9,7 @@ using CommonHelper.Helper.EFDbContext;
 
 namespace WebApplication1.Repository
 {
-    public class DistrictRepository : BaseRepository<District, District, District>
+    public class DistrictRepository : BaseRepository<District, District, District, District>
     {
         public override BaseDbContext CreateDbContext()
         {
@@ -17,6 +17,16 @@ namespace WebApplication1.Repository
         }
 
         protected override IQueryable<District> Query(IQueryable<District> query, District paramz, District neqArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetNull(BaseDbContext dbContext, District param)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void UpdateChange(BaseDbContext dbContext, District entity)
         {
             throw new NotImplementedException();
         }

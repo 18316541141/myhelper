@@ -136,10 +136,12 @@
   <ItemGroup>
     <Compile Include="AopInterceptor\DistributedTransactionScan.cs" />
     <Compile Include="AopInterceptor\DistributedTransactionScope.cs" />
+    <Compile Include="AopInterceptor\DistributeRepository.cs" />
     <Compile Include="CommonEntity\AreaTree.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
+    <Compile Include="CommonEntity\IDistributedEntity.cs" />
     <Compile Include="CommonEntity\LeftMenu.cs" />
     <Compile Include="CommonEntity\MyPagedList.cs" />
     <Compile Include="CommonEntity\Result.cs" />
@@ -149,12 +151,13 @@
     <Compile Include="CommonJsonConverter\LongConverter.cs" />
     <Compile Include="CommonJsonConverter\StarStrConverter.cs" />
     <Compile Include="EFDbContext\DistributedMainDbContext.cs" />
-    <Compile Include="EFDbContext\DistributedPartDbContext.cs" />
+    <Compile Include="EFDbContext\BaseDbContext.cs" />
     <Compile Include="EFMap\DistributedTransactionMainDetailMap.cs" />
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />
     <Compile Include="EFRepository\BaseRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
+    <Compile Include="staticVar\AllStatic.cs" />
     <Compile Include="FindAttr\FindDataAttr.cs" />
     <Compile Include="FindAttr\FindDataConvertAttr.cs" />
     <Compile Include="Guess\GuessList.cs" />

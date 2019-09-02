@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using CommonHelper.AopInterceptor;
+using CommonHelper.EFRepository;
 using CommonHelper.Helper;
 using CX_Task_Center.Code.Message;
 using log4net;
@@ -13,7 +15,8 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WebApplication1.AopInterceptor;
+using WebApplication1.Entity;
+using WebApplication1.Repository;
 using WindowsFormsApplication1.ServiceReference1;
 
 namespace WindowsFormsApplication1
@@ -57,6 +60,10 @@ namespace WindowsFormsApplication1
             containerBuilder.RegisterInstance(log).As<ILog>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(typeof(Program).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service") || n.Name.EndsWith("Controller")).SingleInstance().AsSelf().PropertiesAutowired();
             Container = containerBuilder.Build();
+            RepositoryStatic.InverseRepositoryMap["BusinessHeplerTestManager"] = new Dictionary<string, InverseRepository>
+            {
+                ["IRobot_QrCodePayTask"] = Container.Resolve<IRobotQrCodePayTaskInverseRepository>()
+            };
         }
 
         /// <summary>
@@ -65,9 +72,11 @@ namespace WindowsFormsApplication1
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(Container.Resolve<MainForm>());
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(Container.Resolve<MainForm>());
+            
+
         }
     }
 }

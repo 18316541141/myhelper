@@ -4,8 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
-using WebApplication1.MyExtensions;
-using WebApplication1.Params;
 namespace WebApplication1.Controllers
 {
 	/// <summary>

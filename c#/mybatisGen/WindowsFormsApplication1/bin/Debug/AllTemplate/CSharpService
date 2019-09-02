@@ -6,12 +6,14 @@ using System.Web;
 using WebApplication1.Entity;
 using WebApplication1.MyExtensions;
 using WebApplication1.Params;
+using CommonHelper.AopInterceptor;
 namespace WebApplication1.Service
 {
 	/// <summary>
-        /// ***模块的业务类
-        /// </summary>
-    public partial class $entity.EntityName$Service : BaseService
+    /// ***模块的业务类
+    /// </summary>
+	//[Intercept(typeof(DistributedTransactionScan))]
+	public partial class $entity.EntityName$Service : BaseService
     {
 		public $entity.EntityName$Repository Repository { set; get; }
 

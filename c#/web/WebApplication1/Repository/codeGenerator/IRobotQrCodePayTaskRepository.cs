@@ -1,352 +1,1091 @@
 ﻿using System;
+using CommonHelper.CommonEntity;
+using CommonHelper.Helper;
+using CommonHelper.Helper.EFDbContext;
+using CommonHelper.Helper.EFRepository;
+using CommonHelper.AopInterceptor;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
-using WebApplication1.Entity.Common;
 using WebApplication1.Params;
 using WebApplication1.OrderBy;
-using CommonHelper.Helper.CommonExtensions;
-using CommonHelper.Helper.EFRepository;
-using CommonHelper.Helper.EFDbContext;
 
 namespace WebApplication1.Repository
 {
-    public partial class IRobotQrCodePayTaskRepository : BaseRepository<IRobotQrCodePayTask, IRobotQrCodePayTask, IRobotQrCodePayTask>
+    public partial class IRobotQrCodePayTaskRepository : BaseRepository<IRobotQrCodePayTask, IRobotQrCodePayTaskParams, IRobotQrCodePayTaskOrderBy, IRobotQrCodePayTaskSetNullParams>
     {
-        IQueryable<IRobotQrCodePayTask> Query(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTaskParams irobotQrCodePayTaskParams)
+        /// <summary>
+        /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
+        /// 满足项目中常用的模糊查询，分页查询等功能
+        /// </summary>
+        /// <param name="query">待设置参数的query对象</param>
+        /// <param name="eqArgs">装载查询参数的实体类</param>
+        /// <param name="neqArgs">装载不等于查询参数的实体类</param>
+        /// <returns>返回设置好查询参数的query对象</returns>
+        protected override IQueryable<IRobotQrCodePayTask> Query(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTaskParams eqArgs, IRobotQrCodePayTaskParams neqArgs = null)
         {
-            if (irobotQrCodePayTaskParams != null)
+            if (eqArgs != null)
             {
-                if (irobotQrCodePayTaskParams.irTaskID != null)
+
+                if (eqArgs.IRTaskID != null)
                 {
-                    query = query.Where(a => a.irTaskID == irobotQrCodePayTaskParams.irTaskID);
+                    query = query.Where(a => a.IRTaskID == eqArgs.IRTaskID);
                 }
-                if (irobotQrCodePayTaskParams.irOrderNo != null)
+
+                if (eqArgs.IROrderNo != null)
                 {
-                    query = query.Where(a => a.irOrderNo == irobotQrCodePayTaskParams.irOrderNo);
+                    query = query.Where(a => a.IROrderNo == eqArgs.IROrderNo);
                 }
-                if (!string.IsNullOrEmpty(irobotQrCodePayTaskParams.irOrderNoLike))
+
+                if (!string.IsNullOrEmpty(eqArgs.IROrderNoLike))
                 {
-                    query = query.Where(a => a.irOrderNo.Contains(irobotQrCodePayTaskParams.irOrderNoLike));
+                    query = query.Where(a => a.IROrderNo.Contains(eqArgs.IROrderNoLike));
                 }
-                if (irobotQrCodePayTaskParams.irWeiXinNickName != null)
+                if (eqArgs.IRWeiXinNickName != null)
                 {
-                    query = query.Where(a => a.irWeiXinNickName == irobotQrCodePayTaskParams.irWeiXinNickName);
+                    query = query.Where(a => a.IRWeiXinNickName == eqArgs.IRWeiXinNickName);
                 }
-                if (!string.IsNullOrEmpty(irobotQrCodePayTaskParams.irWeiXinNickNameLike))
+
+                if (!string.IsNullOrEmpty(eqArgs.IRWeiXinNickNameLike))
                 {
-                    query = query.Where(a => a.irWeiXinNickName.Contains(irobotQrCodePayTaskParams.irWeiXinNickNameLike));
+                    query = query.Where(a => a.IRWeiXinNickName.Contains(eqArgs.IRWeiXinNickNameLike));
                 }
-                if (irobotQrCodePayTaskParams.irWeiXinHeaderImage != null)
+                if (eqArgs.IRWeiXinHeaderImage != null)
                 {
-                    query = query.Where(a => a.irWeiXinHeaderImage == irobotQrCodePayTaskParams.irWeiXinHeaderImage);
+                    query = query.Where(a => a.IRWeiXinHeaderImage == eqArgs.IRWeiXinHeaderImage);
                 }
-                if (!string.IsNullOrEmpty(irobotQrCodePayTaskParams.irWeiXinHeaderImageLike))
+
+                if (!string.IsNullOrEmpty(eqArgs.IRWeiXinHeaderImageLike))
                 {
-                    query = query.Where(a => a.irWeiXinHeaderImage.Contains(irobotQrCodePayTaskParams.irWeiXinHeaderImageLike));
+                    query = query.Where(a => a.IRWeiXinHeaderImage.Contains(eqArgs.IRWeiXinHeaderImageLike));
                 }
-                if (irobotQrCodePayTaskParams.irQrCodeImagePath != null)
+                if (eqArgs.IRQrCodeImagePath != null)
                 {
-                    query = query.Where(a => a.irQrCodeImagePath == irobotQrCodePayTaskParams.irQrCodeImagePath);
+                    query = query.Where(a => a.IRQrCodeImagePath == eqArgs.IRQrCodeImagePath);
                 }
-                if (!string.IsNullOrEmpty(irobotQrCodePayTaskParams.irQrCodeImagePathLike))
+
+                if (!string.IsNullOrEmpty(eqArgs.IRQrCodeImagePathLike))
                 {
-                    query = query.Where(a => a.irQrCodeImagePath.Contains(irobotQrCodePayTaskParams.irQrCodeImagePathLike));
+                    query = query.Where(a => a.IRQrCodeImagePath.Contains(eqArgs.IRQrCodeImagePathLike));
                 }
-                if (irobotQrCodePayTaskParams.irHandleState != null)
+                if (eqArgs.IRHandleState != null)
                 {
-                    query = query.Where(a => a.irHandleState == irobotQrCodePayTaskParams.irHandleState);
+                    query = query.Where(a => a.IRHandleState == eqArgs.IRHandleState);
                 }
-                if (irobotQrCodePayTaskParams.irHandleMessage != null)
+
+                if (eqArgs.IRHandleStateStart != null)
                 {
-                    query = query.Where(a => a.irHandleMessage == irobotQrCodePayTaskParams.irHandleMessage);
+                    query = query.Where(a => a.IRHandleState >= eqArgs.IRHandleStateStart);
                 }
-                if (!string.IsNullOrEmpty(irobotQrCodePayTaskParams.irHandleMessageLike))
+                if (eqArgs.IRHandleStateEnd != null)
                 {
-                    query = query.Where(a => a.irHandleMessage.Contains(irobotQrCodePayTaskParams.irHandleMessageLike));
+                    query = query.Where(a => a.IRHandleState <= eqArgs.IRHandleStateEnd);
                 }
-                if (irobotQrCodePayTaskParams.irHandleTime != null)
+                if (eqArgs.IRHandleMessage != null)
                 {
-                    query = query.Where(a => a.irHandleTime == irobotQrCodePayTaskParams.irHandleTime);
+                    query = query.Where(a => a.IRHandleMessage == eqArgs.IRHandleMessage);
                 }
-                if (irobotQrCodePayTaskParams.irHandleTimeStart != null)
+
+                if (!string.IsNullOrEmpty(eqArgs.IRHandleMessageLike))
                 {
-                    query = query.Where(a => a.irHandleTime >= irobotQrCodePayTaskParams.irHandleTimeStart);
+                    query = query.Where(a => a.IRHandleMessage.Contains(eqArgs.IRHandleMessageLike));
                 }
-                if (irobotQrCodePayTaskParams.irHandleTimeEnd != null)
+                if (eqArgs.IRHandleTime != null)
                 {
-                    query = query.Where(a => a.irHandleTime <= irobotQrCodePayTaskParams.irHandleTimeEnd);
+                    query = query.Where(a => a.IRHandleTime == eqArgs.IRHandleTime);
                 }
-                if (irobotQrCodePayTaskParams.irCreateTime != null)
+
+                if (eqArgs.IRHandleTimeStart != null)
                 {
-                    query = query.Where(a => a.irCreateTime == irobotQrCodePayTaskParams.irCreateTime);
+                    query = query.Where(a => a.IRHandleTime >= eqArgs.IRHandleTimeStart);
                 }
-                if (irobotQrCodePayTaskParams.irCreateTimeStart != null)
+                if (eqArgs.IRHandleTimeEnd != null)
                 {
-                    query = query.Where(a => a.irCreateTime >= irobotQrCodePayTaskParams.irCreateTimeStart);
+                    query = query.Where(a => a.IRHandleTime <= eqArgs.IRHandleTimeEnd);
                 }
-                if (irobotQrCodePayTaskParams.irCreateTimeEnd != null)
+                if (eqArgs.IRCreateTime != null)
                 {
-                    query = query.Where(a => a.irCreateTime <= irobotQrCodePayTaskParams.irCreateTimeEnd);
+                    query = query.Where(a => a.IRCreateTime == eqArgs.IRCreateTime);
                 }
-                if (irobotQrCodePayTaskParams.irReportPicPathJson != null)
+
+                if (eqArgs.IRCreateTimeStart != null)
                 {
-                    query = query.Where(a => a.irReportPicPathJson == irobotQrCodePayTaskParams.irReportPicPathJson);
+                    query = query.Where(a => a.IRCreateTime >= eqArgs.IRCreateTimeStart);
                 }
-                if (irobotQrCodePayTaskParams.irReportPicPathJsonLike != null)
+                if (eqArgs.IRCreateTimeEnd != null)
                 {
-                    query = query.Where(a => a.irReportPicPathJson.Contains(irobotQrCodePayTaskParams.irReportPicPathJsonLike));
+                    query = query.Where(a => a.IRCreateTime <= eqArgs.IRCreateTimeEnd);
                 }
-                if (irobotQrCodePayTaskParams.irTakeMoney != null)
+                if (eqArgs.IRReportPicPathJson != null)
                 {
-                    query = query.Where(a => a.irTakeMoney == irobotQrCodePayTaskParams.irTakeMoney);
+                    query = query.Where(a => a.IRReportPicPathJson == eqArgs.IRReportPicPathJson);
                 }
-                if (irobotQrCodePayTaskParams.irTakeMoneyStart != null)
+
+                if (!string.IsNullOrEmpty(eqArgs.IRReportPicPathJsonLike))
                 {
-                    query = query.Where(a => a.irTakeMoney >= irobotQrCodePayTaskParams.irTakeMoneyStart);
+                    query = query.Where(a => a.IRReportPicPathJson.Contains(eqArgs.IRReportPicPathJsonLike));
                 }
-                if (irobotQrCodePayTaskParams.irTakeMoneyEnd != null)
+                if (eqArgs.IRTakeMoney != null)
                 {
-                    query = query.Where(a => a.irTakeMoney <= irobotQrCodePayTaskParams.irTakeMoneyEnd);
+                    query = query.Where(a => a.IRTakeMoney == eqArgs.IRTakeMoney);
                 }
-                if (irobotQrCodePayTaskParams.irRobotId != null)
+
+                if (eqArgs.IRTakeMoneyStart != null)
                 {
-                    query = query.Where(a => a.irRobotId == irobotQrCodePayTaskParams.irRobotId);
+                    query = query.Where(a => a.IRTakeMoney >= eqArgs.IRTakeMoneyStart);
                 }
-                if (irobotQrCodePayTaskParams.irRobotIdLike != null)
+                if (eqArgs.IRTakeMoneyEnd != null)
                 {
-                    query = query.Where(a => a.irRobotId.Contains(irobotQrCodePayTaskParams.irRobotIdLike));
+                    query = query.Where(a => a.IRTakeMoney <= eqArgs.IRTakeMoneyEnd);
                 }
-                if (irobotQrCodePayTaskParams.irRemark != null)
+                if (eqArgs.IRRobotId != null)
                 {
-                    query = query.Where(a => a.irRemark == irobotQrCodePayTaskParams.irRemark);
+                    query = query.Where(a => a.IRRobotId == eqArgs.IRRobotId);
                 }
-                if (irobotQrCodePayTaskParams.irRemarkLike != null)
+
+                if (!string.IsNullOrEmpty(eqArgs.IRRobotIdLike))
                 {
-                    query = query.Where(a => a.irRemark.Contains(irobotQrCodePayTaskParams.irRemarkLike));
+                    query = query.Where(a => a.IRRobotId.Contains(eqArgs.IRRobotIdLike));
                 }
-                if (irobotQrCodePayTaskParams.irPushState != null)
+                if (eqArgs.IRRemark != null)
                 {
-                    query = query.Where(a => a.irPushState == irobotQrCodePayTaskParams.irPushState);
+                    query = query.Where(a => a.IRRemark == eqArgs.IRRemark);
                 }
-                if (irobotQrCodePayTaskParams.irPushStateLike != null)
+
+                if (!string.IsNullOrEmpty(eqArgs.IRRemarkLike))
                 {
-                    query = query.Where(a => a.irPushState.Contains(irobotQrCodePayTaskParams.irPushStateLike));
+                    query = query.Where(a => a.IRRemark.Contains(eqArgs.IRRemarkLike));
                 }
-                if (irobotQrCodePayTaskParams.irPushTime != null)
+                if (eqArgs.IRPushState != null)
                 {
-                    query = query.Where(a => a.irPushTime == irobotQrCodePayTaskParams.irPushTime);
+                    query = query.Where(a => a.IRPushState == eqArgs.IRPushState);
                 }
-                if (irobotQrCodePayTaskParams.irPushTimeStart != null)
+
+                if (eqArgs.IRPushStateStart != null)
                 {
-                    query = query.Where(a => a.irPushTime >= irobotQrCodePayTaskParams.irPushTimeStart);
+                    query = query.Where(a => a.IRPushState >= eqArgs.IRPushStateStart);
                 }
-                if (irobotQrCodePayTaskParams.irPushTimeEnd != null)
+                if (eqArgs.IRPushStateEnd != null)
                 {
-                    query = query.Where(a => a.irPushTime <= irobotQrCodePayTaskParams.irPushTimeEnd);
+                    query = query.Where(a => a.IRPushState <= eqArgs.IRPushStateEnd);
                 }
-                if (irobotQrCodePayTaskParams.irScanPayNotifyRet != null)
+                if (eqArgs.IRPushTime != null)
                 {
-                    query = query.Where(a => a.irScanPayNotifyRet == irobotQrCodePayTaskParams.irScanPayNotifyRet);
+                    query = query.Where(a => a.IRPushTime == eqArgs.IRPushTime);
                 }
-                if (irobotQrCodePayTaskParams.irScanPayNotifyRetLike != null)
+
+                if (eqArgs.IRPushTimeStart != null)
                 {
-                    query = query.Where(a => a.irScanPayNotifyRet.Contains(irobotQrCodePayTaskParams.irScanPayNotifyRetLike));
+                    query = query.Where(a => a.IRPushTime >= eqArgs.IRPushTimeStart);
                 }
-                query = OrderByAsc(query, irobotQrCodePayTaskParams.orderByAsc);
-                query = OrderByDesc(query, irobotQrCodePayTaskParams.orderByDesc);
+                if (eqArgs.IRPushTimeEnd != null)
+                {
+                    query = query.Where(a => a.IRPushTime <= eqArgs.IRPushTimeEnd);
+                }
+                if (eqArgs.IRScanPayNotifyRet != null)
+                {
+                    query = query.Where(a => a.IRScanPayNotifyRet == eqArgs.IRScanPayNotifyRet);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.IRScanPayNotifyRetLike))
+                {
+                    query = query.Where(a => a.IRScanPayNotifyRet.Contains(eqArgs.IRScanPayNotifyRetLike));
+                }
+                if (eqArgs.IRScanPayNotifyUrl != null)
+                {
+                    query = query.Where(a => a.IRScanPayNotifyUrl == eqArgs.IRScanPayNotifyUrl);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.IRScanPayNotifyUrlLike))
+                {
+                    query = query.Where(a => a.IRScanPayNotifyUrl.Contains(eqArgs.IRScanPayNotifyUrlLike));
+                }
+            }
+            if (neqArgs != null)
+            {
+
+                if (neqArgs.IRTaskID != null)
+                {
+                    query = query.Where(a => a.IRTaskID != neqArgs.IRTaskID);
+                }
+
+                if (neqArgs.IROrderNo != null)
+                {
+                    query = query.Where(a => a.IROrderNo != neqArgs.IROrderNo);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IROrderNoLike))
+                {
+                    query = query.Where(a => !a.IROrderNo.Contains(neqArgs.IROrderNoLike));
+                }
+                if (neqArgs.IRWeiXinNickName != null)
+                {
+                    query = query.Where(a => a.IRWeiXinNickName != neqArgs.IRWeiXinNickName);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRWeiXinNickNameLike))
+                {
+                    query = query.Where(a => !a.IRWeiXinNickName.Contains(neqArgs.IRWeiXinNickNameLike));
+                }
+                if (neqArgs.IRWeiXinHeaderImage != null)
+                {
+                    query = query.Where(a => a.IRWeiXinHeaderImage != neqArgs.IRWeiXinHeaderImage);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRWeiXinHeaderImageLike))
+                {
+                    query = query.Where(a => !a.IRWeiXinHeaderImage.Contains(neqArgs.IRWeiXinHeaderImageLike));
+                }
+                if (neqArgs.IRQrCodeImagePath != null)
+                {
+                    query = query.Where(a => a.IRQrCodeImagePath != neqArgs.IRQrCodeImagePath);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRQrCodeImagePathLike))
+                {
+                    query = query.Where(a => !a.IRQrCodeImagePath.Contains(neqArgs.IRQrCodeImagePathLike));
+                }
+                if (neqArgs.IRHandleState != null)
+                {
+                    query = query.Where(a => a.IRHandleState != neqArgs.IRHandleState);
+                }
+
+                if (neqArgs.IRHandleMessage != null)
+                {
+                    query = query.Where(a => a.IRHandleMessage != neqArgs.IRHandleMessage);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRHandleMessageLike))
+                {
+                    query = query.Where(a => !a.IRHandleMessage.Contains(neqArgs.IRHandleMessageLike));
+                }
+                if (neqArgs.IRHandleTime != null)
+                {
+                    query = query.Where(a => a.IRHandleTime != neqArgs.IRHandleTime);
+                }
+
+                if (neqArgs.IRCreateTime != null)
+                {
+                    query = query.Where(a => a.IRCreateTime != neqArgs.IRCreateTime);
+                }
+
+                if (neqArgs.IRReportPicPathJson != null)
+                {
+                    query = query.Where(a => a.IRReportPicPathJson != neqArgs.IRReportPicPathJson);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRReportPicPathJsonLike))
+                {
+                    query = query.Where(a => !a.IRReportPicPathJson.Contains(neqArgs.IRReportPicPathJsonLike));
+                }
+                if (neqArgs.IRTakeMoney != null)
+                {
+                    query = query.Where(a => a.IRTakeMoney != neqArgs.IRTakeMoney);
+                }
+
+                if (neqArgs.IRRobotId != null)
+                {
+                    query = query.Where(a => a.IRRobotId != neqArgs.IRRobotId);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRRobotIdLike))
+                {
+                    query = query.Where(a => !a.IRRobotId.Contains(neqArgs.IRRobotIdLike));
+                }
+                if (neqArgs.IRRemark != null)
+                {
+                    query = query.Where(a => a.IRRemark != neqArgs.IRRemark);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRRemarkLike))
+                {
+                    query = query.Where(a => !a.IRRemark.Contains(neqArgs.IRRemarkLike));
+                }
+                if (neqArgs.IRPushState != null)
+                {
+                    query = query.Where(a => a.IRPushState != neqArgs.IRPushState);
+                }
+
+                if (neqArgs.IRPushTime != null)
+                {
+                    query = query.Where(a => a.IRPushTime != neqArgs.IRPushTime);
+                }
+
+                if (neqArgs.IRScanPayNotifyRet != null)
+                {
+                    query = query.Where(a => a.IRScanPayNotifyRet != neqArgs.IRScanPayNotifyRet);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRScanPayNotifyRetLike))
+                {
+                    query = query.Where(a => !a.IRScanPayNotifyRet.Contains(neqArgs.IRScanPayNotifyRetLike));
+                }
+                if (neqArgs.IRScanPayNotifyUrl != null)
+                {
+                    query = query.Where(a => a.IRScanPayNotifyUrl != neqArgs.IRScanPayNotifyUrl);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.IRScanPayNotifyUrlLike))
+                {
+                    query = query.Where(a => !a.IRScanPayNotifyUrl.Contains(neqArgs.IRScanPayNotifyUrlLike));
+                }
+                query = OrderByAsc(query, eqArgs.orderByAsc);
+                query = OrderByDesc(query, eqArgs.orderByDesc);
             }
             return query;
         }
 
+        /// <summary>
+        /// 升序排序的查询参数设置，当对应字段的升序设置为true时才会对
+        /// 该字段升序。
+        /// </summary>
+        /// <param name="query">待设置升序参数的query对象</param>
+        /// <param name="orderBy">装载升序参数的实体类</param>
+        /// <returns>返回设置好升序参数的query对象</returns>
         IQueryable<IRobotQrCodePayTask> OrderByAsc(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTaskOrderBy orderBy)
         {
             if (orderBy != null)
             {
-                if (orderBy.irTaskID) { query = query.OrderBy(a => a.irTaskID); }
-                if (orderBy.irOrderNo) { query = query.OrderBy(a => a.irOrderNo); }
-                if (orderBy.irWeiXinNickName) { query = query.OrderBy(a => a.irWeiXinNickName); }
-                if (orderBy.irWeiXinHeaderImage) { query = query.OrderBy(a => a.irWeiXinHeaderImage); }
-                if (orderBy.irQrCodeImagePath) { query = query.OrderBy(a => a.irQrCodeImagePath); }
-                if (orderBy.irHandleState) { query = query.OrderBy(a => a.irHandleState); }
-                if (orderBy.irHandleMessage) { query = query.OrderBy(a => a.irHandleMessage); }
-                if (orderBy.irHandleTime) { query = query.OrderBy(a => a.irHandleTime); }
-                if (orderBy.irCreateTime) { query = query.OrderBy(a => a.irCreateTime); }
-                if (orderBy.irReportPicPathJson) { query = query.OrderBy(a => a.irReportPicPathJson); }
-                if (orderBy.irTakeMoney) { query = query.OrderBy(a => a.irTakeMoney); }
-                if (orderBy.irRobotId) { query = query.OrderBy(a => a.irRobotId); }
-                if (orderBy.irRemark) { query = query.OrderBy(a => a.irRemark); }
-                if (orderBy.irPushState) { query = query.OrderBy(a => a.irPushState); }
-                if (orderBy.irPushTime) { query = query.OrderBy(a => a.irPushTime); }
-                if (orderBy.irScanPayNotifyRet) { query = query.OrderBy(a => a.irScanPayNotifyRet); }
+
+                if (orderBy.IRTaskID) { query = query.OrderBy(a => a.IRTaskID); }
+                if (orderBy.IROrderNo) { query = query.OrderBy(a => a.IROrderNo); }
+                if (orderBy.IRWeiXinNickName) { query = query.OrderBy(a => a.IRWeiXinNickName); }
+                if (orderBy.IRWeiXinHeaderImage) { query = query.OrderBy(a => a.IRWeiXinHeaderImage); }
+                if (orderBy.IRQrCodeImagePath) { query = query.OrderBy(a => a.IRQrCodeImagePath); }
+                if (orderBy.IRHandleState) { query = query.OrderBy(a => a.IRHandleState); }
+                if (orderBy.IRHandleMessage) { query = query.OrderBy(a => a.IRHandleMessage); }
+                if (orderBy.IRHandleTime) { query = query.OrderBy(a => a.IRHandleTime); }
+                if (orderBy.IRCreateTime) { query = query.OrderBy(a => a.IRCreateTime); }
+                if (orderBy.IRReportPicPathJson) { query = query.OrderBy(a => a.IRReportPicPathJson); }
+                if (orderBy.IRTakeMoney) { query = query.OrderBy(a => a.IRTakeMoney); }
+                if (orderBy.IRRobotId) { query = query.OrderBy(a => a.IRRobotId); }
+                if (orderBy.IRRemark) { query = query.OrderBy(a => a.IRRemark); }
+                if (orderBy.IRPushState) { query = query.OrderBy(a => a.IRPushState); }
+                if (orderBy.IRPushTime) { query = query.OrderBy(a => a.IRPushTime); }
+                if (orderBy.IRScanPayNotifyRet) { query = query.OrderBy(a => a.IRScanPayNotifyRet); }
+                if (orderBy.IRScanPayNotifyUrl) { query = query.OrderBy(a => a.IRScanPayNotifyUrl); }
             }
             return query;
         }
 
+        /// <summary>
+        /// 降序排序的查询参数设置，当对应字段的升序设置为true时才会对
+        /// 该字段降序。
+        /// </summary>
+        /// <param name="query">待设置降序参数的query对象</param>
+        /// <param name="orderBy">装载降序参数的实体类</param>
+        /// <returns>返回设置好降序参数的query对象</returns>
         IQueryable<IRobotQrCodePayTask> OrderByDesc(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTaskOrderBy orderBy)
         {
             if (orderBy != null)
             {
-                if (orderBy.irTaskID) { query = query.OrderByDescending(a => a.irTaskID); }
-                if (orderBy.irOrderNo) { query = query.OrderByDescending(a => a.irOrderNo); }
-                if (orderBy.irWeiXinNickName) { query = query.OrderByDescending(a => a.irWeiXinNickName); }
-                if (orderBy.irWeiXinHeaderImage) { query = query.OrderByDescending(a => a.irWeiXinHeaderImage); }
-                if (orderBy.irQrCodeImagePath) { query = query.OrderByDescending(a => a.irQrCodeImagePath); }
-                if (orderBy.irHandleState) { query = query.OrderByDescending(a => a.irHandleState); }
-                if (orderBy.irHandleMessage) { query = query.OrderByDescending(a => a.irHandleMessage); }
-                if (orderBy.irHandleTime) { query = query.OrderByDescending(a => a.irHandleTime); }
-                if (orderBy.irCreateTime) { query = query.OrderByDescending(a => a.irCreateTime); }
-                if (orderBy.irReportPicPathJson) { query = query.OrderByDescending(a => a.irReportPicPathJson); }
-                if (orderBy.irTakeMoney) { query = query.OrderByDescending(a => a.irTakeMoney); }
-                if (orderBy.irRobotId) { query = query.OrderByDescending(a => a.irRobotId); }
-                if (orderBy.irRemark) { query = query.OrderByDescending(a => a.irRemark); }
-                if (orderBy.irPushState) { query = query.OrderByDescending(a => a.irPushState); }
-                if (orderBy.irPushTime) { query = query.OrderByDescending(a => a.irPushTime); }
-                if (orderBy.irScanPayNotifyRet) { query = query.OrderByDescending(a => a.irScanPayNotifyRet); }
+
+                if (orderBy.IRTaskID) { query = query.OrderByDescending(a => a.IRTaskID); }
+                else
+                if (orderBy.IROrderNo) { query = query.OrderByDescending(a => a.IROrderNo); }
+                else
+                if (orderBy.IRWeiXinNickName) { query = query.OrderByDescending(a => a.IRWeiXinNickName); }
+                else
+                if (orderBy.IRWeiXinHeaderImage) { query = query.OrderByDescending(a => a.IRWeiXinHeaderImage); }
+                else
+                if (orderBy.IRQrCodeImagePath) { query = query.OrderByDescending(a => a.IRQrCodeImagePath); }
+                else
+                if (orderBy.IRHandleState) { query = query.OrderByDescending(a => a.IRHandleState); }
+                else
+                if (orderBy.IRHandleMessage) { query = query.OrderByDescending(a => a.IRHandleMessage); }
+                else
+                if (orderBy.IRHandleTime) { query = query.OrderByDescending(a => a.IRHandleTime); }
+                else
+                if (orderBy.IRCreateTime) { query = query.OrderByDescending(a => a.IRCreateTime); }
+                else
+                if (orderBy.IRReportPicPathJson) { query = query.OrderByDescending(a => a.IRReportPicPathJson); }
+                else
+                if (orderBy.IRTakeMoney) { query = query.OrderByDescending(a => a.IRTakeMoney); }
+                else
+                if (orderBy.IRRobotId) { query = query.OrderByDescending(a => a.IRRobotId); }
+                else
+                if (orderBy.IRRemark) { query = query.OrderByDescending(a => a.IRRemark); }
+                else
+                if (orderBy.IRPushState) { query = query.OrderByDescending(a => a.IRPushState); }
+                else
+                if (orderBy.IRPushTime) { query = query.OrderByDescending(a => a.IRPushTime); }
+                else
+                if (orderBy.IRScanPayNotifyRet) { query = query.OrderByDescending(a => a.IRScanPayNotifyRet); }
+                else
+                if (orderBy.IRScanPayNotifyUrl) { query = query.OrderByDescending(a => a.IRScanPayNotifyUrl); }
+                else
+                {
+                    query = query.OrderByDescending(a => a.IRTaskID);
+                }
             }
             else
             {
-                query = query.OrderByDescending(a => a.irTaskID);
+                query = query.OrderByDescending(a => a.IRTaskID);
             }
             return query;
         }
 
-        public MyPagedList<IRobotQrCodePayTask> BigPageList(IRobotQrCodePayTaskParams irobotQrCodePayTaskParams, int pageIndex, int pageSize)
+        /// <summary>
+        /// 修改变化值的部分共用代码，这里抽取出来简化结构
+        /// </summary>
+        /// <param name="updateBefore"></param>
+        /// <param name="entity"></param>
+        protected override void UpdateChange(BaseDbContext dbContext, IRobotQrCodePayTask entity)
         {
-            using (MyDbContext2 myDbContext2 = new MyDbContext2())
+            IRobotQrCodePayTask updateBefore = new IRobotQrCodePayTask { IRTaskID = entity.IRTaskID };
+            dbContext.Set<IRobotQrCodePayTask>().Attach(updateBefore);
+            if (entity.IROrderNo != null)
             {
-                IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.Set<IRobotQrCodePayTask>().AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
-                int totalItemCount = query.Count();
-                query = query.Skip((pageIndex-1) * pageSize);
-                List<IRobotQrCodePayTask> pageDataList = new List<IRobotQrCodePayTask>();
-                for (int i=0, partCount = (pageSize - pageSize % 1000) / pageSize + 1; i<partCount ;i++)
-                {
-                    pageDataList.AddRange(query.Skip(i * 1000).Take(1000).ToList());
-                }
-                return new MyPagedList<IRobotQrCodePayTask>
-                {
-                    CurrentPageIndex = pageIndex,
-                    PageDataList = pageDataList,
-                    TotalItemCount = totalItemCount,
-                    PageSize = pageSize,
-                    TotalPageCount = (totalItemCount - totalItemCount % pageSize) / pageSize + 1,
-                    StartItemIndex = (pageSize - 1) * pageIndex + 1,
-                    EndItemIndex = pageSize * pageIndex
-                };
+                updateBefore.IROrderNo = entity.IROrderNo;
+            }
+            if (entity.IRWeiXinNickName != null)
+            {
+                updateBefore.IRWeiXinNickName = entity.IRWeiXinNickName;
+            }
+            if (entity.IRWeiXinHeaderImage != null)
+            {
+                updateBefore.IRWeiXinHeaderImage = entity.IRWeiXinHeaderImage;
+            }
+            if (entity.IRQrCodeImagePath != null)
+            {
+                updateBefore.IRQrCodeImagePath = entity.IRQrCodeImagePath;
+            }
+            if (entity.IRHandleState != null)
+            {
+                updateBefore.IRHandleState = entity.IRHandleState;
+            }
+            if (entity.IRHandleMessage != null)
+            {
+                updateBefore.IRHandleMessage = entity.IRHandleMessage;
+            }
+            if (entity.IRHandleTime != null)
+            {
+                updateBefore.IRHandleTime = entity.IRHandleTime;
+            }
+            if (entity.IRCreateTime != null)
+            {
+                updateBefore.IRCreateTime = entity.IRCreateTime;
+            }
+            if (entity.IRReportPicPathJson != null)
+            {
+                updateBefore.IRReportPicPathJson = entity.IRReportPicPathJson;
+            }
+            if (entity.IRTakeMoney != null)
+            {
+                updateBefore.IRTakeMoney = entity.IRTakeMoney;
+            }
+            if (entity.IRRobotId != null)
+            {
+                updateBefore.IRRobotId = entity.IRRobotId;
+            }
+            if (entity.IRRemark != null)
+            {
+                updateBefore.IRRemark = entity.IRRemark;
+            }
+            if (entity.IRPushState != null)
+            {
+                updateBefore.IRPushState = entity.IRPushState;
+            }
+            if (entity.IRPushTime != null)
+            {
+                updateBefore.IRPushTime = entity.IRPushTime;
+            }
+            if (entity.IRScanPayNotifyRet != null)
+            {
+                updateBefore.IRScanPayNotifyRet = entity.IRScanPayNotifyRet;
+            }
+            if (entity.IRScanPayNotifyUrl != null)
+            {
+                updateBefore.IRScanPayNotifyUrl = entity.IRScanPayNotifyUrl;
             }
         }
 
-        public MyPagedList<IRobotQrCodePayTask> PageList(IRobotQrCodePayTaskParams irobotQrCodePayTaskParams, int pageIndex, int pageSize)
+        /// <summary>
+        /// 把指定字段值设置为null的部分共用代码，这里抽取出来简化结构
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="param"></param>
+        protected override void SetNull(BaseDbContext dbContext, IRobotQrCodePayTaskSetNullParams param)
         {
-            using (MyDbContext2 myDbContext2 = new MyDbContext2())
+            IRobotQrCodePayTask updateBefore = FindEntity(param.IRTaskID);
+            dbContext.Set<IRobotQrCodePayTask>().Attach(updateBefore);
+            if (param.IROrderNo)
             {
-                IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.IRobotQrCodePayTasks.AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
-                return query.ToMyPagedList(pageIndex, pageSize);
+                updateBefore.IROrderNo = null;
+            }
+            if (param.IRWeiXinNickName)
+            {
+                updateBefore.IRWeiXinNickName = null;
+            }
+            if (param.IRWeiXinHeaderImage)
+            {
+                updateBefore.IRWeiXinHeaderImage = null;
+            }
+            if (param.IRQrCodeImagePath)
+            {
+                updateBefore.IRQrCodeImagePath = null;
+            }
+            if (param.IRHandleState)
+            {
+                updateBefore.IRHandleState = null;
+            }
+            if (param.IRHandleMessage)
+            {
+                updateBefore.IRHandleMessage = null;
+            }
+            if (param.IRHandleTime)
+            {
+                updateBefore.IRHandleTime = null;
+            }
+            if (param.IRCreateTime)
+            {
+                updateBefore.IRCreateTime = null;
+            }
+            if (param.IRReportPicPathJson)
+            {
+                updateBefore.IRReportPicPathJson = null;
+            }
+            if (param.IRTakeMoney)
+            {
+                updateBefore.IRTakeMoney = null;
+            }
+            if (param.IRRobotId)
+            {
+                updateBefore.IRRobotId = null;
+            }
+            if (param.IRRemark)
+            {
+                updateBefore.IRRemark = null;
+            }
+            if (param.IRPushState)
+            {
+                updateBefore.IRPushState = null;
+            }
+            if (param.IRPushTime)
+            {
+                updateBefore.IRPushTime = null;
+            }
+            if (param.IRScanPayNotifyRet)
+            {
+                updateBefore.IRScanPayNotifyRet = null;
+            }
+            if (param.IRScanPayNotifyUrl)
+            {
+                updateBefore.IRScanPayNotifyUrl = null;
             }
         }
 
-        public int Count(IRobotQrCodePayTaskParams irobotQrCodePayTaskParams)
+        /// <summary>
+        /// 检查分布式事务是否已完成
+        /// </summary>
+        /// <param name="primaryKeyVal">主键的值</param>
+        public void CheckTransactionFinish(long primaryKeyVal)
         {
-            using (MyDbContext2 myDbContext2 = new MyDbContext2())
-            {
-                IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.IRobotQrCodePayTasks.AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
-                return query.Count();
-            }
+            CheckTransactionFinish(primaryKeyVal, "IRobot_QrCodePayTask");
         }
-        
-        public List<IRobotQrCodePayTask> FindList(IRobotQrCodePayTaskParams irobotQrCodePayTaskParams = null)
+
+        /// <summary>
+        /// 分布式插入一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedInsert(IRobotQrCodePayTask entity)
         {
-            using (MyDbContext2 myDbContext2 = new MyDbContext2())
+            if (DistributedTransactionScan.TransactionIds.Value == null)
             {
-                IQueryable<IRobotQrCodePayTask> query = Query(myDbContext2.IRobotQrCodePayTasks.AsNoTracking().AsQueryable(), irobotQrCodePayTaskParams);
-                return query.ToList();
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                dbContext.Entry(entity).State = EntityState.Added;
+                dbContext.Entry(new DistributedTransactionPart
+                {
+                    Id = IdWorker.NextId(),
+                    DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                    InverseOper = Convert.ToString(entity.IRTaskID),
+                    InverseOperType = 'd',
+                    TransTableName = "IRobot_QrCodePayTask",
+                    TransPrimaryKeyVal = entity.IRTaskID,
+                    TransactionStatus = 0,
+                    CreateDate = DateTime.Now,
+                }).State = EntityState.Added;
+                if (dbContext.SaveChanges() > 0)
+                {
+                    RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
+                }
             }
         }
 
-        public int UpdateChange(IRobotQrCodePayTask irobotQrCodePayTask)
+        /// <summary>
+        /// 分布式批量插入数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedInsert(List<IRobotQrCodePayTask> entities)
         {
-            using (MyDbContext2 myDbContext2 = new MyDbContext2())
+            if (DistributedTransactionScan.TransactionIds.Value == null)
             {
-                IRobotQrCodePayTask updateBefore = new IRobotQrCodePayTask { irTaskID = irobotQrCodePayTask.irTaskID};
-                myDbContext2.IRobotQrCodePayTasks.Attach(updateBefore);
-                if (irobotQrCodePayTask.irTaskID != null)
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                foreach (IRobotQrCodePayTask entity in entities)
                 {
-                    updateBefore.irTaskID = irobotQrCodePayTask.irTaskID;
+                    dbContext.Entry(entity).State = EntityState.Added;
+                    dbContext.Entry(new DistributedTransactionPart
+                    {
+                        Id = IdWorker.NextId(),
+                        DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                        InverseOper = Convert.ToString(entity.IRTaskID),
+                        InverseOperType = 'D',
+                        TransTableName = "IRobot_QrCodePayTask",
+                        TransPrimaryKeyVal = entity.IRTaskID,
+                        TransactionStatus = 0,
+                        CreateDate = DateTime.Now,
+                    }).State = EntityState.Added;
                 }
-                if (irobotQrCodePayTask.irOrderNo != null)
+                if (dbContext.SaveChanges() > 0)
                 {
-                    updateBefore.irOrderNo = irobotQrCodePayTask.irOrderNo;
+                    RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
                 }
-                if (irobotQrCodePayTask.irWeiXinNickName != null)
+            }
+        }
+
+        /// <summary>
+        /// 分布式把指定字段值设置为null，主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedSetNull(IRobotQrCodePayTaskSetNullParams param)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                IRobotQrCodePayTask beforeData = FindEntity(param.IRTaskID);
+                if (beforeData != null)
                 {
-                    updateBefore.irWeiXinNickName = irobotQrCodePayTask.irWeiXinNickName;
+                    IRobotQrCodePayTask inverseData = new IRobotQrCodePayTask { IRTaskID = param.IRTaskID };
+                    dbContext.Set<IRobotQrCodePayTask>().Attach(beforeData);
+                    if (param.IROrderNo)
+                    {
+                        inverseData.IROrderNo = beforeData.IROrderNo;
+                        beforeData.IROrderNo = null;
+                    }
+                    if (param.IRWeiXinNickName)
+                    {
+                        inverseData.IRWeiXinNickName = beforeData.IRWeiXinNickName;
+                        beforeData.IRWeiXinNickName = null;
+                    }
+                    if (param.IRWeiXinHeaderImage)
+                    {
+                        inverseData.IRWeiXinHeaderImage = beforeData.IRWeiXinHeaderImage;
+                        beforeData.IRWeiXinHeaderImage = null;
+                    }
+                    if (param.IRQrCodeImagePath)
+                    {
+                        inverseData.IRQrCodeImagePath = beforeData.IRQrCodeImagePath;
+                        beforeData.IRQrCodeImagePath = null;
+                    }
+                    if (param.IRHandleState)
+                    {
+                        inverseData.IRHandleState = beforeData.IRHandleState;
+                        beforeData.IRHandleState = null;
+                    }
+                    if (param.IRHandleMessage)
+                    {
+                        inverseData.IRHandleMessage = beforeData.IRHandleMessage;
+                        beforeData.IRHandleMessage = null;
+                    }
+                    if (param.IRHandleTime)
+                    {
+                        inverseData.IRHandleTime = beforeData.IRHandleTime;
+                        beforeData.IRHandleTime = null;
+                    }
+                    if (param.IRCreateTime)
+                    {
+                        inverseData.IRCreateTime = beforeData.IRCreateTime;
+                        beforeData.IRCreateTime = null;
+                    }
+                    if (param.IRReportPicPathJson)
+                    {
+                        inverseData.IRReportPicPathJson = beforeData.IRReportPicPathJson;
+                        beforeData.IRReportPicPathJson = null;
+                    }
+                    if (param.IRTakeMoney)
+                    {
+                        inverseData.IRTakeMoney = beforeData.IRTakeMoney;
+                        beforeData.IRTakeMoney = null;
+                    }
+                    if (param.IRRobotId)
+                    {
+                        inverseData.IRRobotId = beforeData.IRRobotId;
+                        beforeData.IRRobotId = null;
+                    }
+                    if (param.IRRemark)
+                    {
+                        inverseData.IRRemark = beforeData.IRRemark;
+                        beforeData.IRRemark = null;
+                    }
+                    if (param.IRPushState)
+                    {
+                        inverseData.IRPushState = beforeData.IRPushState;
+                        beforeData.IRPushState = null;
+                    }
+                    if (param.IRPushTime)
+                    {
+                        inverseData.IRPushTime = beforeData.IRPushTime;
+                        beforeData.IRPushTime = null;
+                    }
+                    if (param.IRScanPayNotifyRet)
+                    {
+                        inverseData.IRScanPayNotifyRet = beforeData.IRScanPayNotifyRet;
+                        beforeData.IRScanPayNotifyRet = null;
+                    }
+                    if (param.IRScanPayNotifyUrl)
+                    {
+                        inverseData.IRScanPayNotifyUrl = beforeData.IRScanPayNotifyUrl;
+                        beforeData.IRScanPayNotifyUrl = null;
+                    }
+                    dbContext.Entry(new DistributedTransactionPart
+                    {
+                        Id = IdWorker.NextId(),
+                        DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                        InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData, TimeConverter)),
+                        InverseOperType = 'u',
+                        TransTableName = "IRobot_QrCodePayTask",
+                        TransPrimaryKeyVal = param.IRTaskID,
+                        TransactionStatus = 0,
+                        CreateDate = DateTime.Now,
+                    }).State = EntityState.Added;
+                    if (dbContext.SaveChanges() > 0)
+                    {
+                        RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
+                    }
                 }
-                if (irobotQrCodePayTask.irWeiXinHeaderImage != null)
+            }
+        }
+
+        /// <summary>
+        /// 分布式部分更新数据，数据的主键不能为null，只更新不为null的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedUpdateChange(IRobotQrCodePayTask entity)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                IRobotQrCodePayTask beforeData = FindEntity(entity.IRTaskID);
+                if (beforeData != null)
                 {
-                    updateBefore.irWeiXinHeaderImage = irobotQrCodePayTask.irWeiXinHeaderImage;
+                    IRobotQrCodePayTask inverseData = new IRobotQrCodePayTask { IRTaskID = entity.IRTaskID };
+                    DistributedUpdateChange(beforeData, inverseData, entity, dbContext);
+                    dbContext.Entry(new DistributedTransactionPart
+                    {
+                        Id = IdWorker.NextId(),
+                        DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                        InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData, TimeConverter)),
+                        InverseOperType = 'u',
+                        TransTableName = "IRobot_QrCodePayTask",
+                        TransPrimaryKeyVal = entity.IRTaskID,
+                        TransactionStatus = 0,
+                        CreateDate = DateTime.Now,
+                    }).State = EntityState.Added;
+                    if (dbContext.SaveChanges() > 0)
+                    {
+                        RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
+                    }
                 }
-                if (irobotQrCodePayTask.irQrCodeImagePath != null)
+            }
+        }
+
+        /// <summary>
+        /// 分布式更新部分数据的共用代码，
+        /// </summary>
+        /// <param name="beforeData"></param>
+        /// <param name="inverseData"></param>
+        /// <param name="entity"></param>
+        /// <param name="dbContext"></param>
+        void DistributedUpdateChange(IRobotQrCodePayTask beforeData, IRobotQrCodePayTask inverseData, IRobotQrCodePayTask entity, BaseDbContext dbContext)
+        {
+            IRobotQrCodePayTask updateBefore = new IRobotQrCodePayTask { IRTaskID = entity.IRTaskID };
+            dbContext.Set<IRobotQrCodePayTask>().Attach(updateBefore);
+            if (entity.IROrderNo != null)
+            {
+                updateBefore.IROrderNo = entity.IROrderNo;
+                inverseData.IROrderNo = beforeData.IROrderNo;
+            }
+            if (entity.IRWeiXinNickName != null)
+            {
+                updateBefore.IRWeiXinNickName = entity.IRWeiXinNickName;
+                inverseData.IRWeiXinNickName = beforeData.IRWeiXinNickName;
+            }
+            if (entity.IRWeiXinHeaderImage != null)
+            {
+                updateBefore.IRWeiXinHeaderImage = entity.IRWeiXinHeaderImage;
+                inverseData.IRWeiXinHeaderImage = beforeData.IRWeiXinHeaderImage;
+            }
+            if (entity.IRQrCodeImagePath != null)
+            {
+                updateBefore.IRQrCodeImagePath = entity.IRQrCodeImagePath;
+                inverseData.IRQrCodeImagePath = beforeData.IRQrCodeImagePath;
+            }
+            if (entity.IRHandleState != null)
+            {
+                updateBefore.IRHandleState = entity.IRHandleState;
+                inverseData.IRHandleState = beforeData.IRHandleState;
+            }
+            if (entity.IRHandleMessage != null)
+            {
+                updateBefore.IRHandleMessage = entity.IRHandleMessage;
+                inverseData.IRHandleMessage = beforeData.IRHandleMessage;
+            }
+            if (entity.IRHandleTime != null)
+            {
+                updateBefore.IRHandleTime = entity.IRHandleTime;
+                inverseData.IRHandleTime = beforeData.IRHandleTime;
+            }
+            if (entity.IRCreateTime != null)
+            {
+                updateBefore.IRCreateTime = entity.IRCreateTime;
+                inverseData.IRCreateTime = beforeData.IRCreateTime;
+            }
+            if (entity.IRReportPicPathJson != null)
+            {
+                updateBefore.IRReportPicPathJson = entity.IRReportPicPathJson;
+                inverseData.IRReportPicPathJson = beforeData.IRReportPicPathJson;
+            }
+            if (entity.IRTakeMoney != null)
+            {
+                updateBefore.IRTakeMoney = entity.IRTakeMoney;
+                inverseData.IRTakeMoney = beforeData.IRTakeMoney;
+            }
+            if (entity.IRRobotId != null)
+            {
+                updateBefore.IRRobotId = entity.IRRobotId;
+                inverseData.IRRobotId = beforeData.IRRobotId;
+            }
+            if (entity.IRRemark != null)
+            {
+                updateBefore.IRRemark = entity.IRRemark;
+                inverseData.IRRemark = beforeData.IRRemark;
+            }
+            if (entity.IRPushState != null)
+            {
+                updateBefore.IRPushState = entity.IRPushState;
+                inverseData.IRPushState = beforeData.IRPushState;
+            }
+            if (entity.IRPushTime != null)
+            {
+                updateBefore.IRPushTime = entity.IRPushTime;
+                inverseData.IRPushTime = beforeData.IRPushTime;
+            }
+            if (entity.IRScanPayNotifyRet != null)
+            {
+                updateBefore.IRScanPayNotifyRet = entity.IRScanPayNotifyRet;
+                inverseData.IRScanPayNotifyRet = beforeData.IRScanPayNotifyRet;
+            }
+            if (entity.IRScanPayNotifyUrl != null)
+            {
+                updateBefore.IRScanPayNotifyUrl = entity.IRScanPayNotifyUrl;
+                inverseData.IRScanPayNotifyUrl = beforeData.IRScanPayNotifyUrl;
+            }
+        }
+
+        /// <summary>
+        /// 分布式批量的部分更新数据，数据的主键不能为null，只更新不为null的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedUpdateChange(List<IRobotQrCodePayTask> entities)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                foreach (IRobotQrCodePayTask entity in entities)
                 {
-                    updateBefore.irQrCodeImagePath = irobotQrCodePayTask.irQrCodeImagePath;
+                    IRobotQrCodePayTask beforeData = FindEntity(entity.IRTaskID);
+                    if (beforeData != null)
+                    {
+                        IRobotQrCodePayTask inverseData = new IRobotQrCodePayTask { IRTaskID = entity.IRTaskID };
+                        DistributedUpdateChange(beforeData, inverseData, entity, dbContext);
+                        dbContext.Entry(new DistributedTransactionPart
+                        {
+                            Id = IdWorker.NextId(),
+                            DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                            InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(inverseData, TimeConverter)),
+                            InverseOperType = 'U',
+                            TransTableName = "IRobot_QrCodePayTask",
+                            TransPrimaryKeyVal = entity.IRTaskID,
+                            TransactionStatus = 0,
+                            CreateDate = DateTime.Now,
+                        }).State = EntityState.Added;
+                    }
                 }
-                if (irobotQrCodePayTask.irHandleState != null)
+                if (dbContext.SaveChanges() > 0)
                 {
-                    updateBefore.irHandleState = irobotQrCodePayTask.irHandleState;
+                    RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
                 }
-                if (irobotQrCodePayTask.irHandleMessage != null)
+            }
+        }
+
+        /// <summary>
+        /// 分布式全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedUpdateAll(IRobotQrCodePayTask entity)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                IRobotQrCodePayTask beforeData = FindEntity(entity.IRTaskID);
+                if (beforeData != null)
                 {
-                    updateBefore.irHandleMessage = irobotQrCodePayTask.irHandleMessage;
+                    dbContext.Entry(entity).State = EntityState.Modified;
+                    dbContext.Entry(new DistributedTransactionPart
+                    {
+                        Id = IdWorker.NextId(),
+                        DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                        InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData, TimeConverter)),
+                        InverseOperType = 'u',
+                        TransTableName = "IRobot_QrCodePayTask",
+                        TransPrimaryKeyVal = entity.IRTaskID,
+                        TransactionStatus = 0,
+                        CreateDate = DateTime.Now,
+                    }).State = EntityState.Added;
+                    if (dbContext.SaveChanges() > 0)
+                    {
+                        RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
+                    }
                 }
-                if (irobotQrCodePayTask.irHandleTime != null)
+            }
+        }
+
+        /// <summary>
+        /// 分布式批量全覆盖更新数据，数据的主键不能为null，所有属性全部覆盖数据库记录原有的值
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedUpdateAllBatch(List<IRobotQrCodePayTask> entities)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                foreach (IRobotQrCodePayTask entity in entities)
                 {
-                    updateBefore.irHandleTime = irobotQrCodePayTask.irHandleTime;
+                    IRobotQrCodePayTask beforeData = FindEntity(entity.IRTaskID);
+                    if (beforeData != null)
+                    {
+                        dbContext.Entry(entity).State = EntityState.Modified;
+                        dbContext.Entry(new DistributedTransactionPart
+                        {
+                            Id = IdWorker.NextId(),
+                            DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                            InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData, TimeConverter)),
+                            InverseOperType = 'U',
+                            TransTableName = "IRobot_QrCodePayTask",
+                            TransPrimaryKeyVal = entity.IRTaskID,
+                            TransactionStatus = 0,
+                            CreateDate = DateTime.Now,
+                        }).State = EntityState.Added;
+                    }
                 }
-                if (irobotQrCodePayTask.irCreateTime != null)
+                if (dbContext.SaveChanges() > 0)
                 {
-                    updateBefore.irCreateTime = irobotQrCodePayTask.irCreateTime;
+                    RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
                 }
-                if (irobotQrCodePayTask.irReportPicPathJson != null)
+            }
+        }
+
+        /// <summary>
+        /// 分布式删除一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedDelete(IRobotQrCodePayTask entity)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                IRobotQrCodePayTask beforeData = FindEntity(entity.IRTaskID);
+                if (beforeData != null)
                 {
-                    updateBefore.irReportPicPathJson = irobotQrCodePayTask.irReportPicPathJson;
+                    dbContext.Entry(entity).State = EntityState.Deleted;
+                    dbContext.Entry(new DistributedTransactionPart
+                    {
+                        Id = IdWorker.NextId(),
+                        DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                        InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData, TimeConverter)),
+                        InverseOperType = 'i',
+                        TransTableName = "IRobot_QrCodePayTask",
+                        TransPrimaryKeyVal = entity.IRTaskID,
+                        TransactionStatus = 0,
+                        CreateDate = DateTime.Now,
+                    }).State = EntityState.Added;
+                    if (dbContext.SaveChanges() > 0)
+                    {
+                        RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
+                    }
                 }
-                if (irobotQrCodePayTask.irTakeMoney != null)
+            }
+        }
+
+
+        /// <summary>
+        /// 分布式删除一条数据，数据的主键不能为null
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        public void DistributedDelete(List<IRobotQrCodePayTask> entities)
+        {
+            if (DistributedTransactionScan.TransactionIds.Value == null)
+            {
+                throw new Exception("方法调用失败，失败原因：未开启分布式事务。");
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                foreach (IRobotQrCodePayTask entity in entities)
                 {
-                    updateBefore.irTakeMoney = irobotQrCodePayTask.irTakeMoney;
+                    IRobotQrCodePayTask beforeData = FindEntity(entity.IRTaskID);
+                    if (beforeData != null)
+                    {
+                        dbContext.Entry(entity).State = EntityState.Deleted;
+                        dbContext.Entry(new DistributedTransactionPart
+                        {
+                            Id = IdWorker.NextId(),
+                            DistributedTransactionMainId = (long)DistributedTransactionScan.TransactionIds.Value,
+                            InverseOper = CompressHelper.GZipCompressString(JsonConvert.SerializeObject(beforeData, TimeConverter)),
+                            InverseOperType = 'I',
+                            TransTableName = "IRobot_QrCodePayTask",
+                            TransPrimaryKeyVal = entity.IRTaskID,
+                            TransactionStatus = 0,
+                            CreateDate = DateTime.Now,
+                        }).State = EntityState.Added;
+                    }
                 }
-                if (irobotQrCodePayTask.irRobotId != null)
+                if (dbContext.SaveChanges() > 0)
                 {
-                    updateBefore.irRobotId = irobotQrCodePayTask.irRobotId;
+                    RecordDistribute(dbContext.Database.Connection.ConnectionString, "IRobot_QrCodePayTask");
                 }
-                if (irobotQrCodePayTask.irRemark != null)
-                {
-                    updateBefore.irRemark = irobotQrCodePayTask.irRemark;
-                }
-                if (irobotQrCodePayTask.irPushState != null)
-                {
-                    updateBefore.irPushState = irobotQrCodePayTask.irPushState;
-                }
-                if (irobotQrCodePayTask.irPushTime != null)
-                {
-                    updateBefore.irPushTime = irobotQrCodePayTask.irPushTime;
-                }
-                if (irobotQrCodePayTask.irScanPayNotifyRet != null)
-                {
-                    updateBefore.irScanPayNotifyRet = irobotQrCodePayTask.irScanPayNotifyRet;
-                }
-                return myDbContext2.SaveChanges();
             }
         }
 
         public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext2();
-        }
-
-        protected override IQueryable<IRobotQrCodePayTask> Query(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTask paramz, IRobotQrCodePayTask neqArgs)
-        {
-            throw new NotImplementedException();
         }
     }
 }

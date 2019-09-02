@@ -30,11 +30,12 @@ namespace CommonHelper.CommonEntity
         public virtual string InverseOper { set; get; }
 
         /// <summary>
-        /// 逆向操作类型，当本次事务为批量插入操作时，逆向操作类型是：D（Delete）、
+        /// 逆向操作类型，当本次事务为插入操作时，逆向操作类型是：d（Delete）、
+        /// 当本次事务为批量插入操作时，逆向操作类型是：D（Delete）、
+        /// 当本次事务为删除操作时，逆向操作类型是：i（Insert）、
         /// 当本次事务为批量删除操作时，逆向操作类型是：I（Insert）、
-        /// 当本次事务为批量全更新操作时，逆向操作类型是：A（UpdateAll）、
-		/// 当本次事务为部分更新操作时，逆向操作类型是：C（UpdateChange）、
-        /// 当本次事务为置空更新操作时，逆向操作类型是：N（SetNull）、
+        /// 当本次事务为更新操作时，逆向操作类型是：u（UpdateAll）、
+        /// 当本次事务为批量更新操作时，逆向操作类型是：U（UpdateAll）、
         /// </summary>
         public virtual char? InverseOperType { set; get; }
 
@@ -42,11 +43,6 @@ namespace CommonHelper.CommonEntity
         /// 涉及事务的表
         /// </summary>
         public virtual string TransTableName { set; get; }
-
-        /// <summary>
-        /// 涉及事务的主键
-        /// </summary>
-        public virtual string TransPrimaryKey { set; get; }
 
         /// <summary>
         /// 涉及事务的主键值

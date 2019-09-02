@@ -18,7 +18,14 @@ namespace CommonHelper.Helper.EFMap
             this.ToTable("Distributed_Transaction_Main");
             this.HasKey(u => u.Id);
             this.Property(u => u.Id).HasColumnName("Id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            this.Property(u => u.TransactionStatus).HasColumnName("TransactionStatus");
+            this.Property(u => u.TransactionStatus).HasColumnName("Transaction_Status");
+            /* 建表sql语句，sql_server版
+             CREATE TABLE Distributed_Transaction_Main (
+                Id bigint NOT NULL ,
+                Transaction_Status tinyint NULL ,
+                PRIMARY KEY (Id)
+            );
+             */
         }
     }
 }

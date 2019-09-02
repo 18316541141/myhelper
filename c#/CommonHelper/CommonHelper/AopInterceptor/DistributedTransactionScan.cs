@@ -1,6 +1,7 @@
 ﻿using Castle.DynamicProxy;
 using CommonHelper.CommonEntity;
 using CommonHelper.Helper.EFDbContext;
+using CommonHelper.staticVar;
 using Snowflake.Net;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,6 @@ namespace CommonHelper.AopInterceptor
     /// </summary>
     public class DistributedTransactionScan : IInterceptor
     {
-        /// <summary>
-        /// 分布式雪花id生成器
-        /// </summary>
-        public static IdWorker IdWorker { set; get; }
-
         /// <summary>
         /// 事务id的值
         /// </summary>
@@ -76,7 +72,7 @@ namespace CommonHelper.AopInterceptor
             {
                 if (TransactionIds.Value == null)
                 {
-                    TransactionIds.Value = IdWorker.NextId();
+                    TransactionIds.Value = AllStatic.IdWorker.NextId();
                 }
                 EnterTimes.Value++;
                 try

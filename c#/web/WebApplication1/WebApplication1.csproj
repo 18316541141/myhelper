@@ -256,7 +256,6 @@
     <Compile Include="Entity\Province.cs" />
     <Compile Include="Entity\Town.cs" />
     <Compile Include="Filter\Common\OperCountAttribute.cs" />
-    <Compile Include="Filter\ExcelEntity\IRobotQrCodePayTaskExcel.cs" />
     <Compile Include="Filter\Common\CompressAttribute.cs" />
     <Compile Include="Filter\Common\LoginAuthorizeAttribute.cs" />
     <Compile Include="Filter\Common\MyErrorAttribute.cs" />
@@ -271,8 +270,8 @@
     </Compile>
     <Compile Include="Mapping\AreaTreeMap.cs" />
     <Compile Include="Mapping\CityMap.cs" />
+    <Compile Include="Mapping\CodeGenerator\IRobotQrCodePayTaskMap.cs" />
     <Compile Include="Mapping\DistrictMap.cs" />
-    <Compile Include="Mapping\IRobotQrCodePayTaskMap.cs" />
     <Compile Include="Mapping\LeftMenuMap.cs" />
     <Compile Include="Mapping\ProvinceMap.cs" />
     <Compile Include="Mapping\TownMap.cs" />
@@ -280,9 +279,11 @@
     <Compile Include="EFDbContext\MyDbContext.cs" />
     <Compile Include="OrderBy\codeGenerator\IRobotQrCodePayTaskOrderBy.cs" />
     <Compile Include="Params\codeGenerator\IRobotQrCodePayTaskParams.cs" />
+    <Compile Include="Params\codeGenerator\IRobotQrCodePayTaskSetNullParams.cs" />
     <Compile Include="Params\ProvinceParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CityRepository.cs" />
+    <Compile Include="Repository\codeGenerator\IRobotQrCodePayTaskInverseRepository.cs" />
     <Compile Include="Repository\DistrictRepository.cs" />
     <Compile Include="Repository\codeGenerator\IRobotQrCodePayTaskRepository.cs" />
     <Compile Include="Repository\ProvinceRepository.cs" />

@@ -9,7 +9,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
-using WebApplication1.MyExtensions;
 using WebApplication1.Params;
 namespace WebApplication1.Repository
 {
@@ -32,7 +31,7 @@ namespace WebApplication1.Repository
 		}
 
 		/// <summary>
-        /// 分布式批量插入数据的反向操作。当事务失败时调用
+        /// 分布式批量更新数据的反向操作。当事务失败时调用
         /// </summary>
         /// <param name="entity">实体对象</param>
 		public override void DistributedInsertInverse(List<DistributedTransactionPart> distributedTransactionParts)
@@ -51,10 +50,10 @@ namespace WebApplication1.Repository
 		}
 
 		/// <summary>
-        /// 分布式setNull的逆操作，当事务失败时调用
+        /// 分布式更新的逆操作，当事务失败时调用
         /// </summary>
         /// <param name="entity">实体对象</param>
-		public override void DistributedSetNullInverse(DistributedTransactionPart distributedTransactionPart)
+		public override void DistributedUpdateInverse(DistributedTransactionPart distributedTransactionPart)
 		{
 			using (BaseDbContext dbContext = CreateDbContext())
             {
@@ -75,28 +74,10 @@ namespace WebApplication1.Repository
 		}
 
 		/// <summary>
-        /// 分布式部分更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public override void DistributedUpdateChangeInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			DistributedSetNullInverse(entity);
-		}
-
-		/// <summary>
-        /// 分布式全覆盖更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-		public override void DistributedUpdateAllInverse(DistributedTransactionPart distributedTransactionPart)
-		{
-			DistributedSetNullInverse(entity);
-		}
-
-		/// <summary>
         /// 分布式批量全覆盖更新数据的逆操作，当事务失败时调用
         /// </summary>
         /// <param name="entity">实体对象</param>
-		public override void DistributedUpdateAllBatchInverse(List<DistributedTransactionPart> distributedTransactionParts)
+		public override void DistributedUpdateInverse(List<DistributedTransactionPart> distributedTransactionParts)
 		{
 			using (BaseDbContext dbContext = CreateDbContext())
             {

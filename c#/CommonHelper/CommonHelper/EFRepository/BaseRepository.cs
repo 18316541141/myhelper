@@ -11,6 +11,7 @@ using CommonHelper.Helper.EFDbContext;
 using CommonHelper.CommonEntity;
 using CommonHelper.EFRepository;
 using CommonHelper.AopInterceptor;
+using CommonHelper.staticVar;
 
 namespace CommonHelper.Helper.EFRepository
 {
@@ -18,22 +19,15 @@ namespace CommonHelper.Helper.EFRepository
     /// 通用的数据操作基类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class BaseRepository<TEntity, TParams, TOrderBy> where TEntity : class where TParams : class where TOrderBy : class
+    public abstract class BaseRepository<TEntity, TParams, TOrderBy, TSetNullParams> where TEntity : class where TParams : class where TOrderBy : class where TSetNullParams :class
     {
         /// <summary>
         /// 分布式雪花id生成器
         /// </summary>
         public IdWorker IdWorker { set; get; }
 
-        /// <summary>
-        /// 默认的时间转换器
-        /// </summary>
-        protected static IsoDateTimeConverter TimeConverter { set; get; }
-
         static BaseRepository()
         {
-            TimeConverter = new IsoDateTimeConverter();
-            TimeConverter.DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
             ReadOnlyMainDbContext = new DistributedMainDbContext();
         }
 
@@ -288,6 +282,23 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
+        /// 批量修改所有字段，注意：为null的也会在数据库上写成null
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public int UpdateAll(List<TEntity> entities)
+        {
+            using (DbContext dbContext = CreateDbContext())
+            {
+                foreach (TEntity entity in entities)
+                {
+                    dbContext.Entry(entity).State = EntityState.Modified;
+                }
+                return dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// 根据条件查询符合条件的数据量
         /// </summary>
         /// <param name="predicate"></param>
@@ -341,7 +352,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="primaryKeyVal">主键的值</param>
         /// <param name="transTableName">事务操作的表名称</param>
-		public bool CheckTransactionFinish(long? primaryKeyVal, string transTableName)
+		public void CheckTransactionFinish(long? primaryKeyVal, string transTableName)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -350,10 +361,11 @@ namespace CommonHelper.Helper.EFRepository
                 {
                     long? distributedTransactionMainId = query.Select(a => a.DistributedTransactionMainId).FirstOrDefault();
                     var result=ReadOnlyMainDbContext.DistributedTransactionMains.AsNoTracking().AsQueryable().Where(a => a.Id == distributedTransactionMainId && a.TransactionStatus==1).Any();
-                    List<string> dataSrcs = ReadOnlyMainDbContext.DistributedTransactionMainDetails.AsNoTracking().AsQueryable().Where(a=>a.DistributedTransactionMainId== distributedTransactionMainId).Select(a=>a.TransactionDataSource).ToList();
-                    foreach (string dataSrc in dataSrcs)
+                    List<DistributedTransactionMainDetail> mainDetails = ReadOnlyMainDbContext.DistributedTransactionMainDetails.AsNoTracking().AsQueryable().Where(a => a.DistributedTransactionMainId == distributedTransactionMainId)
+                        .Select(a => new DistributedTransactionMainDetail { TransactionDataSource = a.TransactionDataSource,TransactionTable=a.TransactionTable }).ToList();
+                    foreach (DistributedTransactionMainDetail mainDetail in mainDetails)
                     {
-                        InverseRepository inverseRepository = RepositoryStatic.InverseRepositoryMap[dataSrc];
+                        InverseRepository inverseRepository = AllStatic.InverseRepositoryMap[mainDetail.TransactionDataSource][mainDetail.TransactionTable];
                         List<DistributedTransactionPart> distributedTransactionPartList = inverseRepository.FindTransPartsById(distributedTransactionMainId);
                         if (result)
                         {
@@ -361,36 +373,44 @@ namespace CommonHelper.Helper.EFRepository
                         }
                         else
                         {
+                            //批量插入的逆操作
+                            List<DistributedTransactionPart> dparts = new List<DistributedTransactionPart>();
+                            //批量删除的逆操作
+                            List<DistributedTransactionPart> iparts = new List<DistributedTransactionPart>();
+                            //批量更新的逆操作
+                            List<DistributedTransactionPart> uparts = new List<DistributedTransactionPart>();
                             foreach (DistributedTransactionPart distributedTransactionPart in distributedTransactionPartList)
                             {
                                 if (distributedTransactionPart.InverseOperType == 'D')
+                                {
+                                    dparts.Add(distributedTransactionPart);
+                                }
+                                else if (distributedTransactionPart.InverseOperType == 'd')
                                 {
                                     inverseRepository.DistributedDeleteInverse(distributedTransactionPart);
                                 }
                                 else if (distributedTransactionPart.InverseOperType == 'I')
                                 {
+                                    iparts.Add(distributedTransactionPart);
+                                }
+                                else if (distributedTransactionPart.InverseOperType == 'i')
+                                {
                                     inverseRepository.DistributedInsertInverse(distributedTransactionPart);
                                 }
-                                else if (distributedTransactionPart.InverseOperType == 'A')
+                                else if (distributedTransactionPart.InverseOperType == 'U')
                                 {
-                                    inverseRepository.DistributedUpdateAllInverse(distributedTransactionPart);
+                                    uparts.Add(distributedTransactionPart);
                                 }
-                                else if (distributedTransactionPart.InverseOperType == 'C')
+                                else if (distributedTransactionPart.InverseOperType == 'u')
                                 {
-                                    inverseRepository.DistributedUpdateChangeInverse(distributedTransactionPart);
+                                    inverseRepository.DistributedUpdateInverse(distributedTransactionPart);
                                 }
-                                else if (distributedTransactionPart.InverseOperType == 'N')
-                                {
-                                    inverseRepository.DistributedSetNullInverse(distributedTransactionPart);
-                                }
+                                inverseRepository.DistributedDeleteInverse(dparts);
+                                inverseRepository.DistributedInsertInverse(iparts);
+                                inverseRepository.DistributedUpdateInverse(uparts);
                             }
                         }
                     }
-                    return result;
-                }
-                else
-                {
-                    return true;
                 }
             }
         }
@@ -530,5 +550,65 @@ namespace CommonHelper.Helper.EFRepository
                 tableNameSet.Add(tableName);
             }
         }
+
+        /// <summary>
+        /// 修改变化值，把entity不为null的数据视为变化值
+        /// </summary>
+        /// <param name="entity">修改实体类，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
+        /// <returns>返回修改的数据行数</returns>
+        public int UpdateChange(TEntity entity)
+        {
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                UpdateChange(dbContext, entity);
+                return dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// 批量修改变化值，把entity不为null的数据视为变化值
+        /// </summary>
+        /// <param name="entities">修改实体类集合，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
+        /// <returns>返回修改的数据行数</returns>
+        public int UpdateChange(List<TEntity> entities)
+        {
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                foreach (TEntity entity in entities)
+                {
+                    UpdateChange(dbContext, entity);
+                }
+                return dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// 修改变化值的部分共用代码，这里抽取出来简化结构
+        /// </summary>
+        /// <param name="updateBefore"></param>
+        /// <param name="entity"></param>
+        protected abstract void UpdateChange(BaseDbContext dbContext, TEntity entity);
+
+
+        /// <summary>
+        /// 把指定字段值设置为null
+        /// </summary>
+        /// <param name="param">设为null的字段参数，主键必须要传入，其他字段等于true则表示设置为null</param>
+        /// <returns>返回修改的数据行数</returns>
+        public void SetNull(TSetNullParams param)
+        {
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                SetNull(dbContext, param);
+                dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// 把指定字段值设置为null的部分共用代码，这里抽取出来简化结构
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="param"></param>
+        protected abstract void SetNull(BaseDbContext dbContext, TSetNullParams param);
     }
 }

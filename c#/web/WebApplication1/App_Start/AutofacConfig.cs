@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using CommonHelper.AopInterceptor;
 using CommonHelper.Helper;
+using CommonHelper.staticVar;
 using log4net;
 using RabbitMQ.Client;
 using Snowflake.Net;
@@ -48,7 +49,7 @@ namespace WebApplication1.App_Start
             IdWorker idWorker = new IdWorker((ipNum >> 27) & 31, ipNum & 31);
             //ConnectionFactory factory = new ConnectionFactory { HostName = "hostname", UserName = "root", Password = "root001", VirtualHost = "hostserver" };
             //containerBuilder.RegisterInstance(factory.CreateConnection()).As<IConnection>().SingleInstance().PropertiesAutowired();
-            DistributedTransactionScan.IdWorker = idWorker;
+            AllStatic.IdWorker = idWorker;
             containerBuilder.RegisterInstance(idWorker).As<IdWorker>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")).SingleInstance().AsSelf().PropertiesAutowired();
             containerBuilder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired().InstancePerRequest();

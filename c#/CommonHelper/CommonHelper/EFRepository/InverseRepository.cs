@@ -26,28 +26,16 @@ namespace CommonHelper.EFRepository
         public abstract void DistributedInsertInverse(List<DistributedTransactionPart> distributedTransactionParts);
 
         /// <summary>
-        /// 分布式setNull的逆操作，当事务失败时调用
+        /// 分布式更新数据的逆操作，当事务失败时调用
         /// </summary>
         /// <param name="distributedTransactionPart">分表对象</param>
-		public abstract void DistributedSetNullInverse(DistributedTransactionPart distributedTransactionPart);
+		public abstract void DistributedUpdateInverse(DistributedTransactionPart distributedTransactionPart);
 
         /// <summary>
-        /// 分布式部分更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="distributedTransactionPart">分表对象</param>
-		public abstract void DistributedUpdateChangeInverse(DistributedTransactionPart distributedTransactionPart);
-
-        /// <summary>
-        /// 分布式全覆盖更新数据的逆操作，当事务失败时调用
-        /// </summary>
-        /// <param name="distributedTransactionPart">分表对象</param>
-		public abstract void DistributedUpdateAllInverse(DistributedTransactionPart distributedTransactionPart);
-
-        /// <summary>
-        /// 分布式批量全覆盖更新数据的逆操作，当事务失败时调用
+        /// 分布式批量更新数据的逆操作，当事务失败时调用
         /// </summary>
         /// <param name="distributedTransactionParts">分表集合</param>
-		public abstract void DistributedUpdateAllBatchInverse(List<DistributedTransactionPart> distributedTransactionParts);
+		public abstract void DistributedUpdateInverse(List<DistributedTransactionPart> distributedTransactionParts);
 
         /// <summary>
         /// 分布式删除数据的逆操作，当事务失败时调用
