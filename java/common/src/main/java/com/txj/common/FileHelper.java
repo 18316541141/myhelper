@@ -12,20 +12,20 @@ import java.io.InputStream;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
-public class FileHelper {
+public final class FileHelper {
 	/**
 	 * 保存输入流为sha1
 	 * @param inputStream
 	 * @param basePath
 	 * @return
 	 */
-	public static String SaveInputStreamBySha1(InputStream inputStream,String basePath){
+	public static String SaveInputStreamBySha1(final InputStream inputStream,final String basePath){
 		new File(basePath+File.separator).mkdirs();
 		try {
-			File uuidFile=new File(basePath+File.separator+UUID.randomUUID().toString());
+			final File uuidFile=new File(basePath+File.separator+UUID.randomUUID().toString());
 			FileUtils.copyInputStreamToFile(inputStream, uuidFile);
-			String sha1=EncrypHelper.getSha1FromFile(uuidFile);
-			File sha1File=new File(basePath+File.separator+sha1);
+			final String sha1=EncrypHelper.getSha1FromFile(uuidFile);
+			final File sha1File=new File(basePath+File.separator+sha1);
 			if(sha1File.exists()){
 				FileUtils.deleteQuietly(uuidFile);
 			}else{
@@ -44,17 +44,17 @@ public class FileHelper {
 	 * @param basePath	保存的目录位置
 	 * @return	返回图片的sha1
 	 */
-	public static String SaveImageBySha1(Image image, String basePath){
-		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufferedImage.createGraphics();   
+	public static String SaveImageBySha1(final Image image, final String basePath){
+		final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+		final Graphics g = bufferedImage.createGraphics();   
         g.drawImage(image, 0, 0, null);   
         g.dispose();
         FileOutputStream fileOutputStream = null;
         BufferedOutputStream bufferedOutputStream=null;
 		try {
-			String sha1=EncrypHelper.getSha1FromImage(image);
+			final String sha1=EncrypHelper.getSha1FromImage(image);
 			new File(basePath+File.separator).mkdirs();
-			String filename=basePath+File.separator+sha1;
+			final String filename=basePath+File.separator+sha1;
 			if(!new File(filename).exists()){
 				fileOutputStream = new FileOutputStream(filename);
 				bufferedOutputStream=new BufferedOutputStream(fileOutputStream);

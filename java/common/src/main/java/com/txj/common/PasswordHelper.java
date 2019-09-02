@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-public class PasswordHelper {
+public final class PasswordHelper {
 	/**
 	 * 密码强度等级
 	 * 
@@ -28,8 +28,8 @@ public class PasswordHelper {
 	 *            密码类型，生成规则，规则如下： 001（只含数字）、010（只含小写字母）、100（只含大写字母）；或者左边情况的混合。
 	 * @return
 	 */
-	public static String RandomPassword(int len, int type) {
-		List<Character> randomCharArray = new ArrayList<Character>();
+	public static String RandomPassword(final int len, final int type) {
+		final List<Character> randomCharArray = new ArrayList<Character>();
 		if ((type & 1) == 1)
 			randomCharArray.addAll(Arrays.asList(new Character[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }));
 		if (((type >> 1) & 1) == 1)
@@ -39,7 +39,7 @@ public class PasswordHelper {
 			randomCharArray.addAll(Arrays.asList(new Character[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 					'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' }));
 		String str = "";
-		Random next = new Random();
+		final Random next = new Random();
 		for (int i = 0; i < len; i++)
 			str += randomCharArray.get(next.nextInt(randomCharArray.size()));
 		return str;
@@ -51,8 +51,8 @@ public class PasswordHelper {
 	 * @param paswword
 	 * @return
 	 */
-	public static PasswordLevel getPasswordLevel(String paswword) {
-		int nScore = getPasswordScore(paswword);
+	public static PasswordLevel getPasswordLevel(final String paswword) {
+		final int nScore = getPasswordScore(paswword);
 		if (nScore >= 0 && nScore < 20)
 			return PasswordLevel.Very_Week;
 		if (nScore >= 20 && nScore < 40)
@@ -135,9 +135,9 @@ public class PasswordHelper {
                 }
             }
         }
-        String sAlphas = "abcdefghijklmnopqrstuvwxyz";
-        String sNumerics = "01234567890";
-        int nSeqCount = 3;//规则:依顺序出现三个以上
+        final String sAlphas = "abcdefghijklmnopqrstuvwxyz";
+        final String sNumerics = "01234567890";
+        final int nSeqCount = 3;//规则:依顺序出现三个以上
 
         for (int i = 0; i < sAlphas.length() - nSeqCount; i++)
         {

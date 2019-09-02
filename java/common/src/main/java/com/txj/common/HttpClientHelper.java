@@ -41,14 +41,14 @@ import org.dom4j.io.SAXReader;
 import org.jsoup.Jsoup;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-public class HttpClientHelper {
+public final class HttpClientHelper {
 	/**
 	 * 检查是否被踢出登录，由用户自定义判断是否被踢出登录的逻辑
 	 * @author admin
 	 */
     public interface CheckLogout
     {
-    	boolean isLogout(HttpResponse response);
+    	boolean isLogout(final HttpResponse response);
     }
 	
 	/**
@@ -61,19 +61,19 @@ public class HttpClientHelper {
     	 * 检测遇到该异常时否需要重新再发一次请求
     	 * @param reqUrl	请求的url
     	 * @param ex	异常对象
-    	 * @return	如果需要重新发送请求，则返回true
+    	 * @return	如果需要重新发送请求，则返回Boolean.TRUE
     	 */
-        boolean checkTry(String reqUrl, Exception ex);
+        boolean checkTry(final String reqUrl, final Exception ex);
     }
     
     /**
      * 默认的异常重试器，直接抛出异常，没有其他处理
      * @author admin
      */
-    public static class DefaultTryExceptionHandle implements TryExceptionHandle
+    public static final class DefaultTryExceptionHandle implements TryExceptionHandle
     {
-        public boolean checkTry(String reqUrl,Exception ex){
-        	return false;
+        public boolean checkTry(final String reqUrl,final Exception ex){
+        	return Boolean.FALSE;
         }
     }
 	
@@ -81,21 +81,21 @@ public class HttpClientHelper {
      * 默认的登出检测，始终认为当前用户不会被踢出
      * @author admin
      */
-    public static class DefaultCheckLogout implements CheckLogout
+    public static final class DefaultCheckLogout implements CheckLogout
     {
-        public boolean isLogout(HttpResponse response) {
-        	return false;
+        public boolean isLogout(final HttpResponse response) {
+        	return Boolean.FALSE;
         }
     }
     
-    private static Element HttpCfg;
+    private final static Element HttpCfg;
     
     
     static{
     	DefaultCheckLogout = new DefaultCheckLogout();
     	DefaultTryExceptionHandle = new DefaultTryExceptionHandle();
-    	SAXReader reader=new SAXReader();
-    	File file=new File("http.xml");
+    	final SAXReader reader=new SAXReader();
+    	final File file=new File("http.xml");
     	if(file.exists()){    		
     		try {
     			HttpCfg = reader.read(file).getRootElement();
@@ -103,7 +103,7 @@ public class HttpClientHelper {
     			throw new RuntimeException(e);
     		}
     	}else{
-    		Document doc=DocumentHelper.createDocument();
+    		final Document doc=DocumentHelper.createDocument();
     		HttpCfg = doc.addElement("Urls");
     	}
     }
@@ -112,11 +112,11 @@ public class HttpClientHelper {
     
     private static CheckLogout DefaultCheckLogout;
     
-	public static void setDefaultTryExceptionHandle(TryExceptionHandle defaultTryExceptionHandle) {
+	public static void setDefaultTryExceptionHandle(final TryExceptionHandle defaultTryExceptionHandle) {
 		DefaultTryExceptionHandle = defaultTryExceptionHandle;
 	}
 
-	public static void setDefaultCheckLogout(CheckLogout defaultCheckLogout) {
+	public static void setDefaultCheckLogout(final CheckLogout defaultCheckLogout) {
 		DefaultCheckLogout = defaultCheckLogout;
 	}
 
@@ -138,11 +138,11 @@ public class HttpClientHelper {
 		void fail(Throwable throwable);
 	}
 	
-	public static class AsyncReq{
-		private static AtomicInteger executeCount;
+	public final static class AsyncReq{
+		private final static AtomicInteger executeCount;
 		private static int maxExecuteCount;
-        private static String controllerName;
-        private static ExecutorService cachedThreadPool ;
+        private final static String controllerName;
+        private final static ExecutorService cachedThreadPool ;
         static
         {
         	cachedThreadPool = Executors.newCachedThreadPool();
@@ -157,7 +157,7 @@ public class HttpClientHelper {
 			AsyncReq.maxExecuteCount = maxExecuteCount;
 		}
 		
-		public static void httpGet(AsyncCallback asyncCallback,String requestUrl, HttpContext context){
+		public static void httpGet(final AsyncCallback asyncCallback,final String requestUrl, final HttpContext context){
 			executeCount.incrementAndGet();
 			while(executeCount.get()>=maxExecuteCount){
 				ThreadHelper.batchWait(controllerName, 30000);
@@ -173,7 +173,7 @@ public class HttpClientHelper {
 			});
 		}
 		
-		public static void httpPost(AsyncCallback asyncCallback,Map<String, Object> param,String requestUrl,HttpContext context){
+		public static void httpPost(final AsyncCallback asyncCallback,final Map<String, Object> param,final String requestUrl,final HttpContext context){
 			executeCount.incrementAndGet();
 			while(executeCount.get()>=maxExecuteCount){
 				ThreadHelper.batchWait(controllerName, 30000);
@@ -189,7 +189,7 @@ public class HttpClientHelper {
 			});
 		}
 		
-		public static void HttpPost(AsyncCallback asyncCallback,String requestUrl, Map<String, String> param, HttpContext context){
+		public static void HttpPost(final AsyncCallback asyncCallback,final String requestUrl, final Map<String, String> param, final HttpContext context){
 			executeCount.incrementAndGet();
 			while(executeCount.get()>=maxExecuteCount){
 				ThreadHelper.batchWait(controllerName, 30000);
@@ -205,7 +205,7 @@ public class HttpClientHelper {
 			});
 		}
 		
-		public static void HttpPost(AsyncCallback asyncCallback, String requestUrl, String body, HttpContext context){
+		public static void HttpPost(final AsyncCallback asyncCallback, final String requestUrl, final String body, final HttpContext context){
 			executeCount.incrementAndGet();
 			while(executeCount.get()>=maxExecuteCount){
 				ThreadHelper.batchWait(controllerName, 30000);
@@ -229,7 +229,7 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	public static HttpResponse httpGet(String requestUrl, Map<String, String> query,HttpContext context){
+	public static HttpResponse httpGet(final String requestUrl, final Map<String, String> query,final HttpContext context){
 		return httpGet(requestUrl+"?"+queryParamsMapToStr(query, loadRequestEncoding(requestUrl)),context);
 	}
 	
@@ -239,10 +239,10 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	public static HttpResponse httpGet(String requestUrl, HttpContext context){
-		HttpGet httpGet = new HttpGet(requestUrl);
+	public static HttpResponse httpGet(final String requestUrl, final HttpContext context){
+		final HttpGet httpGet = new HttpGet(requestUrl);
 		LoadConfig(httpGet, requestUrl);
-		HttpClient innerHttpClient = HttpClients.createDefault();
+		final HttpClient innerHttpClient = HttpClients.createDefault();
 		TRY_AGAIN:
 		try {
 			return innerHttpClient.execute(httpGet, context);
@@ -264,7 +264,7 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	public static HttpResponse httpPost(Map<String, Object> param,String requestUrl,Map<String, String> query, HttpContext context){
+	public static HttpResponse httpPost(final Map<String, Object> param,final String requestUrl,final Map<String, String> query, final HttpContext context){
 		return httpPost(param,requestUrl+"?"+queryParamsMapToStr(query,loadRequestEncoding(requestUrl)), context);
 	}
 	
@@ -275,9 +275,9 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	public static HttpResponse httpPost(Map<String, Object> param,String requestUrl, HttpContext context){
-		MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-		for(Entry<String, Object> entry:param.entrySet()){
+	public static HttpResponse httpPost(final Map<String, Object> param,final String requestUrl, final HttpContext context){
+		final MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+		for(final Entry<String, Object> entry:param.entrySet()){
 			 if (entry.getValue() instanceof File) {
 				 multipartEntityBuilder.addBinaryBody(entry.getKey(), (File) entry.getValue());
 			}else{
@@ -294,8 +294,8 @@ public class HttpClientHelper {
 	 * @param context	
 	 * @return
 	 */
-	public static HttpResponse httpPost(String requestUrl, String body, HttpContext context){
-		StringEntity	stringEntity=new StringEntity(body,loadRequestEncoding(requestUrl));
+	public static HttpResponse httpPost(final String requestUrl, final String body, final HttpContext context){
+		final StringEntity stringEntity=new StringEntity(body,loadRequestEncoding(requestUrl));
 		return httpPost(requestUrl, stringEntity, context);
 	}
 
@@ -307,7 +307,7 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	public static HttpResponse httpPost(String requestUrl,Map<String, String> query,Map<String, String> param, HttpContext context){
+	public static HttpResponse httpPost(final String requestUrl,final Map<String, String> query,final Map<String, String> param, final HttpContext context){
 		return httpPost(requestUrl+"?"+queryParamsMapToStr(query,loadRequestEncoding(requestUrl)), param, context);
 	}
 
@@ -320,8 +320,8 @@ public class HttpClientHelper {
 	 *            编码方式
 	 * @return 返回url上的请求参数和值
 	 */
-	private static String queryParamsMapToStr(Map<String, String> param, String encoding) {
-		StringBuilder sb = new StringBuilder();
+	private static String queryParamsMapToStr(final Map<String, String> param, final String encoding) {
+		final StringBuilder sb = new StringBuilder();
 		String connChar = "";
 		for (Entry<String, String> kv : param.entrySet()) {
 			try {
@@ -344,12 +344,12 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	public static HttpResponse httpPost(String requestUrl, Map<String, String> param, HttpContext context) {
-		List<NameValuePair> paramPairs = new ArrayList<NameValuePair>();
-		for (Entry<String, String> entry : param.entrySet()) {
+	public static HttpResponse httpPost(final String requestUrl, final Map<String, String> param, final HttpContext context) {
+		final List<NameValuePair> paramPairs = new ArrayList<NameValuePair>();
+		for (final Entry<String, String> entry : param.entrySet()) {
 			paramPairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 		}
-		UrlEncodedFormEntity httpEntity;
+		final UrlEncodedFormEntity httpEntity;
 		try {
 			httpEntity = new UrlEncodedFormEntity(paramPairs, loadRequestEncoding(requestUrl));
 		} catch (UnsupportedEncodingException e) {
@@ -365,10 +365,10 @@ public class HttpClientHelper {
 	 * @param context
 	 * @return
 	 */
-	private static HttpResponse httpPost(String requestUrl, HttpEntity httpEntity, HttpContext context) {
-		HttpPost httpPost = new HttpPost(requestUrl);
+	private static HttpResponse httpPost(final String requestUrl, final HttpEntity httpEntity, final HttpContext context) {
+		final HttpPost httpPost = new HttpPost(requestUrl);
 		LoadConfig(httpPost, requestUrl);
-		HttpClient innerHttpClient = HttpClients.createDefault();
+		final HttpClient innerHttpClient = HttpClients.createDefault();
 		httpPost.setEntity(httpEntity);
 		TRY_AGAIN:
 		try {
@@ -390,7 +390,7 @@ public class HttpClientHelper {
 	 *            响应报文
 	 * @return 返回图片对象
 	 */
-	public static Image getImage(HttpResponse httpResponse) {
+	public static Image getImage(final HttpResponse httpResponse) {
 		if (DefaultCheckLogout.isLogout(httpResponse)){
 			throw new RuntimeException("已退出登录！(ERROR:-3)");
 		}else{
@@ -408,7 +408,7 @@ public class HttpClientHelper {
 	 * @param httpResponse
 	 * @return 返回输入流
 	 */
-	public static BufferedInputStream getInput(HttpResponse httpResponse) {
+	public static BufferedInputStream getInput(final HttpResponse httpResponse) {
 		if (DefaultCheckLogout.isLogout(httpResponse)){
 			throw new RuntimeException("已退出登录！(ERROR:-3)");
 		}else{			
@@ -428,7 +428,7 @@ public class HttpClientHelper {
 	 * @param outputStream
 	 *            输出流
 	 */
-	public static void output(HttpResponse httpResponse, OutputStream outputStream) {
+	public static void output(final HttpResponse httpResponse, final OutputStream outputStream) {
 		if (DefaultCheckLogout.isLogout(httpResponse)){
 			throw new RuntimeException("已退出登录！(ERROR:-3)");
 		}else{
@@ -447,13 +447,13 @@ public class HttpClientHelper {
 	 *            响应报文
 	 * @return 返回xml根元素
 	 */
-	public static Element getXml(HttpResponse httpResponse,String requestUrl) {
+	public static Element getXml(final HttpResponse httpResponse,final String requestUrl) {
 		if (DefaultCheckLogout.isLogout(httpResponse)){
 			throw new RuntimeException("已退出登录！(ERROR:-3)");
 		}else{
-			String encoding=loadResponseEncoding(requestUrl);
-			SAXReader saxReader = new SAXReader();
-			Document doc;
+			final String encoding=loadResponseEncoding(requestUrl);
+			final SAXReader saxReader = new SAXReader();
+			final Document doc;
 			try {
 				doc = saxReader.read(new InputStreamReader(httpResponse.getEntity().getContent(),encoding));
 				return doc.getRootElement();
@@ -476,14 +476,14 @@ public class HttpClientHelper {
 	 * 				请求的url            
 	 * @return 返回报文内容字符串
 	 */
-	public static String getText(HttpResponse httpResponse,String requestUrl) {
+	public static String getText(final HttpResponse httpResponse,final String requestUrl) {
 		if (DefaultCheckLogout.isLogout(httpResponse)){
 			throw new RuntimeException("已退出登录！(ERROR:-3)");
 		}else{
-			String encoding=loadResponseEncoding(requestUrl);
-			HttpEntity httpEntity = httpResponse.getEntity();
-			int rest = (int) (httpEntity.getContentLength() % Integer.MAX_VALUE);
-			int partCount = (int) ((httpEntity.getContentLength() - rest) / Integer.MAX_VALUE);
+			final String encoding=loadResponseEncoding(requestUrl);
+			final HttpEntity httpEntity = httpResponse.getEntity();
+			final int rest = (int) (httpEntity.getContentLength() % Integer.MAX_VALUE);
+			final int partCount = (int) ((httpEntity.getContentLength() - rest) / Integer.MAX_VALUE);
 			byte[] buffer = null;
 			StringBuilder sb = new StringBuilder();
 			try {
@@ -506,7 +506,7 @@ public class HttpClientHelper {
 	 * @param httpResponse
 	 * @return
 	 */
-	public static org.jsoup.nodes.Document getHtmlDoc(HttpResponse httpResponse,String requestUrl) {
+	public static org.jsoup.nodes.Document getHtmlDoc(final HttpResponse httpResponse,final String requestUrl) {
 		if (DefaultCheckLogout.isLogout(httpResponse)){
 			throw new RuntimeException("已退出登录！(ERROR:-3)");
 		}else{

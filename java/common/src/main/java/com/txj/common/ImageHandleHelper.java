@@ -23,9 +23,9 @@ public class ImageHandleHelper {
 	 * @param height	缩放后的高度
 	 * @return	返回缩放后的图片
 	 */
-	public static Image scale(Image image, int width, int height) {
-		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufferedImage.getGraphics();
+	public static Image scale(final Image image, final int width, final int height) {
+		final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		final Graphics g = bufferedImage.getGraphics();
 		g.drawImage(image, 0, 0,width,height, null); // 绘制缩小后的图
 		g.dispose();
 		return bufferedImage;
@@ -40,9 +40,9 @@ public class ImageHandleHelper {
 	 *            切割的矩形范围
 	 * @return 返回切割后的图片
 	 */
-	public static Image cutPicByRect(Image image, Rectangle cutRect) {
-		BufferedImage bufferedImage = new BufferedImage(cutRect.width, cutRect.height, BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufferedImage.getGraphics();
+	public static Image cutPicByRect(final Image image, final Rectangle cutRect) {
+		final BufferedImage bufferedImage = new BufferedImage(cutRect.width, cutRect.height, BufferedImage.TYPE_INT_RGB);
+		final Graphics g = bufferedImage.getGraphics();
 		g.drawImage(image, 0, 0, cutRect.width, cutRect.height, cutRect.x, cutRect.y, cutRect.x+cutRect.width, cutRect.y+cutRect.height, null);
 		g.dispose();
 		return bufferedImage;

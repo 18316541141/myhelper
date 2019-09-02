@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TemplateApplication {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(final String[] args) throws IOException {
 		SpringApplication.run(TemplateApplication.class, args);
 //		refreshVersion();
 	}
@@ -22,8 +22,8 @@ public class TemplateApplication {
 	 * 发布项目前，统一刷新版本号
 	 */
 	private static void refreshVersion() {
-		String s=File.separator;
-		String newVersion=new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		final String s=File.separator;
+		final String newVersion=new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		try {
 			FileUtils.writeStringToFile(new File("src"+s+"main"+s+"webapp"+s+"index.jsp"), "<!doctype html>\r\n"+
 "<html>\r\n"+

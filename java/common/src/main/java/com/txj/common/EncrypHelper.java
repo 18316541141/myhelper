@@ -15,27 +15,27 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
+
 import javax.imageio.ImageIO;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.crypto.hash.Sha1Hash;
 
 /**
  * 加密帮助类
  * @author admin
  */
-public class EncrypHelper {
+public final class EncrypHelper {
 	
 	/**
 	 * 读取输入流，并转化为base64返回
 	 * @param	inputStream	输入流
 	 * @return	返回文件的base64
 	 */
-	public static String inputStreamToBase64(InputStream inputStream){
-		Encoder encoder = Base64.getEncoder();
-		byte[] buffer=new byte[Integer.MAX_VALUE];
+	public static String inputStreamToBase64(final InputStream inputStream){
+		final Encoder encoder = Base64.getEncoder();
+		final byte[] buffer=new byte[Integer.MAX_VALUE];
 		try {
-			byte[]  fixedBuffer = Arrays.copyOf(buffer, IOUtils.read(inputStream, buffer));
+			final byte[]  fixedBuffer = Arrays.copyOf(buffer, IOUtils.read(inputStream, buffer));
 			return new String(encoder.encode(fixedBuffer));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -48,13 +48,12 @@ public class EncrypHelper {
 	 * @param image	图片对象
 	 * @return	返回图片的base64
 	 */
-	public static String imageToBase64(Image image){
-		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufferedImage.createGraphics();   
+	public static String imageToBase64(final Image image){
+		final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+		final Graphics g = bufferedImage.createGraphics();   
         g.drawImage(image, 0, 0, null);   
         g.dispose();
-		ByteArrayOutputStream output=new ByteArrayOutputStream();
-		try {
+		try (final ByteArrayOutputStream output=new ByteArrayOutputStream()){
 			ImageIO.write(bufferedImage, "jpeg", output);
 			ByteArrayInputStream input=new ByteArrayInputStream(output.toByteArray());
 			return inputStreamToBase64(input);
@@ -69,8 +68,8 @@ public class EncrypHelper {
 	 * @param filePath	文件路径
 	 * @return
 	 */
-	public static String fileToBase64(String filePath){
-		try(InputStream inputStream =new BufferedInputStream(new FileInputStream(filePath))){
+	public static String fileToBase64(final String filePath){
+		try(final InputStream inputStream =new BufferedInputStream(new FileInputStream(filePath))){
 			return inputStreamToBase64(inputStream);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -86,22 +85,16 @@ public class EncrypHelper {
 	 * @param file 文件
 	 * @return 返回sha1
 	 */
-	public static String getSha1FromFile(File file){
-		FileInputStream fileInputStream=null;
-		try {
-			return getSha1FromInputStream(fileInputStream=new FileInputStream(file));
+	public static String getSha1FromFile(final File file){
+		try (final FileInputStream fileInputStream=new FileInputStream(file)){
+			return getSha1FromInputStream(fileInputStream);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}finally {
-			if(fileInputStream!=null){
-				try {
-					fileInputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			return null;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 	/**
@@ -109,31 +102,31 @@ public class EncrypHelper {
 	 * @param text
 	 * @return
 	 */
-	public static String getSha1FromString(String text){
-		char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f'};
+	public static String getSha1FromString(final String text){
+		final char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f'};
 	    try {
-	        MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
-	        byte[] buff;
+	    	final MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+	    	final byte[] buff;
 	        try {
 	        	buff=text.getBytes("UTF-8");
 				mdTemp.update(buff, 0, buff.length);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	        byte[] md = mdTemp.digest();
-	        int j = md.length;
-	        char[] buf = new char[j * 2];
+	        final byte[] md = mdTemp.digest();
+	        final int j = md.length;
+	        final char[] buf = new char[j * 2];
 	        int k = 0;
 	        for (int i = 0; i < j; i++) {
-	            byte byte0 = md[i];
+	        	final byte byte0 = md[i];
 	            buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
 	            buf[k++] = hexDigits[byte0 & 0xf];
 	        }
 	        return new String(buf);
 	    } catch (NoSuchAlgorithmException e) {
 	        e.printStackTrace();
+	        return null;
 	    }
-	    return null;
 	}
 	
 	/**
@@ -141,11 +134,11 @@ public class EncrypHelper {
 	 * @param inputStream 输入流
 	 * @return
 	 */
-	public static String getSha1FromInputStream(InputStream inputStream){
-	    char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f'};
+	public static String getSha1FromInputStream(final InputStream inputStream){
+		final char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a', 'b', 'c', 'd', 'e', 'f'};
 	    try {
-	        MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
-	        byte[] buff=new byte[2048];
+	    	final MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+	    	final byte[] buff=new byte[2048];
 	        try {
 				for(int len;(len=inputStream.read(buff))>-1;){	        	
 					mdTemp.update(buff, 0, len);
@@ -159,9 +152,9 @@ public class EncrypHelper {
 					e.printStackTrace();
 				}
 			}
-	        byte[] md = mdTemp.digest();
-	        int j = md.length;
-	        char[] buf = new char[j * 2];
+	        final byte[] md = mdTemp.digest();
+	        final int j = md.length;
+	        final char[] buf = new char[j * 2];
 	        int k = 0;
 	        for (int i = 0; i < j; i++) {
 	            byte byte0 = md[i];
@@ -171,8 +164,8 @@ public class EncrypHelper {
 	        return new String(buf);
 	    } catch (NoSuchAlgorithmException e) {
 	        e.printStackTrace();
+	        return null;
 	    }
-	    return null;
 	}
 	
 	/**
@@ -180,22 +173,16 @@ public class EncrypHelper {
 	 * @param file
 	 * @return
 	 */
-	public static String getMD5FromFile(File file){
-		FileInputStream fileInputStream=null;
-		try {
-			return getMD5FromInputStream(fileInputStream=new FileInputStream(file));
+	public static String getMD5FromFile(final File file){
+		try (final FileInputStream fileInputStream=new FileInputStream(file)){
+			return getMD5FromInputStream(fileInputStream);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}finally {
-			if(fileInputStream!=null){
-				try {
-					fileInputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			return null;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 	/**
@@ -203,10 +190,10 @@ public class EncrypHelper {
 	 * @param inputStream
 	 * @return
 	 */
-	public static String getMD5FromInputStream(InputStream inputStream){
+	public static String getMD5FromInputStream(final InputStream inputStream){
 		try {
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			byte[] buff=new byte[2048];
+			final MessageDigest m = MessageDigest.getInstance("MD5");
+			final byte[] buff=new byte[2048];
 	        try {
 				for(int len;(len=inputStream.read(buff))>-1;){	        	
 					m.update(buff, 0, len);
@@ -214,7 +201,7 @@ public class EncrypHelper {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			byte s[] = m.digest();
+	        final byte s[] = m.digest();
 			String result = "";
 			for (int i = 0; i < s.length; i++) {
 				result += Integer.toHexString((0x000000FF & s[i]) | 0xFFFFFF00).substring(6);
@@ -222,8 +209,8 @@ public class EncrypHelper {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "";
 		}
-		return "";
 	}
 	
 	/**
@@ -231,25 +218,18 @@ public class EncrypHelper {
 	 * @param image	图片
 	 * @return	返回sha1
 	 */
-	public static String getSha1FromImage(Image image){
-		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufferedImage.createGraphics();   
+	public static String getSha1FromImage(final Image image){
+		final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+		final Graphics g = bufferedImage.createGraphics();   
         g.drawImage(image, 0, 0, null);   
         g.dispose();
-        ByteArrayOutputStream output=new ByteArrayOutputStream();
-		try {
+		try (final ByteArrayOutputStream output=new ByteArrayOutputStream()){
 			ImageIO.write(bufferedImage, "jpeg", output);
 			ByteArrayInputStream input=new ByteArrayInputStream(output.toByteArray());
 			return getSha1FromInputStream(input);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}finally {
-			try {
-				output.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -258,25 +238,18 @@ public class EncrypHelper {
 	 * @param image	
 	 * @return
 	 */
-	public static String getMD5FromImage(Image image){
-		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
-		Graphics g = bufferedImage.createGraphics();   
+	public static String getMD5FromImage(final Image image){
+		final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),BufferedImage.TYPE_INT_RGB);
+		final Graphics g = bufferedImage.createGraphics();   
         g.drawImage(image, 0, 0, null);   
         g.dispose();
-        ByteArrayOutputStream output=new ByteArrayOutputStream();
-		try {
+		try(final ByteArrayOutputStream output=new ByteArrayOutputStream()) {
 			ImageIO.write(bufferedImage, "jpeg", output);
 			ByteArrayInputStream input=new ByteArrayInputStream(output.toByteArray());
 			return getMD5FromInputStream(input);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}finally {
-			try {
-				output.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

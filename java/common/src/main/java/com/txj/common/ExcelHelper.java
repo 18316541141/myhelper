@@ -21,7 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.txj.annotation.ExcelCol;
 import com.txj.annotation.ExcelSheet;
 
-public class ExcelHelper {
+public final class ExcelHelper {
 	/**
 	 * 导出excel到输出流上
 	 * 
@@ -30,7 +30,7 @@ public class ExcelHelper {
 	 * @param outputStream
 	 *            输出流
 	 */
-	public static <T> void listToExcelXlsx(List<T>[] dataListArrays, OutputStream outputStream) {
+	public static <T> void listToExcelXlsx(final List<T>[] dataListArrays,final OutputStream outputStream) {
 		listToExcelXlsx(dataListArrays, outputStream, null);
 	}
 
@@ -41,10 +41,10 @@ public class ExcelHelper {
 	 * @param groupName
 	 * @return
 	 */
-	public static <T> List<T> ExcelXlsxToList(Class clazz, InputStream inputStream, String groupName){
-        List<T> ret = new ArrayList<T>();
-        String sheetName=getSheetName(clazz, groupName);
-        List<ExcelColInfo> excelColInfoList = colFilter(clazz, groupName);
+	public static <T> List<T> ExcelXlsxToList(final Class<T> clazz, final InputStream inputStream, final String groupName){
+		final List<T> ret = new ArrayList<T>();
+		final String sheetName=getSheetName(clazz, groupName);
+		final List<ExcelColInfo> excelColInfoList = colFilter(clazz, groupName);
         if (excelColInfoList.size() == 0)
         {
             throw new RuntimeException("字段列表为空，不能导入数据！");
@@ -53,10 +53,9 @@ public class ExcelHelper {
 		try {
 			xssfWorkbook = new XSSFWorkbook(inputStream);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        XSSFSheet xssfSheet=(XSSFSheet)xssfWorkbook.getSheet(sheetName);
+		final XSSFSheet xssfSheet=(XSSFSheet)xssfWorkbook.getSheet(sheetName);
         XSSFRow xssfRow;
         T obj;
         for (int i=1,len= xssfSheet.getLastRowNum();i<=len ;i++)
@@ -64,7 +63,7 @@ public class ExcelHelper {
             xssfRow = (XSSFRow)xssfSheet.getRow(i);
             try {
 				obj=(T)clazz.newInstance();
-				for (ExcelColInfo excelColInfo : excelColInfoList)
+				for (final ExcelColInfo excelColInfo : excelColInfoList)
 				{
 					setPropValue(obj, xssfRow.getCell(excelColInfo.getColIndex()), excelColInfo.getField());
 				}
@@ -84,10 +83,10 @@ public class ExcelHelper {
 	 * @param groupName	
 	 * @return
 	 */
-	public static <T> List<T> ExcelXlsToList(Class clazz, InputStream inputStream, String groupName) {
-		List<T> ret = new ArrayList<T>();
-		String sheetName = getSheetName(clazz, groupName);
-		List<ExcelColInfo> excelColInfoList = colFilter(clazz, groupName);
+	public static <T> List<T> ExcelXlsToList(final Class<T> clazz, final InputStream inputStream, final String groupName) {
+		final List<T> ret = new ArrayList<T>();
+		final String sheetName = getSheetName(clazz, groupName);
+		final List<ExcelColInfo> excelColInfoList = colFilter(clazz, groupName);
 		if (excelColInfoList.size() == 0) {
 			throw new RuntimeException("字段列表为空，不能导入数据！");
 		}
@@ -97,14 +96,14 @@ public class ExcelHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		HSSFSheet hssfSheet = (HSSFSheet) hssfWorkbook.getSheet(sheetName);
+		final HSSFSheet hssfSheet = (HSSFSheet) hssfWorkbook.getSheet(sheetName);
 		HSSFRow hssfRow;
 		T obj;
 		for (int i = 1, len = hssfSheet.getLastRowNum(); i <= len; i++) {
 			hssfRow = (HSSFRow) hssfSheet.getRow(i);
 			try {
 				obj = (T) clazz.newInstance();
-				for (ExcelColInfo excelColInfo : excelColInfoList) {
+				for (final ExcelColInfo excelColInfo : excelColInfoList) {
 					setPropValue(obj, (HSSFCell) hssfRow.getCell(excelColInfo.getColIndex()), excelColInfo.getField());
 				}
 				ret.add(obj);
@@ -115,13 +114,13 @@ public class ExcelHelper {
 		return ret;
 	}
 
-	static void setPropValue(Object obj, CellBase cell, Field field) {
-		CellType cellType = cell.getCellType();
+	static void setPropValue(final Object obj, final CellBase cell, final Field field) {
+		final CellType cellType = cell.getCellType();
 		try {
 			if (cellType == CellType.BOOLEAN) {
 				field.set(obj, cell.getBooleanCellValue());
 			} else if (cellType == CellType.NUMERIC) {
-				Class clazz = field.getClass();
+				final Class<?> clazz = field.getClass();
 				if (clazz == Double.class || clazz == double.class) {
 					field.set(obj, cell.getNumericCellValue());
 				} else if (clazz == Float.class || clazz == float.class) {
@@ -157,27 +156,27 @@ public class ExcelHelper {
 	 * @param groupName
 	 *            组名称
 	 */
-	public static <T> void listToExcelXlsx(List<T>[] dataListArrays, OutputStream outputStream, String groupName) {
-		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
-		for (List<T> dataList : dataListArrays) {
+	public static <T> void listToExcelXlsx(final List<T>[] dataListArrays, final OutputStream outputStream, final String groupName) {
+		final XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+		for (final List<T> dataList : dataListArrays) {
 			if (dataList == null || dataList.size() == 0) {
 				throw new RuntimeException("数据列表为空，未能导出数据！");
 			}
-			List<ExcelColInfo> excelColInfoList = colFilter(dataList.get(0).getClass(), groupName);
+			final List<ExcelColInfo> excelColInfoList = colFilter(dataList.get(0).getClass(), groupName);
 			if (excelColInfoList.size() == 0) {
 				throw new RuntimeException("字段列表为空，不能导出数据！");
 			}
-			String sheetName = getSheetName(dataList.get(0).getClass(), groupName);
-			XSSFSheet xssfSheet = xssfWorkbook.createSheet(sheetName);
+			final String sheetName = getSheetName(dataList.get(0).getClass(), groupName);
+			final XSSFSheet xssfSheet = xssfWorkbook.createSheet(sheetName);
 			XSSFRow xssfRow = (XSSFRow) xssfSheet.createRow(0);
-			for (ExcelColInfo excelColInfo : excelColInfoList) {
+			for (final ExcelColInfo excelColInfo : excelColInfoList) {
 				xssfRow.createCell(excelColInfo.getColIndex()).setCellValue(excelColInfo.getColName());
 			}
 			T temp;
 			for (int i = 1, len = dataList.size(); i <= len; i++) {
 				temp = dataList.get(i - 1);
 				xssfRow = (XSSFRow) xssfSheet.createRow(i);
-				for (ExcelColInfo excelColInfo : excelColInfoList) {
+				for (final ExcelColInfo excelColInfo : excelColInfoList) {
 					try {
 						setCellValue(xssfRow.createCell(excelColInfo.getColIndex()), excelColInfo.getField().get(temp));
 					} catch (IllegalArgumentException e) {
@@ -212,7 +211,7 @@ public class ExcelHelper {
 	 * @param outputStream
 	 *            组名称
 	 */
-	public static <T> void listToExcelXls(List<T>[] dataListArrays, OutputStream outputStream) {
+	public static <T> void listToExcelXls(final List<T>[] dataListArrays, final OutputStream outputStream) {
 		listToExcelXls(dataListArrays, outputStream, null);
 	}
 
@@ -226,27 +225,27 @@ public class ExcelHelper {
 	 * @param groupName
 	 *            组名称
 	 */
-	public static <T> void listToExcelXls(List<T>[] dataListArrays, OutputStream outputStream, String groupName) {
-		HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-		for (List<T> dataList : dataListArrays) {
+	public static <T> void listToExcelXls(final List<T>[] dataListArrays, final OutputStream outputStream, final String groupName) {
+		final HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+		for (final List<T> dataList : dataListArrays) {
 			if (dataList == null || dataList.size() == 0) {
 				throw new RuntimeException("数据列表为空，未能导出数据！");
 			}
-			List<ExcelColInfo> excelColInfoList = colFilter(dataList.get(0).getClass(), groupName);
+			final List<ExcelColInfo> excelColInfoList = colFilter(dataList.get(0).getClass(), groupName);
 			if (excelColInfoList.size() == 0) {
 				throw new RuntimeException("字段列表为空，不能导出数据！");
 			}
-			String sheetName = getSheetName(dataList.get(0).getClass(), groupName);
-			HSSFSheet hssfSheet = hssfWorkbook.createSheet(sheetName);
+			final String sheetName = getSheetName(dataList.get(0).getClass(), groupName);
+			final HSSFSheet hssfSheet = hssfWorkbook.createSheet(sheetName);
 			HSSFRow hssfRow = (HSSFRow) hssfSheet.createRow(0);
-			for (ExcelColInfo excelColInfo : excelColInfoList) {
+			for (final ExcelColInfo excelColInfo : excelColInfoList) {
 				hssfRow.createCell(excelColInfo.getColIndex()).setCellValue(excelColInfo.getColName());
 			}
 			T temp;
 			for (int i = 1, len = dataList.size(); i <= len; i++) {
 				temp = dataList.get(i - 1);
 				hssfRow = (HSSFRow) hssfSheet.createRow(i);
-				for (ExcelColInfo excelColInfo : excelColInfoList) {
+				for (final ExcelColInfo excelColInfo : excelColInfoList) {
 					try {
 						setCellValue(hssfRow.createCell(excelColInfo.getColIndex()), excelColInfo.getField().get(temp));
 					} catch (IllegalArgumentException e) {
@@ -273,7 +272,7 @@ public class ExcelHelper {
 		}
 	}
 
-	public static SimpleDateFormat simpleDateFormat;
+	public static final SimpleDateFormat simpleDateFormat;
 
 	static {
 		simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -312,9 +311,9 @@ public class ExcelHelper {
 	 * @param groupName
 	 * @return
 	 */
-	static String getSheetName(Class<?> clazz, String groupName) {
-		ExcelSheet excelSheet = (ExcelSheet) clazz.getAnnotation(ExcelSheet.class);
-		String[] groupNames = excelSheet.groupNames();
+	static String getSheetName(final Class<?> clazz, final String groupName) {
+		final ExcelSheet excelSheet = (ExcelSheet) clazz.getAnnotation(ExcelSheet.class);
+		final String[] groupNames = excelSheet.groupNames();
 		for (int i = 0, len = groupName.length(); i < len; i++) {
 			if (StringUtils.isEmpty(groupName) || groupNames[i].equals(groupName)) {
 				return groupName;
@@ -323,14 +322,16 @@ public class ExcelHelper {
 		return "sheet" + PasswordHelper.RandomPassword(6, 1);
 	}
 
-	static List<ExcelColInfo> colFilter(Class clazz, String groupName) {
-		List<ExcelColInfo> excelColInfoList = new ArrayList<ExcelColInfo>();
+	static List<ExcelColInfo> colFilter(final Class<?> clazz, final String groupName) {
+		final List<ExcelColInfo> excelColInfoList = new ArrayList<ExcelColInfo>();
 		Field field;
 		ExcelColInfo excelColInfo;
+		ExcelCol excelCol;
+		String[] groupNames;
 		for (int i = 0, len_i = clazz.getDeclaredFields().length; i < len_i; i++) {
 			field = clazz.getDeclaredFields()[i];
-			ExcelCol excelCol = field.getAnnotation(ExcelCol.class);
-			String[] groupNames = excelCol.groupNames();
+			excelCol = field.getAnnotation(ExcelCol.class);
+			groupNames = excelCol.groupNames();
 			for (int j = 0, len_j = groupNames.length; j < len_j; j++) {
 				if (StringUtils.isEmpty(groupName) || groupNames[j].equals(groupName)) {
 					excelColInfo = new ExcelColInfo();
@@ -345,37 +346,33 @@ public class ExcelHelper {
 		return excelColInfoList;
 	}
 
-	private static class ExcelColInfo {
+	private static final class ExcelColInfo {
 		private Field field;
 		private Integer colIndex;
 		private String colName;
 
-		public Field getField() {
+		public final Field getField() {
 			return field;
 		}
 
-		public void setField(Field field) {
+		public final void setField(final Field field) {
 			this.field = field;
 		}
 
-		public int getColIndex() {
+		public final int getColIndex() {
 			return colIndex;
 		}
 
-		public void setColIndex(int colIndex) {
+		public final void setColIndex(final int colIndex) {
 			this.colIndex = colIndex;
 		}
 
-		public String getColName() {
+		public final String getColName() {
 			return colName;
 		}
 
-		public void setColName(String colName) {
+		public final void setColName(final String colName) {
 			this.colName = colName;
-		}
-
-		public void setColIndex(Integer colIndex) {
-			this.colIndex = colIndex;
 		}
 	}
 }

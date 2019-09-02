@@ -9,7 +9,7 @@ import java.util.Map;
  * @author admin
  *
  */
-public class IteratorHelper {
+public final class IteratorHelper {
 	public interface MatchRule<T> {
 		boolean isMatch(T val);
 	}
@@ -22,14 +22,14 @@ public class IteratorHelper {
 	 * @param matchRule
 	 *            匹配规则
 	 */
-	public static <K, V> void delEleFromMap(Map<K, V> map, MatchRule<V> matchRule) {
-		List<K> removeKeyList = new ArrayList<>();
-		for (Entry<K, V> keyVal : map.entrySet()) {
+	public static <K, V> void delEleFromMap(final Map<K, V> map, final MatchRule<V> matchRule) {
+		final List<K> removeKeyList = new ArrayList<>();
+		for (final Entry<K, V> keyVal : map.entrySet()) {
 			if (matchRule.isMatch(keyVal.getValue())) {
 				removeKeyList.add(keyVal.getKey());
 			}
 		}
-		for (K key : removeKeyList) {
+		for (final K key : removeKeyList) {
 			map.remove(key);
 		}
 	}
@@ -42,7 +42,7 @@ public class IteratorHelper {
 	 * @param matchRule
 	 *            匹配规则
 	 */
-	public static <V> void delEleFromList(List<V> list, MatchRule<V> matchRule) {
+	public static <V> void delEleFromList(final List<V> list, final MatchRule<V> matchRule) {
 		for (int i = list.size() - 1; i > -1; i--) {
 			if (matchRule.isMatch(list.get(i))) {
 				list.remove(list.get(i));
@@ -54,7 +54,7 @@ public class IteratorHelper {
 	 * 数组反序
 	 * @param varray
 	 */
-	public static  void ArrayReverse(char[] varray){
+	public static  void ArrayReverse(final char[] varray){
 		char temp;
 		for(int i=0,len=(varray.length-varray.length%2)/2;i<len;i++){
 			temp=varray[len-i-1];
@@ -67,7 +67,7 @@ public class IteratorHelper {
 	 * 数组反序
 	 * @param varray
 	 */
-	public static  void ArrayReverse(int[] varray){
+	public static  void ArrayReverse(final int[] varray){
 		int temp;
 		for(int i=0,len=(varray.length-varray.length%2)/2;i<len;i++){
 			temp=varray[len-i-1];
@@ -80,7 +80,7 @@ public class IteratorHelper {
 	 * 数组反序
 	 * @param varray
 	 */
-	public static <V> void ArrayReverse(V[] varray){
+	public static <V> void ArrayReverse(final V[] varray){
 		V temp;
 		for(int i=0,len=(varray.length-varray.length%2)/2;i<len;i++){
 			temp=varray[len-i-1];

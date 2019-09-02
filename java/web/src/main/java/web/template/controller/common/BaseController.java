@@ -37,7 +37,7 @@ public abstract class BaseController {
 	/**
 	 * 跨平台的斜杠
 	 */
-	protected static char s;
+	protected final static char s;
 	
 	static{
 		s=File.separatorChar;
@@ -58,10 +58,9 @@ public abstract class BaseController {
 	 * @return
 	 */
 	@ExceptionHandler(Throwable.class)
-	public Result handleException(Throwable throwable){
+	public final Result handleException(final Throwable throwable){
 		if(throwable instanceof ResultException){
-			ResultException resultException=(ResultException)throwable;
-			return resultException.getResult();
+			return ((ResultException)throwable).getResult();
 		}else{
 			return new Result(-1, "系统繁忙，请稍后重试...", null);
 		}		
@@ -71,7 +70,7 @@ public abstract class BaseController {
 	 * 返回当前登陆的用户名
 	 * @return
 	 */
-	public String username() {
+	public final String username() {
 		return (String)SecurityUtils.getSubject().getPrincipal();
 	}
 	
@@ -80,9 +79,9 @@ public abstract class BaseController {
 	 * @param webPath web路径
 	 * @return
 	 */
-	public File realFile(String webPath){
+	public final File realFile(final String webPath){
 		try {
-			HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+			final HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
 			return new ServletContextResource(request.getServletContext(), webPath).getFile();
 		} catch (IOException e) {
 			return null;
@@ -94,7 +93,7 @@ public abstract class BaseController {
 	 * @param webPath web路径
 	 * @return
 	 */
-	public String realPath(String webPath){
+	public final String realPath(final String webPath){
 		return realFile(webPath).getAbsolutePath();
 	}
 }

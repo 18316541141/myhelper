@@ -55,7 +55,7 @@ public class IndexController extends BaseController {
 	/**
 	 * 用户和等待池表，确保每个用户只能在同一个等待池上等待。
 	 */
-	public static HashSet<String> USERNAME_AND_POOL_SET;
+	public final static HashSet<String> USERNAME_AND_POOL_SET;
 
 	static {
 		USERNAME_AND_POOL_SET = new HashSet<String>();
@@ -76,16 +76,16 @@ public class IndexController extends BaseController {
 	 * @param username
 	 * @return
 	 */
-	private Result realTime(String realTimePool, String realTimeVersion, String username) {
+	private final Result realTime(final String realTimePool, final String realTimeVersion, final String username) {
 		if (waitPoolSet.contains(realTimePool)) {
-			String[] newestVersion = new String[1];
+			final String[] newestVersion = new String[1];
 			boolean initRet = ThreadHelper.compareControllerVersion(realTimePool, realTimeVersion, newestVersion);
 			if (realTimeVersion == null) {
 				initRet = realTimeInitService.init(realTimePool, username);
 			}
-			Map<String, String> data = new HashMap<String, String>();
+			final Map<String, String> data = new HashMap<String, String>();
 			if (initRet) {
-				String usernameAndPoolKey = username + realTimePool;
+				final String usernameAndPoolKey = username + realTimePool;
 				if (USERNAME_AND_POOL_SET.contains(usernameAndPoolKey)) {
 					return new Result(-1, "当前用户已有线程在等待池中，无法向等待池放入新线程。", null);
 				} else {
@@ -122,7 +122,7 @@ public class IndexController extends BaseController {
 	 * @param signKey
 	 * @return
 	 */
-	public Result anonymousRealTime(String realTimePool, String realTimeVersion, String signKey) {
+	public final Result anonymousRealTime(final String realTimePool, final String realTimeVersion, final String signKey) {
 		return realTime(realTimePool, realTimeVersion,
 				/* systemService.LoadUsernameBySignKey(signKey) */"zhang");
 	}

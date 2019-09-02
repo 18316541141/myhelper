@@ -40,7 +40,7 @@ import web.template.view.MyExcelView;
 public class Beans {
 	@Bean(name="defaultKaptcha")
 	public DefaultKaptcha defaultKaptcha(){
-		Properties properties=new Properties();
+		final Properties properties=new Properties();
 		properties.put("kaptcha.border", "no");  
 		properties.put("kaptcha.border.color", "105,179,90");  
 		properties.put("kaptcha.textproducer.font.color", "red");  
@@ -51,14 +51,14 @@ public class Beans {
 		properties.put("kaptcha.textproducer.char.length", "4");  
 		properties.put("kaptcha.textproducer.char.string", "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		properties.put("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");		
-		DefaultKaptcha defaultKaptcha=new DefaultKaptcha();
+		final DefaultKaptcha defaultKaptcha=new DefaultKaptcha();
 		defaultKaptcha.setConfig(new Config(properties));
 		return defaultKaptcha;
 	}
 	
 	@Bean(name="snowFlakeHelper")
 	public SnowFlakeHelper snowFlakeHelper(){
-		int ipInt=IpHelper.ipToInt(IpHelper.getOuterNetIP());
+		final int ipInt=IpHelper.ipToInt(IpHelper.getOuterNetIP());
 		return new SnowFlakeHelper(ipInt>>>27,ipInt & 31);
 	}
 	
@@ -73,8 +73,8 @@ public class Beans {
 	}
 	
 	@Bean(name="securityManager")
-	public SecurityManager securityManager(@Autowired UserRealm userRealm,@Autowired MyPermissionResolver myPermissionResolver,@Autowired ModularRealmAuthorizer modularRealmAuthorizer){
-		DefaultWebSecurityManager defaultWebSecurityManager=new DefaultWebSecurityManager();
+	public SecurityManager securityManager(@Autowired final UserRealm userRealm,@Autowired final MyPermissionResolver myPermissionResolver,@Autowired final ModularRealmAuthorizer modularRealmAuthorizer){
+		final DefaultWebSecurityManager defaultWebSecurityManager=new DefaultWebSecurityManager();
 		defaultWebSecurityManager.setRealm(userRealm);
 		defaultWebSecurityManager.setAuthorizer(modularRealmAuthorizer);
 		return defaultWebSecurityManager;
@@ -82,8 +82,8 @@ public class Beans {
 	
 	@Bean
 	public FilterRegistrationBean<DelegatingFilterProxy> registerFilter() {
-		FilterRegistrationBean<DelegatingFilterProxy> filterRegistrationBean = new FilterRegistrationBean<>();
-	    DelegatingFilterProxy proxy = new DelegatingFilterProxy();
+		final FilterRegistrationBean<DelegatingFilterProxy> filterRegistrationBean = new FilterRegistrationBean<>();
+		final DelegatingFilterProxy proxy = new DelegatingFilterProxy();
 	    proxy.setTargetFilterLifecycle(true);
 	    proxy.setTargetBeanName("shiroFilter");
 	    filterRegistrationBean.setFilter(proxy);
@@ -91,19 +91,19 @@ public class Beans {
 	}
 	
 	@Bean(name="shiroFilter")
-	public ShiroFilterFactoryBean shiroFilter(@Autowired SecurityManager securityManager,@Autowired MyPermissionsAuthorizationFilter myPermissionsAuthorizationFilter,@Autowired ObjectMapper objectMapper,@Autowired SystemService systemService){
-		ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
+	public ShiroFilterFactoryBean shiroFilter(@Autowired final SecurityManager securityManager,@Autowired final MyPermissionsAuthorizationFilter myPermissionsAuthorizationFilter,@Autowired final ObjectMapper objectMapper,@Autowired final SystemService systemService){
+		final ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		
-		Map<String, String> filterChainDefinitionMap=shiroFilterFactoryBean.getFilterChainDefinitionMap();
+		final Map<String, String> filterChainDefinitionMap=shiroFilterFactoryBean.getFilterChainDefinitionMap();
 		filterChainDefinitionMap.put("/session/verificationCode", "anon");
 		filterChainDefinitionMap.put("/index/anonymousRealTime", "anon");
 		
 		filterChainDefinitionMap.put("/**", "authc");
 		
-		Map<String,Filter> filterMap=shiroFilterFactoryBean.getFilters();
+		final Map<String,Filter> filterMap=shiroFilterFactoryBean.getFilters();
 		
-		MyFormAuthenticationFilter myFormAuthenticationFilter=new MyFormAuthenticationFilter();
+		final MyFormAuthenticationFilter myFormAuthenticationFilter=new MyFormAuthenticationFilter();
 		myFormAuthenticationFilter.setLoginUrl("/session/login");
 		myFormAuthenticationFilter.setUsernameParam("username");
 		myFormAuthenticationFilter.setPasswordParam("password");
@@ -119,14 +119,14 @@ public class Beans {
 	 * @return
 	 */
 	@Bean
-    public WebMvcConfigurer webMvcConfigurerAdapter(@Autowired ObjectMapper objectMapper){
+    public WebMvcConfigurer webMvcConfigurerAdapter(@Autowired final ObjectMapper objectMapper){
 		return new WebMvcConfigurer(){
 			@Override
-            public void addInterceptors(InterceptorRegistry registry) {
+            public final void addInterceptors(InterceptorRegistry registry) {
                 registry.addInterceptor(new UpdateVersionInterceptor())
                         .addPathPatterns("/newAlarm/add");
                 
-                SignInterceptor signInterceptor=new SignInterceptor();
+                final SignInterceptor signInterceptor=new SignInterceptor();
                 signInterceptor.setObjectMapper(objectMapper);
                 registry.addInterceptor(signInterceptor);
             }
