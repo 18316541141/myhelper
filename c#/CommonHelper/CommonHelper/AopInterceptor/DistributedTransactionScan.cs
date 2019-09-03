@@ -41,7 +41,7 @@ namespace CommonHelper.AopInterceptor
         /// 保存事务总表数据
         /// </summary>
         /// <param name="transactionStatus"></param>
-        private void SaveDistributedTransaction(sbyte transactionStatus)
+        private void SaveDistributedTransaction(byte transactionStatus)
         {
             using (DistributedMainDbContext db = new DistributedMainDbContext())
             {
@@ -81,7 +81,10 @@ namespace CommonHelper.AopInterceptor
                     if (--EnterTimes.Value == 0)
                     {
                         //保存全局事务id，
-                        SaveDistributedTransaction(1);
+                        if (TransactionDataSources.Value.Count > 0)
+                        {
+                            SaveDistributedTransaction(1);
+                        }
                         //并通知消息队列确认事务
                         try
                         {
@@ -102,7 +105,10 @@ namespace CommonHelper.AopInterceptor
                         try
                         {
                             //保存全局事务id，
-                            SaveDistributedTransaction(2);
+                            if (TransactionDataSources.Value.Count > 0)
+                            {
+                                SaveDistributedTransaction(2);
+                            }
                             //通知消息队列取消事务
                         }
                         catch

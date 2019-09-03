@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers.Common
 		/// <summary>
         /// 跨平台的斜杠
         /// </summary>
-        protected static char s;
+        protected static readonly char s;
 
         static BaseController()
         {

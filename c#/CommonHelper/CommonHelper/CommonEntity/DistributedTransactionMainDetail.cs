@@ -12,6 +12,11 @@ namespace CommonHelper.CommonEntity
     public class DistributedTransactionMainDetail
     {
         /// <summary>
+        /// 主键id
+        /// </summary>
+        public virtual long? Id { set; get; }
+
+        /// <summary>
         /// 关联事务总表的主键
         /// </summary>
         public virtual long? DistributedTransactionMainId { set; get; }

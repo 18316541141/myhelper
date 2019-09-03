@@ -148,13 +148,18 @@ namespace CommonHelper.Helper.EFRepository
             }
         }
 
+        /// <summary>
+        /// 获取当前数据源的逆操作对象
+        /// </summary>
+        /// <returns></returns>
+        public abstract InverseRepository<TEntity> CurrentInverse();
 
         /// <summary>
         /// 插入一条数据
         /// </summary>
         /// <param name="entity">实体对象</param>
         /// <returns>返回插入的数据数量</returns>
-        public int Insert(TEntity entity)
+        public virtual int Insert(TEntity entity)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -168,7 +173,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="entities">表数据列表对象</param>
         /// <returns></returns>
-        public int Insert(List<TEntity> entities)
+        public virtual int Insert(List<TEntity> entities)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -185,7 +190,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="entity">对象实体</param>
         /// <returns></returns>
-        public int Delete(TEntity entity)
+        public virtual int Delete(TEntity entity)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -199,7 +204,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        public int Delete(List<TEntity> entities)
+        public virtual int Delete(List<TEntity> entities)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -212,7 +217,7 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
-        /// 根据条件删除对象
+        /// 根据条件删除对象，注意：该方法不支持分布式事务。
         /// </summary>
         /// <param name="predicate">条件</param>
         /// <returns></returns>
@@ -272,7 +277,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public int UpdateAll(TEntity entity)
+        public virtual int UpdateAll(TEntity entity)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -286,7 +291,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public int UpdateAll(List<TEntity> entities)
+        public virtual int UpdateAll(List<TEntity> entities)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -359,55 +364,80 @@ namespace CommonHelper.Helper.EFRepository
                 var query = dbContext.Set<DistributedTransactionPart>().AsNoTracking().AsQueryable().Where(a => a.TransTableName == transTableName && a.TransPrimaryKeyVal == primaryKeyVal && a.TransactionStatus == 0);
                 if (query.Any())
                 {
-                    long? distributedTransactionMainId = query.Select(a => a.DistributedTransactionMainId).FirstOrDefault();
-                    var result=ReadOnlyMainDbContext.DistributedTransactionMains.AsNoTracking().AsQueryable().Where(a => a.Id == distributedTransactionMainId && a.TransactionStatus==1).Any();
-                    List<DistributedTransactionMainDetail> mainDetails = ReadOnlyMainDbContext.DistributedTransactionMainDetails.AsNoTracking().AsQueryable().Where(a => a.DistributedTransactionMainId == distributedTransactionMainId)
-                        .Select(a => new DistributedTransactionMainDetail { TransactionDataSource = a.TransactionDataSource,TransactionTable=a.TransactionTable }).ToList();
-                    foreach (DistributedTransactionMainDetail mainDetail in mainDetails)
+                    DistributedTransactionPart distributedTransactionPart = query.FirstOrDefault();
+                    var result=ReadOnlyMainDbContext.DistributedTransactionMains.AsNoTracking().AsQueryable().Where(a => a.Id == distributedTransactionPart.DistributedTransactionMainId && a.TransactionStatus==1).Any();
+                    List<DistributedTransactionMainDetail> mainDetails = ReadOnlyMainDbContext.DistributedTransactionMainDetails.AsNoTracking().AsQueryable().Where(a => a.DistributedTransactionMainId == distributedTransactionPart.DistributedTransactionMainId).ToList();
+                    if (mainDetails.Count == 0)
                     {
-                        InverseRepository inverseRepository = AllStatic.InverseRepositoryMap[mainDetail.TransactionDataSource][mainDetail.TransactionTable];
-                        List<DistributedTransactionPart> distributedTransactionPartList = inverseRepository.FindTransPartsById(distributedTransactionMainId);
+                        InverseRepository<TEntity> inverseRepository = CurrentInverse();
                         if (result)
                         {
-                            inverseRepository.UpdateTransPartsStatus(distributedTransactionPartList.Select(a => a.Id).ToList(), 1);
+                            inverseRepository.UpdateTransPartsStatus(distributedTransactionPart.Id, 1);
                         }
                         else
                         {
-                            //批量插入的逆操作
-                            List<DistributedTransactionPart> dparts = new List<DistributedTransactionPart>();
-                            //批量删除的逆操作
-                            List<DistributedTransactionPart> iparts = new List<DistributedTransactionPart>();
-                            //批量更新的逆操作
-                            List<DistributedTransactionPart> uparts = new List<DistributedTransactionPart>();
-                            foreach (DistributedTransactionPart distributedTransactionPart in distributedTransactionPartList)
+                            if (distributedTransactionPart.InverseOperType == "D" || distributedTransactionPart.InverseOperType == "d")
                             {
-                                if (distributedTransactionPart.InverseOperType == 'D')
+                                inverseRepository.DistributedDeleteInverse(distributedTransactionPart);
+                            }
+                            else if (distributedTransactionPart.InverseOperType == "I" || distributedTransactionPart.InverseOperType == "i")
+                            {
+                                inverseRepository.DistributedInsertInverse(distributedTransactionPart);
+                            }
+                            else if (distributedTransactionPart.InverseOperType == "U" || distributedTransactionPart.InverseOperType == "u")
+                            {
+                                inverseRepository.DistributedUpdateInverse(distributedTransactionPart);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (DistributedTransactionMainDetail mainDetail in mainDetails)
+                        {
+                            var inverseRepository = AllStatic.InverseRepositoryMap[mainDetail.TransactionDataSource][mainDetail.TransactionTable];
+                            List<DistributedTransactionPart> distributedTransactionPartList = inverseRepository.FindTransPartsById(distributedTransactionPart.DistributedTransactionMainId);
+                            if (result)
+                            {
+                                inverseRepository.UpdateTransPartsStatus(distributedTransactionPartList.Select(a => a.Id).ToList(), 1);
+                            }
+                            else
+                            {
+                                //批量插入的逆操作
+                                List<DistributedTransactionPart> dparts = new List<DistributedTransactionPart>();
+                                //批量删除的逆操作
+                                List<DistributedTransactionPart> iparts = new List<DistributedTransactionPart>();
+                                //批量更新的逆操作
+                                List<DistributedTransactionPart> uparts = new List<DistributedTransactionPart>();
+                                foreach (DistributedTransactionPart part in distributedTransactionPartList)
                                 {
-                                    dparts.Add(distributedTransactionPart);
+                                    if (part.InverseOperType == "D")
+                                    {
+                                        dparts.Add(part);
+                                    }
+                                    else if (part.InverseOperType == "d")
+                                    {
+                                        inverseRepository.DistributedDeleteInverse(part);
+                                    }
+                                    else if (part.InverseOperType == "I")
+                                    {
+                                        iparts.Add(part);
+                                    }
+                                    else if (part.InverseOperType == "i")
+                                    {
+                                        inverseRepository.DistributedInsertInverse(part);
+                                    }
+                                    else if (part.InverseOperType == "U")
+                                    {
+                                        uparts.Add(part);
+                                    }
+                                    else if (part.InverseOperType == "u")
+                                    {
+                                        inverseRepository.DistributedUpdateInverse(part);
+                                    }
+                                    inverseRepository.DistributedDeleteInverse(dparts);
+                                    inverseRepository.DistributedInsertInverse(iparts);
+                                    inverseRepository.DistributedUpdateInverse(uparts);
                                 }
-                                else if (distributedTransactionPart.InverseOperType == 'd')
-                                {
-                                    inverseRepository.DistributedDeleteInverse(distributedTransactionPart);
-                                }
-                                else if (distributedTransactionPart.InverseOperType == 'I')
-                                {
-                                    iparts.Add(distributedTransactionPart);
-                                }
-                                else if (distributedTransactionPart.InverseOperType == 'i')
-                                {
-                                    inverseRepository.DistributedInsertInverse(distributedTransactionPart);
-                                }
-                                else if (distributedTransactionPart.InverseOperType == 'U')
-                                {
-                                    uparts.Add(distributedTransactionPart);
-                                }
-                                else if (distributedTransactionPart.InverseOperType == 'u')
-                                {
-                                    inverseRepository.DistributedUpdateInverse(distributedTransactionPart);
-                                }
-                                inverseRepository.DistributedDeleteInverse(dparts);
-                                inverseRepository.DistributedInsertInverse(iparts);
-                                inverseRepository.DistributedUpdateInverse(uparts);
                             }
                         }
                     }
@@ -532,31 +562,11 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
-        /// 记录分布式事务操作时涉及到的表和数据源
-        /// </summary>
-        /// <param name="dataSrc">记录的数据源</param>
-        /// <param name="tableName">记录的表</param>
-        protected void RecordDistribute(string dataSrc,string tableName)
-        {
-            var dataSrcMap = DistributedTransactionScan.TransactionDataSources.Value;
-            if (dataSrcMap.ContainsKey(dataSrc))
-            {
-                dataSrcMap[dataSrc].Add(tableName);
-            }
-            else
-            {
-                HashSet<string> tableNameSet = new HashSet<string>();
-                dataSrcMap.Add(dataSrc, tableNameSet);
-                tableNameSet.Add(tableName);
-            }
-        }
-
-        /// <summary>
         /// 修改变化值，把entity不为null的数据视为变化值
         /// </summary>
         /// <param name="entity">修改实体类，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
         /// <returns>返回修改的数据行数</returns>
-        public int UpdateChange(TEntity entity)
+        public virtual int UpdateChange(TEntity entity)
         {
             using (BaseDbContext dbContext = CreateDbContext())
             {
@@ -570,7 +580,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="entities">修改实体类集合，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
         /// <returns>返回修改的数据行数</returns>
-        public int UpdateChange(List<TEntity> entities)
+        public virtual int UpdateChange(List<TEntity> entities)
         {
             using (BaseDbContext dbContext = CreateDbContext())
             {
@@ -595,7 +605,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="param">设为null的字段参数，主键必须要传入，其他字段等于true则表示设置为null</param>
         /// <returns>返回修改的数据行数</returns>
-        public void SetNull(TSetNullParams param)
+        public virtual void SetNull(TSetNullParams param)
         {
             using (BaseDbContext dbContext = CreateDbContext())
             {

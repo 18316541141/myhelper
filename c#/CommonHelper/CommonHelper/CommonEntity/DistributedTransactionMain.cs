@@ -19,6 +19,6 @@ namespace CommonHelper.CommonEntity
         /// <summary>
         /// 事务状态，1：事务成功，2：事务失败
         /// </summary>
-        public virtual sbyte? TransactionStatus { set; get; }
+        public virtual byte? TransactionStatus { set; get; }
     }
 }

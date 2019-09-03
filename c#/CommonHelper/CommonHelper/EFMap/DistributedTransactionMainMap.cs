@@ -15,10 +15,10 @@ namespace CommonHelper.Helper.EFMap
     {
         public DistributedTransactionMainMap()
         {
-            this.ToTable("Distributed_Transaction_Main");
-            this.HasKey(u => u.Id);
-            this.Property(u => u.Id).HasColumnName("Id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            this.Property(u => u.TransactionStatus).HasColumnName("Transaction_Status");
+            ToTable("Distributed_Transaction_Main");
+            HasKey(u => u.Id);
+            Property(u => u.Id).HasColumnName("Id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            Property(u => u.TransactionStatus).HasColumnName("Transaction_Status");
             /* 建表sql语句，sql_server版
              CREATE TABLE Distributed_Transaction_Main (
                 Id bigint NOT NULL ,

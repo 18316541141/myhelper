@@ -12,12 +12,13 @@ namespace WebApplication1.Service
 	/// <summary>
     /// ***模块的业务类
     /// </summary>
-	//[Intercept(typeof(DistributedTransactionScan))]
+	//[Intercept(typeof(DistributedTransactionScan))]	//启用分布式事务扫描
 	public partial class $entity.EntityName$Service : BaseService
     {
 		public $entity.EntityName$Repository Repository { set; get; }
 
 		/*抄考代码
+		[DistributedTransactionScope] //启用分布式事务
 ----------------------------------------------------------------------------------------------------------------------------
 		$entity.EntityName$ data = new $entity.EntityName$
 		{

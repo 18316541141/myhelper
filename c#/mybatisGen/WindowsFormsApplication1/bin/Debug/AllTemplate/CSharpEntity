@@ -7,7 +7,7 @@ namespace WebApplication1.Entity
 	/// <summary>
 	/// $entity.EntityNotes$
 	/// </summary>
-    public partial class $entity.EntityName$
+    public partial class $entity.EntityName$ /*: IEntity */
     {
         public $entity.EntityName$() { }
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
@@ -17,5 +17,24 @@ namespace WebApplication1.Entity
 		/// </summary>
 		public virtual $it.PropType$ $it.PropName$ { set; get; }
 	$endif$}$
+	/*
+		public override long Key
+		{
+			set
+			{
+				this.$entity.KeyName$ = value;
+			}
+
+			get
+			{
+				return this.$entity.KeyName$;
+			}
+		}
+
+		public override string TableName()
+		{
+			return this.$entity.TableName$;
+		}
+	*/
     }
 }

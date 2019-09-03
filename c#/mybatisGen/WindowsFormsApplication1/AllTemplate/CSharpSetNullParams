@@ -12,11 +12,13 @@ namespace WebApplication1.Entity
         public $entity.EntityName$SetNullParams() { }
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
         $if(it.IsKey)$
+
         /// <summary>
 		/// $it.PropNotes$
 		/// </summary>
         public virtual $it.PropType$ $it.PropName$ { set; get; }
         $else$
+
 		/// <summary>
 		/// $it.PropNotes$
 		/// </summary>

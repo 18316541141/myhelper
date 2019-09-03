@@ -29,7 +29,7 @@ namespace WebApplication1.Service.Common
         /// <summary>
         /// 跨平台的斜杠
         /// </summary>
-        protected static char s;
+        protected readonly static char s;
 
         static BaseService()
         {

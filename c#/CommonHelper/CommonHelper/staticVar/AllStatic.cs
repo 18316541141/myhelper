@@ -17,7 +17,7 @@ namespace CommonHelper.staticVar
         /// <summary>
         /// 数据源、数据表、数据库操作
         /// </summary>
-        public static Dictionary<string, Dictionary<string, InverseRepository>> InverseRepositoryMap { set; get; }
+        public static Dictionary<string, Dictionary<string, dynamic>> InverseRepositoryMap { set; get; }
 
         /// <summary>
         /// 分布式雪花id生成器
@@ -33,7 +33,7 @@ namespace CommonHelper.staticVar
         {
             TimeConverter = new IsoDateTimeConverter();
             TimeConverter.DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-            InverseRepositoryMap = new Dictionary<string, Dictionary<string, InverseRepository>>();
+            InverseRepositoryMap = new Dictionary<string, Dictionary<string, dynamic>>();
         }
     }
 }

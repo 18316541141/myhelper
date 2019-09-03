@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApplication1.Entity
 {
 	/// <summary>
 	/// $entity.EntityNotes$
 	/// </summary>
-    public partial class $entity.EntityName$
+    public partial class $entity.EntityName$ //: IEntity
     {
         public $entity.EntityName$() { }
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
@@ -17,5 +18,18 @@ namespace WebApplication1.Entity
 		/// </summary>
 		public virtual $it.PropType$ $it.PropName$ { set; get; }
 	$endif$}$
+	/*
+		[NotMapped]
+		public long? Key
+		{
+			set { $entity.KeyName$ = value; }
+			get { return $entity.KeyName$; }
+		}
+
+		public string TableName()
+		{
+			return "$entity.TableName$";
+		}
+	*/
     }
 }
