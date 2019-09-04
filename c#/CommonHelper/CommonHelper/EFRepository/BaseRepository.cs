@@ -38,6 +38,13 @@ namespace CommonHelper.Helper.EFRepository
         /// <returns></returns>
         public abstract BaseDbContext CreateDbContext();
 
+
+        /// <summary>
+        /// 创建多个DbContext，返回所有数据源
+        /// </summary>
+        /// <returns></returns>
+        public abstract List<BaseDbContext> CreateAllDbContext();
+
         /// <summary>
         /// 只读数据操作
         /// </summary>
@@ -453,12 +460,28 @@ namespace CommonHelper.Helper.EFRepository
         /// <returns></returns>
         protected abstract IQueryable<TEntity> Query(IQueryable<TEntity> query, TParams paramz, TParams neqArgs);
 
+        /// <summary>
+        /// 获取排序的列和排序的类型
+        /// </summary>
+        /// <param name="paramz">查询参数，含排序参数</param>
+        /// <param name="orderType">返回排序类型，true：升序、false：降序</param>
+        /// <returns>返回排序列</returns>
+        protected abstract Func<TEntity, IComparable> GetOrderColAndOrderType(TParams paramz,out bool orderType);
+
+        /// <summary>
+        /// 获取betweenAnd条件
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="paramz"></param>
+        /// <param name="baseExtremum"></param>
+        /// <param name="otherExtremum"></param>
+        protected abstract IQueryable<TEntity> GetBetweenAnd(IQueryable<TEntity> query, TParams paramz,IComparable baseExtremum, IComparable otherExtremum);
 
         /// <summary>
         /// 查询符合查询条件的数据量
         /// </summary>
         /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
-		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
+        /// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回符合查询条件的数据量</returns>
         public int Count(TParams eqArgs = null, TParams neqArgs = null)
         {
@@ -554,11 +577,60 @@ namespace CommonHelper.Helper.EFRepository
             {
                 pageSize = 20;
             }
-            using (DbContext dbContext = CreateDbContext())
+            List<BaseDbContext> dbContexts = CreateAllDbContext();
+            //单个数据源的分页
+            if (dbContexts.Count == 1)
             {
-                IQueryable<TEntity> query = Query(dbContext.Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                return query.ToMyPagedList(pageIndex, pageSize);
+                using (DbContext dbContext = dbContexts[0])
+                {
+                    IQueryable<TEntity> query = Query(dbContext.Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    return query.ToMyPagedList(pageIndex, pageSize);
+                }
             }
+            //多个数据源的分页（需改成按比例）
+            else if (dbContexts.Count > 1)
+            {
+                int sumSkipCount = (pageIndex-1)* pageSize;
+                int avgSkipCount = (sumSkipCount - sumSkipCount % dbContexts.Count)/ dbContexts.Count;
+
+                List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
+                List<List<IComparable>> allComparableList = new List<List<IComparable>>();
+                List<IComparable> comparableList;
+                bool orderType;
+                Func<TEntity, IComparable> orderCol = GetOrderColAndOrderType(eqArgs,out orderType);
+                foreach (BaseDbContext baseDbContext in dbContexts)
+                {
+                    IQueryable<TEntity> query = Query(baseDbContext.Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    comparableList = query.Select(orderCol).Skip(avgSkipCount).Take(pageSize).ToList();
+                    if (comparableList.Count > 0)
+                    {
+                        allComparableList.Add(comparableList);
+                        baseDbContextList.Add(baseDbContext);
+                    }
+                }
+                IComparable baseExtremum= allComparableList[0][0];
+                foreach (List<IComparable> comparable in allComparableList)
+                {
+                    if (orderType && comparable[0].CompareTo(baseExtremum) < 0)
+                    {
+                        baseExtremum = comparable[0];
+                    }
+                    else if(comparable[0].CompareTo(baseExtremum) > 0)
+                    {
+                        baseExtremum = comparable[0];
+                    }
+                }
+                List<TEntity> entities = new List<TEntity>();
+                for (int i = 0, len = baseDbContextList.Count; i < len; i++)
+                {
+                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    query = GetBetweenAnd(query, eqArgs, baseExtremum, allComparableList[i][allComparableList.Count - 1]);
+                    entities.AddRange(query.ToList());
+                }
+                entities = (orderType ? entities.OrderBy(orderCol):entities.OrderByDescending(orderCol)).Skip(entities.Count - (3 * pageSize)).Take(pageSize).ToList();
+                return null;
+            }
+            throw new Exception("没有找到数据源，请确保“CreateAllDbContext”方法正确实现。");
         }
 
         /// <summary>

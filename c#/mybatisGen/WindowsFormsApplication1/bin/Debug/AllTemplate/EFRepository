@@ -169,5 +169,13 @@ namespace WebApplication1.Repository
         {
             return new MyDbContext2();
         }
+
+		public override InverseRepository<IRobotQrCodePayTask> CurrentInverse()
+        {
+			using(BaseDbContext db = CreateDbContext())
+			{
+				return AllStatic.InverseRepositoryMap[db.Database.Connection.ConnectionString]["IRobot_QrCodePayTask"];
+			}
+        }
     }
 }

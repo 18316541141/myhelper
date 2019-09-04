@@ -45,7 +45,7 @@ namespace WindowsFormsApplication1.Service
 
         public bool SqlTypeIsChangeType(string sqlType)
         {
-            throw new NotImplementedException();
+            return sqlType == "integer" || sqlType == "long";
         }
     }
 }
