@@ -31,7 +31,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 默认的ip代理（默认不使用）
     /// </summary>
-    public class DefaultProxyIp : ProxyIp
+    public sealed class DefaultProxyIp : ProxyIp
     {
         /// <summary>
         /// 默认不使用ip代理
@@ -84,7 +84,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 默认的登出检测，始终认为当前用户不会被踢出
     /// </summary>
-    public class DefaultCheckLogout : CheckLogout
+    public sealed class DefaultCheckLogout : CheckLogout
     {
         public bool IsLogout(WebResponse Response) => false;
 
@@ -94,7 +94,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 默认的异常重试器，直接抛出异常，没有其他处理
     /// </summary>
-    public class DefaultTryExceptionHandle : TryExceptionHandle
+    public sealed class DefaultTryExceptionHandle : TryExceptionHandle
     {
         public bool CheckTry(string reqUrl,Exception ex) => false;
     }

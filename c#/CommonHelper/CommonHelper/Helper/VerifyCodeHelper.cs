@@ -10,7 +10,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 验证码
     /// </summary>
-    public class VerifyCodeHelper
+    public static class VerifyCodeHelper
     {
         #region 变量
         /// <summary>

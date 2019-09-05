@@ -14,7 +14,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 寻找数据的帮助类
     /// </summary>
-    public class FindDataHelper
+    public static class FindDataHelper
     {
         /// <summary>
         /// 从身份证号中提取性别信息
@@ -36,7 +36,7 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="idCardNum">身份证号</param>
         /// <returns>返回出生日期</returns>
-        public string FindBirthdayFromIDCard(string idCardNum)
+        public static string FindBirthdayFromIDCard(string idCardNum)
         {
             if (idCardNum.Length == 18)
                 return DateTime.ParseExact(idCardNum.Substring(6, 8), "yyyyMMdd", CultureInfo.CurrentCulture).ToString("yyyy-MM-dd");

@@ -11,7 +11,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 生成器帮助类
     /// </summary>
-    public class GenerateHelper
+    public static class GenerateHelper
     {
         /// <summary>
         /// 把单个json转化为实体类代码

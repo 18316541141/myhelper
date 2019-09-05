@@ -127,9 +127,10 @@ D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.M
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll.config
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.SqlServer.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Log4net.config
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Guess.xml
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll.config
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.dll
@@ -158,7 +159,6 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.D
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Castle.Core.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.xml
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.SqlServer.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\HtmlAgilityPack.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\HtmlAgilityPack.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\ICSharpCode.SharpZipLib.pdb
@@ -174,5 +174,6 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentati
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Web.Mvc.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb

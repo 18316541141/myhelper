@@ -32,7 +32,7 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 冷却时间处理
         /// </summary>
-        public class CooldownTime
+        public sealed class CooldownTime
         {
             /// <summary>
             /// 冷却时间类型

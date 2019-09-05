@@ -12,7 +12,7 @@ namespace CommonHelper.Helper
     /// 稀疏矩阵的元素
     /// </summary>
     [Serializable]
-    public class SparseMatrixCell
+    public sealed class SparseMatrixCell
     {
         /// <summary>
         /// 行索引
@@ -57,7 +57,7 @@ namespace CommonHelper.Helper
     ///     7,8,9   A[2,0]=7
     /// </summary>
     [Serializable]
-    public class SparseMatrix : ICloneable
+    public sealed class SparseMatrix : ICloneable
     {
         SparseArray<SparseMatrixCell> _colHead;
         SparseArray<SparseMatrixCell> _rowHead;

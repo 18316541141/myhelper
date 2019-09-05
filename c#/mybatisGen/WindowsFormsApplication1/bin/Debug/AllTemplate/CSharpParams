@@ -9,7 +9,7 @@ namespace WebApplication1.Params
     /// <summary>
     /// $entity.EntityNotes$
     /// </summary>
-    public partial class $entity.EntityName$Params
+    public partial sealed class $entity.EntityName$Params
     {
     $entity.PropList:{
 

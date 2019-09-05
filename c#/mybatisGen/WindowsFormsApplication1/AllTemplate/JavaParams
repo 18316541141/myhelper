@@ -3,18 +3,18 @@ import java.util.Date;
 /**
  * $entity.EntityNotes$
  */
-public class $entity.EntityName$Params {
+public final class $entity.EntityName$Params {
 $entity.PropList:{
 	/**
 		* $it.PropNotes$
 		*/
 	private $it.PropType$ $it.PropName$;
 
-	public void set$it.CapUpperPropName$($it.PropType$ $it.PropName$){
+	public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
 		this.$it.PropName$=$it.PropName$;
 	}
 
-	public $it.PropType$ get$it.CapUpperPropName$(){
+	public final $it.PropType$ get$it.CapUpperPropName$(){
 		return this.$it.PropName$;
 	}
 }$
@@ -23,11 +23,11 @@ $entity.PropList:{
 	 */
 	private $entity.EntityName$OrderBy orderByAsc;
 
-	public void setOrderByAsc($entity.EntityName$OrderBy orderByAsc){
+	public final void setOrderByAsc(final $entity.EntityName$OrderBy orderByAsc){
 		this.orderByAsc=orderByAsc;
 	}
 
-	public $entity.EntityName$OrderBy getOrderByAsc(){
+	public final $entity.EntityName$OrderBy getOrderByAsc(){
 		return this.orderByAsc;
 	}
 
@@ -36,11 +36,11 @@ $entity.PropList:{
 	 */
 	private $entity.EntityName$OrderBy orderByDesc;
 
-	public void setOrderByDesc($entity.EntityName$OrderBy orderByDesc){
+	public final void setOrderByDesc(final $entity.EntityName$OrderBy orderByDesc){
 		this.orderByDesc=orderByDesc;
 	}
 
-	public $entity.EntityName$OrderBy getOrderByDesc(){
+	public final $entity.EntityName$OrderBy getOrderByDesc(){
 		return this.orderByDesc;
 	}
 }

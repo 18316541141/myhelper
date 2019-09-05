@@ -16,7 +16,7 @@ using WebApplication1.Service;
 
 namespace WebApplication1.Controllers
 {
-    public class IRobotQrCodePayTaskController : BaseController
+    public sealed class IRobotQrCodePayTaskController : BaseController
     {
         public IRobotQrCodePayTaskService IRobotQrCodePayTaskService { set; get; }
 

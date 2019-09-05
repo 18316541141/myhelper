@@ -9,7 +9,7 @@ namespace WebApplication1.Controllers
 	/// <summary>
 	/// ***模块的控制器类
 	/// </summary>
-    public partial class $entity.EntityName$Controller : BaseController
+    public partial sealed class $entity.EntityName$Controller : BaseController
     {
 		public $entity.EntityName$Service Service { set; get; }
 

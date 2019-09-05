@@ -15,11 +15,11 @@ $entity.PropList:{
 		 */
 		private $it.PropType$ $it.PropName$;
 
-		public void set$it.CapUpperPropName$($it.PropType$ $it.PropName$){
+		public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
 			this.$it.PropName$=$it.PropName$;
 		}
 
-		public $it.PropType$ get$it.CapUpperPropName$(){
+		public final $it.PropType$ get$it.CapUpperPropName$(){
 			return this.$it.PropName$;
 		}
 	$elseif(it.ParamsTypeIsChange)$
@@ -28,11 +28,11 @@ $entity.PropList:{
 		 */
 		private $it.PropType$ $it.PropName$;
 
-		public void set$it.CapUpperPropName$($it.PropType$ $it.PropName$){
+		public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
 			this.$it.PropName$=$it.PropName$;
 		}
 
-		public $it.PropType$ get$it.CapUpperPropName$(){
+		public final $it.PropType$ get$it.CapUpperPropName$(){
 			return this.$it.PropName$;
 		}
 	$endif$

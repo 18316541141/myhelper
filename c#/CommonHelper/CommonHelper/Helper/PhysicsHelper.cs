@@ -9,7 +9,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 物理帮助类
     /// </summary>
-    public class PhysicsHelper
+    public static class PhysicsHelper
     {
         /// <summary>
         /// 在Firefox浏览器模拟人手拖拉拼图验证码

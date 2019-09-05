@@ -8,7 +8,7 @@ using System.Web;
 
 namespace CommonHelper.Helper.EFDbContext
 {
-    public class DistributedMainDbContext : DbContext
+    public sealed class DistributedMainDbContext : DbContext
     {
         /// <summary>
         /// 分布式事务总表

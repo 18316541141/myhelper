@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers.Common
     /// <summary>
     /// 所有操作session的请求都在这里处理
     /// </summary>
-    public class SessionController : BaseController
+    public sealed class SessionController : BaseController
     {
         public SystemService SystemService { set; get; }
 

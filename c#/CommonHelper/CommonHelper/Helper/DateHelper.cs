@@ -11,7 +11,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 日期帮助类
     /// </summary>
-    public class DateHelper
+    public static class DateHelper
     {
 
         /// <summary>

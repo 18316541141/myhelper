@@ -6,6 +6,9 @@ using WebApplication1.Params;
 using WebApplication1.OrderBy;
 using CommonHelper.AopInterceptor;
 using Autofac.Extras.DynamicProxy;
+using CommonHelper.EFRepository;
+using System;
+using System.Collections.Generic;
 
 namespace WebApplication1.Repository
 {
@@ -586,6 +589,26 @@ namespace WebApplication1.Repository
         public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext2();
+        }
+
+        public override List<BaseDbContext> CreateAllDbContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override InverseRepository<IRobotQrCodePayTask> CurrentInverse()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Func<IRobotQrCodePayTask, IComparable> GetOrderColAndOrderType(IRobotQrCodePayTaskParams paramz, out bool orderType)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IQueryable<IRobotQrCodePayTask> GetBetweenAnd(IQueryable<IRobotQrCodePayTask> query, IRobotQrCodePayTaskParams paramz, IComparable baseExtremum, IComparable otherExtremum)
+        {
+            throw new NotImplementedException();
         }
     }
 }

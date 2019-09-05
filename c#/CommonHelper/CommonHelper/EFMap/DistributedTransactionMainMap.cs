@@ -11,7 +11,7 @@ namespace CommonHelper.Helper.EFMap
     /// <summary>
     /// 事务总表
     /// </summary>
-    public class DistributedTransactionMainMap: EntityTypeConfiguration<DistributedTransactionMain>
+    public sealed class DistributedTransactionMainMap: EntityTypeConfiguration<DistributedTransactionMain>
     {
         public DistributedTransactionMainMap()
         {

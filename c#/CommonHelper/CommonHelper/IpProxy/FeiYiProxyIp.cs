@@ -6,13 +6,14 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebApplication1.App_Start;
 
 namespace CommonHelper.IpProxy
 {
     /// <summary>
     /// 飞蚁代理
     /// </summary>
-    public class FeiYiProxyIp : UseProxyIp
+    public sealed class FeiYiProxyIp : UseProxyIp
     {
         protected override string ProxyIpCacheFilePath
         {
@@ -22,12 +23,12 @@ namespace CommonHelper.IpProxy
             }
         }
 
-        protected override Queue<ProxyUserInfo> ProxyUserInfoQueue
+        protected sealed override Queue<ProxyUserInfo> ProxyUserInfoQueue
         {
             get
             {
                 Queue<ProxyUserInfo> _proxyUserInfoQueue = new Queue<ProxyUserInfo>();
-                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings["FeiYiProxyRefresh"]))
+                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.FeiYiProxyRefresh"]))
                 {
                     _proxyUserInfoQueue.Enqueue(new ProxyUserInfo
                     {
@@ -44,7 +45,7 @@ namespace CommonHelper.IpProxy
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public override string AddLimitDate(string text)
+        public sealed override string AddLimitDate(string text)
         {
             string[] rows=text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             StringBuilder textBuilder = new StringBuilder();
@@ -64,7 +65,7 @@ namespace CommonHelper.IpProxy
 
         public override bool CheckNeedAddWhite(string text) => false;
 
-        public override bool Explain(out List<string> ipProxyCacheList, out List<string> portProxyCacheList, out List<DateTime?> limitDateCacheList, string text)
+        public sealed override bool Explain(out List<string> ipProxyCacheList, out List<string> portProxyCacheList, out List<DateTime?> limitDateCacheList, string text)
         {
             ipProxyCacheList = new List<string>();
             portProxyCacheList = new List<string>();

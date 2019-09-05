@@ -13,7 +13,7 @@ namespace CommonHelper.AopInterceptor
     /// <summary>
     /// 分布式事务拦截器
     /// </summary>
-    public class DistributedTransactionScan : IInterceptor
+    public sealed class DistributedTransactionScan : IInterceptor
     {
         /// <summary>
         /// 事务id的值

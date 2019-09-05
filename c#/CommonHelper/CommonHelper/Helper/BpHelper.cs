@@ -11,7 +11,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// BP算法帮助类
     /// </summary>
-    public class BpHelper
+    public static class BpHelper
     {
         public static ActivateFunc DefaultActivateFunc { set; get; }
 

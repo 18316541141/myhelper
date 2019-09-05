@@ -6,7 +6,7 @@ namespace CommonHelper.Helper.CommonEntity
     /// <summary>
     /// 后台菜单树实体类
     /// </summary>
-    public class LeftMenu
+    public sealed class LeftMenu
     {
         /// <summary>
         /// 菜单序号

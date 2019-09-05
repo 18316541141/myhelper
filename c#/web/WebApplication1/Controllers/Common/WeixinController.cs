@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers.Common
     /// <summary>
     /// 微信接口、jssdk专用的控制器（登录除外，因为登录会修改session，所以登录放在SessionController、
     /// </summary>
-    public class WeixinController : FastController
+    public sealed class WeixinController : FastController
     {
         /// <summary>
         /// 微信公众平台专用的图片上传功能

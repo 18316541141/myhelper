@@ -9,6 +9,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication1.App_Start;
 
 namespace CommonHelper.Helper
 {
@@ -20,7 +21,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 邮件发送者实体类
     /// </summary>
-    public class EmailSenderEntity
+    public sealed class EmailSenderEntity
     {
         /// <summary>
         /// 负责发送邮件的邮件服务器地址
@@ -53,7 +54,7 @@ namespace CommonHelper.Helper
         bool CheckTry(Exception ex);
     }
 
-    public class DefaultTryAgain : TryAgain
+    public sealed class DefaultTryAgain : TryAgain
     {
         public bool CheckTry(Exception ex)
         {
@@ -64,7 +65,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 发送电子邮件的帮助类
     /// </summary>
-    public class EmailHelper
+    public static class EmailHelper
     {
 
         static DefaultTryAgain _defaultTryAgain;
@@ -80,7 +81,8 @@ namespace CommonHelper.Helper
         {
             _defaultTryAgain = new DefaultTryAgain();
             _randomIndex = (uint)new Random().Next();
-            string emailSenderEntities = ConfigurationManager.AppSettings["EmailSenderEntities"];
+            //电子邮件发送者的json配置。
+            string emailSenderEntities = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.EmailSenderEntities"];
             if (!string.IsNullOrEmpty(emailSenderEntities))
             {
                 _emailSenderEntityList = new List<EmailSenderEntity>();

@@ -3,7 +3,7 @@ import java.util.Date;
 /**
  * $entity.EntityNotes$
  */
-public class $entity.EntityName$SetNullParams {
+public final class $entity.EntityName$SetNullParams {
 $entity.PropList:{
 	$if(it.ParamsTypeIsEqual)$
 		$if(it.IsKey)$
@@ -12,11 +12,11 @@ $entity.PropList:{
 		 */
 		private $it.PropType$ $it.PropName$;
 
-		public void set$it.CapUpperPropName$($it.PropType$ $it.PropName$){
+		public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
 			this.$it.PropName$=$it.PropName$;
 		}
 
-		public $it.PropType$ get$it.CapUpperPropName$(){
+		public final $it.PropType$ get$it.CapUpperPropName$(){
 			return this.$it.PropName$;
 		}
 		$else$
@@ -25,11 +25,11 @@ $entity.PropList:{
 		 */
 		private boolean $it.PropName$;
 
-		public void set$it.CapUpperPropName$(boolean $it.PropName$){
+		public final void set$it.CapUpperPropName$(final boolean $it.PropName$){
 			this.$it.PropName$=$it.PropName$;
 		}
 
-		public boolean get$it.CapUpperPropName$(){
+		public final boolean get$it.CapUpperPropName$(){
 			return this.$it.PropName$;
 		}
 		$endif$

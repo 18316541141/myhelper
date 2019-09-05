@@ -12,7 +12,7 @@ namespace CommonHelper.Helper
     /// 发现有多次调用Set方法后，会先记录调用次数Count，在调用WaitOne时不会阻塞，只会减少Count，
     /// 只有当Count为0时才会真正的阻塞
     /// </summary>
-    public class CountAutoResetEvent
+    public sealed class CountAutoResetEvent
     {
         AutoResetEvent _autoResetEvent;
         long _count;

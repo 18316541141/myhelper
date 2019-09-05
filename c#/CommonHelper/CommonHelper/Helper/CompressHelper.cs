@@ -14,7 +14,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 压缩、解压缩类
     /// </summary>
-    public class CompressHelper
+    public static class CompressHelper
     {
 
         /// <summary>

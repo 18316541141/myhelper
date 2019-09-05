@@ -8,7 +8,7 @@ using System.Web;
 
 namespace CommonHelper.Helper.EFMap
 {
-    public class DistributedTransactionMainDetailMap : EntityTypeConfiguration<DistributedTransactionMainDetail>
+    public sealed class DistributedTransactionMainDetailMap : EntityTypeConfiguration<DistributedTransactionMainDetail>
     {
         public DistributedTransactionMainDetailMap()
         {

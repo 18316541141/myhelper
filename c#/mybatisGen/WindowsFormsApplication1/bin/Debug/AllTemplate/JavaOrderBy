@@ -2,7 +2,7 @@
 /**
  * $entity.EntityNotes$
  */
-public class $entity.EntityName$OrderBy {
+public final class $entity.EntityName$OrderBy {
 $entity.PropList:{
 	$if(it.ParamsTypeIsEqual)$
 
@@ -11,11 +11,11 @@ $entity.PropList:{
 		 */
 		private boolean $it.PropName$;
 
-		public void set$it.CapUpperPropName$(boolean $it.PropName$){
+		public final void set$it.CapUpperPropName$(final boolean $it.PropName$){
 			this.$it.PropName$=$it.PropName$;
 		}
 
-		public boolean get$it.CapUpperPropName$(){
+		public final boolean get$it.CapUpperPropName$(){
 			return this.$it.PropName$;
 		}
 	$endif$

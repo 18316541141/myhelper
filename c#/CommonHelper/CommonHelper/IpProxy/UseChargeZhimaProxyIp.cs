@@ -8,6 +8,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebApplication1.App_Start;
+
 namespace CommonHelper.IpProxy
 {
     /// <summary>
@@ -34,7 +36,7 @@ namespace CommonHelper.IpProxy
             get
             {
                 Queue<ProxyUserInfo> proxyUserInfoQueue = new Queue<ProxyUserInfo>();
-                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings["ChargeZhimaProxyRefresh"]))
+                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.ChargeZhimaProxyRefresh"]))
                     proxyUserInfoQueue.Enqueue(new ProxyUserInfo
                     {
                         User = Convert.ToString(jobject["user"]),

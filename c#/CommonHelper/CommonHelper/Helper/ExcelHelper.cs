@@ -18,7 +18,7 @@ namespace CommonHelper.Helper
     /// excel表格的sheet属性
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class ExcelSheet : Attribute
+    public sealed class ExcelSheet : Attribute
     {
         /// <summary>
         /// Sheet名称
@@ -35,7 +35,7 @@ namespace CommonHelper.Helper
     /// excel表格的列名称属性
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class ExcelCol : Attribute
+    public sealed class ExcelCol : Attribute
     {
         /// <summary>
         /// 列名称
@@ -56,7 +56,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// excel列信息
     /// </summary>
-    public class ExcelColInfo
+    public sealed class ExcelColInfo
     {
         /// <summary>
         /// 列特性
@@ -72,7 +72,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// Excel帮助类
     /// </summary>
-    public class ExcelHelper
+    public static class ExcelHelper
     {
 
         /// <summary>

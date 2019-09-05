@@ -11,7 +11,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// web项目帮助类
     /// </summary>
-    public class WebProjectHelper
+    public static class WebProjectHelper
     {
         /// <summary>
         /// 刷新web项目

@@ -98,7 +98,7 @@
 				<el-form ref="form" v-bind:model="formData" label-width="80px" v-on:keyup.enter.native="onSubmit">
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$			
 					<el-form-item label="$it.PropNotes$">
-						<el-input v-model="formData.$it.PropName$" placeholder="请填写$it.PropNotes$"></el-input>
+						<el-input v-validate="'required|max:20'" data-vv-name="formData.$it.PropName$" v-model="formData.$it.PropName$" placeholder="请填写$it.PropNotes$"></el-input>
 					</el-form-item>
 				$endif$}$
 				  <el-form-item>
@@ -125,31 +125,51 @@ export default {
             };
         }
 ------------------------------------------------------------------------------------------------------
+		mounted(){
+			//校验
+			this.$validator.localize('zh_CN',{
+				custom:{
+					'formData.$it.PropName$':{
+						required:'$it.PropNotes$不能为空',
+						max(fieldName,replaceArray){
+							return '$it.PropNotes$最大长度不能大于'+replaceArray[0]+'个字符';
+						},
+						min(){
+							
+						}
+					}
+				}
+			});
+		},
+------------------------------------------------------------------------------------------------------
         methods:{
         
         导出excel
         
 			exportExcel(command){
-        this.$refs.table.export(command);
-      }
+				this.$refs.table.export(command);
+			}
 			  保存表单
 			 
 			onSubmit(){
-				if(this.formData.$entity.KeyName$===null){
-					this.\$post('/api/$entity.EntityName$/add',this.formData,function(result){
-						if(result.code===0){
-							this.editDialog=false;
-							this.\$refs.table.refresh();
-						}
-					});
-				}else{
-					this.\$post('/api/$entity.EntityName$/edit',this.formData,function(result){
-						if(result.code===0){
-							this.editDialog=false;
-							this.\$refs.table.refresh();
-						}
-					});
-				}
+				//校验
+				this.$validateForm(()=>{
+					if(this.formData.$entity.KeyName$===null){
+						this.\$post('/api/$entity.EntityName$/add',this.formData,function(result){
+							if(result.code===0){
+								this.editDialog=false;
+								this.\$refs.table.refresh();
+							}
+						});
+					}else{
+						this.\$post('/api/$entity.EntityName$/edit',this.formData,function(result){
+							if(result.code===0){
+								this.editDialog=false;
+								this.\$refs.table.refresh();
+							}
+						});
+					}
+				});
 			},
 			
 			  新增一条数据

@@ -9,7 +9,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 文件帮助类
     /// </summary>
-    public class FileHelper
+    public static class FileHelper
     {
         /// <summary>
         /// 文件分级保存，如果文件夹中有大量文件，会影响读文件的速度，

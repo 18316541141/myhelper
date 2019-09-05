@@ -11,7 +11,7 @@ using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
 using WebApplication1.Params;
-using Autofac.Extras.DynamicProxy;
+using CommonHelper.staticVar;
 namespace WebApplication1.Repository
 {
 	//启用分布式事务
@@ -170,12 +170,29 @@ namespace WebApplication1.Repository
             return new MyDbContext2();
         }
 
-		public override InverseRepository<IRobotQrCodePayTask> CurrentInverse()
+		public override InverseRepository<$entity.EntityName$> CurrentInverse()
         {
 			using(BaseDbContext db = CreateDbContext())
 			{
 				return AllStatic.InverseRepositoryMap[db.Database.Connection.ConnectionString]["IRobot_QrCodePayTask"];
 			}
+        }
+
+		public override List<BaseDbContext> CreateAllDbContext()
+        {
+			List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
+			baseDbContextList.Add(new MyDbContext2());
+            return baseDbContextList;
+        }
+
+        protected override Func<$entity.EntityName$, IComparable> GetOrderColAndOrderType($entity.EntityName$Params paramz, out bool orderType)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IQueryable<$entity.EntityName$> GetBetweenAnd(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params paramz, IComparable baseExtremum, IComparable otherExtremum)
+        {
+            throw new NotImplementedException();
         }
     }
 }

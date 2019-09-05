@@ -12,7 +12,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 模板帮助类
     /// </summary>
-    public class TemplateHelper
+    public sealed class TemplateHelper
     {
         string _templateBasePath, _smallTemplatePath;
         static TemplateHelper _templateHelper;

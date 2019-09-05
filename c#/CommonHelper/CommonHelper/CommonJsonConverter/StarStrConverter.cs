@@ -8,7 +8,7 @@ namespace CommonHelper.Helper.CommonJsonConverter
     /// <summary>
     /// 屏蔽转换器，用于屏蔽隐私信息，例如：18316541141 => 183****1141（手机号码）
     /// </summary>
-    public class StarStrConverter : JsonConverter
+    public sealed class StarStrConverter : JsonConverter
     {
         /// <summary>
         /// 起始屏蔽索引

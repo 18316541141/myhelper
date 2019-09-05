@@ -9,7 +9,7 @@ namespace CommonHelper.AopInterceptor
     /// 启用分布式事务的标记
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class DistributedTransactionScope:Attribute
+    public sealed class DistributedTransactionScope:Attribute
     {
     }
 }

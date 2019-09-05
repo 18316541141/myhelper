@@ -9,7 +9,7 @@ namespace WebApplication1.Entity.Common
     /// <summary>
     /// 自定义的分页列表
     /// </summary>
-    public class MyPagedList<T>
+    public sealed class MyPagedList<T>
     {
         /// <summary>
         /// 分页查询的数据

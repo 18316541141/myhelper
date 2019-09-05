@@ -591,22 +591,32 @@ namespace CommonHelper.Helper.EFRepository
             else if (dbContexts.Count > 1)
             {
                 int sumSkipCount = (pageIndex-1)* pageSize;
-                int avgSkipCount = (sumSkipCount - sumSkipCount % dbContexts.Count)/ dbContexts.Count;
-
+                int totalCount = 0;
+                List<int> counts = new List<int>();
                 List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
+                for (int i=0,count,len= dbContexts.Count; i<len; i++)
+                {
+                    IQueryable<TEntity> query = Query(dbContexts[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    count = query.Count();
+                    if (count > 0)
+                    {
+                        totalCount += count;
+                        counts.Add(count);
+                        baseDbContextList.Add(dbContexts[i]);
+                    }
+                }
                 List<List<IComparable>> allComparableList = new List<List<IComparable>>();
                 List<IComparable> comparableList;
                 bool orderType;
                 Func<TEntity, IComparable> orderCol = GetOrderColAndOrderType(eqArgs,out orderType);
-                foreach (BaseDbContext baseDbContext in dbContexts)
+                int tempSumSkip = 0;
+                int takeSum = 0;
+                for (int i = 0, len = baseDbContextList.Count; i < len; i++)
                 {
-                    IQueryable<TEntity> query = Query(baseDbContext.Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    comparableList = query.Select(orderCol).Skip(avgSkipCount).Take(pageSize).ToList();
-                    if (comparableList.Count > 0)
-                    {
-                        allComparableList.Add(comparableList);
-                        baseDbContextList.Add(baseDbContext);
-                    }
+                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    comparableList = query.Select(orderCol).Skip(tempSumSkip += (counts[i]* sumSkipCount / totalCount)).Take(pageSize).ToList();
+                    takeSum += comparableList.Count;
+                    allComparableList.Add(comparableList);
                 }
                 IComparable baseExtremum= allComparableList[0][0];
                 foreach (List<IComparable> comparable in allComparableList)
@@ -627,8 +637,17 @@ namespace CommonHelper.Helper.EFRepository
                     query = GetBetweenAnd(query, eqArgs, baseExtremum, allComparableList[i][allComparableList.Count - 1]);
                     entities.AddRange(query.ToList());
                 }
-                entities = (orderType ? entities.OrderBy(orderCol):entities.OrderByDescending(orderCol)).Skip(entities.Count - (3 * pageSize)).Take(pageSize).ToList();
-                return null;
+                entities = (orderType ? entities.OrderBy(orderCol):entities.OrderByDescending(orderCol)).Skip(sumSkipCount- tempSumSkip +entities.Count- takeSum).Take(pageSize).ToList();
+                return new MyPagedList<TEntity>
+                {
+                    PageDataList = entities,
+                    CurrentPageIndex = pageIndex,
+                    EndItemIndex = pageIndex * pageSize+ entities.Count,
+                    PageSize = pageSize,
+                    StartItemIndex = pageIndex*pageSize+1,
+                    TotalItemCount = totalCount,
+                    TotalPageCount = (totalCount - totalCount%pageSize)/pageSize+1
+                };
             }
             throw new Exception("没有找到数据源，请确保“CreateAllDbContext”方法正确实现。");
         }

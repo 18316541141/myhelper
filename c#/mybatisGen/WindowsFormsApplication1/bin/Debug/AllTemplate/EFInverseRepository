@@ -12,7 +12,7 @@ using WebApplication1.Entity;
 using WebApplication1.Params;
 namespace WebApplication1.Repository
 {
-    public partial class $entity.EntityName$InverseRepository : InverseRepository<$entity.EntityName$>
+    public partial sealed class $entity.EntityName$InverseRepository : InverseRepository<$entity.EntityName$>
     {
 		/// <summary>
         /// 分布式插入数据的反操作。当事务失败时调用

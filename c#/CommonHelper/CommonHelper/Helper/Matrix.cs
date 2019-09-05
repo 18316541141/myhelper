@@ -9,7 +9,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 矩阵
     /// </summary>
-    public class Matrix
+    public sealed class Matrix
     {
         public int Row
         {

@@ -10,7 +10,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 流帮助类
     /// </summary>
-    public class StreamHelper
+    public static class StreamHelper
     {
 		/// <summary>
         /// 输入流转化为字符，并关闭流

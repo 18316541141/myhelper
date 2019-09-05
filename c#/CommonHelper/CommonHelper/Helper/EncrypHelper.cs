@@ -13,7 +13,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 加密帮助类
     /// </summary>
-    public class EncrypHelper
+    public static class EncrypHelper
     {
         /// <summary>
         /// 读取指定路径的图片，返回该图片的base64

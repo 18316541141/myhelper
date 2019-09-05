@@ -9,7 +9,7 @@ namespace CommonHelper.Helper.CommonEntity
     /// <summary>
     /// 地区树
     /// </summary>
-    public class AreaTree
+    public sealed class AreaTree
     {
         /// <summary>
         /// 地区名称

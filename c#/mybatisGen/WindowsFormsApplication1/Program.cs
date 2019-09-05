@@ -23,12 +23,12 @@ namespace WindowsFormsApplication1
             GenEntityService genEntityService = new GenEntityService
             {
                 NameTrans = new RobotNameCSharpTrans(),
-                //DbTypeTrans = new SqlServerToCSharpTrans(),
-                DbTypeTrans = new SqliteToCSharpTrans(),
-                //SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
-                SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
+                DbTypeTrans = new SqlServerToCSharpTrans(),
+                //DbTypeTrans = new SqliteToCSharpTrans(),
+                SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
+                //SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
             };
-            Entity entity=genEntityService.GenTemplateEntity("IRobot_QrCodePayTask");
+            Entity entity=genEntityService.GenTemplateEntity("IRobot_ErrorMsg");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
         }

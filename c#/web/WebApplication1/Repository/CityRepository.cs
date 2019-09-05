@@ -28,7 +28,12 @@ namespace WebApplication1.Repository
             throw new NotImplementedException();
         }
 
-        protected override Expression<Func<City, IComparable>> GetOrderColAndOrderType(City paramz, out bool orderType)
+        protected override IQueryable<City> GetBetweenAnd(IQueryable<City> query, City paramz, IComparable baseExtremum, IComparable otherExtremum)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Func<City, IComparable> GetOrderColAndOrderType(City paramz, out bool orderType)
         {
             throw new NotImplementedException();
         }

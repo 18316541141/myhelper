@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers.Common
     /// <summary>
     /// 通用控制器
     /// </summary>
-    public class IndexController : FastController
+    public sealed class IndexController : FastController
     {
         public SystemService SystemService { set; get; }
 

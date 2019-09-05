@@ -6,14 +6,35 @@ using System.Linq;
 using System.Web;
 using WebApplication1.Entity;
 using CommonHelper.Helper.EFDbContext;
+using CommonHelper.EFRepository;
 
 namespace WebApplication1.Repository
 {
     public class TownRepository : BaseRepository<Town, Town, Town, Town>
     {
+        public override List<BaseDbContext> CreateAllDbContext()
+        {
+            throw new NotImplementedException();
+        }
+
         public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext();
+        }
+
+        public override InverseRepository<Town> CurrentInverse()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IQueryable<Town> GetBetweenAnd(IQueryable<Town> query, Town paramz, IComparable baseExtremum, IComparable otherExtremum)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Func<Town, IComparable> GetOrderColAndOrderType(Town paramz, out bool orderType)
+        {
+            throw new NotImplementedException();
         }
 
         protected override IQueryable<Town> Query(IQueryable<Town> query, Town paramz, Town neqArgs)

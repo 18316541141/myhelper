@@ -15,7 +15,7 @@ namespace CommonHelper.Helper
     /// 猜想帮助类，日常生活中存在大量的信息都是含有*号的，例如手机号码：183****1141、
     /// 身份证：4406811993****5911，这些数据都可以根据它的生成规则来推算出完整号码
     /// </summary>
-    public class GuessHelper
+    public static class GuessHelper
     {
         /// <summary>
         /// 所有可能的行政区划编码

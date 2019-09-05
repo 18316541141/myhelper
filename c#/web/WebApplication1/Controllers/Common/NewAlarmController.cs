@@ -12,7 +12,7 @@ using WebApplication1.Service;
 
 namespace WebApplication1.Controllers.Common
 {
-    public class NewAlarmController:BaseController
+    public sealed class NewAlarmController:BaseController
     {
         public SystemService SystemService { set; get; }
 

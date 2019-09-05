@@ -144,6 +144,7 @@
     <Compile Include="CommonEntity\IEntity.cs" />
     <Compile Include="CommonEntity\LeftMenu.cs" />
     <Compile Include="CommonEntity\MyPagedList.cs" />
+    <Compile Include="CommonEntity\RealTimeWSEntity.cs" />
     <Compile Include="CommonEntity\Result.cs" />
     <Compile Include="CommonEntity\TransactionMsg.cs" />
     <Compile Include="CommonEntity\TreeFormNode.cs" />

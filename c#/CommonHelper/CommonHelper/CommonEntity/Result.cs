@@ -7,7 +7,7 @@ namespace CommonHelper.Helper.CommonEntity
     /// <summary>
     /// 这是整个网站的后台和前端交互的返回值类
     /// </summary>
-    public class Result
+    public sealed class Result
     {
         /// <summary>
         /// 返回的消息

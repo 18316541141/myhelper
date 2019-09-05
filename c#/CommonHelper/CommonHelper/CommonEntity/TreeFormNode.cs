@@ -9,7 +9,7 @@ namespace CommonHelper.Helper.CommonEntity
     /// <summary>
     /// 树表单节点
     /// </summary>
-    public class TreeFormNode
+    public sealed class TreeFormNode
     {
         /// <summary>
         /// 节点id

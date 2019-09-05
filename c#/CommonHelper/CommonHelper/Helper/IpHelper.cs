@@ -11,7 +11,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// ip地址帮助类
     /// </summary>
-    public class IpHelper
+    public static class IpHelper
     {
         /// <summary>
         /// 获取本机在外网的ip地址

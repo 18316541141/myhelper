@@ -9,7 +9,7 @@ namespace CommonHelper.Helper.CommonJsonConverter
     /// <summary>
     /// 全局统一转化long类型属性为string，避免前端使用long类型溢出。
     /// </summary>
-    public class LongConverter : JsonConverter
+    public sealed class LongConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

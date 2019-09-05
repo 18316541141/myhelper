@@ -10,7 +10,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 二值化帮助类
     /// </summary>
-    public class BinaryHelper
+    public static class BinaryHelper
     {
         /// <summary>
         /// 获取灰度图的灰度直方图

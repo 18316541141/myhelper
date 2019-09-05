@@ -8,7 +8,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 专用的签名帮助类，仅在此项目专用，不通用。
     /// </summary>
-    public class MySignHelper
+    public sealed class MySignHelper
     {
         private MySignHelper() { }
 

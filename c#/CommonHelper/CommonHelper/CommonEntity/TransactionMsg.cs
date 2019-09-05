@@ -8,7 +8,7 @@ namespace CommonHelper.CommonEntity
     /// <summary>
     /// 分布式事务在消息队列中传输的数据实体
     /// </summary>
-    public class TransactionMsg
+    public sealed class TransactionMsg
     {
         /// <summary>
         /// 事务id

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CommonHelper.Helper
 {
     [Serializable]
-    public class SparseArrayCell<T>
+    public sealed class SparseArrayCell<T>
     {
         public int Index { set; get; }
         public T Val { set; get; }
@@ -20,7 +20,7 @@ namespace CommonHelper.Helper
     /// 稀疏数组
     /// </summary>
     [Serializable]
-    public class SparseArray<T>: IEnumerable
+    public sealed class SparseArray<T>: IEnumerable
     {
         SparseArrayCell<T> _head;
         SparseArrayCell<T> _tail;
