@@ -2,6 +2,10 @@ package web.template.filter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,13 +18,27 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * 响应报文压缩过滤器
  * @author admin
  *
  */
-public class CompressFilter implements Filter {
-
+public final class CompressFilter implements Filter {
+	
+	private ObjectMapper objectMapper;
+	
+	private Set<String> excludes;
+	
+	public final static String EXCLUDE;
+	
+	static{
+		EXCLUDE="exclude";
+	}
+	
 	public class GZipResponseWrapper extends HttpServletResponseWrapper {
 
 		private GzipServletOupputStream gzipServletOupputStream;
@@ -93,7 +111,17 @@ public class CompressFilter implements Filter {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void init(FilterConfig filterConfig) throws ServletException {
+		try {
+			excludes=new HashSet<String>((Collection<? extends String>) objectMapper.readValue(filterConfig.getInitParameter(EXCLUDE), List.class));
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -104,7 +132,7 @@ public class CompressFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		// 用encodings 来判断浏览器是否有 gzip压缩的功能
 		String encodings = req.getHeader("accept-encoding");
-		if ((encodings != null) && (encodings.indexOf("gzip")) > -1) {
+		if (encodings.contains(req.getRequestURI()) && (encodings != null) && (encodings.indexOf("gzip")) > -1) {
 			GZipResponseWrapper gzipWrapper = new GZipResponseWrapper(res);
 			chain.doFilter(request, gzipWrapper);
 			// 设置响应内容编码为gzip格式
@@ -116,6 +144,14 @@ public class CompressFilter implements Filter {
 		} else {
 			chain.doFilter(request, response);
 		}
+	}
+
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 	}
 
 	@Override

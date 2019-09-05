@@ -19,6 +19,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -111,8 +112,8 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
 	}
 
 	private List<Session> getLoginedSession(Subject currentUser) {
-		Collection<Session> list = ((DefaultSessionManager) ((DefaultSecurityManager) SecurityUtils
-				.getSecurityManager()).getSessionManager()).getSessionDAO().getActiveSessions();
+		ServletContainerSessionManager o=(ServletContainerSessionManager)((DefaultSecurityManager) SecurityUtils.getSecurityManager()).getac.getSessionManager();
+		Collection<Session> list = ((ServletContainerSessionManager) o).getActiveSessions();
 		List<Session> loginedList = new ArrayList<Session>();
 		String loginUser = (String) currentUser.getPrincipal();
 		for (Session session : list) {

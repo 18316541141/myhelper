@@ -1,4 +1,6 @@
 package web.template.config;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -22,12 +24,14 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
+import web.template.filter.CompressFilter;
 import web.template.interceptor.SignInterceptor;
 import web.template.interceptor.UpdateVersionInterceptor;
 import web.template.service.common.SystemService;
@@ -55,6 +59,31 @@ public class Beans {
 		defaultKaptcha.setConfig(new Config(properties));
 		return defaultKaptcha;
 	}
+	
+	/**
+	 * 注册一个报文压缩的拦截器
+	 * @return
+	 * @throws JsonProcessingException 
+	 */
+	@Bean
+    public FilterRegistrationBean<CompressFilter> compressFilter(@Autowired final ObjectMapper objectMapper) throws JsonProcessingException {
+		FilterRegistrationBean<CompressFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+		CompressFilter compressFilter = new CompressFilter();
+		compressFilter.setObjectMapper(objectMapper);
+		filterRegistrationBean.setFilter(compressFilter);
+		//需要进行压缩的报文
+		filterRegistrationBean.addUrlPatterns("/index/loadLeftMenus");
+		filterRegistrationBean.addUrlPatterns("/index/loadLoginData");
+		//这里一般是指分页查询数据，为确保分页查询得到压缩，控制器名称尽量以page为前缀。
+		filterRegistrationBean.addUrlPatterns("/*/page*");
+		//这里指代导出功能
+		filterRegistrationBean.addUrlPatterns("/*/export*");
+		List<String> exclude=new ArrayList<String>();
+		//被匹配到但又不需要压缩的请求
+//		exclude.add("//");
+		filterRegistrationBean.addInitParameter(CompressFilter.EXCLUDE, objectMapper.writeValueAsString(exclude));
+        return filterRegistrationBean;
+    }
 	
 	@Bean(name="snowFlakeHelper")
 	public SnowFlakeHelper snowFlakeHelper(){
@@ -128,7 +157,7 @@ public class Beans {
                 
                 final SignInterceptor signInterceptor=new SignInterceptor();
                 signInterceptor.setObjectMapper(objectMapper);
-                registry.addInterceptor(signInterceptor);
+                registry.addInterceptor(signInterceptor).addPathPatterns("/index/anonymousRealTime");
             }
 		};
 	}

@@ -17,8 +17,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,6 +120,7 @@ public class IndexController extends BaseController {
 	 * @param signKey
 	 * @return
 	 */
+	@RequestMapping("/anonymousRealTime")
 	public final Result anonymousRealTime(final String realTimePool, final String realTimeVersion, final String signKey) {
 		return realTime(realTimePool, realTimeVersion,
 				/* systemService.LoadUsernameBySignKey(signKey) */"zhang");
@@ -134,7 +133,7 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/realTime")
-	public Result realTime(String realTimePool, String realTimeVersion) {
+	public final Result realTime(String realTimePool, String realTimeVersion) {
 		return realTime(realTimePool, realTimeVersion, username());
 	}
 
