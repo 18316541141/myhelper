@@ -12,10 +12,6 @@ namespace WebApplication1.Filter.Common
     /// </summary>
     public class CompressAttribute: ActionFilterAttribute
     {
-        public CompressAttribute()
-        {
-            IgnoreRequests = new HashSet<string>();
-        }
 
         /// <summary>
         /// 不需要压缩过滤器的请求url
@@ -24,23 +20,20 @@ namespace WebApplication1.Filter.Common
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (!IgnoreRequests.Contains(filterContext.HttpContext.Request.Url.AbsolutePath.ToLower()))
+            var content = filterContext.Result;
+            var response = filterContext.HttpContext.Response;
+            var acceptEncoding = filterContext.HttpContext.Request.Headers["Accept-Encoding"]?.ToUpper();
+            if (acceptEncoding != null)
             {
-                var content = filterContext.Result;
-                var response = filterContext.HttpContext.Response;
-                var acceptEncoding = filterContext.HttpContext.Request.Headers["Accept-Encoding"]?.ToUpper();
-                if (acceptEncoding != null)
+                if (acceptEncoding.Contains("GZIP"))
                 {
-                    if (acceptEncoding.Contains("GZIP"))
-                    {
-                        response.AppendHeader("Content-Encoding", "gzip");
-                        response.Filter= new GZipStream(response.Filter, CompressionMode.Compress);
-                    }
-                    else if (acceptEncoding.Contains("DEFLATE"))
-                    {
-                        response.AppendHeader("Content-Encoding", "deflate");
-                        response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
-                    }
+                    response.AppendHeader("Content-Encoding", "gzip");
+                    response.Filter= new GZipStream(response.Filter, CompressionMode.Compress);
+                }
+                else if (acceptEncoding.Contains("DEFLATE"))
+                {
+                    response.AppendHeader("Content-Encoding", "deflate");
+                    response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
                 }
             }
             base.OnActionExecuted(filterContext);

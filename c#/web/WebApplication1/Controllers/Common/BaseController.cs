@@ -3,6 +3,7 @@ using Entity.Common;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,7 +18,20 @@ namespace WebApplication1.Controllers.Common
     /// </summary>
     public abstract class BaseController : Controller
     {
+        /// <summary>
+        /// 日志
+        /// </summary>
         public ILog log { set; get; }
+
+        /// <summary>
+        /// 跨平台的文件路径分隔符
+        /// </summary>
+        public readonly static char s;
+
+        static BaseController()
+        {
+            s = Path.DirectorySeparatorChar;
+        }
 
 
         /// <summary>

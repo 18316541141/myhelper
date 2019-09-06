@@ -138,6 +138,7 @@
     <Compile Include="AopInterceptor\DistributedTransactionScope.cs" />
     <Compile Include="AopInterceptor\DistributeRepository.cs" />
     <Compile Include="CommonEntity\AreaTree.cs" />
+    <Compile Include="CommonEntity\DisPageEntity.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />

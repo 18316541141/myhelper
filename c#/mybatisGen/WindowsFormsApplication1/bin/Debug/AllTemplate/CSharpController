@@ -9,7 +9,7 @@ namespace WebApplication1.Controllers
 	/// <summary>
 	/// ***模块的控制器类
 	/// </summary>
-    public partial sealed class $entity.EntityName$Controller : BaseController
+    public sealed partial class $entity.EntityName$Controller : BaseController
     {
 		public $entity.EntityName$Service Service { set; get; }
 
@@ -42,6 +42,7 @@ namespace WebApplication1.Controllers
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
+		[Compress]
 		public JsonResult Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			return MyJson(new Result{code = 0, data = Service.Page(param, currentPageIndex, pageSize)});
@@ -56,6 +57,7 @@ namespace WebApplication1.Controllers
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的导出结果</returns>
 		[OperInterval(IntervalMillisecond=10000)]
+		[Compress]
 		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
 		{
 			return new ExcelResult<$entity.EntityName$>

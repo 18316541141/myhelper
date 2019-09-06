@@ -96,12 +96,14 @@
 			v-bind:append-to-body="true">
 			<div style="width:100%;height:400px;overflow-y:auto;">
 				<el-form ref="form" v-bind:model="formData" label-width="80px" v-on:keyup.enter.native="onSubmit">
+				<div class="form-body">
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$			
 					<el-form-item label="$it.PropNotes$">
 						<el-input v-validate="'required|max:20'" data-vv-name="formData.$it.PropName$" v-model="formData.$it.PropName$" placeholder="请填写$it.PropNotes$"></el-input>
 					</el-form-item>
 				$endif$}$
-				  <el-form-item>
+				</div>		
+				  <el-form-item class="form-bottom">
 					  <el-button type="primary" v-on:click="onSubmit">保存</el-button>
 					  <el-button v-on:click="editDialog=false;">取消</el-button>
 				  </el-form-item>
@@ -117,7 +119,12 @@ export default {
         数据部分（和列表部分配合使用）：
         data(){
             return {
-				formData:{},	//仅用于存放新增表单、编辑表单的数据
+		//仅用于存放新增表单、编辑表单的数据
+		formData:{
+		$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+			$it.PropName$:null,
+		$endif$}$
+		},
                 postData:{},	//仅用于存放查询参数的数据
                 retData:{},		//仅用于存放分页查询的返回结果
                 checkedDatas:[],	//仅用于存放当前分页表格勾选项
@@ -127,8 +134,9 @@ export default {
 ------------------------------------------------------------------------------------------------------
 		mounted(){
 			//校验
-			this.$validator.localize('zh_CN',{
+			this.\$validator.localize('zh_CN',{
 				custom:{
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 					'formData.$it.PropName$':{
 						required:'$it.PropNotes$不能为空',
 						max(fieldName,replaceArray){
@@ -137,7 +145,8 @@ export default {
 						min(){
 							
 						}
-					}
+					},
+				$endif$}$
 				}
 			});
 		},
@@ -147,13 +156,13 @@ export default {
         导出excel
         
 			exportExcel(command){
-				this.$refs.table.export(command);
+				this.\$refs.table.export(command);
 			}
 			  保存表单
 			 
 			onSubmit(){
 				//校验
-				this.$validateForm(()=>{
+				this.\$validateForm(()=>{
 					if(this.formData.$entity.KeyName$===null){
 						this.\$post('/api/$entity.EntityName$/add',this.formData,function(result){
 							if(result.code===0){

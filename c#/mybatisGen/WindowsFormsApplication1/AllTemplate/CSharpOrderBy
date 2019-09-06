@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApplication1.OrderBy
 {
-    public partial sealed class $entity.EntityName$OrderBy
+    public sealed partial class $entity.EntityName$OrderBy
     {
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 

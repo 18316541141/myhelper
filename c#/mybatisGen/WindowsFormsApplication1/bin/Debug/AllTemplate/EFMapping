@@ -8,7 +8,7 @@ using WebApplication1.Entity;
 
 namespace WebApplication1.Mapping
 {
-    public partial sealed class $entity.EntityName$Map: EntityTypeConfiguration<$entity.EntityName$>
+    public sealed partial class $entity.EntityName$Map: EntityTypeConfiguration<$entity.EntityName$>
     {
         public $entity.EntityName$Map()
         {

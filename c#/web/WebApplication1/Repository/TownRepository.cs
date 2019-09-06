@@ -7,10 +7,11 @@ using System.Web;
 using WebApplication1.Entity;
 using CommonHelper.Helper.EFDbContext;
 using CommonHelper.EFRepository;
+using CommonHelper.CommonEntity;
 
 namespace WebApplication1.Repository
 {
-    public class TownRepository : BaseRepository<Town, Town, Town, Town>
+    public class TownRepository : BaseRepository<Town, Town, Town>
     {
         public override List<BaseDbContext> CreateAllDbContext()
         {
@@ -19,7 +20,7 @@ namespace WebApplication1.Repository
 
         public override BaseDbContext CreateDbContext()
         {
-            return new MyDbContext();
+            throw new NotImplementedException();
         }
 
         public override InverseRepository<Town> CurrentInverse()
@@ -27,17 +28,12 @@ namespace WebApplication1.Repository
             throw new NotImplementedException();
         }
 
-        protected override IQueryable<Town> GetBetweenAnd(IQueryable<Town> query, Town paramz, IComparable baseExtremum, IComparable otherExtremum)
+        public override DisPageEntity<Town> GetDisPageEntity()
         {
             throw new NotImplementedException();
         }
 
-        protected override Func<Town, IComparable> GetOrderColAndOrderType(Town paramz, out bool orderType)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override IQueryable<Town> Query(IQueryable<Town> query, Town paramz, Town neqArgs)
+        protected override IQueryable<Town> Query(IQueryable<Town> query, Town paramz, Town neqArgs, IComparable baseVal = null)
         {
             throw new NotImplementedException();
         }

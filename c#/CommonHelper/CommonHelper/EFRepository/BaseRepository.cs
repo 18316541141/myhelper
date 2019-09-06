@@ -19,7 +19,7 @@ namespace CommonHelper.Helper.EFRepository
     /// 通用的数据操作基类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class BaseRepository<TEntity, TParams, TOrderBy, TSetNullParams> where TEntity : class where TParams : class where TOrderBy : class where TSetNullParams :class
+    public abstract class BaseRepository<TEntity, TParams, TSetNullParams> where TEntity : class where TParams : class where TSetNullParams :class
     {
         /// <summary>
         /// 分布式雪花id生成器
@@ -456,26 +456,11 @@ namespace CommonHelper.Helper.EFRepository
         /// 设置查询时的筛选条件
         /// </summary>
         /// <param name="query">查询对象</param>
-        /// <param name="paramz">筛选条件</param>
+        /// <param name="paramz">查询参数</param>
+        /// <param name="neqArgs">不等查询参数</param>
+        /// <param name="baseVal">基准值，仅在跨库分页查询时使用</param>
         /// <returns></returns>
         protected abstract IQueryable<TEntity> Query(IQueryable<TEntity> query, TParams paramz, TParams neqArgs);
-
-        /// <summary>
-        /// 获取排序的列和排序的类型
-        /// </summary>
-        /// <param name="paramz">查询参数，含排序参数</param>
-        /// <param name="orderType">返回排序类型，true：升序、false：降序</param>
-        /// <returns>返回排序列</returns>
-        protected abstract Func<TEntity, IComparable> GetOrderColAndOrderType(TParams paramz,out bool orderType);
-
-        /// <summary>
-        /// 获取betweenAnd条件
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="paramz"></param>
-        /// <param name="baseExtremum"></param>
-        /// <param name="otherExtremum"></param>
-        protected abstract IQueryable<TEntity> GetBetweenAnd(IQueryable<TEntity> query, TParams paramz,IComparable baseExtremum, IComparable otherExtremum);
 
         /// <summary>
         /// 查询符合查询条件的数据量
@@ -556,6 +541,21 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
+        /// 获取跨库查询所需的表达式
+        /// </summary>
+        /// <returns></returns>
+        protected abstract DisPageEntity<TEntity> GetDisPageEntity();
+
+        /// <summary>
+        /// 跨库分页时，基准值查询
+        /// </summary>
+        /// <param name="paramz">查询参数，判断排序的重要依据</param>
+        /// <param name="baseVal">基准值，缩小查询范围</param>
+        /// <param name="queryType">查询类型，0：查询基准值跳过的数据量，1：查询比基准值大，并当中含有合适的基准值</param>
+        /// <returns></returns>
+        protected abstract Expression<Func<TEntity, IComparable>> BaseValQuery(TParams paramz,IComparable baseVal,int queryType);
+
+        /// <summary>
         /// 普通的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
         /// </summary>
         /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
@@ -590,11 +590,11 @@ namespace CommonHelper.Helper.EFRepository
             //多个数据源的分页（需改成按比例）
             else if (dbContexts.Count > 1)
             {
-                int sumSkipCount = (pageIndex-1)* pageSize;
-                int totalCount = 0;
-                List<int> counts = new List<int>();
-                List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
-                for (int i=0,count,len= dbContexts.Count; i<len; i++)
+                int sumSkipCount = (pageIndex - 1) * pageSize; //期望的总跳过数据量
+                int totalCount = 0; //符合条件的总数据量
+                List<int> counts = new List<int>(); //各个数据源的符合条件数据
+                List<BaseDbContext> baseDbContextList = new List<BaseDbContext>(); //含有符合条件数据的数据库
+                for (int i = 0, count, len = dbContexts.Count; i < len; i++)
                 {
                     IQueryable<TEntity> query = Query(dbContexts[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
                     count = query.Count();
@@ -605,48 +605,61 @@ namespace CommonHelper.Helper.EFRepository
                         baseDbContextList.Add(dbContexts[i]);
                     }
                 }
-                List<List<IComparable>> allComparableList = new List<List<IComparable>>();
-                List<IComparable> comparableList;
-                bool orderType;
-                Func<TEntity, IComparable> orderCol = GetOrderColAndOrderType(eqArgs,out orderType);
-                int tempSumSkip = 0;
-                int takeSum = 0;
-                for (int i = 0, len = baseDbContextList.Count; i < len; i++)
+                bool orderType = true;
+                IComparable comparable; //临时变量
+                DisPageEntity<TEntity> disPageEntity = GetDisPageEntity();
+                List <IComparable> sortList = new List<IComparable>();
+                for (int i = 0, len = dbContexts.Count; i < len; i++)
                 {
                     IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    comparableList = query.Select(orderCol).Skip(tempSumSkip += (counts[i]* sumSkipCount / totalCount)).Take(pageSize).ToList();
-                    takeSum += comparableList.Count;
-                    allComparableList.Add(comparableList);
+                    comparable = query.Select(disPageEntity.OrderColLazy).Skip(counts[i] * sumSkipCount / totalCount).Take(1).FirstOrDefault();
+                    if (comparable != null)
+                    {
+                        sortList.Add(comparable);
+                    }
                 }
-                IComparable baseExtremum= allComparableList[0][0];
-                foreach (List<IComparable> comparable in allComparableList)
+                sortList.Sort();
+                IComparable baseVal = sortList[orderType ? 0 : sortList.Count - 1]; //得到基准值
+                int baseValSkip = 0; //基准值跳过数据量
+                for (int i = 0, len = dbContexts.Count; i < len; i++)
                 {
-                    if (orderType && comparable[0].CompareTo(baseExtremum) < 0)
-                    {
-                        baseExtremum = comparable[0];
-                    }
-                    else if(comparable[0].CompareTo(baseExtremum) > 0)
-                    {
-                        baseExtremum = comparable[0];
-                    }
+                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    baseValSkip += query.Select(disPageEntity.OrderColLazy).Count();
+                    
                 }
+                int restSkipCount = sumSkipCount - baseValSkip; //剩余需要跳过的数据量
+                sortList.Clear();
+                for (int i = 0, len = dbContexts.Count; i < len; i++)
+                {
+                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    query = query.Where(BaseValQuery(eqArgs,baseVal,0));
+                    sortList.AddRange(query.Select(disPageEntity.OrderColLazy).Take(restSkipCount).ToList());
+                }
+                sortList.Sort();
+                baseVal = sortList[orderType ? restSkipCount : sortList.Count - restSkipCount - 1]; //得到基准值,
                 List<TEntity> entities = new List<TEntity>();
-                for (int i = 0, len = baseDbContextList.Count; i < len; i++)
+                for (int i = 0, len = dbContexts.Count; i < len; i++)
                 {
                     IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    query = GetBetweenAnd(query, eqArgs, baseExtremum, allComparableList[i][allComparableList.Count - 1]);
-                    entities.AddRange(query.ToList());
+                    entities.AddRange(query.Take(pageSize).ToList());
                 }
-                entities = (orderType ? entities.OrderBy(orderCol):entities.OrderByDescending(orderCol)).Skip(sumSkipCount- tempSumSkip +entities.Count- takeSum).Take(pageSize).ToList();
+                if (orderType)
+                {
+                    entities = entities.OrderBy(disPageEntity.OrderCol).Take(pageSize).ToList();
+                }
+                else
+                {
+                    entities = entities.OrderByDescending(disPageEntity.OrderCol).Take(pageSize).ToList();
+                }
                 return new MyPagedList<TEntity>
                 {
                     PageDataList = entities,
                     CurrentPageIndex = pageIndex,
-                    EndItemIndex = pageIndex * pageSize+ entities.Count,
+                    EndItemIndex = pageIndex * pageSize + entities.Count,
                     PageSize = pageSize,
-                    StartItemIndex = pageIndex*pageSize+1,
+                    StartItemIndex = pageIndex * pageSize + 1,
                     TotalItemCount = totalCount,
-                    TotalPageCount = (totalCount - totalCount%pageSize)/pageSize+1
+                    TotalPageCount = (totalCount - totalCount % pageSize) / pageSize + 1
                 };
             }
             throw new Exception("没有找到数据源，请确保“CreateAllDbContext”方法正确实现。");

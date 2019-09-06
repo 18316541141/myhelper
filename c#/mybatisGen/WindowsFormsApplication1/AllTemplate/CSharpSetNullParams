@@ -7,7 +7,7 @@ namespace WebApplication1.Entity
 	/// <summary>
 	/// $entity.EntityNotes$
 	/// </summary>
-    public partial sealed class $entity.EntityName$SetNullParams
+    public sealed partial class $entity.EntityName$SetNullParams
     {
         public $entity.EntityName$SetNullParams() { }
 	$entity.PropList:{$if(it.ParamsTypeIsEqual)$
@@ -16,13 +16,13 @@ namespace WebApplication1.Entity
         /// <summary>
 		/// $it.PropNotes$
 		/// </summary>
-        public virtual $it.PropType$ $it.PropName$ { set; get; }
+        public $it.PropType$ $it.PropName$ { set; get; }
         $else$
 
 		/// <summary>
 		/// $it.PropNotes$
 		/// </summary>
-		public virtual bool $it.PropName$ { set; get; }
+		public bool $it.PropName$ { set; get; }
         $endif$
 	$endif$}$
     }

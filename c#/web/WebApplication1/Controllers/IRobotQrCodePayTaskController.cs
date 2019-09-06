@@ -27,6 +27,7 @@ namespace WebApplication1.Controllers
         /// <param name="currentPageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
+        [Compress]
         public JsonResult Page(IRobotQrCodePayTaskParams param, int currentPageIndex = 1, int pageSize = 20)
         {
             return MyJson(new Result {code=0,data= IRobotQrCodePayTaskService.Page(param, currentPageIndex, pageSize) });

@@ -21,11 +21,6 @@ namespace WebApplication1.Controllers.Common
         public RealTimeInitService RealTimeInitService { set; get; }
 
         /// <summary>
-        /// 上传文件所允许的路径
-        /// </summary>
-        public static HashSet<string> _allowPath { set; get; }
-
-        /// <summary>
         /// 等待池表
         /// </summary>
         public static HashSet<string> WaitPoolSet { set; get; }
@@ -37,8 +32,6 @@ namespace WebApplication1.Controllers.Common
 
         static IndexController()
         {
-            _allowPath = new HashSet<string>();
-            _allowPath.Add("test");
 
             WaitPoolSet = new HashSet<string>();
             WaitPoolSet.Add("newsAlarm");
@@ -50,6 +43,7 @@ namespace WebApplication1.Controllers.Common
         /// 加载登陆后数据
         /// </summary>
         /// <returns></returns>
+        [Compress]
         public JsonResult LoadLoginData()
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
@@ -148,6 +142,7 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         /// <param name="version"></param>
         /// <returns></returns>
+        [Compress]
         public JsonResult LoadNewsAlarm()
         {
             return MyJson(new Result { code = 0, data = SystemService.LoadNewsAlarm() });
@@ -157,6 +152,7 @@ namespace WebApplication1.Controllers.Common
         /// 加载树节点测试方法，正式上线时删除
         /// </summary>
         /// <returns></returns>
+        [Compress]
         public JsonResult LoadTreeNode()
         {
             List<TreeFormNode> treeNodeList = new List<TreeFormNode>();
@@ -275,39 +271,32 @@ namespace WebApplication1.Controllers.Common
         /// <returns></returns>
         [SizeFilter(Size = 3145728, Msg = "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
         [OperCount(CountLimit = 10,ClearMillisecond = 60000)]
-        public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload, string pathName)
+        public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload)
         {
-            if (_allowPath.Contains(pathName))
+            Image image = null;
+            try
             {
-                Image image = null;
-                try
+                image = Image.FromStream(fileUpload.InputStream);
+            }
+            catch
+            {
+                return MyJson(new Result { code = -1, msg = "上传的文件可能不是图片文件，无法处理。" });
+            }
+            try
+            {
+                string imgName = FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}");
+                using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{s}{imgName}"))
                 {
-                    image = Image.FromStream(fileUpload.InputStream);
-                }
-                catch
-                {
-                    return MyJson(new Result { code = -1, msg = "上传的文件可能不是图片文件，无法处理。" });
-                }
-                try
-                {
-                    string imgName = FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
-                    using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}"))
+                    using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
                     {
-                        using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
-                        {
-                            string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}");
-                            return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } });
-                        }
+                        string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}");
+                        return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } });
                     }
                 }
-                catch (Exception ex)
-                {
-                    return MyJson(new Result { code = -1, msg = ex.Message });
-                }
             }
-            else
+            catch (Exception ex)
             {
-                return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" });
+                return MyJson(new Result { code = -1, msg = ex.Message });
             }
         }
 
@@ -319,22 +308,14 @@ namespace WebApplication1.Controllers.Common
         /// <returns></returns>
         [SizeFilter(Size = 52428800, Msg = "上传文件大小不能超过50M，可通过压缩减少文件大小。")]
         [OperCount(CountLimit = 100, ClearMillisecond = 60000)]
-        public JsonResult UploadFiles(HttpPostedFileBase fileUploads, string pathName)
+        public JsonResult UploadFiles(HttpPostedFileBase fileUploads)
         {
-            if (_allowPath.Contains(pathName))
-            {
-                return MyJson(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, $"{Server.MapPath("~/uploadFiles/")}{pathName}") });
-            }
-            else
-            {
-                return MyJson(new Result { code = -1, msg = "该路径不允许上传文件。" });
-            }
+            return MyJson(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, $"{Server.MapPath("~/uploadFiles/")}") });
         }
 
         /// <summary>
         /// 切割单张图片
         /// </summary>
-        /// <param name="pathName">图片路径名称</param>
         /// <param name="imgName">图片名称</param>
         /// <param name="imgWidth">图片宽度</param>
         /// <param name="imgHeight">图片高度</param>
@@ -342,9 +323,9 @@ namespace WebApplication1.Controllers.Common
         /// <param name="y">左上角切点y坐标</param>
         /// <param name="w">切割宽度</param>
         /// <param name="h">切割高度</param>
-        public JsonResult SingleImageCrop(string pathName, string imgName, int imgWidth, int imgHeight, int x, int y, int w, int h)
+        public JsonResult SingleImageCrop(string imgName, int imgWidth, int imgHeight, int x, int y, int w, int h)
         {
-            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
+            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{s}{imgName}";
             if (System.IO.File.Exists(imgPath))
             {
                 Bitmap bitmap = null;
@@ -370,8 +351,8 @@ namespace WebApplication1.Controllers.Common
                                     code = 0,
                                     data = new
                                     {
-                                        thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}"),
-                                        imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}{pathName}")
+                                        thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}"),
+                                        imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}")
                                     }
                                 });
                             }
@@ -395,11 +376,11 @@ namespace WebApplication1.Controllers.Common
         /// <param name="pathName">图片路径名称</param>
         /// <param name="imgName">图片名称</param>
         [AllowAnonymous]
-        [Sign(new string[] { "createDate", "r" , "pathName", "imgName" })]
+        [Sign(new string[] { "createDate", "r" ,"imgName" })]
         [OutputCache(Duration = int.MaxValue)]
-        public void AnonymousShowImage(string pathName, string imgName)
+        public void AnonymousShowImage(string imgName)
         {
-            ShowImage(pathName, imgName);
+            ShowImage(imgName);
         }
 
         /// <summary>
@@ -408,11 +389,11 @@ namespace WebApplication1.Controllers.Common
         /// <param name="imgName">图片名称</param>
         /// </summary>
         [OutputCache(Duration = int.MaxValue)]
-        public void ShowImage(string pathName, string imgName)
+        public void ShowImage(string imgName)
         {
             Response.ContentType = "image/jpeg";
-            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{imgName}";
-            if (_allowPath.Contains(pathName) && System.IO.File.Exists(imgPath))
+            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{s}{imgName}";
+            if (System.IO.File.Exists(imgPath))
             {
                 using (Stream stream = System.IO.File.OpenRead(imgPath))
                 {
@@ -430,6 +411,7 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         /// <returns></returns>
         [OutputCache(Duration = int.MaxValue)]
+        [Compress]
         public JsonResult AreaSelect()
         {
             return MyJson(new Result { code = 0, data = SystemService.LoadAreaTree() });
@@ -443,10 +425,10 @@ namespace WebApplication1.Controllers.Common
         /// <param name="fileDesc">文件的中文描述</param>
         /// <returns></returns>
         [OutputCache(Duration = int.MaxValue)]
-        public FilePathResult DownFile(string pathName, string fileName, string fileDesc)
+        public FilePathResult DownFile(string fileName, string fileDesc)
         {
-            string filePath = $"{Server.MapPath("~/uploadFiles/")}{pathName}{Path.DirectorySeparatorChar}{fileName}";
-            if (_allowPath.Contains(pathName) && System.IO.File.Exists(filePath))
+            string filePath = $"{Server.MapPath("~/uploadFiles/")}{s}{fileName}";
+            if (System.IO.File.Exists(filePath))
             {
                 return File(filePath, MimeMapping.GetMimeMapping(filePath), fileDesc);
             }

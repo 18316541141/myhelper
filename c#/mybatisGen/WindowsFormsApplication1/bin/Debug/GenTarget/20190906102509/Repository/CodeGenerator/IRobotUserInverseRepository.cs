@@ -12,18 +12,18 @@ using WebApplication1.Entity;
 using WebApplication1.Params;
 namespace WebApplication1.Repository
 {
-    public partial sealed class IRobotErrorMsgInverseRepository : InverseRepository<IRobotErrorMsg>
+    public sealed partial class IRobotUserInverseRepository : InverseRepository<IRobotUser>
     {
 		/// <summary>
         /// 分布式插入数据的反操作。当事务失败时调用
         /// </summary>
         /// <param name="entity">实体对象</param>
-		public override void DistributedInsertInverse(DistributedTransactionPart distributedTransactionPart)
+		public override void DistributedDeleteInverse(DistributedTransactionPart distributedTransactionPart)
 		{
 			using (BaseDbContext dbContext = CreateDbContext())
             {
 				DistributedTransactionPart updateBefore=new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
-				dbContext.Entry(new IRobotErrorMsg{ IEErrNo = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
+				dbContext.Entry(new IRobotUser{ IUId = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
 				dbContext.Set<DistributedTransactionPart>().Attach(updateBefore);
 				updateBefore.TransactionStatus = 2;
 				dbContext.SaveChanges();
@@ -34,14 +34,14 @@ namespace WebApplication1.Repository
         /// 分布式批量更新数据的反向操作。当事务失败时调用
         /// </summary>
         /// <param name="entity">实体对象</param>
-		public override void DistributedInsertInverse(List<DistributedTransactionPart> distributedTransactionParts)
+		public override void DistributedDeleteInverse(List<DistributedTransactionPart> distributedTransactionParts)
 		{
 			using (BaseDbContext dbContext = CreateDbContext())
             {
 				foreach(var distributedTransactionPart in distributedTransactionParts)
 				{
 					DistributedTransactionPart updateBefore=new DistributedTransactionPart{ Id = distributedTransactionPart.Id };
-					dbContext.Entry(new IRobotErrorMsg{ IEErrNo = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
+					dbContext.Entry(new IRobotUser{ IUId = distributedTransactionPart.TransPrimaryKeyVal }).State = EntityState.Deleted;
 					dbContext.Set<DistributedTransactionPart>().Attach(updateBefore);
 					updateBefore.TransactionStatus = 2;
 				}

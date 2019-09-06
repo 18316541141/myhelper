@@ -1093,7 +1093,7 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadImageTemplate').html(),
-        scope: { path: "@", cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
+        scope: { cut: "@", widthOverHeight: "@", minWidth: "@", maxWidth: "@", imgName: "=", thumbnailName: "=" },
         controller: function ($scope, layer, $timeout, $myHttp) {
             $scope.id = new UUID().id;
             $scope.isUploaded = false;
@@ -1102,7 +1102,6 @@ myApp.factory('$realTime', function ($http) {
                 var select = $scope.jcropApi.tellSelect();
                 var $img = $($scope.img);
                 $myHttp.post('/index/singleImageCrop',{
-                    pathName: $scope.path, 
                     imgName: $scope.imgName,
                     imgWidth: $img.width(), 
                     imgHeight: $img.height(), 
@@ -1116,7 +1115,7 @@ myApp.factory('$realTime', function ($http) {
                     var data=response.data;
                     $scope.imgName = data.imgName;
                     $scope.thumbnailName = data.thumbnailName;
-                    $scope.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
+                    $scope.src = '/index/showImage?imgName=' + $scope.imgName;
                 });
             };
             $timeout(function () {
@@ -1125,7 +1124,6 @@ myApp.factory('$realTime', function ($http) {
                     auto: true,//选中文件后自动上传
                     server: '/index/uploadSingleImage',//处理上传文件的统一控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
-                    formData: { pathName: $scope.path },//每次上传时要提供一个上传目录，让服务端确认保存位置
                     duplicate: true,
                     pick: {
                         id: '#uploadImage' + $scope.id,//生成上传插件的位置
@@ -1147,7 +1145,7 @@ myApp.factory('$realTime', function ($http) {
                         var data = response.data;
                         $scope.imgName = data.imgName;
                         $scope.thumbnailName = data.thumbnailName;
-                        $scope.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
+                        $scope.src = '/index/showImage?imgName=' + $scope.imgName;
                         if ($scope.cut === 'true') {
                             $scope.cropLayer = layer.ngOpen({
                                 type: 1,
@@ -1173,7 +1171,7 @@ myApp.factory('$realTime', function ($http) {
                                             $scope.jcropApi = this
                                         });
                                     };
-                                    $scope.img.src = '/index/showImage?pathName=' + $scope.path + '&imgName=' + $scope.imgName;
+                                    $scope.img.src = '/index/showImage?imgName=' + $scope.imgName;
                                 }
                             });
                         }
@@ -1360,7 +1358,7 @@ myApp.factory('$realTime', function ($http) {
     return {
         restrict: 'EA',
         template: $('#uploadFilesTemplate').html(),
-        scope: { fileDescMaxWidth: "@", path: "@", files:"=" },
+        scope: { fileDescMaxWidth: "@", files:"=" },
         controller: function ($scope, $timeout, $myHttp) {
             $scope.id = new UUID().id;
             $scope.files = [];
@@ -1387,7 +1385,6 @@ myApp.factory('$realTime', function ($http) {
             //下载文件
             $scope.downFile = function (x) {
                 postOpenWin('/index/downFile', {
-                    pathName: $scope.path,
                     fileName: x.fileName,
                     fileDesc: x.fileDesc
                 });
@@ -1424,9 +1421,6 @@ myApp.factory('$realTime', function ($http) {
                     server: '/index/uploadFiles',//统一上传的控制器
                     pick: { id: '#uploadFiles' + $scope.id},//上传域的id
                     fileVal: 'fileUploads',//上传流文件的参数名
-                    formData: {
-                        pathName: $scope.path //上传时的路径参数
-                    }
                 }).on('uploadStart', function (file) {
                     var files = $scope.files;
                     fileMap[file.id] = files.length;

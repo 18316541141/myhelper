@@ -21,13 +21,6 @@ namespace WebApplication1
             singleUserAttribute.IgnoreRequests.Add("/Index/AnonymousShowImage".ToLower());
             filters.Add(singleUserAttribute);
             #endregion
-
-            CompressAttribute compressAttribute = new CompressAttribute();
-            compressAttribute.IgnoreRequests.Add("/index/showImage".ToLower());
-            compressAttribute.IgnoreRequests.Add("/Index/AnonymousShowImage".ToLower());
-            compressAttribute.IgnoreRequests.Add("/index/downFile".ToLower());
-            compressAttribute.IgnoreRequests.Add("/session/verificationCode".ToLower());
-            filters.Add(compressAttribute);
             filters.Add(new MyErrorAttribute());
             //filters.Add(new HandleErrorAttribute());
         }

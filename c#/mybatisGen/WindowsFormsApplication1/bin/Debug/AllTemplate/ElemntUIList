@@ -127,8 +127,9 @@ export default {
 ------------------------------------------------------------------------------------------------------
 		mounted(){
 			//校验
-			this.$validator.localize('zh_CN',{
+			this.\$validator.localize('zh_CN',{
 				custom:{
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 					'formData.$it.PropName$':{
 						required:'$it.PropNotes$不能为空',
 						max(fieldName,replaceArray){
@@ -138,6 +139,7 @@ export default {
 							
 						}
 					}
+				$endif$}$
 				}
 			});
 		},
@@ -147,13 +149,13 @@ export default {
         导出excel
         
 			exportExcel(command){
-				this.$refs.table.export(command);
+				this.\$refs.table.export(command);
 			}
 			  保存表单
 			 
 			onSubmit(){
 				//校验
-				this.$validateForm(()=>{
+				this.\$validateForm(()=>{
 					if(this.formData.$entity.KeyName$===null){
 						this.\$post('/api/$entity.EntityName$/add',this.formData,function(result){
 							if(result.code===0){

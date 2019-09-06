@@ -6,7 +6,6 @@
         <!--
             上传图片的组件
             id：上传图组件的唯一id
-            path：上传的路径（可能项目有多个上传路径，每个功能一个路径，用于区分）
             cut：是否需要裁剪
             width-over-height：裁剪框宽高比
             min-width：裁剪框最小宽度
@@ -14,8 +13,8 @@
             img-name： 这是和父controller共用的数据，用于表示上传后的图片名称
             thumbnail-name： 这是和父controller共用的数据，用于表示上传后的缩略图名称
         -->
-        <div upload-image path="test" cut="true" width-over-height="2" min-width="100" max-width="300" img-name="imgName" thumbnail-name="thumbnailName"></div>
-        <div upload-image path="test" cut="true" width-over-height="2" min-width="100" max-width="300" img-name="imgName2" thumbnail-name="thumbnailName2"></div>
+        <div upload-image cut="true" width-over-height="2" min-width="100" max-width="300" img-name="imgName" thumbnail-name="thumbnailName"></div>
+        <div upload-image cut="true" width-over-height="2" min-width="100" max-width="300" img-name="imgName2" thumbnail-name="thumbnailName2"></div>
         <button type="button" class="layui-btn" ng-click="testImg();">测试</button>
 
     </form>

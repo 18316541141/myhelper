@@ -17,7 +17,7 @@ namespace WebApplication1.Repository
 {
 	//启用分布式事务
     //[Intercept(typeof(DistributeRepository))]
-    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy,$entity.EntityName$SetNullParams>
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$SetNullParams>
     {
 		/// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -56,6 +56,8 @@ namespace WebApplication1.Repository
                     query = query.Where(a => a.$it.SrcPropName$.Contains(eqArgs.$it.PropName$));
                 }
 			$endif$$endif$}$
+				query = OrderByAsc(query, eqArgs.orderByAsc);
+                query = OrderByDesc(query, eqArgs.orderByDesc);
             }
 			if(neqArgs != null){
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
@@ -71,8 +73,6 @@ namespace WebApplication1.Repository
 					query = query.Where(a => !a.$it.SrcPropName$.Contains(neqArgs.$it.PropName$));
 				}
 			$endif$$endif$}$
-				query = OrderByAsc(query, eqArgs.orderByAsc);
-                query = OrderByDesc(query, eqArgs.orderByDesc);
 			}
             return query;
         }

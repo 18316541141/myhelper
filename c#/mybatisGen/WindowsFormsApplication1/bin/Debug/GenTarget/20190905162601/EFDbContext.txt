@@ -1,7 +1,0 @@
-﻿/// <summary>
-/// 
-/// </summary>
-public DbSet<IRobotErrorMsg> IRobotErrorMsgs { set; get; }
-
-
-modelBuilder.Configurations.Add(new IRobotErrorMsgMap());

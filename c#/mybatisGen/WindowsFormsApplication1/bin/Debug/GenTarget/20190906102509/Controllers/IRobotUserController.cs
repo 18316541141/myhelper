@@ -9,77 +9,61 @@ namespace WebApplication1.Controllers
 	/// <summary>
 	/// ***模块的控制器类
 	/// </summary>
-    public partial sealed class IRobotErrorMsgController : BaseController
+    public sealed partial class IRobotUserController : BaseController
     {
-		public IRobotErrorMsgService Service { set; get; }
+		public IRobotUserService Service { set; get; }
 
 		/*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
-		IRobotErrorMsg data = new IRobotErrorMsg
+		IRobotUser data = new IRobotUser
 		{
 
-					IEErrNo = Next(),
+					IUId = Next(),
+		
+					IUUsername = param.IUUsername,
 		
 		
-					IECreateDate = param.IECreateDate,
+					IUPassword = param.IUPassword,
 		
 		
-		
-					IEErrOrderNo = param.IEErrOrderNo,
-		
-		
-					IEErrRobotId = param.IEErrRobotId,
+					IUSignKey = param.IUSignKey,
 		
 		
-					IEErrPic = param.IEErrPic,
+					IUSignSecret = param.IUSignSecret,
 		
 		
-					IEErrContext = param.IEErrContext,
-		
-		
-					IEHandleStatus = param.IEHandleStatus,
-		
+					IUCreateDate = param.IUCreateDate,
 		
 		
 		
 		};
 ----------------------------------------------------------------------------------------------------------------------------
-		IRobotErrorMsgParams param = new IRobotErrorMsgParams
+		IRobotUserParams param = new IRobotUserParams
 		{
 
-			IEErrNo = param.IEErrNo,
+			IUId = param.IUId,
 		
-			IEErrNoLike = param.IEErrNoLike,
+			IUUsername = param.IUUsername,
 		
-			IECreateDate = param.IECreateDate,
+			IUUsernameLike = param.IUUsernameLike,
 		
-			IECreateDateStart = param.IECreateDateStart,
+			IUPassword = param.IUPassword,
 		
-			IECreateDateEnd = param.IECreateDateEnd,
+			IUPasswordLike = param.IUPasswordLike,
 		
-			IEErrOrderNo = param.IEErrOrderNo,
+			IUSignKey = param.IUSignKey,
 		
-			IEErrOrderNoLike = param.IEErrOrderNoLike,
+			IUSignKeyLike = param.IUSignKeyLike,
 		
-			IEErrRobotId = param.IEErrRobotId,
+			IUSignSecret = param.IUSignSecret,
 		
-			IEErrRobotIdLike = param.IEErrRobotIdLike,
+			IUSignSecretLike = param.IUSignSecretLike,
 		
-			IEErrPic = param.IEErrPic,
+			IUCreateDate = param.IUCreateDate,
 		
-			IEErrPicLike = param.IEErrPicLike,
+			IUCreateDateStart = param.IUCreateDateStart,
 		
-			IEErrContext = param.IEErrContext,
-		
-			IEErrContextLike = param.IEErrContextLike,
-		
-			IEHandleStatus = param.IEHandleStatus,
-		
-			IEHandleStatusStart = param.IEHandleStatusStart,
-		
-			IEHandleStatusEnd = param.IEHandleStatusEnd,
-		
-			IEHandleStatusChange = param.IEHandleStatusChange,
+			IUCreateDateEnd = param.IUCreateDateEnd,
 		
 		};
 ----------------------------------------------------------------------------------------------------------------------------
@@ -90,7 +74,8 @@ namespace WebApplication1.Controllers
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
-		public JsonResult Page(IRobotErrorMsgParams param,int currentPageIndex = 1,int pageSize = 20)
+		[Compress]
+		public JsonResult Page(IRobotUserParams param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			return MyJson(new Result{code = 0, data = Service.Page(param, currentPageIndex, pageSize)});
 		}
@@ -104,9 +89,10 @@ namespace WebApplication1.Controllers
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的导出结果</returns>
 		[OperInterval(IntervalMillisecond=10000)]
-		public ExcelResult<IRobotErrorMsg> Export(IRobotErrorMsgParams param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
+		[Compress]
+		public ExcelResult<IRobotUser> Export(IRobotUserParams param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
 		{
-			return new ExcelResult<IRobotErrorMsg>
+			return new ExcelResult<IRobotUser>
 			{
 				DataList = Service.Page(param, currentPageIndex, pageSize).pageDataList,
 				FileName = "测试excel."+excelType
@@ -122,26 +108,26 @@ namespace WebApplication1.Controllers
         /// <returns>返回***模块的导出结果</returns>
 		public JsonResult Import(HttpPostedFileBase fileUpload, 其他参数...)
 		{
-			List<IRobotErrorMsg> IRobotErrorMsgList;
+			List<IRobotUser> IRobotUserList;
             if (fileUpload.FileName.EndsWith("xlsx"))
             {
-                IRobotErrorMsgList = ExcelHelper.ExcelXlsxToList<IRobotErrorMsg>(fileUpload.InputStream);
+                IRobotUserList = ExcelHelper.ExcelXlsxToList<IRobotUser>(fileUpload.InputStream);
             }
             else if (fileUpload.FileName.EndsWith("xls"))
             {
-                IRobotErrorMsgList = ExcelHelper.ExcelXlsToList<IRobotErrorMsg>(fileUpload.InputStream);
+                IRobotUserList = ExcelHelper.ExcelXlsToList<IRobotUser>(fileUpload.InputStream);
             }
-			Service.AddBatch(IRobotErrorMsgList);
+			Service.AddBatch(IRobotUserList);
 			return MyJson(new Result { code = 0, msg = "导入成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 根据主键删除指定数据
         /// </summary>
-        /// <param name="IEErrNo">删除数据的主键</param>
-		public JsonResult Del(long IEErrNo)
+        /// <param name="IUId">删除数据的主键</param>
+		public JsonResult Del(long IUId)
 		{
-            Service.Del(IEErrNo);
+            Service.Del(IUId);
 			return MyJson(new Result { code = 0, msg = "数据已删除。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
@@ -149,7 +135,7 @@ namespace WebApplication1.Controllers
         /// 新增一条数据
         /// </summary>
         /// <param name="data">新增的数据</param>
-		public JsonResult Add(IRobotErrorMsg data)
+		public JsonResult Add(IRobotUser data)
 		{
 			Service.Add(data);
 			return MyJson(new Result { code = 0, msg = "保存成功。"});
@@ -159,7 +145,7 @@ namespace WebApplication1.Controllers
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public JsonResult ChangeStatus(IRobotErrorMsg datas)
+		public JsonResult ChangeStatus(IRobotUser datas)
 		{
 			return MyJson(new Result { code = 0,msg=$"修改成功，共{Service.ChangeStatus(datas)}条。"});
 		}
@@ -167,18 +153,18 @@ namespace WebApplication1.Controllers
 		/// <summary>
         /// 根据主键id查询***模块的数据实体
         /// </summary>
-        /// <param name="IEErrNo">主键id</param>
+        /// <param name="IUId">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public JsonResult Load(long IEErrNo)
+		public JsonResult Load(long IUId)
 		{
-			return MyJson(new Result { code = 0, data = Service.Load(IEErrNo) });
+			return MyJson(new Result { code = 0, data = Service.Load(IUId) });
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public JsonResult DelBatch(List<IRobotErrorMsg> datas)
+		public JsonResult DelBatch(List<IRobotUser> datas)
 		{
 			return MyJson(new Result { code = 0 ,msg = $"删除成功，共{Service.DelBatch(datas)}条。" });
 		}

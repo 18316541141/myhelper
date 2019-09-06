@@ -7,7 +7,6 @@
             upload-files 是一个批量上传多个文件的控件
             id：当前上传控件的唯一id
             file-desc-max-width：上传文件的名称显示列的最大宽度
-            path：上传路径
             files：这是和父controller共用的数据，里面包含：
                 fileDesc：文件本身的名称
                 fileName：文件上传后，在后台管理系统的名称，用于保存到数据库
@@ -16,6 +15,6 @@
                 isFinish：是否上传完毕
                 id：文件id，文件上传插件区分每个文件。
         -->
-        <div upload-files file-desc-max-width="200" path="test" files="files"></div>
+        <div upload-files file-desc-max-width="200" files="files"></div>
     </form>
 </div>
