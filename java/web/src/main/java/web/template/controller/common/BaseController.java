@@ -16,9 +16,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.ServletContextResource;
 
 import com.txj.common.SnowFlakeHelper;
+import com.txj.common.entity.Result;
+import com.txj.common.exception.ResultException;
 
-import web.template.entity.common.Result;
-import web.template.exception.ResultException;
 import web.template.view.MyExcelView;
 
 /**

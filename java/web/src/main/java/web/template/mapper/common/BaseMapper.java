@@ -2,7 +2,7 @@ package web.template.mapper.common;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-import web.template.entity.common.MyPagedList;
+import com.txj.common.entity.MyPagedList;
 /**
  * 操作数据库的mapper
  * @author admin

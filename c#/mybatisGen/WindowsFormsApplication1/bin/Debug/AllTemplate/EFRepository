@@ -13,11 +13,12 @@ using WebApplication1.Entity;
 using WebApplication1.Params;
 using CommonHelper.staticVar;
 using CommonHelper.EFRepository;
+using System.Linq.Expressions;
 namespace WebApplication1.Repository
 {
 	//启用分布式事务
     //[Intercept(typeof(DistributeRepository))]
-    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$OrderBy,$entity.EntityName$SetNullParams>
+    public partial class $entity.EntityName$Repository : BaseRepository<$entity.EntityName$,$entity.EntityName$Params,$entity.EntityName$SetNullParams>
     {
 		/// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -56,6 +57,7 @@ namespace WebApplication1.Repository
                     query = query.Where(a => a.$it.SrcPropName$.Contains(eqArgs.$it.PropName$));
                 }
 			$endif$$endif$}$
+				query = OrderBy(query, eqArgs);
             }
 			if(neqArgs != null){
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
@@ -71,54 +73,42 @@ namespace WebApplication1.Repository
 					query = query.Where(a => !a.$it.SrcPropName$.Contains(neqArgs.$it.PropName$));
 				}
 			$endif$$endif$}$
-				query = OrderByAsc(query, eqArgs.orderByAsc);
-                query = OrderByDesc(query, eqArgs.orderByDesc);
 			}
             return query;
         }
 
 		/// <summary>
-        /// 升序排序的查询参数设置，当对应字段的升序设置为true时才会对
-		/// 该字段升序。
-        /// </summary>
-        /// <param name="query">待设置升序参数的query对象</param>
-        /// <param name="orderBy">装载升序参数的实体类</param>
-        /// <returns>返回设置好升序参数的query对象</returns>
-        IQueryable<$entity.EntityName$> OrderByAsc(IQueryable<$entity.EntityName$> query, $entity.EntityName$OrderBy orderBy)
-        {
-            if (orderBy != null)
-            {
-			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
-
-				if (orderBy.$it.PropName$) { query = query.OrderBy(a => a.$it.PropName$); }
-			$endif$}$
-            }
-            return query;
-        }
-
-		/// <summary>
-        /// 降序排序的查询参数设置，当对应字段的升序设置为true时才会对
+        /// 升序、降序排序的查询参数设置，当对应字段的升序设置为true时才会对
 		/// 该字段降序。
         /// </summary>
         /// <param name="query">待设置降序参数的query对象</param>
         /// <param name="orderBy">装载降序参数的实体类</param>
         /// <returns>返回设置好降序参数的query对象</returns>
-        IQueryable<$entity.EntityName$> OrderByDesc(IQueryable<$entity.EntityName$> query, $entity.EntityName$OrderBy orderBy)
+        IQueryable<$entity.EntityName$> OrderBy(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params eqArgs)
         {
+			$entity.EntityName$OrderBy orderBy = eqArgs.orderByAsc;
+			if (orderBy != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+
+				if (orderBy.$it.PropName$) { return query = query.OrderBy(a => a.$it.PropName$); }
+			$endif$};separator="else "$
+            }
+			orderBy = eqArgs.orderByDesc;
             if (orderBy != null)
             {
 			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
-				if (orderBy.$it.PropName$) { query = query.OrderByDescending(a => a.$it.PropName$); }
+				if (orderBy.$it.PropName$) { return query = query.OrderByDescending(a => a.$it.PropName$); }
 			$endif$};separator="else "$
 				else
 				{
-					query = query.OrderByDescending(a => a.$entity.KeyName$);
+					return query = query.OrderByDescending(a => a.$entity.KeyName$);
 				}
             }
             else
             {
-                query = query.OrderByDescending(a => a.$entity.KeyName$);
+                return query = query.OrderByDescending(a => a.$entity.KeyName$);
             }
             return query;
         }
@@ -186,14 +176,121 @@ namespace WebApplication1.Repository
             return baseDbContextList;
         }
 
-        protected override Func<$entity.EntityName$, IComparable> GetOrderColAndOrderType($entity.EntityName$Params paramz, out bool orderType)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// 获取跨库查询所需的表达式
+        /// </summary>
+        /// <returns></returns>
+        protected override DisPageEntity<$entity.EntityName$> GetDisPageEntity($entity.EntityName$Params paramz)
+		{
+			DisPageEntity<$entity.EntityName$> disPageEntity = new DisPageEntity<$entity.EntityName$>();
+			$entity.EntityName$OrderBy orderBy = paramz.orderByAsc;
+			if (orderBy != null)
+            {
+				disPageEntity.OrderType = true;
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+				if (orderBy.$it.PropName$) 
+				{
+					disPageEntity.OrderCol= a => a.$it.PropName$;
+					disPageEntity.OrderColLazy = a => a.$it.PropName$;
+					return disPageEntity;
+				}
+			$endif$}$
+            }
+			disPageEntity.OrderType = false;
+			orderBy = paramz.orderByDesc;
+			if (orderBy != null)
+			{
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
-        protected override IQueryable<$entity.EntityName$> GetBetweenAnd(IQueryable<$entity.EntityName$> query, $entity.EntityName$Params paramz, IComparable baseExtremum, IComparable otherExtremum)
-        {
-            throw new NotImplementedException();
-        }
+				if (orderBy.$it.PropName$) 
+				{ 
+					disPageEntity.OrderCol= a => a.$it.PropName$;
+					disPageEntity.OrderColLazy = a => a.$it.PropName$;
+					return disPageEntity;
+				}
+			$endif$};separator="else "$
+				else
+				{
+					disPageEntity.OrderCol= a => a.$entity.KeyName$;
+					disPageEntity.OrderColLazy = a => a.$entity.KeyName$;
+					return disPageEntity;
+				}
+			}
+			else
+			{
+				disPageEntity.OrderCol= a => a.$entity.KeyName$;
+				disPageEntity.OrderColLazy = a => a.$entity.KeyName$;
+				return disPageEntity;
+			}
+			return null;
+		}
+
+		/// <summary>
+        /// 跨库分页时，基准值查询
+        /// </summary>
+        /// <param name="paramz">查询参数，判断排序的重要依据</param>
+        /// <param name="baseVal">基准值，缩小查询范围</param>
+        /// <param name="queryType">查询类型，0：查询基准值跳过的数据量，1：查询比基准值大，并当中含有合适的基准值</param>
+        /// <returns></returns>
+        protected override Expression<Func<$entity.EntityName$, bool>> BaseValQuery($entity.EntityName$Params paramz,IComparable baseVal,int queryType)
+		{
+			$entity.EntityName$OrderBy orderBy = paramz.orderByAsc;
+			if (orderBy != null)
+            {
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+				if (orderBy.$it.PropName$) 
+				{
+					if(queryType==0)
+					{
+						return a=> baseVal.CompareTo(a.$it.PropName$) > 0;
+					}
+					else if (queryType==1)
+					{
+						return a=> baseVal.CompareTo(a.$it.PropName$) < 0;
+					}
+				}
+			$endif$}$
+            }
+			orderBy = paramz.orderByDesc;
+			if (orderBy != null)
+			{
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+				if (orderBy.$it.PropName$) 
+				{ 
+					if(queryType==0)
+					{
+						return a=> baseVal.CompareTo(a.$it.PropName$) < 0;
+					}
+					else if (queryType==1)
+					{
+						return a=> baseVal.CompareTo(a.$it.PropName$) > 0;
+					}
+				}
+			$endif$};separator="else "$
+				else
+				{
+					if(queryType==0)
+					{
+						return a=> baseVal.CompareTo(a.$entity.KeyName$) < 0;
+					}
+					else if (queryType==1)
+					{
+						return a=> baseVal.CompareTo(a.$entity.KeyName$) > 0;
+					}
+				}
+			}
+			else
+			{
+				if(queryType==0)
+				{
+					return a=> baseVal.CompareTo(a.$entity.KeyName$) < 0;
+				}
+				else if (queryType==1)
+				{
+					return a=> baseVal.CompareTo(a.$entity.KeyName$) > 0;
+				}
+			}
+		}
+		return null;
     }
 }

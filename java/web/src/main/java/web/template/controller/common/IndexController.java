@@ -27,8 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.txj.common.FileHelper;
 import com.txj.common.ImageHandleHelper;
 import com.txj.common.ThreadHelper;
+import com.txj.common.entity.Result;
 
-import web.template.entity.common.Result;
 import web.template.entity.common.TreeFormNode;
 import web.template.service.common.RealTimeInitService;
 import web.template.service.common.SystemService;
@@ -43,13 +43,11 @@ public class IndexController extends BaseController {
 	@Autowired
 	private RealTimeInitService realTimeInitService;
 
-	private Set<String> allowPath;
-
 	/**
 	 * 等待池表
 	 */
 	public Set<String> waitPoolSet;
-
+	
 	/**
 	 * 用户和等待池表，确保每个用户只能在同一个等待池上等待。
 	 */
@@ -62,9 +60,6 @@ public class IndexController extends BaseController {
 	public IndexController() {
 		waitPoolSet = new HashSet<String>();
 		waitPoolSet.add("newsAlarm");
-
-		allowPath = new HashSet<String>();
-		allowPath.add("test");
 	}
 
 	/**
@@ -181,30 +176,25 @@ public class IndexController extends BaseController {
 	/**
 	 * 显示图片
 	 * 
-	 * @param pathName
 	 * @param imgName
 	 */
 	@RequestMapping("/showImage")
-	public Result showImage(String pathName, String imgName, HttpServletRequest request, HttpServletResponse response) {
-		if (allowPath.contains(pathName)) {
-			InputStream inputStream;
-			try {
-				File imgFile = realFile("/WEB-INF/uploadFiles/" + pathName + "/" + imgName);
-				if (imgFile.exists()) {
-					inputStream = new FileInputStream(imgFile);
-					response.addHeader("Cache-control", "max-age=" + Integer.MAX_VALUE);
-					response.setContentType("image/jpeg");
-					FileCopyUtils.copy(inputStream, response.getOutputStream());
-				} else {
-					response.setStatus(404);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+	public Result showImage(String imgName, HttpServletRequest request, HttpServletResponse response) {
+		InputStream inputStream;
+		try {
+			File imgFile = realFile("/WEB-INF/uploadFiles/" + imgName);
+			if (imgFile.exists()) {
+				inputStream = new FileInputStream(imgFile);
+				response.addHeader("Cache-control", "max-age=" + Integer.MAX_VALUE);
+				response.setContentType("image/jpeg");
+				FileCopyUtils.copy(inputStream, response.getOutputStream());
+			} else {
+				response.setStatus(404);
 			}
-			return null;
-		} else {
-			return new Result(-1, "该目录不允许查看", null);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**
@@ -215,29 +205,23 @@ public class IndexController extends BaseController {
 	 * @param fileDesc
 	 */
 	@RequestMapping("/downFile")
-	public void downFile(String pathName, String fileName, String fileDesc, HttpServletResponse response) {
-		File file = realFile("/WEB-INF/uploadFiles/" + pathName + "/" + fileName);
-		if (allowPath.contains(pathName) && file.exists()) {
-			try (FileInputStream fileInputStream = new FileInputStream(file)) {
-				response.setContentType("application/octet-stream");
-				response.setHeader("Content-disposition",
-						"attachment; filename=" + new String(fileDesc.getBytes("utf-8"), "ISO8859-1"));
-				IOUtils.copy(fileInputStream, response.getOutputStream());
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			response.setStatus(404);
+	public void downFile(String fileName, String fileDesc, HttpServletResponse response) {
+		File file = realFile("/WEB-INF/uploadFiles/" + fileName);
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+			response.setContentType("application/octet-stream");
+			response.setHeader("Content-disposition",
+					"attachment; filename=" + new String(fileDesc.getBytes("utf-8"), "ISO8859-1"));
+			IOUtils.copy(fileInputStream, response.getOutputStream());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * 切割单张图片
 	 * 
-	 * @param pathName
-	 *            图片路径名称
 	 * @param imgName
 	 *            图片名称
 	 * @param imgWidth
@@ -255,19 +239,19 @@ public class IndexController extends BaseController {
 	 * @return 返回切割结果，thumbnailName（切割图）、imgName（缩略图）、
 	 */
 	@RequestMapping("/singleImageCrop")
-	public Result singleImageCrop(String pathName, String imgName, int imgWidth, int imgHeight, int x, int y, int w,
+	public Result singleImageCrop(String imgName, int imgWidth, int imgHeight, int x, int y, int w,
 			int h, HttpServletRequest request) {
 		try {
-			File file = realFile("/WEB-INF/uploadFiles/" + pathName + "/" + imgName);
+			File file = realFile("/WEB-INF/uploadFiles/" + imgName);
 			if (file.exists()) {
 				Image scaleImage = ImageHandleHelper.scale(ImageIO.read(file), imgWidth, imgHeight);
 				Image cutImage = ImageHandleHelper.cutPicByRect(scaleImage, new Rectangle(x, y, w, h));
 				Image thumbnailImg = ImageHandleHelper.scale(cutImage, 150,
 						cutImage.getHeight(null) * 150 / cutImage.getWidth(null));
 				Map<String, String> data = new HashMap<String, String>();
-				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, realPath("/WEB-INF/uploadFiles/" + pathName)));
+				data.put("imgName", FileHelper.SaveImageBySha1(cutImage, realPath("/WEB-INF/uploadFiles/")));
 				data.put("thumbnailName",
-						FileHelper.SaveImageBySha1(thumbnailImg, realPath("/WEB-INF/uploadFiles/" + pathName)));
+						FileHelper.SaveImageBySha1(thumbnailImg, realPath("/WEB-INF/uploadFiles/")));
 				return new Result(0, null, data);
 			} else {
 				return new Result(-1, "图片不存在，切割失败！", null);
@@ -290,31 +274,26 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/uploadSingleImage")
-	public Result uploadSingleImage(@RequestParam("fileUpload") MultipartFile fileUpload, HttpServletRequest request,
-			String pathName) {
-		if (allowPath.contains(pathName)) {
-			try {
-				File target = realFile("/WEB-INF/uploadFiles/" + pathName + "/");
-				String sha1 = FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
-				Image image = ImageIO.read(new File(target.getAbsoluteFile() + File.separator + sha1));
-				Image scaleImg = ImageHandleHelper.scale(image, 150,
-						image.getHeight(null) * 150 / image.getWidth(null));
-				String thumbnailName = FileHelper.SaveImageBySha1(scaleImg, target.getAbsolutePath());
-				Map<String, Object> dataMap = new HashMap<>();
-				dataMap.put("thumbnailName", thumbnailName);
-				dataMap.put("imgName", sha1);
-				dataMap.put("imgWidth", image.getWidth(null));
-				dataMap.put("imgHeight", image.getHeight(null));
-				return new Result(0, null, dataMap);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		} else {
-			return new Result(-1, "该目录不允许上传！", null);
+	public Result uploadSingleImage(@RequestParam("fileUpload") MultipartFile fileUpload, HttpServletRequest request) {
+		try {
+			File target = realFile("/WEB-INF/uploadFiles/");
+			String sha1 = FileHelper.SaveInputStreamBySha1(fileUpload.getInputStream(), target.getAbsolutePath());
+			Image image = ImageIO.read(new File(target.getAbsoluteFile() + File.separator + sha1));
+			Image scaleImg = ImageHandleHelper.scale(image, 150,
+					image.getHeight(null) * 150 / image.getWidth(null));
+			String thumbnailName = FileHelper.SaveImageBySha1(scaleImg, target.getAbsolutePath());
+			Map<String, Object> dataMap = new HashMap<>();
+			dataMap.put("thumbnailName", thumbnailName);
+			dataMap.put("imgName", sha1);
+			dataMap.put("imgWidth", image.getWidth(null));
+			dataMap.put("imgHeight", image.getHeight(null));
+			return new Result(0, null, dataMap);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -328,19 +307,14 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/uploadFiles")
-	public Result uploadFiles(@RequestParam("fileUploads") MultipartFile fileUploads, HttpServletRequest request,
-			String pathName) {
-		if (allowPath.contains(pathName)) {
-			try {
-				File target = realFile("/WEB-INF/uploadFiles/" + pathName + "/");
-				return new Result(0, null,
-						FileHelper.SaveInputStreamBySha1(fileUploads.getInputStream(), target.getAbsolutePath()));
-			} catch (IOException e) {
-				e.printStackTrace();
-				return new Result(-1, e.getMessage(), null);
-			}
-		} else {
-			return new Result(-1, "该路径不允许上传文件。", null);
+	public Result uploadFiles(@RequestParam("fileUploads") MultipartFile fileUploads, HttpServletRequest request) {
+		try {
+			File target = realFile("/WEB-INF/uploadFiles/");
+			return new Result(0, null,
+					FileHelper.SaveInputStreamBySha1(fileUploads.getInputStream(), target.getAbsolutePath()));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new Result(-1, e.getMessage(), null);
 		}
 	}
 

@@ -139,6 +139,7 @@
     <Compile Include="AopInterceptor\DistributeRepository.cs" />
     <Compile Include="CommonEntity\AreaTree.cs" />
     <Compile Include="CommonEntity\DisPageEntity.cs" />
+    <Compile Include="CommonEntity\DistributedDataSrc.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="CommonJsonConverter\StarStrConverter.cs" />
     <Compile Include="EFDbContext\DistributedMainDbContext.cs" />
     <Compile Include="EFDbContext\BaseDbContext.cs" />
+    <Compile Include="EFMap\DistributedDataSrcMap.cs" />
     <Compile Include="EFMap\DistributedTransactionMainDetailMap.cs" />
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />

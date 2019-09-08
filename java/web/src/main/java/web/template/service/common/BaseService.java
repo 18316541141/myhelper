@@ -4,8 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.txj.common.SnowFlakeHelper;
-
-import web.template.exception.ResultException;
+import com.txj.common.exception.ResultException;
 /**
  * 业务基础类，所有的service都必须继承
  * @author admin

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.txj.common.EncrypHelper;
-import web.template.entity.common.Result;
+import com.txj.common.entity.Result;
 public class SignInterceptor  implements HandlerInterceptor {
 	
 	public Map<String,Set<String>> paramsMap;

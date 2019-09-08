@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.txj.common.entity.Result;
+
 import web.template.entity.common.NewsAlarm;
-import web.template.entity.common.Result;
 import web.template.service.common.SystemService;
 
 /**

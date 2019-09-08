@@ -10,27 +10,32 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.txj.common.entity.Result;
 
-import web.template.entity.common.Result;
-
+/**
+ * 请求次数拦截器
+ * 
+ * @author admin
+ *
+ */
 public class OperCountInterceptor implements HandlerInterceptor {
 
-	public ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
 	/**
 	 * 最近一次清理缓存的时间
 	 */
-	public long lastClearMillis;
+	private long lastClearMillis;
 
 	/**
 	 * 记录近期访客的操作记录
 	 */
-	public Map<String, OperRecord> recordMap;
+	private Map<String, OperRecord> recordMap;
 
 	/**
 	 * 次数限制和清理规则
 	 */
-	public Map<String, ClearInfo> clearInfoMap;
+	private Map<String, ClearInfo> clearInfoMap;
 
 	public OperCountInterceptor(Map<String, ClearInfo> clearInfoMap) {
 		this.clearInfoMap = clearInfoMap;
@@ -43,32 +48,35 @@ public class OperCountInterceptor implements HandlerInterceptor {
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		String operKey = request.getRemoteAddr() + request.getRequestURI();
-		if (recordMap.containsKey(operKey)) {
-			ClearInfo clearInfo = clearInfoMap.get(request.getRequestURI());
-			OperRecord operRecord = recordMap.get(operKey);
-			long totalMilliseconds = System.currentTimeMillis() - operRecord.getLastOperMillisecond();
-			long count = (totalMilliseconds - totalMilliseconds % clearInfo.getClearMillisecond())
-					/ clearInfo.getClearMillisecond();
-			operRecord.setCount(operRecord.getCount() > count ? operRecord.getCount() - count : 0);
-			if (operRecord.getCount() >= clearInfo.getCountLimit()) {
-				response.setCharacterEncoding("UTF-8");
-				response.setContentType("application/json;charset=UTF-8");
-				response.setStatus(200);
-				response.getWriter().write(objectMapper.writeValueAsString(new Result(-1, "操作过于频繁、请稍后重试！", null)));
-				return Boolean.FALSE;
+		synchronized (recordMap) {
+			String operKey = request.getRemoteAddr() + request.getRequestURI();
+			if (recordMap.containsKey(operKey)) {
+				ClearInfo clearInfo = clearInfoMap.get(request.getRequestURI());
+				OperRecord operRecord = recordMap.get(operKey);
+				long totalMilliseconds = System.currentTimeMillis() - operRecord.getLastOperMillisecond();
+				long count = (totalMilliseconds - totalMilliseconds % clearInfo.getClearMillisecond())
+						/ clearInfo.getClearMillisecond();
+				operRecord.setCount(operRecord.getCount() > count ? operRecord.getCount() - count : 0);
+				if (operRecord.getCount() >= clearInfo.getCountLimit()) {
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("application/json;charset=UTF-8");
+					response.setStatus(200);
+					response.getWriter().write(objectMapper.writeValueAsString(new Result(-1, "操作过于频繁、请稍后重试！", null)));
+					return Boolean.FALSE;
+				} else {
+					operRecord.setCount(1 + operRecord.getCount());
+					operRecord.setLastOperMillisecond(System.currentTimeMillis());
+					return Boolean.TRUE;
+				}
 			} else {
-				operRecord.setCount(1 + operRecord.getCount());
+				OperRecord operRecord = new OperRecord();
+				operRecord.setCount(1);
+				operRecord.setOperKey(operKey);
+				operRecord.setLastOperMillisecond(System.currentTimeMillis());
+				recordMap.put(operKey, operRecord);
 				return Boolean.TRUE;
 			}
-		} else {
-			OperRecord operRecord = new OperRecord();
-			operRecord.setCount(1);
-			operRecord.setOperKey(operKey);
-			operRecord.setLastOperMillisecond(System.currentTimeMillis());
-			recordMap.put(operKey, operRecord);
 		}
-		return Boolean.TRUE;
 	}
 
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
@@ -78,13 +86,15 @@ public class OperCountInterceptor implements HandlerInterceptor {
 			long sumMillisecond = clearInfo.clearMillisecond * clearInfo.countLimit;
 			String tkey;
 			OperRecord operRecord;
-			for (Iterator<String> it = recordMap.keySet().iterator(); it.hasNext();) {
-				tkey = it.next();
-				operRecord=recordMap.get(tkey);
-				long totalMilliseconds=System.currentTimeMillis()-operRecord.lastOperMillisecond;
-				if(totalMilliseconds >= sumMillisecond){
-                    recordMap.remove(tkey);
-                }
+			synchronized (recordMap) {
+				for (Iterator<String> it = recordMap.keySet().iterator(); it.hasNext();) {
+					tkey = it.next();
+					operRecord = recordMap.get(tkey);
+					long totalMilliseconds = System.currentTimeMillis() - operRecord.getLastOperMillisecond();
+					if (totalMilliseconds >= sumMillisecond) {
+						recordMap.remove(tkey);
+					}
+				}
 			}
 		}
 	}
@@ -103,7 +113,7 @@ public class OperCountInterceptor implements HandlerInterceptor {
 	 * @author admin
 	 *
 	 */
-	public class ClearInfo {
+	public static class ClearInfo {
 		/**
 		 * 次数限制，当次数达到countLimit次时，无法访问。
 		 */
@@ -113,6 +123,16 @@ public class OperCountInterceptor implements HandlerInterceptor {
 		 * 清除的毫秒数，每隔ClearMillisecond毫秒清理一次。
 		 */
 		public long clearMillisecond;
+
+		public ClearInfo() {
+			super();
+		}
+
+		public ClearInfo(int countLimit, long clearMillisecond) {
+			super();
+			this.countLimit = countLimit;
+			this.clearMillisecond = clearMillisecond;
+		}
 
 		public int getCountLimit() {
 			return countLimit;

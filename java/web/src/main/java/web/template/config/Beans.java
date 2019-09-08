@@ -1,5 +1,6 @@
 package web.template.config;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -11,18 +12,12 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.View;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,14 +27,18 @@ import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
 import web.template.filter.CompressFilter;
+import web.template.interceptor.OperCountInterceptor;
+import web.template.interceptor.OperIntervalInterceptor;
 import web.template.interceptor.SignInterceptor;
+import web.template.interceptor.SizeFilterInterceptor;
+import web.template.interceptor.SizeFilterInterceptor.SizeInfo;
 import web.template.interceptor.UpdateVersionInterceptor;
+import web.template.interceptor.OperCountInterceptor.ClearInfo;
 import web.template.service.common.SystemService;
 import web.template.shiro.MyFormAuthenticationFilter;
 import web.template.shiro.MyPermissionResolver;
 import web.template.shiro.MyPermissionsAuthorizationFilter;
 import web.template.shiro.UserRealm;
-import web.template.view.MyExcelView;
 @Configuration
 public class Beans {
 	@Bean(name="defaultKaptcha")
@@ -152,9 +151,31 @@ public class Beans {
 		return new WebMvcConfigurer(){
 			@Override
             public final void addInterceptors(InterceptorRegistry registry) {
+				//请求报文长度拦截器，分为全局拦截、局部拦截
+				Map<String,SizeInfo> sizeInfoMap=new HashMap<String, SizeInfo>();
+				SizeFilterInterceptor sizeFilterInterceptor=new SizeFilterInterceptor(new SizeInfo(10240,"参数过大，请求失败！"),sizeInfoMap);
+				sizeFilterInterceptor.setObjectMapper(objectMapper);
+				registry.addInterceptor(sizeFilterInterceptor);
+				
+				//请求间隔拦截器，对于每次请求之间间隔时间太短时，进行拦截
+//				Map<String, Long> intervalMillisMap = new HashMap<String, Long>();
+//				intervalMillisMap.put("/session/verificationCode", 10000l);
+//				OperIntervalInterceptor operIntervalInterceptor=new OperIntervalInterceptor(intervalMillisMap);
+//				operIntervalInterceptor.setObjectMapper(objectMapper);
+//				registry.addInterceptor(operIntervalInterceptor).addPathPatterns("/session/verificationCode");
+				
+				//请求次数拦截器，会记录请求的次数，当次数达到阈值时禁止访问，需要等待一段时间才能继续访问
+//				Map<String, ClearInfo> clearInfoMap=new HashMap<String, ClearInfo>();
+//				clearInfoMap.put("/session/verificationCode", new ClearInfo(1, 10000));
+//				OperCountInterceptor operCountInterceptor=new OperCountInterceptor(clearInfoMap);
+//				operCountInterceptor.setObjectMapper(objectMapper);
+//				registry.addInterceptor(operCountInterceptor).addPathPatterns("/session/verificationCode");
+				
+				//版本更新拦截器，当调用该请求时，会更新等待池版本号
                 registry.addInterceptor(new UpdateVersionInterceptor())
                         .addPathPatterns("/newAlarm/add");
                 
+				//签名拦截器，当该请求是一个需要签名认证的接口时，使用该过滤器
                 final SignInterceptor signInterceptor=new SignInterceptor();
                 signInterceptor.setObjectMapper(objectMapper);
                 registry.addInterceptor(signInterceptor).addPathPatterns("/index/anonymousRealTime");

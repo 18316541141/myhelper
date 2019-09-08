@@ -1,12 +1,11 @@
 ﻿package web.template.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.txj.common.entity.MyPagedList;
 
-import web.template.entity.codeGenerator.IRobotQrCodePayTask;
-import web.template.entity.common.MyPagedList;
-import web.template.mapper.IRobotQrCodePayTaskMapper;
-import web.template.params.codeGenerator.IRobotQrCodePayTaskParams;
+import web.template.entity.db1.codeGenerator.IRobotQrCodePayTask;
+import web.template.mapper.db1.IRobotQrCodePayTaskMapper;
+import web.template.params.db1.codeGenerator.IRobotQrCodePayTaskParams;
 import web.template.service.common.BaseService;
 
 /**

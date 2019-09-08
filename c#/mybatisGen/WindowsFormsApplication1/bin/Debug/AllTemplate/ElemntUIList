@@ -90,18 +90,20 @@
         </default-page>
 ------------------------------------------------------------------------------------------------------
 		编辑部分：
-		<el-dialog v-bind:title="(formData.$entity.KeyName$===null?'新增':'编辑')+'***模块'" top="25px" width="300px"
+		<el-dialog v-bind:title="(formData.$entity.KeyName$===''?'新增':'编辑')+'***模块'" top="25px" width="300px"
 			v-bind:visible.sync="editDialog"
 			v-bind:modal-append-to-body="true"
 			v-bind:append-to-body="true">
 			<div style="width:100%;height:400px;overflow-y:auto;">
 				<el-form ref="form" v-bind:model="formData" label-width="80px" v-on:keyup.enter.native="onSubmit">
+				<div class="form-body">
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$			
 					<el-form-item label="$it.PropNotes$">
-						<el-input v-validate="'required|max:20'" data-vv-name="formData.$it.PropName$" v-model="formData.$it.PropName$" placeholder="请填写$it.PropNotes$"></el-input>
+						<el-input v-validate="'required|rangeLength:6,20|between:6,20'" data-vv-name="formData_$it.PropName$" v-model="formData.$it.PropName$" placeholder="请填写$it.PropNotes$"></el-input>
 					</el-form-item>
 				$endif$}$
-				  <el-form-item>
+				</div>		
+				  <el-form-item class="form-bottom">
 					  <el-button type="primary" v-on:click="onSubmit">保存</el-button>
 					  <el-button v-on:click="editDialog=false;">取消</el-button>
 				  </el-form-item>
@@ -117,8 +119,18 @@ export default {
         数据部分（和列表部分配合使用）：
         data(){
             return {
-				formData:{},	//仅用于存放新增表单、编辑表单的数据
-                postData:{},	//仅用于存放查询参数的数据
+		//仅用于存放新增表单、编辑表单的数据
+		formData:{
+		$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+			$it.PropName$:'',
+		$endif$}$
+		},
+		//仅用于存放查询参数的数据
+                postData:{
+		$entity.PropList:{
+			$it.PropName$:'',
+		}$
+		},
                 retData:{},		//仅用于存放分页查询的返回结果
                 checkedDatas:[],	//仅用于存放当前分页表格勾选项
 				editDialog:false,	//编辑、新增表单的显示和隐藏
@@ -130,15 +142,11 @@ export default {
 			this.\$validator.localize('zh_CN',{
 				custom:{
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$
-					'formData.$it.PropName$':{
+					'formData_$it.PropName$':{
 						required:'$it.PropNotes$不能为空',
-						max(fieldName,replaceArray){
-							return '$it.PropNotes$最大长度不能大于'+replaceArray[0]+'个字符';
-						},
-						min(){
-							
-						}
-					}
+						rangeLength:'$it.PropNotes$长度须在6-20个字符之间',
+						between:'$it.PropNotes$的值须在6-20之间',
+					},
 				$endif$}$
 				}
 			});
@@ -156,7 +164,7 @@ export default {
 			onSubmit(){
 				//校验
 				this.\$validateForm(()=>{
-					if(this.formData.$entity.KeyName$===null){
+					if(this.formData.$entity.KeyName$===''){
 						this.\$post('/api/$entity.EntityName$/add',this.formData,function(result){
 							if(result.code===0){
 								this.editDialog=false;
@@ -179,7 +187,7 @@ export default {
 			add(){
 				for(var key in this.formData){
 					if(this.formData.hasOwnProperty(key)){
-						this.formData[key]=null;
+						this.formData[key]='';
 					}
 				}
 				this.editDialog = true;

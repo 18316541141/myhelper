@@ -129,11 +129,40 @@ namespace WebApplication1.Service
 	/// 数据库查询、流读取等其他复杂操作），校验不通过时，异常往外抛出
         /// </summary>
         /// <param name="param">待校验参数</param>
-        public void Check****($entity.EntityName$Params param)
+        public void Check****($entity.EntityName$ data)
         {
-            if(...){
-		Ex(...,...);
-	    }
+			Regex regex = new Regex("\\w");
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+				if(string.IsNullOrEmpty(data.$it.PropName$))
+				{
+					Ex("$it.PropNotes$不能为空");
+				}
+				else
+				{
+					if(data.$it.PropName$.Length<6 || data.$it.PropName$.Length>20)
+					{
+						Ex("$it.PropNotes$长度须在6-20个字符之间");
+					}
+					if(!regex.IsMatch(data.$it.PropName$))
+					{
+						Ex("$it.PropNotes$须是字母、数字、下划线组合");
+					}
+				}
+			$endif$}$
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+				if(data.$it.PropName$==null)
+				{
+					Ex("$it.PropNotes$不能为空");
+				}
+				else
+				{
+					if(data.$it.PropName$<6 || data.$it.PropName$>20)
+					{
+						Ex("$it.PropNotes$的值须在6-20之间");
+					}
+
+				}
+			$endif$}$
         }
 		*/
     }

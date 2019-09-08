@@ -132,7 +132,7 @@ public final class CompressFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		// 用encodings 来判断浏览器是否有 gzip压缩的功能
 		String encodings = req.getHeader("accept-encoding");
-		if (encodings.contains(req.getRequestURI()) && (encodings != null) && (encodings.indexOf("gzip")) > -1) {
+		if (encodings.contains(req.getRequestURI()) && !excludes.contains(req.getRequestURI()) && (encodings != null) && (encodings.indexOf("gzip")) > -1) {
 			GZipResponseWrapper gzipWrapper = new GZipResponseWrapper(res);
 			chain.doFilter(request, gzipWrapper);
 			// 设置响应内容编码为gzip格式

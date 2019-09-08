@@ -1,8 +1,6 @@
 ﻿package web.template.controller;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,10 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
+import com.txj.common.entity.Result;
 import web.template.controller.common.BaseController;
-import web.template.entity.common.Result;
-import web.template.params.codeGenerator.IRobotQrCodePayTaskParams;
+import web.template.params.db1.codeGenerator.IRobotQrCodePayTaskParams;
 import web.template.service.IRobotQrCodePayTaskService;
 import web.template.view.MyExcelView;
 

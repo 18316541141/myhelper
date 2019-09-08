@@ -544,7 +544,7 @@ namespace CommonHelper.Helper.EFRepository
         /// 获取跨库查询所需的表达式
         /// </summary>
         /// <returns></returns>
-        protected abstract DisPageEntity<TEntity> GetDisPageEntity();
+        protected abstract DisPageEntity<TEntity> GetDisPageEntity(TParams paramz);
 
         /// <summary>
         /// 跨库分页时，基准值查询
@@ -553,7 +553,7 @@ namespace CommonHelper.Helper.EFRepository
         /// <param name="baseVal">基准值，缩小查询范围</param>
         /// <param name="queryType">查询类型，0：查询基准值跳过的数据量，1：查询比基准值大，并当中含有合适的基准值</param>
         /// <returns></returns>
-        protected abstract Expression<Func<TEntity, IComparable>> BaseValQuery(TParams paramz,IComparable baseVal,int queryType);
+        protected abstract Expression<Func<TEntity, bool>> BaseValQuery(TParams paramz,IComparable baseVal,int queryType);
 
         /// <summary>
         /// 普通的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
@@ -607,7 +607,7 @@ namespace CommonHelper.Helper.EFRepository
                 }
                 bool orderType = true;
                 IComparable comparable; //临时变量
-                DisPageEntity<TEntity> disPageEntity = GetDisPageEntity();
+                DisPageEntity<TEntity> disPageEntity = GetDisPageEntity(eqArgs);
                 List <IComparable> sortList = new List<IComparable>();
                 for (int i = 0, len = dbContexts.Count; i < len; i++)
                 {
@@ -624,6 +624,7 @@ namespace CommonHelper.Helper.EFRepository
                 for (int i = 0, len = dbContexts.Count; i < len; i++)
                 {
                     IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
+                    query = query.Where(BaseValQuery(eqArgs, baseVal, 0));
                     baseValSkip += query.Select(disPageEntity.OrderColLazy).Count();
                     
                 }
@@ -632,7 +633,7 @@ namespace CommonHelper.Helper.EFRepository
                 for (int i = 0, len = dbContexts.Count; i < len; i++)
                 {
                     IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    query = query.Where(BaseValQuery(eqArgs,baseVal,0));
+                    query = query.Where(BaseValQuery(eqArgs,baseVal,1));
                     sortList.AddRange(query.Select(disPageEntity.OrderColLazy).Take(restSkipCount).ToList());
                 }
                 sortList.Sort();

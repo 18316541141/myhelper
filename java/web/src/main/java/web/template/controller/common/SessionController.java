@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.code.kaptcha.Producer;
-
-import web.template.entity.common.Result;
+import com.txj.common.entity.Result;
 
 @RestController
 @RequestMapping("/session")
