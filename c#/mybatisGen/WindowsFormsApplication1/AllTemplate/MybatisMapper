@@ -46,13 +46,13 @@ $endif$}$
 		</foreach>
 	</insert>
 	
-	<delete id="delete">
-		delete from $entity.TableName$ where $entity.KeyCol$=#{key}
+	<delete id="delete" parameterType="$entity.EntityName$Params">
+		delete from $entity.TableName$ where $entity.KeyCol$=#{$entity.KeyName$}
 	</delete>
 	
-	<delete id="deleteList">
+	<delete id="deleteList" parameterType="List">
 		delete from $entity.TableName$ where $entity.KeyCol$ in
-		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.$entity.KeyName$}</foreach>
 	</delete>
 	
 	
@@ -63,12 +63,19 @@ $endif$}$
 		</where>
 	</delete>
 	
-	<select id="findEntity" resultMap="$entity.EntityName$Map">
+	<select id="findEntity" resultMap="$entity.EntityName$Map" parameterType="$entity.EntityName$">
 		select 
 			<include refid="colNames"></include>
-		from $entity.TableName$ where $entity.KeyCol$=#{key}
+		from $entity.TableName$ where $entity.KeyCol$=#{$entity.KeyName$}
 	</select>
-	
+
+  <select id="findEntitiesByIn" resultMap="$entity.EntityName$Map" parameterType="List">
+    select 
+			<include refid="colNames"></include>
+		from $entity.TableName$ where $entity.KeyCol$ in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item.$entity.KeyName$}</foreach>
+  </select>
+  
 	<sql id="selectWherePart">
 $entity.PropList:{
 	$if(it.ParamsTypeIsEqual)$
@@ -121,7 +128,7 @@ $entity.PropList:{
     	</trim>
 	</select>
 	
-	<select id="count" resultType="int" parameterType="$entity.EntityName$Params">
+	<select id="count" resultType="int">
 		select count($entity.KeyCol$) from $entity.TableName$
 		<where>
 			<include refid="selectWherePart"></include>
@@ -178,7 +185,6 @@ $entity.PropList:{
 		$elseif(it.ParamsTypeIsChange)$
 			<if test="$it.PropName$!=null">$it.ColName$+=#{$it.PropName$},</if>
 		$endif$
-
 	}$
 		</set>
 		where $entity.KeyCol$=#{$entity.KeyName$}

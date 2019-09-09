@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CommonHelper.staticVar;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,7 +7,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebApplication1.App_Start;
 
 namespace CommonHelper.IpProxy
 {
@@ -25,7 +25,7 @@ namespace CommonHelper.IpProxy
             get
             {
                 Queue<ProxyUserInfo> _proxyUserInfoQueue = new Queue<ProxyUserInfo>();
-                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.TaiYangProxyRefresh"]))
+                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.TaiYangProxyRefresh"]))
                 {
                     _proxyUserInfoQueue.Enqueue(new ProxyUserInfo
                     {

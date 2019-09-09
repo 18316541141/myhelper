@@ -11,7 +11,7 @@ namespace Entity.Common
     /// 下载excel的返回结果
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ExcelResult<T> : ActionResult
+    public sealed class ExcelResult<T> : ActionResult
     {
         /// <summary>
         /// 导出的数据

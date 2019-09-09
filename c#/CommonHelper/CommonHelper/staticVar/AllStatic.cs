@@ -28,9 +28,19 @@ namespace CommonHelper.staticVar
         /// 默认的时间转换器
         /// </summary>
         public static IsoDateTimeConverter TimeConverter { set; get; }
-        
+
+        /// <summary>
+        /// 环境类型，当环境是Debug时使用Debug，当环境是Release时使用Release
+        /// </summary>
+        public static string EnvironmentType { set; get; }
+
         static AllStatic()
         {
+#if debugger
+            EnvironmentType = "Debug";
+#else
+            EnvironmentType = "Release";
+#endif
             TimeConverter = new IsoDateTimeConverter();
             TimeConverter.DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
             InverseRepositoryMap = new Dictionary<string, Dictionary<string, dynamic>>();

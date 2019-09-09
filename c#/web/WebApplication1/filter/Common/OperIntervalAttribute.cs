@@ -14,7 +14,7 @@ namespace WebApplication1.Filter.Common
     /// 操作间隔拦截器，以ip为标识，对每次操作的间隔时间
     /// 进行限制
     /// </summary>
-    public class OperIntervalAttribute: ActionFilterAttribute
+    public sealed class OperIntervalAttribute: ActionFilterAttribute
     {
         /// <summary>
         /// 间隔的毫秒数

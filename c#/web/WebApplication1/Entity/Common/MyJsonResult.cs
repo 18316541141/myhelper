@@ -13,7 +13,7 @@ namespace Entity.Common
     /// <summary>
     /// 自定义jsonResult，可以控制日期的格式化，以及是否使用jsonp跨域
     /// </summary>
-    public class MyJsonResult:JsonResult
+    public sealed class MyJsonResult:JsonResult
     {
         /// <summary>
         /// long类型数据转字符串

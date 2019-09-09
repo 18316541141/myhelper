@@ -18,7 +18,7 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 签名校验拦截器
     /// </summary>
-    public class SignAttribute : ActionFilterAttribute
+    public sealed class SignAttribute : ActionFilterAttribute
     {
         /// <summary>
         /// 必须包含的参数

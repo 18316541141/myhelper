@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WindowsFormsApplication1.Intf
+{
+    /// <summary>
+    /// 数据库类型转编程语言类型
+    /// </summary>
+    public interface IDbTypeTrans
+    {
+        /// <summary>
+        /// sql类型转实体类型
+        /// </summary>
+        /// <param name="sqlType">数据库类型</param>
+        /// <returns></returns>
+        string SqlType2EntityType(string sqlType);
+
+        /// <summary>
+        /// 根据sql类型判断传参的类型：range（模糊搜索时可以传入范围条件）、like（模糊搜索时可以传入like条件）
+        /// </summary>
+        /// <param name="sqlType">数据库类型</param>
+        /// <returns></returns>
+        string SqlType2ParamsType(string sqlType);
+
+        /// <summary>
+        /// 根据sql类型判断是否为可通过+、-进行update的字段
+        /// </summary>
+        /// <param name="sqlType"></param>
+        /// <returns></returns>
+        bool SqlTypeIsChangeType(string sqlType);
+
+        /// <summary>
+        /// 根据列名称判断是否为软删除字段
+        /// </summary>
+        /// <param name="colName">列名称</param>
+        /// <returns></returns>
+        bool ColIsDeleteProp(string colName);
+    }
+}

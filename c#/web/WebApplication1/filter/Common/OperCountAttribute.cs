@@ -13,7 +13,7 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 操作记录
     /// </summary>
-    public class OperRecord
+    public sealed class OperRecord
     {
         /// <summary>
         /// 操作标识，用于区分操作者和操作目标
@@ -35,7 +35,7 @@ namespace WebApplication1.Filter.Common
     /// 操作次数限制的拦截器，超过一定的次数后，需要隔一段时间才能
     /// 再次操作。
     /// </summary>
-    public class OperCountAttribute : ActionFilterAttribute
+    public sealed class OperCountAttribute : ActionFilterAttribute
     {
         /// <summary>
         /// 清除的毫秒数，每隔ClearMillisecond毫秒清理一次。

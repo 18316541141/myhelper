@@ -52,8 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service\RobotNameJavaTrans.cs" />
-    <Compile Include="Service\SqlServerToJavaTrans.cs" />
+    <Compile Include="NameTrans\RobotNameJavaTrans.cs" />
+    <Compile Include="DbTypeTrans\SqlServerToJavaTrans.cs" />
     <None Include="AllTemplate\EFInverseRepository">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -66,20 +66,20 @@
     <None Include="AllTemplate\CSharpSetNullParams">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="Service\BsyNameTrans.cs" />
+    <Compile Include="NameTrans\BsyNameTrans.cs" />
     <Compile Include="Service\EntityTemplateToCode.cs" />
-    <Compile Include="Service\IDbTypeTrans.cs" />
-    <Compile Include="Service\RobotNameCSharpTrans.cs" />
-    <Compile Include="Service\SqliteInfo.cs" />
-    <Compile Include="Service\SqliteToCSharpTrans.cs" />
-    <Compile Include="Service\SqlServerInfo.cs" />
+    <Compile Include="Intf\IDbTypeTrans.cs" />
+    <Compile Include="NameTrans\RobotNameCSharpTrans.cs" />
+    <Compile Include="SqlInfo\SqliteInfo.cs" />
+    <Compile Include="DbTypeTrans\SqliteToCSharpTrans.cs" />
+    <Compile Include="SqlInfo\SqlServerInfo.cs" />
     <None Include="AllTemplate\CSharpOrderBy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="AllTemplate\CSharpParams">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="entity\Entity.cs" />
+    <Compile Include="Entity\Entity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,9 +88,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\SqlServerToCSharpTrans.cs" />
-    <Compile Include="Service\INameTrans.cs" />
-    <Compile Include="Service\ISqlInfo.cs" />
+    <Compile Include="DbTypeTrans\SqlServerToCSharpTrans.cs" />
+    <Compile Include="Intf\INameTrans.cs" />
+    <Compile Include="Intf\ISqlInfo.cs" />
     <Compile Include="Service\NameTransService.cs" />
     <Compile Include="Service\GenEntityService.cs" />
     <EmbeddedResource Include="Form1.resx">
