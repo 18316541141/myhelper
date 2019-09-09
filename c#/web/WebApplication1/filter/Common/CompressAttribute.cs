@@ -10,14 +10,8 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 压缩过滤器
     /// </summary>
-    public class CompressAttribute: ActionFilterAttribute
+    public sealed class CompressAttribute: ActionFilterAttribute
     {
-
-        /// <summary>
-        /// 不需要压缩过滤器的请求url
-        /// </summary>
-        public HashSet<string> IgnoreRequests { set; get; }
-
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             var content = filterContext.Result;

@@ -118,6 +118,7 @@ namespace CommonHelper.AopInterceptor
                         TransactionDataSources.Value.Clear();
                         TransactionIds.Value = null;
                     }
+                    throw ex;
                 }
             }
             else

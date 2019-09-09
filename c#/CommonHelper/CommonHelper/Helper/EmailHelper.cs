@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CommonHelper.staticVar;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,8 +10,6 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WebApplication1.App_Start;
-
 namespace CommonHelper.Helper
 {
     /// <summary>
@@ -82,7 +81,7 @@ namespace CommonHelper.Helper
             _defaultTryAgain = new DefaultTryAgain();
             _randomIndex = (uint)new Random().Next();
             //电子邮件发送者的json配置。
-            string emailSenderEntities = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.EmailSenderEntities"];
+            string emailSenderEntities = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.EmailSenderEntities"];
             if (!string.IsNullOrEmpty(emailSenderEntities))
             {
                 _emailSenderEntityList = new List<EmailSenderEntity>();

@@ -36,13 +36,32 @@ public interface BaseMapper<T,P,SNP> {
 	 * 根据主键删除数据
 	 * @param entity
 	 */
-	public void delete(long key);
+	public void delete(P params);
 	
 	/**
-	 * 根据主键删除一批对象
+	 * 根据主键删除一批对象，仅在数量不多的情况下使用
+	 * 该方法删除，如果数量过多需要使用deleteBigList删除
 	 * @param keys
 	 */
 	public void deleteList(List<P> keys);
+
+	/**
+	 * 根据主键删除一批对象，适用于大批量删除。
+	 * @param keys
+	 */
+	default void deleteBigList(List<P> keys){
+		List<P> batchs =new ArrayList<P>();
+		for(int i=1 , len = keys.size();i<=len;i++){
+			batchs.add(keys.get(i-1));
+			if(i % 500==0){
+				deleteList(batchs);
+				batchs.clear();
+			}
+		}
+		if(batchs.size()>0){
+			deleteList(batchs);
+		}
+	}
 	
 	/**
 	 * 根据条件删除对象
@@ -55,7 +74,13 @@ public interface BaseMapper<T,P,SNP> {
 	 * 根据主键查找一个实体
 	 * @return
 	 */
-	public T findEntity(int key);
+	public T findEntity(T entity);
+
+	/**
+	 * 根据in(主键...)的方式查询实体
+	 * @param keys 只填写了主键的查询参数集合
+	 */
+	public List<T> findEntitiesByIn(List<P> keys);
 	
 	/**
 	 * 根据条件查找一个实体

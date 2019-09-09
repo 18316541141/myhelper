@@ -13,7 +13,7 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 权限校验模块
     /// </summary>
-    public class PermAuthorizeAttribute : AuthorizeAttribute
+    public sealed class PermAuthorizeAttribute : AuthorizeAttribute
     {
 
         /// <summary>

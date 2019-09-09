@@ -14,18 +14,24 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 报文大小过滤器
     /// </summary>
-    public class SizeFilterAttribute: AuthorizeAttribute
+    public sealed class SizeFilterAttribute: AuthorizeAttribute
     {
 
         /// <summary>
         /// 附件最大限制，单位：字节
         /// </summary>
-        public int Size { set; get; }
+        public readonly int Size;
 
         /// <summary>
         /// 提示信息
         /// </summary>
-        public string Msg { set; get; }
+        public readonly string Msg;
+
+        public SizeFilterAttribute(int size, string msg)
+        {
+            Size = size;
+            Msg = msg;
+        }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {

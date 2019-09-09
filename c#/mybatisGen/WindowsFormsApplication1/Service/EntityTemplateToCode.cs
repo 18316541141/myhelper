@@ -12,7 +12,7 @@ namespace WindowsFormsApplication1.Service
     /// <summary>
     /// 实体信息转为代码
     /// </summary>
-    public class EntityTemplateToCode
+    public sealed class EntityTemplateToCode
     {
         TemplateHelper _templateHelper;
 

@@ -40,5 +40,16 @@ namespace CommonHelper.Helper.EFDbContext
         {
 
         }
+
+        /// <summary>
+        /// 分布式分表
+        /// </summary>
+        public readonly DbSet<DistributedTransactionPart> DistributedTransactionParts;
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Configurations.Add(new DistributedTransactionPartMap());
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

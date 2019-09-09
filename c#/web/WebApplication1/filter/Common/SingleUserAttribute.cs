@@ -16,9 +16,9 @@ namespace WebApplication1.Filter.Common
     /// 单用户拦截器，检测多个用户名相同的用户登录时产生的guid是不一样的，
     /// 利用这一点使得用户只能在同一地区登陆。
     /// </summary>
-    public class SingleUserAttribute : ActionFilterAttribute
+    public sealed class SingleUserAttribute : ActionFilterAttribute
     {
-        public static Dictionary<string, string> UserMap;
+        public readonly static Dictionary<string, string> UserMap;
 
         static SingleUserAttribute()
         {
@@ -28,7 +28,7 @@ namespace WebApplication1.Filter.Common
         /// <summary>
         /// 不需要单用户权限的请求url
         /// </summary>
-        public HashSet<string> IgnoreRequests { set; get; }
+        public readonly HashSet<string> IgnoreRequests;
 
         public SingleUserAttribute()
         {

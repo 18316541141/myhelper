@@ -12,9 +12,8 @@ using WindowsFormsApplication1.entity;
 
 namespace WindowsFormsApplication1.Service
 {
-    public class GenEntityService
+    public sealed class GenEntityService
     {
-
         /// <summary>
         /// 命名转换规则
         /// </summary>

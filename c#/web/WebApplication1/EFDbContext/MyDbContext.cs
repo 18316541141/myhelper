@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper.EFDbContext;
+using CommonHelper.staticVar;
 using MySql.Data.MySqlClient;
 using Oracle.ManagedDataAccess.Client;
 using System;
@@ -18,7 +19,7 @@ namespace WebApplication1
     /// </summary>
     public class MyDbContext: BaseDbContext
     {
-        public MyDbContext() : base(new OracleConnection(WebConfigurationManager.ConnectionStrings[$"{EnvironmentConfig.EnvironmentType}.oracleConn"].ConnectionString),true){
+        public MyDbContext() : base(new OracleConnection(WebConfigurationManager.ConnectionStrings[$"{AllStatic.EnvironmentType}.oracleConn"].ConnectionString),true){
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper;
+using CommonHelper.staticVar;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebApplication1.App_Start;
 
 namespace CommonHelper.IpProxy
 {
@@ -39,7 +39,7 @@ namespace CommonHelper.IpProxy
             get
             {
                 Queue<ProxyUserInfo> proxyUserInfoQueue = new Queue<ProxyUserInfo>();
-                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.FreeZhimaProxyRefresh"]))
+                foreach (JObject jobject in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.FreeZhimaProxyRefresh"]))
                     proxyUserInfoQueue.Enqueue(new ProxyUserInfo
                     {
                         User = Convert.ToString(jobject["user"]),

@@ -11,7 +11,7 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 版本更新拦截器，会使得实时加载的版本号更新，并唤醒等待池。
     /// </summary>
-    public class UpdateVersionAttribute : ActionFilterAttribute
+    public sealed class UpdateVersionAttribute : ActionFilterAttribute
     {
         /// <summary>
         /// 当对某一实时刷新的数据进行操作后，使用该拦截器唤醒等待池，

@@ -14,7 +14,7 @@ namespace WebApplication1.Filter.Common
     /// 统一的异常处理器，对于任何未处理，或意料之外的异常都会
     /// 由该处理器处理，并统一对用户声称是系统繁忙。
     /// </summary>
-    public class MyErrorAttribute: HandleErrorAttribute
+    public sealed class MyErrorAttribute: HandleErrorAttribute
     {
         ILog log;
 
@@ -40,7 +40,7 @@ namespace WebApplication1.Filter.Common
                 code = -1,
                 msg = "系统繁忙，请稍后重试..."
             });
-            log = LogManager.GetLogger("Log4net.config");
+            log = DependencyResolver.Current.GetService<ILog>();
         }
 
         public override void OnException(ExceptionContext filterContext)

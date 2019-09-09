@@ -88,6 +88,7 @@ F:\git_project\CommonHelper\CommonHelper\bin\Debug\zxing.xml
 F:\git_project\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.pdb
 F:\git_project\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.xml
 E:\git_projects\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
+<<<<<<< HEAD
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Log4net.config
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Guess.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll.config
@@ -137,15 +138,20 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
+=======
+>>>>>>> 0ce66b3ba587f8957d9a89712b6d49d2962fbf42
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Log4net.config
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Guess.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll.config
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\CommonHelper.pdb
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.dll
+<<<<<<< HEAD
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Castle.Core.dll
+=======
+>>>>>>> 0ce66b3ba587f8957d9a89712b6d49d2962fbf42
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.SqlServer.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\HtmlAgilityPack.dll
@@ -156,16 +162,22 @@ D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OOXML.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXml4Net.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXmlFormats.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\SeleniumExtras.WaitHelpers.dll
+<<<<<<< HEAD
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Snowflake.Net.dll
+=======
+>>>>>>> 0ce66b3ba587f8957d9a89712b6d49d2962fbf42
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Webdiyer.MvcPager.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\WebDriver.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Antlr3.StringTemplate.pdb
+<<<<<<< HEAD
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.pdb
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Autofac.Extras.DynamicProxy.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Castle.Core.xml
+=======
+>>>>>>> 0ce66b3ba587f8957d9a89712b6d49d2962fbf42
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\EntityFramework.SqlServer.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\HtmlAgilityPack.pdb
@@ -182,6 +194,12 @@ D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentatio
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
+<<<<<<< HEAD
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
+=======
+D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.dll
+D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
+>>>>>>> 0ce66b3ba587f8957d9a89712b6d49d2962fbf42

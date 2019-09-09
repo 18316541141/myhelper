@@ -1,7 +1,0 @@
-﻿/// <summary>
-/// $entity.EntityNotes$
-/// </summary>
-public DbSet<$entity.EntityName$> $entity.EntityNames$ { set; get; }
-
-
-modelBuilder.Configurations.Add(new $entity.EntityName$Map());

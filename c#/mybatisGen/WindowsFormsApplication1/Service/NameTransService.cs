@@ -9,7 +9,7 @@ namespace WindowsFormsApplication1.Service
     /// <summary>
     /// 命名法转化服务
     /// </summary>
-    public class NameTransService
+    public sealed class NameTransService
     {
         /// <summary>
         /// 下划线命名法转驼峰命名法，例如：USER_ACCOUNT -> userAccount
