@@ -1,6 +1,8 @@
 ﻿package web.template.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.txj.common.entity.MyPagedList;
 
 import web.template.entity.db1.codeGenerator.IRobotQrCodePayTask;
@@ -29,6 +31,7 @@ public class IRobotQrCodePayTaskService extends BaseService {
 	 * @param pageSize
 	 *            每页显示的数据量
 	 */
+	
 	public MyPagedList<IRobotQrCodePayTask> page(IRobotQrCodePayTaskParams param, int currentPageIndex, int pageSize) {
 		return mapper.pageList(param, currentPageIndex, pageSize);
 	}

@@ -1,4 +1,5 @@
 ﻿using CommonHelper.CommonEntity;
+using CommonHelper.EFMap;
 using CommonHelper.Helper.EFMap;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,11 @@ namespace CommonHelper.Helper.EFDbContext
         }
 
         /// <summary>
+        /// 数据源标识表
+        /// </summary>
+        public readonly DbSet<DistributedDataSrc> DistributedDataSrcs;
+
+        /// <summary>
         /// 分布式分表
         /// </summary>
         public readonly DbSet<DistributedTransactionPart> DistributedTransactionParts;
@@ -49,6 +55,7 @@ namespace CommonHelper.Helper.EFDbContext
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new DistributedTransactionPartMap());
+            modelBuilder.Configurations.Add(new DistributedDataSrcMap());
             base.OnModelCreating(modelBuilder);
         }
     }
