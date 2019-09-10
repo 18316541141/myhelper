@@ -5,9 +5,6 @@
 		<id property="irTaskID" column="IR_TaskID" />
 
 		<result property="irTaskID" column="IR_TaskID" />
-
-
-
 		<result property="irOrderNo" column="IR_OrderNo" />
 
 
@@ -902,4 +899,14 @@
 		#{currentPageIndex}*#{pageSize}
 		)
 	</select>
+
+	<insert id="insertPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.insertPart"></include>
+	</insert>
+
+	<select id="selectPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.selectPart"></include>
+	</select>
+	
+	
 </mapper>

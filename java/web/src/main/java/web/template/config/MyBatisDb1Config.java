@@ -1,4 +1,6 @@
 package web.template.config;
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -45,7 +47,10 @@ public class MyBatisDb1Config {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(db1DataSource);
         PathMatchingResourcePatternResolver resolver=new PathMatchingResourcePatternResolver();
-        factoryBean.setMapperLocations(resolver.getResources("classpath:mapper/db1/codeGenerator/*.xml"));
+        Resource[] db1DataSrcs=resolver.getResources("classpath:mapper/db1/codeGenerator/*.xml");
+        db1DataSrcs=Arrays.copyOf(db1DataSrcs, db1DataSrcs.length+1);
+        db1DataSrcs[db1DataSrcs.length-1]=resolver.getResource("classpath:mapper/CommonMapper.xml");
+        factoryBean.setMapperLocations(db1DataSrcs);
         factoryBean.setTypeAliasesPackage("web.template.entity.db1,web.template.params.db1,web.template.orderBy.db1,web.template.setNullParams.db1");
         return factoryBean.getObject();
     }
