@@ -269,7 +269,7 @@ namespace WebApplication1.Controllers.Common
         /// 上传单张图片
         /// </summary>
         /// <returns></returns>
-        [SizeFilter(Size = 3145728, Msg = "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
+        [SizeFilter(3145728, "上传文件大小不能超过3M，可通过压缩减少文件大小。")]
         [OperCount(CountLimit = 10,ClearMillisecond = 60000)]
         public JsonResult UploadSingleImage(HttpPostedFileBase fileUpload)
         {
@@ -306,7 +306,7 @@ namespace WebApplication1.Controllers.Common
         /// <param name="fileUploads"></param>
         /// <param name="pathName"></param>
         /// <returns></returns>
-        [SizeFilter(Size = 52428800, Msg = "上传文件大小不能超过50M，可通过压缩减少文件大小。")]
+        [SizeFilter(52428800, "上传文件大小不能超过50M，可通过压缩减少文件大小。")]
         [OperCount(CountLimit = 100, ClearMillisecond = 60000)]
         public JsonResult UploadFiles(HttpPostedFileBase fileUploads)
         {

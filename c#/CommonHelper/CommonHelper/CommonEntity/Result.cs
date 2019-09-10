@@ -22,6 +22,7 @@ namespace CommonHelper.Helper.CommonEntity
         /// -9：用户未授权，但有回调
         /// -10：登录超时
         /// -11：同一账户登录两次
+        /// -12：接口签名认证错误
         /// </summary>
         public short code { set; get; }
         /// <summary>

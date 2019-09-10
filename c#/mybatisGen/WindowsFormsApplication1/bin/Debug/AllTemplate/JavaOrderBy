@@ -1,0 +1,23 @@
+﻿package web.template.orderBy.codeGenerator;
+/**
+ * $entity.EntityNotes$
+ */
+public final class $entity.EntityName$OrderBy {
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+
+		/**
+		 * $it.PropNotes$
+		 */
+		private boolean $it.PropName$;
+
+		public final void set$it.CapUpperPropName$(final boolean $it.PropName$){
+			this.$it.PropName$=$it.PropName$;
+		}
+
+		public final boolean get$it.CapUpperPropName$(){
+			return this.$it.PropName$;
+		}
+	$endif$
+}$
+}

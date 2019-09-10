@@ -1,0 +1,38 @@
+﻿package web.template.setNullParams.codeGenerator;
+import java.util.Date;
+/**
+ * $entity.EntityNotes$
+ */
+public final class $entity.EntityName$SetNullParams {
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+		$if(it.IsKey)$
+		/**
+		 * $it.PropNotes$
+		 */
+		private $it.PropType$ $it.PropName$;
+
+		public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
+			this.$it.PropName$=$it.PropName$;
+		}
+
+		public final $it.PropType$ get$it.CapUpperPropName$(){
+			return this.$it.PropName$;
+		}
+		$else$
+		/**
+		 * $it.PropNotes$
+		 */
+		private boolean $it.PropName$;
+
+		public final void set$it.CapUpperPropName$(final boolean $it.PropName$){
+			this.$it.PropName$=$it.PropName$;
+		}
+
+		public final boolean get$it.CapUpperPropName$(){
+			return this.$it.PropName$;
+		}
+		$endif$
+	$endif$
+}$
+}

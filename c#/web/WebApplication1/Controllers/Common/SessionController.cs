@@ -53,9 +53,10 @@ namespace WebApplication1.Controllers.Common
         /// <param name="username"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [Sign(new string[] { "callback", "username", "signKey", "createDate", "r" })]
-        public JsonResult JsonpLogin(string callback, string username,string signKey)
+        [Sign(new string[] { "callback", "signKey", "createDate", "r" })]
+        public JsonResult JsonpLogin(string callback,string signKey)
         {
+            string username = "zhang";
             FormsAuthentication.SetAuthCookie(username, false);
             string guid = Guid.NewGuid().ToString();
             Session.Add("loginGuid", guid);
@@ -92,7 +93,6 @@ namespace WebApplication1.Controllers.Common
                     return Json(new Result { code = -1, msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
                 }
 #endif
-                Random random = new Random();
                 //zhang
                 string u = "zhang";
                 //123

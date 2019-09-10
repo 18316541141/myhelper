@@ -290,7 +290,7 @@ namespace WebApplication1.Repository
 					return a=> baseVal.CompareTo(a.$entity.KeyName$) > 0;
 				}
 			}
+			return null;
 		}
-		return null;
     }
 }

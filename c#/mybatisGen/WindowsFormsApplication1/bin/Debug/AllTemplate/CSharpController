@@ -110,16 +110,6 @@ namespace WebApplication1.Controllers
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
-		/// 编辑一条数据
-		/// </summary>
-		/// <param name="data">编辑的数据</param>
-		public JsonResult Edit($entity.EntityName$ data)
-		{
-			Service.Update(data);
-			return MyJson(new Result { code = 0, msg = "保存成功。"});
-		}
-----------------------------------------------------------------------------------------------------------------------------
-		/// <summary>
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>

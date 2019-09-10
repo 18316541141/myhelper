@@ -1,0 +1,40 @@
+﻿package web.template.entity.codeGenerator;
+
+import java.util.Date;
+/**
+ * $entity.EntityNotes$
+ */
+public class $entity.EntityName$ {
+	
+	public $entity.EntityName$() { }
+
+$entity.PropList:{
+	$if(it.ParamsTypeIsEqual)$
+		/**
+		 * $it.PropNotes$
+		 */
+		private $it.PropType$ $it.PropName$;
+
+		public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
+			this.$it.PropName$=$it.PropName$;
+		}
+
+		public final $it.PropType$ get$it.CapUpperPropName$(){
+			return this.$it.PropName$;
+		}
+	$elseif(it.ParamsTypeIsChange)$
+		/**
+		 * $it.PropNotes$
+		 */
+		private $it.PropType$ $it.PropName$;
+
+		public final void set$it.CapUpperPropName$(final $it.PropType$ $it.PropName$){
+			this.$it.PropName$=$it.PropName$;
+		}
+
+		public final $it.PropType$ get$it.CapUpperPropName$(){
+			return this.$it.PropName$;
+		}
+	$endif$
+}$
+}
