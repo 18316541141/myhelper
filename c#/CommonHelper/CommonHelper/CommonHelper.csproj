@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{894851A0-8849-4F2F-8C14-936694B97F60}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommonHelper</RootNamespace>
     <AssemblyName>CommonHelper</AssemblyName>
@@ -145,6 +145,7 @@
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
     <Compile Include="CommonEntity\IEntity.cs" />
     <Compile Include="CommonEntity\LeftMenu.cs" />
+    <Compile Include="CommonEntity\LogEntity.cs" />
     <Compile Include="CommonEntity\MyPagedList.cs" />
     <Compile Include="CommonEntity\RealTimeWSEntity.cs" />
     <Compile Include="CommonEntity\Result.cs" />
@@ -159,8 +160,10 @@
     <Compile Include="EFMap\DistributedTransactionMainDetailMap.cs" />
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />
+    <Compile Include="EFMap\LogEntityMap.cs" />
     <Compile Include="EFRepository\BaseRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
+    <Compile Include="Helper\NumToChinese.cs" />
     <Compile Include="staticVar\AllStatic.cs" />
     <Compile Include="FindAttr\FindDataAttr.cs" />
     <Compile Include="FindAttr\FindDataConvertAttr.cs" />

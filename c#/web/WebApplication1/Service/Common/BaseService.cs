@@ -5,6 +5,7 @@ using Snowflake.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using WebApplication1.Entity.Common;
 using WebApplication1.Filter.Common;
 
 namespace WebApplication1.Service.Common
@@ -47,8 +48,9 @@ namespace WebApplication1.Service.Common
         /// 手动抛出异常信息，并交由异常处理器统一处理
         /// </summary>
         /// <param name="msg">异常信息</param>
+        /// <param name="modularEnum">需指明这是由哪一个模块抛出的异常</param>
         /// <param name="code">错误码</param>
-        protected void Ex(string msg, short code = -1)
+        protected void Ex(string msg,short code = -1)
         {
             throw new Exception(MyErrorAttribute.ErrorPrefix + JsonConvert.SerializeObject(new Result
             {

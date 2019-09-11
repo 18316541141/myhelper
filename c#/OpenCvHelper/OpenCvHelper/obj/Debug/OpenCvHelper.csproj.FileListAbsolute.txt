@@ -145,7 +145,6 @@ E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Guess.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\openCvHelper.exe.config
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\openCvHelper.exe
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\openCvHelper.pdb
-E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Emgu.CV.UI.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Emgu.CV.UI.GL.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Emgu.CV.World.dll
@@ -186,3 +185,4 @@ E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\zh-CHT\Webdiyer.
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\obj\Debug\OpenCvHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\obj\Debug\openCvHelper.exe
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\obj\Debug\openCvHelper.pdb
+E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\CommonHelper.exe

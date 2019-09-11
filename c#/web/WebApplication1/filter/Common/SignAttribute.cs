@@ -43,13 +43,13 @@ namespace WebApplication1.Filter.Common
             HttpContextBase httpContextBase = filterContext.HttpContext;
             HttpRequestBase request = httpContextBase.Request;
             NameValueCollection headers = httpContextBase.Request.Headers;
-            NameValueCollection queryString = request.QueryString;
-            string[] allKeys=queryString.AllKeys;
+            NameValueCollection paramz = request.Params;
+			HttpResponseBase response = httpContextBase.Response;
+            string[] allKeys=paramz.AllKeys;
             foreach (string requiredKey in RequiredKeys)
             {
                 if (!allKeys.Contains(requiredKey))
                 {
-                    HttpResponseBase response = httpContextBase.Response;
                     response.ContentEncoding = Encoding.UTF8;
                     response.ContentType = "application/json;charset=UTF-8";
                     response.StatusCode = 200;
@@ -69,20 +69,32 @@ namespace WebApplication1.Filter.Common
             {
                 if(key!= "signChar" && key != "signKey" && RequiredKeys.Contains(key))
                 {
-                    sb.Append(connChar).Append(key).Append("=").Append(queryString[key]);
+                    sb.Append(connChar).Append(key).Append("=").Append(paramz[key]);
                     connChar = "&";
                 }
             }
-            string signSecret=systemService.FindSecretByKey(queryString["signKey"]);
-            sb.Append("&signKey=").Append(queryString["signKey"]).Append("&signSecret=").Append(signSecret);
+            string signSecret=systemService.FindSecretByKey(paramz["signKey"]);
+			if (signSecret == null)
+            {
+                response.ContentEncoding = Encoding.UTF8;
+                response.ContentType = "application/json;charset=UTF-8";
+                response.StatusCode = 200;
+                response.Write(JsonConvert.SerializeObject(new Result
+                {
+                    code = -12,
+                    msg = "签名错误，signKey或signSecret错误！",
+                }));
+                filterContext.Result = new EmptyResult();
+                return;
+            }
+            sb.Append("&signKey=").Append(paramz["signKey"]).Append("&signSecret=").Append(signSecret);
             string signChar = EncrypHelper.GetSha1FromStr(sb.ToString()).ToUpper();
-            if (signChar == queryString["signChar"])
+            if (signChar == paramz["signChar"].ToUpper())
             {
                 base.OnActionExecuting(filterContext);
             }
             else
             {
-                HttpResponseBase response = httpContextBase.Response;
                 response.ContentEncoding = Encoding.UTF8;
                 response.ContentType = "application/json;charset=UTF-8";
                 response.StatusCode = 200;
