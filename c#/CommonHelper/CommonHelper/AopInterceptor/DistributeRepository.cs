@@ -104,7 +104,7 @@ namespace CommonHelper.AopInterceptor
                                         baseDbContext.Entry(distributedTransactionPart).State = EntityState.Added;
                                     }
                                 }
-                                else if (MethodName == "SetNull" || MethodName == "UpdateAll" || MethodName == "UpdateChange")
+                                else if (MethodName == "UpdateAll" || MethodName == "UpdateChange")
                                 {
                                     var beforeData = target.FindEntity(entity.Key);
                                     if (beforeData != null)
@@ -150,7 +150,7 @@ namespace CommonHelper.AopInterceptor
                                             baseDbContext.Entry(distributedTransactionPart).State = EntityState.Added;
                                         }
                                     }
-                                    else if (MethodName == "UpdateAll" || MethodName == "UpdateChange" || MethodName == "SetNull")
+                                    else if (MethodName == "UpdateAll" || MethodName == "UpdateChange")
                                     {
                                         var beforeData = target.FindEntity(entity.Key);
                                         if (beforeData != null)

@@ -2,7 +2,6 @@ package web.template.mapper.common;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-
 import com.txj.common.entity.MyPagedList;
 /**
  * 操作数据库的mapper
@@ -14,7 +13,7 @@ import com.txj.common.entity.MyPagedList;
  */
 public interface BaseMapper<T,P,SNP> {
 	/**
-	 * 把指定字段的值设置为null
+	 * 把指定字段的值设置为null，注：该方法在分布式事务中，事务失败时不会还原。
 	 * @param setNullParams
 	 * @return
 	 */
@@ -37,35 +36,17 @@ public interface BaseMapper<T,P,SNP> {
 	 * 根据主键删除数据
 	 * @param entity
 	 */
-	public void delete(P params);
+	public void delete(T t);
 	
 	/**
 	 * 根据主键删除一批对象，仅在数量不多的情况下使用
 	 * 该方法删除，如果数量过多需要使用deleteBigList删除
 	 * @param keys
 	 */
-	public void deleteList(List<P> keys);
-
-	/**
-	 * 根据主键删除一批对象，适用于大批量删除。
-	 * @param keys
-	 */
-	default void deleteBigList(List<P> keys){
-		List<P> batchs =new ArrayList<P>();
-		for(int i=1 , len = keys.size();i<=len;i++){
-			batchs.add(keys.get(i-1));
-			if(i % 500==0){
-				deleteList(batchs);
-				batchs.clear();
-			}
-		}
-		if(batchs.size()>0){
-			deleteList(batchs);
-		}
-	}
+	public void deleteList(List<T> keys);
 	
 	/**
-	 * 根据条件删除对象
+	 * 根据条件删除对象，注：该方法在分布式事务中，事务失败时不会还原。
 	 * @param params 删除条件
 	 * @param nparams 不等删除条件
 	 */
@@ -124,10 +105,30 @@ public interface BaseMapper<T,P,SNP> {
 	public void updateAll(T entity);
 	
 	/**
+	 * 修改所有字段
+	 * @param entity
+	 */
+	default void updateAllList(List<T> entities){
+		for(T t:entities){
+			updateAll(t);
+		}
+	}
+	
+	/**
 	 * 只修改变化的字段
 	 * @param entity
 	 */
 	public void updateChange(T entity);
+	
+	/**
+	 * 只修改变化的字段
+	 * @param entity
+	 */
+	default void updateChangeList(List<T> entities){
+		for(T t:entities){
+			updateChange(t);
+		}
+	}
 	
 	/**
 	 * 普通分页查询结果

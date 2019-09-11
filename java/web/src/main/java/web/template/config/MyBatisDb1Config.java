@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -45,6 +46,7 @@ public class MyBatisDb1Config {
     @Primary
     public SqlSessionFactory db1SqlSessionFactory(@Autowired @Qualifier("db1DataSource") DataSource db1DataSource) throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         factoryBean.setDataSource(db1DataSource);
         PathMatchingResourcePatternResolver resolver=new PathMatchingResourcePatternResolver();
         Resource[] db1DataSrcs=resolver.getResources("classpath:mapper/db1/codeGenerator/*.xml");
