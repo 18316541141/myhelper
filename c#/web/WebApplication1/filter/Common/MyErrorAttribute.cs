@@ -52,14 +52,22 @@ namespace WebApplication1.Filter.Common
              * 如果有，则表示是开发人员自发的捕获出来，并写上具体错误原因的异常消息。
              * 如果没有，则表示这是意料之外的异常，这时统一口径就是："系统繁忙，请稍后重试..."
              */
-            string resultJson = exception.Message.StartsWith(ErrorPrefix) ? FindDataHelper.FindDataByPrefix(exception.Message, ErrorPrefix): DefaultExJsonStr;
+            string resultJson;
+            if (exception.Message.StartsWith(ErrorPrefix))
+            {
+                resultJson = FindDataHelper.FindDataByPrefix(exception.Message, ErrorPrefix);
+            }
+            else
+            {
+                log.Error(exception.Message, exception);
+                resultJson = DefaultExJsonStr;
+            }
             HttpContextBase httpContextBase = filterContext.HttpContext;
             HttpResponseBase response = httpContextBase.Response;
             response.ContentEncoding = Encoding.UTF8;
             response.ContentType = "application/json;charset=UTF-8";
             response.StatusCode = 200;
             response.Write(resultJson);
-            log.Error(exception.Message, exception);
             filterContext.Result = new EmptyResult();
             filterContext.ExceptionHandled = true;
         }

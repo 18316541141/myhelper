@@ -24,8 +24,6 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            string ret = NumToChinese.NumConvertToChinese("1456460086.10086");
-            Console.WriteLine();
             //IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
             //Console.WriteLine(ipe.AddressList[4]);
 
