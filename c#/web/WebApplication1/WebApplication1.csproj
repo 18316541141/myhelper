@@ -289,6 +289,7 @@
     <Compile Include="Repository\ProvinceRepository.cs" />
     <Compile Include="Repository\TownRepository.cs" />
     <Compile Include="Service\Common\BaseService.cs" />
+    <Compile Include="Service\Common\MyLog.cs" />
     <Compile Include="Service\IRobotQrCodePayTaskService.cs" />
     <Compile Include="Service\RealTimeInitService.cs" />
     <Compile Include="Service\Common\SystemService.cs" />

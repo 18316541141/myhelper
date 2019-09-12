@@ -18,7 +18,7 @@ namespace WebApplication1.Service.Common
         /// <summary>
         /// 日志输出类
         /// </summary>
-        public ILog log { set; get; }
+        public ILog Log { set; get; }
 
         /// <summary>
         /// 分布式雪花id生成器
