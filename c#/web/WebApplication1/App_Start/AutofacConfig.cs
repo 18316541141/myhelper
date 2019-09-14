@@ -13,6 +13,7 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.Entity.Common;
 using WebApplication1.Service.Common;
 
 namespace WebApplication1.App_Start
@@ -50,8 +51,7 @@ namespace WebApplication1.App_Start
             //containerBuilder.RegisterInstance(factory.CreateConnection()).As<IConnection>().SingleInstance().PropertiesAutowired();
             AllStatic.IdWorker = idWorker;
             containerBuilder.RegisterInstance(idWorker).As<IdWorker>().SingleInstance().PropertiesAutowired();
-            MyLog myLog = new MyLog { Log = LogManager.GetLogger("Log4net.config"),IdWorker = idWorker };
-            containerBuilder.RegisterInstance(myLog).As<ILog>().SingleInstance().PropertiesAutowired();
+            containerBuilder.RegisterInstance(new MyLog()).As<ILog>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(typeof(MvcApplication).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")).SingleInstance().AsSelf().PropertiesAutowired();
             containerBuilder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired().InstancePerRequest();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(containerBuilder.Build()));

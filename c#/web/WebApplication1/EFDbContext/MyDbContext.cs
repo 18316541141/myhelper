@@ -17,7 +17,7 @@ namespace WebApplication1
     /// <summary>
     /// 数据库访问器
     /// </summary>
-    public class MyDbContext: BaseDbContext
+    public sealed class MyDbContext: BaseDbContext
     {
         public MyDbContext() : base(new OracleConnection(WebConfigurationManager.ConnectionStrings[$"{AllStatic.EnvironmentType}.oracleConn"].ConnectionString),true){
         }

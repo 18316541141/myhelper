@@ -10,7 +10,7 @@ namespace WebApplication1.Params
     /// <summary>
     /// 微信商务助手二维码支付任务表
     /// </summary>
-    public partial class IRobotQrCodePayTaskParams
+    public sealed partial class IRobotQrCodePayTaskParams
     {
 
 

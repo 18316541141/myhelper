@@ -8,7 +8,7 @@ namespace WebApplication1.Params
     /// <summary>
     /// 省表查询条件
     /// </summary>
-    public class ProvinceParams
+    public sealed class ProvinceParams
     {
         /// <summary>
         /// 地区名称

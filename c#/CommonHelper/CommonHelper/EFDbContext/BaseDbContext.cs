@@ -52,10 +52,16 @@ namespace CommonHelper.Helper.EFDbContext
         /// </summary>
         public readonly DbSet<DistributedTransactionPart> DistributedTransactionParts;
 
+        /// <summary>
+        /// 日志表
+        /// </summary>
+        public readonly DbSet<LogEntity> LogEntities;
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new DistributedTransactionPartMap());
             modelBuilder.Configurations.Add(new DistributedDataSrcMap());
+            modelBuilder.Configurations.Add(new LogEntityMap());
             base.OnModelCreating(modelBuilder);
         }
     }

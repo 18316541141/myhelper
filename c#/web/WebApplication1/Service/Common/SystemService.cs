@@ -15,13 +15,6 @@ namespace WebApplication1.Service
     /// </summary>
     public class SystemService: BaseService
     {
-        public ProvinceRepository ProvinceRepository { set; get; }
-
-        public CityRepository CityRepository { set; get; }
-
-        public DistrictRepository DistrictRepository { set; get; }
-
-        public TownRepository TownRepository { set; get; }
 
         static List<NewsAlarm> _newsAlarmList;
         static SystemService()
@@ -96,48 +89,48 @@ namespace WebApplication1.Service
         public Dictionary<string, List<AreaTree>> LoadAreaTree()
         {
             Dictionary<string, List<AreaTree>> areaTreeMap = new Dictionary<string, List<AreaTree>>();
-            List<AreaTree> provinces = new List<AreaTree>();
-            foreach (Province province in ProvinceRepository.ReadOnly.FindList())
-            {
-                provinces.Add(new AreaTree
-                {
-                    Name=province.provinceName,
-                    Value=Convert.ToString(province.provinceID)
-                });
-            }
-            areaTreeMap.Add("provinces", provinces);
-            List<AreaTree> cities = new List<AreaTree>();
-            foreach (City city in CityRepository.ReadOnly.FindList())
-            {
-                cities.Add(new AreaTree
-                {
-                    Name = city.CityName,
-                    Value = Convert.ToString(city.CityID),
-                    ParentValue = Convert.ToString(city.ProvinceID)
-                });
-            }
-            areaTreeMap.Add("cities", cities);
-            List<AreaTree> counties = new List<AreaTree>();
-            foreach (District district in DistrictRepository.ReadOnly.FindList())
-            {
-                counties.Add(new AreaTree
-                {
-                    Name = district.DistrictName,
-                    Value = Convert.ToString(district.DistrictID),
-                    ParentValue = Convert.ToString(district.CityID)
-                });
-            }
-            areaTreeMap.Add("counties", counties);
-            //foreach (Town town in townRepository.FindList())
+            //List<AreaTree> provinces = new List<AreaTree>();
+            //foreach (Province province in ProvinceRepository.ReadOnly.FindList())
             //{
-            //    areaTreeList.Add(new AreaTree
+            //    provinces.Add(new AreaTree
             //    {
-            //        name = town.TownName,
-            //        value = town.TownID,
-            //        parentValue = town.DistrictID
+            //        Name=province.provinceName,
+            //        Value=Convert.ToString(province.provinceID)
             //    });
             //}
-            areaTreeMap.Add("towns",new List<AreaTree>());
+            //areaTreeMap.Add("provinces", provinces);
+            //List<AreaTree> cities = new List<AreaTree>();
+            //foreach (City city in CityRepository.ReadOnly.FindList())
+            //{
+            //    cities.Add(new AreaTree
+            //    {
+            //        Name = city.CityName,
+            //        Value = Convert.ToString(city.CityID),
+            //        ParentValue = Convert.ToString(city.ProvinceID)
+            //    });
+            //}
+            //areaTreeMap.Add("cities", cities);
+            //List<AreaTree> counties = new List<AreaTree>();
+            //foreach (District district in DistrictRepository.ReadOnly.FindList())
+            //{
+            //    counties.Add(new AreaTree
+            //    {
+            //        Name = district.DistrictName,
+            //        Value = Convert.ToString(district.DistrictID),
+            //        ParentValue = Convert.ToString(district.CityID)
+            //    });
+            //}
+            //areaTreeMap.Add("counties", counties);
+            ////foreach (Town town in townRepository.FindList())
+            ////{
+            ////    areaTreeList.Add(new AreaTree
+            ////    {
+            ////        name = town.TownName,
+            ////        value = town.TownID,
+            ////        parentValue = town.DistrictID
+            ////    });
+            ////}
+            //areaTreeMap.Add("towns",new List<AreaTree>());
             return areaTreeMap;
         }
 
@@ -159,6 +152,20 @@ namespace WebApplication1.Service
         public List<LeftMenu> LoadLeftMenus()
         {
             List<LeftMenu> leftMenuList = new List<LeftMenu>();
+            LeftMenu sysMgr = new LeftMenu
+            {
+                Id = "systemManager",
+                Title = "系统管理",
+                SortIndex = 0,
+            };
+            sysMgr.LeftMenus.Add(new LeftMenu
+            {
+                Id = "logEntity",
+                Title = "系统日志",
+                Url = "menus/systemManager/logEntity.html",
+                SortIndex = 0,
+            });
+            leftMenuList.Add(sysMgr);
             List<LeftMenu> leftMenuList11 = new List<LeftMenu>();
             LeftMenu leftMenuCharts = new LeftMenu
             {

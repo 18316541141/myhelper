@@ -19,7 +19,7 @@ namespace CommonHelper.CommonEntity
         /// <summary>
         /// 日志日期
         /// </summary>
-        public virtual DateTime CreateDate { set; get; }
+        public virtual DateTime? CreateDate { set; get; }
 
         /// <summary>
         /// 日志等级
@@ -37,9 +37,9 @@ namespace CommonHelper.CommonEntity
         public virtual string Message { set; get; }
 
         /// <summary>
-        /// 异常发生的命名空间
+        /// 异常发生的项目名
         /// </summary>
-        public virtual string Namespace { set; get; }
+        public virtual string ProjectName { set; get; }
 
         /// <summary>
         /// 异常发生的类名称
@@ -49,11 +49,11 @@ namespace CommonHelper.CommonEntity
         /// <summary>
         /// 异常发生的方法名称
         /// </summary>
-        public virtual string MethodName { set; get; }
+        public virtual string FuncName { set; get; }
 
         /// <summary>
-        /// 用户名
+        /// 异常的堆栈信息
         /// </summary>
-        public virtual string Username { set; get; }
+        public virtual string Exception { set; get; }
     }
 }

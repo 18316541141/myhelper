@@ -535,7 +535,7 @@ namespace CommonHelper.Helper.EFRepository
                     PageSize = pageSize,
                     TotalPageCount = totalPageCount,
                     StartItemIndex = (pageSize - 1) * pageIndex + 1,
-                    EndItemIndex = pageSize * pageIndex
+                    EndItemIndex = Math.Min(pageSize * pageIndex,totalItemCount)
                 };
             }
         }

@@ -14,7 +14,7 @@ namespace WebApplication1
     /// <summary>
     /// 数据库访问器
     /// </summary>
-    public class MyDbContext2: BaseDbContext
+    public sealed class MyDbContext2: BaseDbContext
     {
         public MyDbContext2() : base(new SqlConnection("Data Source=183.2.233.235;Initial Catalog=BusinessAssistantDB_Test;User ID=BusinessHeplerTestManager;Password=BusinessHeplerTestManager123;MultipleActiveResultSets=True;"), true){ }
 

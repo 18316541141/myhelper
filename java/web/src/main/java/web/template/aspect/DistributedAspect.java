@@ -2,6 +2,9 @@ package web.template.aspect;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -11,7 +14,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.txj.common.SnowFlakeHelper;
 import com.txj.common.entity.DistributedTransactionPart;
 import com.txj.common.intf.IEntity;
@@ -34,6 +42,13 @@ public class DistributedAspect {
 	public ThreadLocal<int[]> layer;
 
 	public DistributedAspect() {
+		transSet = new HashSet<String>();
+		transSet.add("insert");
+		transSet.add("delete");
+		transSet.add("updateAll");
+		transSet.add("updateChange");
+		transSet.add("deleteList");
+		transSet.add("insertList");
 		transId = new ThreadLocal<Long>();
 		layer = new ThreadLocal<int[]>();
 		layer.set(new int[1]);
@@ -54,8 +69,21 @@ public class DistributedAspect {
 		}
 	}
 
+	/**
+	 * 需要记录逆向操作的操作。
+	 */
+	private Set<String> transSet;
+
+	/**
+	 * 当操作insert、delete、updateAll、updateChange、deleteList、insertList方法时，
+	 * 记录反向操作数据到分布式 事物表中。其他操作时不记录。
+	 * 
+	 * @param joinPoint
+	 * @param params
+	 * @throws Throwable
+	 */
 	@Around("within(web.template.mapper.*Mapper) && args(joinPoint,params)")
-	public void mapperAround(ProceedingJoinPoint joinPoint,Object params) throws Throwable {
+	public void mapperAround(ProceedingJoinPoint joinPoint, Object params) throws Throwable {
 		Signature sig = joinPoint.getSignature();
 		if (!(sig instanceof MethodSignature)) {
 			throw new IllegalArgumentException("该注解只能用于方法");
@@ -63,35 +91,72 @@ public class DistributedAspect {
 		MethodSignature msig = (MethodSignature) sig;
 		Object target = joinPoint.getTarget();
 		Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
-		String methodName=currentMethod.getName();
-		BaseMapper baseMapper=(BaseMapper)joinPoint;
-		DistributedMapper distributedMapper =(DistributedMapper)joinPoint;
+		String methodName = currentMethod.getName();
+		if (transSet.contains(methodName)) {
+			BaseMapper baseMapper = (BaseMapper) joinPoint;
+			DistributedMapper distributedMapper = (DistributedMapper) joinPoint;
+			ObjectMapper objectMapper = BeanUtils.getBean(ObjectMapper.class);
+			DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+			def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+			DataSourceTransactionManager tx = BeanUtils.getBean(DataSourceTransactionManager.class);
+			TransactionStatus status = tx.getTransaction(def);
+			try {
+				if (methodName.equals("insert")) {
+					IEntity entity = (IEntity) params;
+					DistributedTransactionPart distributedTransactionPart = createPart(entity);
+					distributedTransactionPart.setInverseOperType("d");
+					distributedMapper.insertPart(distributedTransactionPart);
+				} else if (methodName.equals("delete")) {
+					IEntity entity = (IEntity) params;
+					DistributedTransactionPart distributedTransactionPart = createPart(entity);
+					distributedTransactionPart.setInverseOperType("i");
+					distributedTransactionPart
+							.setInverseOper(objectMapper.writeValueAsString(baseMapper.findEntity(entity)));
+					distributedMapper.insertPart(distributedTransactionPart);
+				} else if (methodName.equals("updateAll") || methodName.equals("updateChange")) {
+					IEntity entity = (IEntity) params;
+					DistributedTransactionPart distributedTransactionPart = createPart(entity);
+					distributedTransactionPart.setInverseOperType("u");
+					distributedTransactionPart
+							.setInverseOper(objectMapper.writeValueAsString(baseMapper.findEntity(entity)));
+					distributedMapper.insertPart(distributedTransactionPart);
+				} else if (methodName.equals("deleteList")) {
+					List<IEntity> entities = (List<IEntity>) params;
+					for (IEntity entity : entities) {
+						DistributedTransactionPart distributedTransactionPart = createPart(entity);
+						distributedTransactionPart.setInverseOperType("I");
+						distributedTransactionPart
+								.setInverseOper(objectMapper.writeValueAsString(baseMapper.findEntity(entity)));
+						distributedMapper.insertPart(distributedTransactionPart);
+					}
+				} else if (methodName.equals("insertList")) {
+					List<IEntity> entities = (List<IEntity>) params;
+					for (IEntity entity : entities) {
+						DistributedTransactionPart distributedTransactionPart = createPart(entity);
+						distributedTransactionPart.setInverseOperType("D");
+						distributedMapper.insertPart(distributedTransactionPart);
+					}
+				}
+				Object ret = joinPoint.proceed();
+				tx.commit(status);
+			} catch (Throwable e) {
+				tx.rollback(status);
+			}
+		} else {
+			Object ret = joinPoint.proceed();
+		}
+	}
+
+	private DistributedTransactionPart createPart(IEntity entity) {
 		SnowFlakeHelper snowFlakeHelper = BeanUtils.getBean(SnowFlakeHelper.class);
-		
-		DistributedTransactionPart distributedTransactionPart=new DistributedTransactionPart();
+		DistributedTransactionPart distributedTransactionPart = new DistributedTransactionPart();
 		distributedTransactionPart.setCreateDate(new Date());
 		distributedTransactionPart.setDistributedTransactionMainId(transId.get());
-		distributedTransactionPart.setInverseOper("d");
-		distributedTransactionPart.setTransactionStatus((byte)0);
-		if(methodName.equals("insert")){
-			IEntity entity =(IEntity) params;
-			distributedTransactionPart.setId(snowFlakeHelper.nextId());
-			distributedTransactionPart.setTransTableName(entity.TableName());
-			distributedTransactionPart.setTransPrimaryKeyVal(entity.getKey());
-			distributedMapper.insertPart(distributedTransactionPart);
-		}else if(methodName.equals("insertList")){
-			
-		}else if(methodName.equals("delete")){
-			
-		}else if(methodName.equals("deleteList")){
-			
-		}else if(methodName.equals("updateAll")){
-			
-		}else if(methodName.equals("updateChange")){
-			
-		}
-		
-		Object ret = joinPoint.proceed();
+		distributedTransactionPart.setTransactionStatus((byte) 0);
+		distributedTransactionPart.setId(snowFlakeHelper.nextId());
+		distributedTransactionPart.setTransTableName(entity.TableName());
+		distributedTransactionPart.setTransPrimaryKeyVal(entity.getKey());
+		return distributedTransactionPart;
 	}
 
 	/**

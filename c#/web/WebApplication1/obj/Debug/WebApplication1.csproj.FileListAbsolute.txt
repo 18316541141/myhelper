@@ -197,6 +197,7 @@ E:\git_projects\微信报警服务\WebApplication1\WebApplication1\bin\zh-CHT\We
 E:\git_projects\微信报警服务\WebApplication1\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Identity.Owin.resources.dll
 E:\git_projects\微信报警服务\WebApplication1\WebApplication1\bin\http.xml
 E:\git_projects\微信报警服务\WebApplication1\WebApplication1\bin\http.xsd
+E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Log4net.config
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Guess.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\ApplicationInsights.config
@@ -239,8 +240,10 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\amd64\Microsoft.VC90.CRT\Micr
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Antlr3.Runtime.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Antlr3.StringTemplate.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.dll
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.Extras.DynamicProxy.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.Integration.Mvc.dll
-D:\git_project\myhelper\c#\web\WebApplication1\bin\CommonHelper.dll
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Castle.Core.dll
+D:\git_project\myhelper\c#\web\WebApplication1\bin\CommonHelper.exe
 D:\git_project\myhelper\c#\web\WebApplication1\bin\EntityFramework.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\EntityFramework.SqlServer.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\EntityFramework.SqlServerCompact.dll
@@ -257,12 +260,14 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.ApplicationInsights
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.AspNet.Identity.Core.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.AspNet.Identity.Owin.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.Diagnostics.Tracing.EventSource.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.Web.Infrastructure.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\MySql.Data.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\MySql.Data.Entity.EF6.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Newtonsoft.Json.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Oracle.ManagedDataAccess.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Oracle.ManagedDataAccess.EntityFramework.dll
+D:\git_project\myhelper\c#\web\WebApplication1\bin\RabbitMQ.Client.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Snowflake.Net.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Data.SqlServerCe.dll
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Web.Helpers.dll
@@ -285,7 +290,10 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\CommonHelper.pdb
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Antlr3.StringTemplate.pdb
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.pdb
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.xml
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.Extras.DynamicProxy.pdb
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.Extras.DynamicProxy.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Autofac.Integration.Mvc.xml
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Castle.Core.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\EntityFramework.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\EntityFramework.SqlServer.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\EntityFramework.SqlServerCompact.xml
@@ -300,8 +308,10 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.AI.Web.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.AI.WindowsServer.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.ApplicationInsights.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\git_project\myhelper\c#\web\WebApplication1\bin\Microsoft.Diagnostics.Tracing.EventSource.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Newtonsoft.Json.pdb
 D:\git_project\myhelper\c#\web\WebApplication1\bin\Newtonsoft.Json.xml
+D:\git_project\myhelper\c#\web\WebApplication1\bin\RabbitMQ.Client.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Web.Helpers.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Web.Mvc.xml
 D:\git_project\myhelper\c#\web\WebApplication1\bin\System.Web.Optimization.xml
@@ -329,4 +339,3 @@ D:\git_project\myhelper\c#\web\WebApplication1\bin\zh-Hans\Microsoft.AspNet.Iden
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.dll
 D:\git_project\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.pdb
-E:\git_projects\myhelper\c#\web\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache

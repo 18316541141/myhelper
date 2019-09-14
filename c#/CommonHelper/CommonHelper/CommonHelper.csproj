@@ -143,9 +143,13 @@
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
+    <Compile Include="CommonEntity\HeartbeatEntity.cs" />
     <Compile Include="CommonEntity\IEntity.cs" />
     <Compile Include="CommonEntity\LeftMenu.cs" />
     <Compile Include="CommonEntity\LogEntity.cs" />
+    <Compile Include="CommonEntity\LogEntityOrderBy.cs" />
+    <Compile Include="CommonEntity\LogEntityParams.cs" />
+    <Compile Include="CommonEntity\LogEntitySetNullParams.cs" />
     <Compile Include="CommonEntity\MyPagedList.cs" />
     <Compile Include="CommonEntity\RealTimeWSEntity.cs" />
     <Compile Include="CommonEntity\Result.cs" />
@@ -161,7 +165,9 @@
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />
     <Compile Include="EFMap\LogEntityMap.cs" />
+    <Compile Include="EFRepository\BaseMemoryRepository.cs" />
     <Compile Include="EFRepository\BaseRepository.cs" />
+    <Compile Include="EFRepository\HeartbeatEntityRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
     <Compile Include="Helper\NumToChinese.cs" />
     <Compile Include="staticVar\AllStatic.cs" />

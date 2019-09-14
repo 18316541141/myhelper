@@ -11,7 +11,7 @@ namespace WebApplication1.Mapping
     /// <summary>
     /// 
     /// </summary>
-    public class DistrictMap : EntityTypeConfiguration<District>
+    public sealed class DistrictMap : EntityTypeConfiguration<District>
     {
         public DistrictMap()
         {

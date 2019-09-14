@@ -12,7 +12,7 @@ namespace WebApplication1.Mapping
     /// <summary>
     /// 左侧树菜单的映射
     /// </summary>
-    public class LeftMenuMap : EntityTypeConfiguration<LeftMenu>
+    public sealed class LeftMenuMap : EntityTypeConfiguration<LeftMenu>
     {
         public LeftMenuMap()
         {

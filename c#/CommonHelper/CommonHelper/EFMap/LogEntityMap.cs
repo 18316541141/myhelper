@@ -23,160 +23,92 @@ namespace CommonHelper.EFMap
             Property(u => u.Level).HasColumnName("Level");
             Property(u => u.ThreadNo).HasColumnName("Thread_No");
             Property(u => u.Message).HasColumnName("Message");
-            Property(u => u.Namespace).HasColumnName("Namespace");
+            Property(u => u.ProjectName).HasColumnName("Project_Name");
             Property(u => u.TypeName).HasColumnName("Type_Name");
-            Property(u => u.MethodName).HasColumnName("Method_Name");
-            Property(u => u.Username).HasColumnName("USERNAME");
+            Property(u => u.FuncName).HasColumnName("Func_Name");
             /* sql_server版的建表数据
-                CREATE TABLE [dbo].[NewTable] (
-                [ID] bigint NOT NULL ,
-                [Create_Date] datetime2 NULL ,
-                [Level] varchar(5) NULL ,
-                [Thread_No] varchar(5) NULL ,
-                [Message] varchar(MAX) NULL ,
-                [Namespace] varchar(50) NULL ,
-                [Type_Name] varchar(50) NULL ,
-                [Method_Name] varchar(30) NULL ,
-                [USERNAME] varchar(20) NULL ,
-                PRIMARY KEY ([ID])
-                )
-
+                CREATE TABLE [dbo].[Untitled] (
+                  [Id] bigint NOT NULL,
+                  [Create_Date] datetime2(7) NULL,
+                  [Level] varchar(5) COLLATE Chinese_PRC_CI_AS NULL,
+                  [Thread_No] varchar(5) COLLATE Chinese_PRC_CI_AS NULL,
+                  [Message] varchar(max) COLLATE Chinese_PRC_CI_AS NULL,
+                  [Project_Name] varchar(50) COLLATE Chinese_PRC_CI_AS NULL,
+                  [Type_Name] varchar(50) COLLATE Chinese_PRC_CI_AS NULL,
+                  [Func_Name] varchar(30) COLLATE Chinese_PRC_CI_AS NULL,
+                  [Exception] varchar(max) COLLATE Chinese_PRC_CI_AS NULL,
+                  CONSTRAINT [PK__log_enti__3214EC07EFA4021C] PRIMARY KEY CLUSTERED ([Id])
+                WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = OFF, ALLOW_PAGE_LOCKS = OFF)  
+                ON [PRIMARY]
+                )  
+                ON [PRIMARY]
+                TEXTIMAGE_ON [PRIMARY]
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'ID')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'主键id，由分布式雪花id生成'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'ID'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'主键id，由分布式雪花id生成'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'ID'
+                ALTER TABLE [dbo].[Untitled] SET (LOCK_ESCALATION = TABLE)
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Create_Date')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'日志日期'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Create_Date'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'日志日期'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Create_Date'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'主键id，由分布式雪花id生成',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Id'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Level')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'日志分级'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Level'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'日志分级'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Level'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志日期',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Create_Date'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Thread_No')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'线程号'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Thread_No'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'线程号'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Thread_No'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志分级',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Level'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Message')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'日志内容'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Message'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'日志内容'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Message'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'线程号',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Thread_No'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Namespace')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'日志发生的命名空间'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Namespace'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'日志发生的命名空间'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Namespace'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志内容',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Message'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Type_Name')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'日志发生的类型'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Type_Name'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'日志发生的类型'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Type_Name'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志发生的项目名',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Project_Name'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'Method_Name')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'日志发生的方法名称'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Method_Name'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'日志发生的方法名称'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'Method_Name'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志发生的类型',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Type_Name'
                 GO
 
-                IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
-                'SCHEMA', N'dbo', 
-                'TABLE', N'NewTable', 
-                'COLUMN', N'USERNAME')) > 0) 
-                EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'导致该日志的用户'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'USERNAME'
-                ELSE
-                EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'导致该日志的用户'
-                , @level0type = 'SCHEMA', @level0name = N'dbo'
-                , @level1type = 'TABLE', @level1name = N'NewTable'
-                , @level2type = 'COLUMN', @level2name = N'USERNAME'
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志发生的方法名称',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Func_Name'
                 GO
+
+                EXEC sp_addextendedproperty
+                'MS_Description', N'日志的异常堆栈信息',
+                'SCHEMA', N'dbo',
+                'TABLE', N'Untitled',
+                'COLUMN', N'Exception'
              */
         }
     }

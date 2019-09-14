@@ -8,7 +8,7 @@ using WebApplication1.Entity;
 
 namespace WebApplication1.Mapping
 {
-    public class CityMap : EntityTypeConfiguration<City>
+    public sealed class CityMap : EntityTypeConfiguration<City>
     {
         public CityMap()
         {

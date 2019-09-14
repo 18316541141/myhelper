@@ -33,6 +33,7 @@ namespace WebApplication1.Controllers.Common
             s = Path.DirectorySeparatorChar;
         }
 
+        public BaseController(){}
 
         /// <summary>
         /// 返回JsonResult

@@ -40,11 +40,11 @@ namespace WebApplication1.Filter.Common
                 code = -1,
                 msg = "系统繁忙，请稍后重试..."
             });
-            log = DependencyResolver.Current.GetService<ILog>();
         }
 
         public override void OnException(ExceptionContext filterContext)
         {
+            log = DependencyResolver.Current.GetService<ILog>();
             //捕获到系统内部往外抛出的异常
             Exception exception = filterContext.Exception;
             /**

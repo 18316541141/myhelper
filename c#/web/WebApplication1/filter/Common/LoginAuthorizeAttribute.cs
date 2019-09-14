@@ -15,7 +15,7 @@ namespace WebApplication1.Filter.Common
     /// <summary>
     /// 登录校验模块
     /// </summary>
-    public sealed class LoginAuthorizeAttribute : AuthorizeAttribute
+    public class LoginAuthorizeAttribute : AuthorizeAttribute
     {
         /// <summary>
         /// 每次发生请求前先检查action是否允许匿名访问，如果不允许匿名访问，

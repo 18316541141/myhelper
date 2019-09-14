@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApplication1.OrderBy
 {
-    public partial class IRobotQrCodePayTaskOrderBy
+    public sealed partial class IRobotQrCodePayTaskOrderBy
     {
 
 

@@ -235,4 +235,12 @@ $entity.PropList:{
 			where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and #{currentPageIndex}*#{pageSize}
 		)
 	</select>
+
+	<insert id="insertPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.insertPart"></include>
+	</insert>
+
+	<select id="selectPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.selectPart"></include>
+	</select>
 </mapper>
