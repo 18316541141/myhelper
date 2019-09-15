@@ -215,7 +215,7 @@ namespace CommonHelper.EFRepository
         /// <param name="neqArgs">不等查询参数</param>
         /// <param name="baseVal">基准值，仅在跨库分页查询时使用</param>
         /// <returns>返回true表示符合条件，返回false，表示不符合条件</returns>
-        protected abstract bool Query(IEquatable<TEntity> entity, TParams paramz, TParams neqArgs);
+        protected abstract bool Query(TEntity entity, TParams paramz, TParams neqArgs);
 
         /// <summary>
         /// 查询符合查询条件的数据量
@@ -230,7 +230,7 @@ namespace CommonHelper.EFRepository
             {
                 foreach (IEquatable<TEntity> entity in DataList)
                 {
-                    if (Query(entity, eqArgs, neqArgs))
+                    if (Query((TEntity)entity, eqArgs, neqArgs))
                     {
                         count++;
                     }
@@ -252,7 +252,7 @@ namespace CommonHelper.EFRepository
             {
                 foreach (IEquatable<TEntity> entity in DataList)
                 {
-                    if (Query(entity, eqArgs, neqArgs))
+                    if (Query((TEntity)entity, eqArgs, neqArgs))
                     {
                         ret.Add(entity);
                     }
@@ -282,35 +282,37 @@ namespace CommonHelper.EFRepository
             {
                 pageSize = 20;
             }
-            List<IEquatable<TEntity>> ret = new List<IEquatable<TEntity>>(20);
-            int totalCount = 0;
+            List<TEntity> tempList = new List<TEntity>(20);
             lock (DataList)
             {
-                for (int i = 0, totalSkip = (pageIndex - 1) * pageSize, skipCount = 0, takeCount = 0, len = DataList.Count; i < len; i++)
+                for (int i = 0,len = DataList.Count; i < len; i++)
                 {
-                    if (Query(DataList[i], eqArgs, neqArgs) && totalSkip == skipCount && takeCount < pageSize)
+                    if (Query((TEntity)DataList[i], eqArgs, neqArgs))
                     {
-                        ret.Add(DataList[i]);
-                        takeCount++;
+                        tempList.Add((TEntity)DataList[i]);
                     }
-                    else
-                    {
-                        skipCount++;
-                    }
-                    totalCount++;
                 }
             }
+            List<IEquatable<TEntity>> ret =Sort(eqArgs, tempList);
+            ret = ret.Skip(pageSize*(pageIndex-1)).Take(pageSize).ToList();
             return new MyPagedList<IEquatable<TEntity>>
             {
                 PageDataList = ret,
-                TotalItemCount = totalCount,
-                TotalPageCount = (totalCount - totalCount % pageSize) / pageSize + 1,
+                TotalItemCount = ret.Count,
+                TotalPageCount = (ret.Count - ret.Count % pageSize) / pageSize + 1,
                 PageSize = pageSize,
                 CurrentPageIndex = pageIndex,
                 StartItemIndex = (pageSize - 1) * pageIndex + 1,
-                EndItemIndex = Math.Min(pageSize * pageIndex,totalCount)
+                EndItemIndex = Math.Min(pageSize * pageIndex, ret.Count)
             };
         }
+
+        /// <summary>
+        /// 排序操作，根据参数进行排序
+        /// </summary>
+        /// <param name="eqArgs">参数，含有排序信息</param>
+        /// <param name="list">需要排序的列表</param>
+        public abstract List<IEquatable<TEntity>> Sort(TParams eqArgs, List<TEntity> list);
 
         /// <summary>
         /// 修改变化值，把entity不为null的数据视为变化值
@@ -324,7 +326,7 @@ namespace CommonHelper.EFRepository
                 int tempIndex = DataList.IndexOf(entity);
                 if (tempIndex > -1)
                 {
-                    UpdateChange(DataList[tempIndex], entity);
+                    UpdateChange((TEntity)DataList[tempIndex], (TEntity)entity);
                 }
             }
         }
@@ -334,7 +336,7 @@ namespace CommonHelper.EFRepository
         /// </summary>
         /// <param name="src">修改前的数据</param>
         /// <param name="entity">需要修改的数据</param>
-        protected abstract void UpdateChange(IEquatable<TEntity> src, IEquatable<TEntity> change);
+        protected abstract void UpdateChange(TEntity src, TEntity change);
 
         /// <summary>
         /// 把指定字段值设置为null
@@ -349,7 +351,7 @@ namespace CommonHelper.EFRepository
                 int tempIndex = DataList.IndexOf(equal);
                 if (tempIndex > -1)
                 {
-                    SetNullOper(DataList[tempIndex], param);
+                    SetNullOper((TEntity)DataList[tempIndex], param);
                 }
             }
         }
@@ -359,6 +361,6 @@ namespace CommonHelper.EFRepository
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="param"></param>
-        protected abstract void SetNullOper(IEquatable<TEntity> entity, TSetNullParams param);
+        protected abstract void SetNullOper(TEntity entity, TSetNullParams param);
     }
 }

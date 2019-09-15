@@ -144,6 +144,8 @@
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
     <Compile Include="CommonEntity\HeartbeatEntity.cs" />
+    <Compile Include="CommonEntity\HeartbeatEntityParams.cs" />
+    <Compile Include="CommonEntity\HeartbeatEntitySetNullParams.cs" />
     <Compile Include="CommonEntity\IEntity.cs" />
     <Compile Include="CommonEntity\LeftMenu.cs" />
     <Compile Include="CommonEntity\LogEntity.cs" />

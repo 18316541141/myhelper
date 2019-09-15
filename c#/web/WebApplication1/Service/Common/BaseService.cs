@@ -45,12 +45,12 @@ namespace WebApplication1.Service.Common
         }
 
         /// <summary>
-        /// 手动抛出异常信息，并交由异常处理器统一处理
+        /// 直接返回json结果，终止后面的代码处理
         /// </summary>
         /// <param name="msg">异常信息</param>
         /// <param name="modularEnum">需指明这是由哪一个模块抛出的异常</param>
         /// <param name="code">错误码</param>
-        protected void Ex(string msg,short code = -1)
+        protected void Ret(string msg,short code = -1)
         {
             throw new Exception(MyErrorAttribute.ErrorPrefix + JsonConvert.SerializeObject(new Result
             {

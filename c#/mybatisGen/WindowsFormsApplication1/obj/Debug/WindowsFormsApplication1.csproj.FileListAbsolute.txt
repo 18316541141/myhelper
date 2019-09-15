@@ -22,7 +22,6 @@ E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTem
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
-E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\CommonHelper.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\System.Data.SQLite.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Newtonsoft.Json.dll
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\Antlr3.StringTemplate.dll
@@ -128,3 +127,5 @@ D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\Windows
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\EFMemoryRepository
+E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\CommonHelper.exe

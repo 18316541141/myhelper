@@ -9,8 +9,13 @@ namespace CommonHelper.CommonEntity
     /// <summary>
     /// 心跳实体类
     /// </summary>
-    public class HeartbeatEntity
+    public class HeartbeatEntity:IEquatable<HeartbeatEntity>
     {
+        /// <summary>
+        /// 主键id
+        /// </summary>
+        public long? Id { set; get; }
+
         /// <summary>
         /// 心跳用户名
         /// </summary>
@@ -22,19 +27,24 @@ namespace CommonHelper.CommonEntity
         public DateTime LastHeartbeatTime { set; get; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public string OpenId { set; get; }
-
-        /// <summary>
         /// 状态：0（死亡）、1（存活）
         /// </summary>
-        public sbyte Status
+        public sbyte? Status
         {
             get
             {
-                return (sbyte)((DateTime.Now - LastHeartbeatTime).TotalMinutes < 10?1:0);
+                return (sbyte?)((DateTime.Now - LastHeartbeatTime).TotalMinutes < 10?1:0);
             }
+        }
+
+        /// <summary>
+        /// 等值依据
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(HeartbeatEntity other)
+        {
+            return other.Id == Id;
         }
     }
 }

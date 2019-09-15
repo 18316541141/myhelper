@@ -23,6 +23,41 @@ namespace WindowsFormsApplication1.Service
 
         char s = Path.AltDirectorySeparatorChar;
 
+
+        /// <summary>
+        /// 把实体类转为.net内存表操作的代码
+        /// </summary>
+        /// <param name="entity"></param>
+        public void CSharpMemoryRepository(Entity entity)
+        {
+            string dateStr = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string paramsPath = $@"GenTarget{s}{dateStr}{s}Params{s}CodeGenerator{s}";
+            string orderByPath = $@"GenTarget{s}{dateStr}{s}OrderBy{s}CodeGenerator{s}";
+            string entityPath = $@"GenTarget{s}{dateStr}{s}Entity{s}CodeGenerator{s}";
+            string repositoryPath = $@"GenTarget{s}{dateStr}{s}Repository{s}CodeGenerator{s}";
+            string servicePath = $@"GenTarget{s}{dateStr}{s}Service{s}";
+            string controllersPath = $@"GenTarget{s}{dateStr}{s}Controllers{s}";
+            string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}CodeGenerator{s}";
+            string basePath = $@"GenTarget{s}{dateStr}{s}";
+            Directory.CreateDirectory(paramsPath);
+            Directory.CreateDirectory(orderByPath);
+            Directory.CreateDirectory(entityPath);
+            Directory.CreateDirectory(repositoryPath);
+            Directory.CreateDirectory(servicePath);
+            Directory.CreateDirectory(controllersPath);
+            Directory.CreateDirectory(mappingPath);
+            Directory.CreateDirectory(basePath);
+            File.WriteAllText($"{paramsPath}{entity.EntityName}Params.cs", _templateHelper.EntityToStr(entity, "CSharpParams"), Encoding.UTF8);
+            File.WriteAllText($"{paramsPath}{entity.EntityName}SetNullParams.cs", _templateHelper.EntityToStr(entity, "CSharpSetNullParams"), Encoding.UTF8);
+            File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.cs", _templateHelper.EntityToStr(entity, "CSharpOrderBy"), Encoding.UTF8);
+            File.WriteAllText($"{entityPath}{entity.EntityName}.cs", _templateHelper.EntityToStr(entity, "CSharpEntity"), Encoding.UTF8);
+            File.WriteAllText($"{repositoryPath}{entity.EntityName}MemoryRepository.cs", _templateHelper.EntityToStr(entity, "EFMemoryRepository"), Encoding.UTF8);
+            File.WriteAllText($"{servicePath}{entity.EntityName}Service.cs", _templateHelper.EntityToStr(entity, "CSharpService"), Encoding.UTF8);
+            File.WriteAllText($"{controllersPath}{entity.EntityName}Controller.cs", _templateHelper.EntityToStr(entity, "CSharpController"), Encoding.UTF8);
+            File.WriteAllText($"{mappingPath}{entity.EntityName}Map.cs", _templateHelper.EntityToStr(entity, "EFMapping"), Encoding.UTF8);
+            File.WriteAllText($"{basePath}ElemntUIList.vue", _templateHelper.EntityToStr(entity, "ElemntUIList"), Encoding.UTF8);
+        }
+
         /// <summary>
         /// 把实体类转为.net ef框架的代码
         /// </summary>

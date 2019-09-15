@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AllTemplate\EFMemoryRepository">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Entity\KeyAttr.cs" />
     <Compile Include="NameTrans\RobotNameJavaTrans.cs" />
     <Compile Include="DbTypeTrans\SqlServerToJavaTrans.cs" />
     <None Include="AllTemplate\EFInverseRepository">
@@ -70,6 +74,7 @@
     <Compile Include="Service\EntityTemplateToCode.cs" />
     <Compile Include="Intf\IDbTypeTrans.cs" />
     <Compile Include="NameTrans\RobotNameCSharpTrans.cs" />
+    <Compile Include="Service\GenMemoryEntityService.cs" />
     <Compile Include="SqlInfo\SqliteInfo.cs" />
     <Compile Include="DbTypeTrans\SqliteToCSharpTrans.cs" />
     <Compile Include="SqlInfo\SqlServerInfo.cs" />

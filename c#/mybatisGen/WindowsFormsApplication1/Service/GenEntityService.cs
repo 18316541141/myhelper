@@ -13,6 +13,9 @@ using WindowsFormsApplication1.Intf;
 
 namespace WindowsFormsApplication1.Service
 {
+    /// <summary>
+    /// 生成数据库操作的实体信息
+    /// </summary>
     public sealed class GenEntityService
     {
         /// <summary>
