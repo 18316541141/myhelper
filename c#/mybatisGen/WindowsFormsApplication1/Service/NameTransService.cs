@@ -39,6 +39,16 @@ namespace WindowsFormsApplication1.Service
         }
 
         /// <summary>
+        /// 大驼峰命名法转驼峰命名法，UserAccount -> userAccount
+        /// </summary>
+        /// <param name="bigHump"></param>
+        /// <returns></returns>
+        public string BigHumpToHump(string bigHump)
+        {
+            return bigHump[0].ToString().ToLower() + bigHump.Substring(1, bigHump.Length - 1);
+        }
+
+        /// <summary>
         /// 下划线命名转大驼峰命名法，USER_ACCOUNT -> UserAccount
         /// </summary>
         /// <param name="underline"></param>

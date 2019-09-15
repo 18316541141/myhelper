@@ -18,8 +18,9 @@ namespace WindowsFormsApplication1.Service
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Entity GenTemplateEntity(Type type)
+        public Entity GenTemplateEntity(object obj)
         {
+            Type type=obj.GetType();
             NameTransService nameTransService = new NameTransService();
             Entity entity = new Entity
             {
@@ -33,42 +34,100 @@ namespace WindowsFormsApplication1.Service
                 {
                     entity.KeyName = propertyInfo.Name;
                 }
-                entity.PropList.Add(new Prop
+                if (propertyInfo.PropertyType.Name== "String")
                 {
-                    PropName = propertyInfo.Name,
-                    CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name),
-                    IsKey = keyAttr != null,
-                    PropType = propertyInfo.PropertyType.Name
-                });
-                if (propertyInfo.PropertyType.Name== "string")
-                {
+                    entity.PropList.Add(new Prop
+                    {
+                        PropName = propertyInfo.Name,
+                        CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name),
+                        IsKey = keyAttr != null,
+                        ParamsType = "equal",
+                        PropType = nameTransService.BigHumpToHump(propertyInfo.PropertyType.Name),
+                        SrcPropName = propertyInfo.Name,
+                    });
                     entity.PropList.Add(new Prop
                     {
                         PropName = propertyInfo.Name+"Like",
                         CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name) + "Like",
                         IsKey = keyAttr != null,
-                        PropType = propertyInfo.PropertyType.Name,
+                        PropType = nameTransService.BigHumpToHump(propertyInfo.PropertyType.Name),
                         ParamsType = "like",
                         SrcPropName = propertyInfo.Name
                     });
                 }
-                else if (propertyInfo.PropertyType.Name == "long" || propertyInfo.PropertyType.Name == "DateTime" || propertyInfo.PropertyType.Name == "int32" || propertyInfo.PropertyType.Name == "sbyte")
+                else if (propertyInfo.PropertyType.Name.StartsWith("Nullable"))
                 {
+                    Type temp=propertyInfo.GetValue(obj).GetType();
+                    string typeName = nameTransService.BigHumpToHump(temp.Name);
+                    if(typeName=="int64" || typeName == "int32" || typeName == "int16")
+                    {
+                        if(typeName == "int64")
+                        {
+                            typeName = "long";
+                        }
+                        else if (typeName == "int32")
+                        {
+                            typeName = "int";
+                        }
+                        else if (typeName == "int16")
+                        {
+                            typeName = "byte";
+                        }
+                        entity.PropList.Add(new Prop
+                        {
+                            PropName = propertyInfo.Name,
+                            CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name),
+                            IsKey = keyAttr != null,
+                            PropType = typeName + "?",
+                            ParamsType = "equal",
+                            SrcPropName = propertyInfo.Name
+                        });
+                        entity.PropList.Add(new Prop
+                        {
+                            PropName = propertyInfo.Name + "Start",
+                            CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name) + "Start",
+                            IsKey = keyAttr != null,
+                            PropType = typeName + "?",
+                            ParamsType = "rangStart",
+                            SrcPropName = propertyInfo.Name
+                        });
+                        entity.PropList.Add(new Prop
+                        {
+                            PropName = propertyInfo.Name+ "End",
+                            CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name) + "End",
+                            IsKey = keyAttr != null,
+                            PropType = typeName + "?",
+                            ParamsType = "rangEnd",
+                            SrcPropName = propertyInfo.Name
+                        });
+                    }
+                }
+                else if (propertyInfo.PropertyType.Name=="DateTime")
+                {
+                    entity.PropList.Add(new Prop
+                    {
+                        PropName = propertyInfo.Name,
+                        CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name),
+                        IsKey = keyAttr != null,
+                        ParamsType = "equal",
+                        PropType = propertyInfo.PropertyType.Name+"?",
+                        SrcPropName = propertyInfo.Name
+                    });
                     entity.PropList.Add(new Prop
                     {
                         PropName = propertyInfo.Name + "Start",
                         CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name) + "Start",
                         IsKey = keyAttr != null,
-                        PropType = propertyInfo.PropertyType.Name,
+                        PropType = propertyInfo.PropertyType.Name + "?",
                         ParamsType = "rangStart",
                         SrcPropName = propertyInfo.Name
                     });
                     entity.PropList.Add(new Prop
                     {
-                        PropName = propertyInfo.Name+ "End",
+                        PropName = propertyInfo.Name + "End",
                         CapUpperPropName = nameTransService.HumpToBigHump(propertyInfo.Name) + "End",
                         IsKey = keyAttr != null,
-                        PropType = propertyInfo.PropertyType.Name,
+                        PropType = propertyInfo.PropertyType.Name + "?",
                         ParamsType = "rangEnd",
                         SrcPropName = propertyInfo.Name
                     });

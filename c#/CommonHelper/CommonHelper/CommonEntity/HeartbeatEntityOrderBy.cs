@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace CommonHelper.CommonEntity
 {
-    public class HeartbeatEntitySetNullParams
+    public sealed partial class HeartbeatEntityOrderBy
     {
-        public HeartbeatEntitySetNullParams() { }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Id { set; get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public long? Id { set; get; }
-        /// <summary>
-        /// 
-        /// </summary>
         public bool Username { set; get; }
+
         /// <summary>
         /// 
         /// </summary>

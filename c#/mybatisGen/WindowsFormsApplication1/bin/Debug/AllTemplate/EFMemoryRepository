@@ -26,21 +26,24 @@ namespace WebApplication1.Repository
 			$endif$};separator="else "$
             }
 			orderBy = eqArgs.orderByDesc;
-            if (orderBy != null)
+	    if (orderEnum == null)
             {
-			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+		    if (orderBy != null)
+		    {
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
-				if (orderBy.$it.PropName$) { orderEnum = list.OrderByDescending(a => a.$it.PropName$); }
-			$endif$};separator="else "$
-				else
-				{
-					orderEnum = list.OrderByDescending(a => a.$entity.KeyName$);
-				}
-            }
-            else
-            {
-                orderEnum = list.OrderByDescending(a => a.$entity.KeyName$);
-            }
+					if (orderBy.$it.PropName$) { orderEnum = list.OrderByDescending(a => a.$it.PropName$); }
+				$endif$};separator="else "$
+					else
+					{
+						orderEnum = list.OrderByDescending(a => a.$entity.KeyName$);
+					}
+		    }
+		    else
+		    {
+			orderEnum = list.OrderByDescending(a => a.$entity.KeyName$);
+		    }
+	    }
             List<IEquatable<$entity.EntityName$>> ret = new List<IEquatable<$entity.EntityName$>>();
             foreach ($entity.EntityName$ entity in orderEnum.ToList())
             {
@@ -55,23 +58,23 @@ namespace WebApplication1.Repository
             {
 				$entity.PropList:{$if(it.ParamsTypeIsEqual)$
 
-				if (eqArgs.$it.PropName$ != null && entity.$it.SrcPropName$ != paramz.$it.PropName$)
+				if (paramz.$it.PropName$ != null && entity.$it.SrcPropName$ != paramz.$it.PropName$)
 				{
 					return false;
 				}
 			$elseif(it.ParamsTypeIsRangeStart)$$if(!it.IsKey)$
-				if (eqArgs.$it.PropName$ != null && entity.$it.SrcPropName$ < paramz.$it.PropName$)
+				if (paramz.$it.PropName$ != null && entity.$it.SrcPropName$ < paramz.$it.PropName$)
                 {
                     return false;
                 }
 			$endif$$elseif(it.ParamsTypeIsRangeEnd)$$if(!it.IsKey)$
-				if (eqArgs.$it.PropName$ != null && entity.$it.SrcPropName$ > paramz.$it.PropName$)
+				if (paramz.$it.PropName$ != null && entity.$it.SrcPropName$ > paramz.$it.PropName$)
                 {
                     return false;
                 }
 			$endif$$elseif(it.ParamsTypeIsLike)$$if(!it.IsKey)$
 
-				if (!string.IsNullOrEmpty(eqArgs.$it.PropName$) && entity.$it.SrcPropName$.IndexOf(paramz.$it.PropName$) == -1)
+				if (!string.IsNullOrEmpty(paramz.$it.PropName$) && entity.$it.SrcPropName$.IndexOf(paramz.$it.PropName$) == -1)
                 {
                     return false;
                 }
@@ -90,12 +93,12 @@ namespace WebApplication1.Repository
 			$endif$$endif$}$
         }
 
-        protected override void UpdateChange($entity.EntityName$ src, $entity.EntityName$ change)
+        protected override void UpdateChange($entity.EntityName$ entity, $entity.EntityName$ change)
         {
             $entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
-			if (entity.$it.PropName$ != null)
+			if (change.$it.PropName$ != null)
 			{
-				src.$it.PropName$ = entity.$it.PropName$;
+				entity.$it.PropName$ = change.$it.PropName$;
 			}
 			$endif$$endif$}$
         }

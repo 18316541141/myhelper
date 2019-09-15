@@ -129,3 +129,4 @@ D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\Windows
 D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\EFMemoryRepository
 E:\git_projects\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\CommonHelper.exe
+D:\git_project\myhelper\c#\mybatisGen\WindowsFormsApplication1\bin\Debug\AllTemplate\EFMemoryRepository

@@ -9,6 +9,6 @@ namespace WindowsFormsApplication1.entity
     /// <summary>
     /// 主键属性，用于标识主键
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class KeyAttr:Attribute{}
 }

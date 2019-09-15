@@ -33,9 +33,14 @@ namespace WindowsFormsApplication1
             //entityTemplateToCode.EntityFrameworkCode(entity);
             //------------------------------下面是内存表操作生成部分------------------------------
             GenMemoryEntityService genMemoryEntityService = new GenMemoryEntityService();
-            Entity entity = genMemoryEntityService.GenTemplateEntity(typeof(HeartbeatEntity));
+            Entity entity = genMemoryEntityService.GenTemplateEntity(new HeartbeatEntity
+            {
+                Id=1,
+                LastHeartbeatTime=DateTime.Now,
+                Username = "asdasd",
+            });
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
-            entityTemplateToCode.EntityFrameworkCode(entity);
+            entityTemplateToCode.CSharpMemoryRepository(entity);
         }
     }
 }

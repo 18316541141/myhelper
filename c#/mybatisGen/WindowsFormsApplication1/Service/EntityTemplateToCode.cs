@@ -71,16 +71,16 @@ namespace WindowsFormsApplication1.Service
             string repositoryPath = $@"GenTarget{s}{dateStr}{s}Repository{s}CodeGenerator{s}";
             string servicePath = $@"GenTarget{s}{dateStr}{s}Service{s}";
             string controllersPath = $@"GenTarget{s}{dateStr}{s}Controllers{s}";
-            string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}CodeGenerator{s}";
             string basePath = $@"GenTarget{s}{dateStr}{s}";
+            string mappingPath = $@"GenTarget{s}{dateStr}{s}Mapping{s}CodeGenerator{s}";
             Directory.CreateDirectory(paramsPath);
             Directory.CreateDirectory(orderByPath);
             Directory.CreateDirectory(entityPath);
             Directory.CreateDirectory(repositoryPath);
             Directory.CreateDirectory(servicePath);
             Directory.CreateDirectory(controllersPath);
-            Directory.CreateDirectory(mappingPath);
             Directory.CreateDirectory(basePath);
+            Directory.CreateDirectory(mappingPath);
             File.WriteAllText($"{paramsPath}{entity.EntityName}Params.cs", _templateHelper.EntityToStr(entity, "CSharpParams"), Encoding.UTF8);
             File.WriteAllText($"{paramsPath}{entity.EntityName}SetNullParams.cs", _templateHelper.EntityToStr(entity, "CSharpSetNullParams"), Encoding.UTF8);
             File.WriteAllText($"{orderByPath}{entity.EntityName}OrderBy.cs", _templateHelper.EntityToStr(entity, "CSharpOrderBy"), Encoding.UTF8);

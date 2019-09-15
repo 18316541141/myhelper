@@ -43,7 +43,6 @@ D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentatio
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentation.xml
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
-D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
 D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Log4net.config
