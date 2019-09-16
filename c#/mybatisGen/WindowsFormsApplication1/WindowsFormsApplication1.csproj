@@ -56,7 +56,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="Entity\KeyAttr.cs" />
-    <Compile Include="HeartbeatEntity.cs" />
     <Compile Include="NameTrans\RobotNameJavaTrans.cs" />
     <Compile Include="DbTypeTrans\SqlServerToJavaTrans.cs" />
     <None Include="AllTemplate\EFInverseRepository">

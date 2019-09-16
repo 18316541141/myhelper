@@ -1,4 +1,5 @@
 ﻿using CommonHelper.Helper;
+using CommonHelper.staticVar;
 using CX_Task_Center.Code.Message;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -6,9 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using WebApplication1.App_Start;
-using WebApplication1.Entity;
-using WebApplication1.Entity.Common;
 
 namespace WebApplication1.Controllers.Common
 {
@@ -70,12 +68,12 @@ namespace WebApplication1.Controllers.Common
 
         public BaseController()
         {
-            MonitorServer = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.MonitorServer"];
-            SignKey = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.SignKey"];
-            SignSecret = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.SignSecret"];
-            RobotId = ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.RobotId"];
+            MonitorServer = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.MonitorServer"];
+            SignKey = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.SignKey"];
+            SignSecret = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.SignSecret"];
+            RobotId = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.RobotId"];
             OpenIds = new List<string>();
-            foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{EnvironmentConfig.EnvironmentType}.OpenIds"]))
+            foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.OpenIds"]))
             {
                 OpenIds.Add(Convert.ToString(val));
             }
@@ -94,7 +92,7 @@ namespace WebApplication1.Controllers.Common
                     .Params();
                 try
                 {
-                    JObject jobject = HttpWebRequestHelper.HttpGet($"{MonitorServer}index/heartbeat", param).GetJsonObj();
+                    JObject jobject = HttpWebRequestHelper.HttpGet($"{MonitorServer}Heartbeat/send", param).GetJsonObj();
                     if(Convert.ToInt32(jobject["code"]) != 0)
                     {
                         foreach (string openId in OpenIds)

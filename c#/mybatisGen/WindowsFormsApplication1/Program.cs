@@ -20,27 +20,27 @@ namespace WindowsFormsApplication1
         static void Main()
         {
             //Data Source = 183.2.233.235; Initial Catalog = BusinessAssistantDB_Test; User ID = BusinessHeplerTestManager; Password = BusinessHeplerTestManager123; MultipleActiveResultSets = True
-            //GenEntityService genEntityService = new GenEntityService
-            //{
-            //    NameTrans = new RobotNameCSharpTrans(),
-            //    DbTypeTrans = new SqlServerToCSharpTrans(),
-            //    //DbTypeTrans = new SqliteToCSharpTrans(),
-            //    SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
-            //    //SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
-            //};
-            //Entity entity=genEntityService.GenTemplateEntity("Log_Entity");
-            //EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
-            //entityTemplateToCode.EntityFrameworkCode(entity);
-            //------------------------------下面是内存表操作生成部分------------------------------
-            GenMemoryEntityService genMemoryEntityService = new GenMemoryEntityService();
-            Entity entity = genMemoryEntityService.GenTemplateEntity(new HeartbeatEntity
+            GenEntityService genEntityService = new GenEntityService
             {
-                Id=1,
-                LastHeartbeatTime=DateTime.Now,
-                Username = "asdasd",
-            });
+                NameTrans = new RobotNameCSharpTrans(),
+                DbTypeTrans = new SqlServerToCSharpTrans(),
+                //DbTypeTrans = new SqliteToCSharpTrans(),
+                SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
+                //SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
+            };
+            Entity entity = genEntityService.GenTemplateEntity("Heartbeat_Entity");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
-            entityTemplateToCode.CSharpMemoryRepository(entity);
+            entityTemplateToCode.EntityFrameworkCode(entity);
+            //------------------------------下面是内存表操作生成部分------------------------------
+            //GenMemoryEntityService genMemoryEntityService = new GenMemoryEntityService();
+            //Entity entity = genMemoryEntityService.GenTemplateEntity(new HeartbeatEntity
+            //{
+            //    Id=1,
+            //    LastHeartbeatTime=DateTime.Now,
+            //    Username = "asdasd",
+            //});
+            //EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
+            //entityTemplateToCode.CSharpMemoryRepository(entity);
         }
     }
 }

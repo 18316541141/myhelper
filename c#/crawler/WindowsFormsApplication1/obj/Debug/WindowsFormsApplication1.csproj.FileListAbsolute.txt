@@ -53,3 +53,4 @@ E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\WindowsFormsApplica
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config

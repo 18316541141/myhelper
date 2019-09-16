@@ -167,10 +167,10 @@
     <Compile Include="EFMap\DistributedTransactionMainDetailMap.cs" />
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />
+    <Compile Include="EFMap\HeartbeatEntityMap.cs" />
     <Compile Include="EFMap\LogEntityMap.cs" />
     <Compile Include="EFRepository\BaseMemoryRepository.cs" />
     <Compile Include="EFRepository\BaseRepository.cs" />
-    <Compile Include="EFRepository\HeartbeatEntityRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
     <Compile Include="Helper\NumToChinese.cs" />
     <Compile Include="staticVar\AllStatic.cs" />
