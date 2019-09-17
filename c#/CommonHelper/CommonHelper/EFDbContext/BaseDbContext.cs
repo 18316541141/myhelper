@@ -57,11 +57,17 @@ namespace CommonHelper.Helper.EFDbContext
         /// </summary>
         public readonly DbSet<LogEntity> LogEntities;
 
+        /// <summary>
+        /// 心跳监测表
+        /// </summary>
+        public readonly DbSet<HeartbeatEntity> HeartbeatEntities;
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new DistributedTransactionPartMap());
             modelBuilder.Configurations.Add(new DistributedDataSrcMap());
             modelBuilder.Configurations.Add(new LogEntityMap());
+            modelBuilder.Configurations.Add(new HeartbeatEntityMap());
             base.OnModelCreating(modelBuilder);
         }
     }
