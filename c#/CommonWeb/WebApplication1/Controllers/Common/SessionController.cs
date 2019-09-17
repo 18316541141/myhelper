@@ -11,6 +11,7 @@ using System.Web.Security;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 using WebApplication1.Filter.Common;
+using WebApplication1.Intf;
 using WebApplication1.Service;
 
 namespace WebApplication1.Controllers.Common
@@ -18,9 +19,12 @@ namespace WebApplication1.Controllers.Common
     /// <summary>
     /// 所有操作session的请求都在这里处理
     /// </summary>
-    public sealed class SessionController : BaseController
+    public sealed partial class SessionController : BaseController
     {
-        public SystemService SystemService { set; get; }
+        /// <summary>
+        /// 用户专用的接口类，提供用户操作的业务逻辑
+        /// </summary>
+        public IUserService UserService { set; get; }
 
         /// <summary>
         /// 验证码获取
@@ -93,11 +97,7 @@ namespace WebApplication1.Controllers.Common
                     return Json(new Result { code = -1, msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
                 }
 #endif
-                //zhang
-                string u = "zhang";
-                //123
-                string p = "40bd001563085fc35165329ea1ff5c5ecbdbbeef";
-                if (u == username && p == password)
+                if (UserService.CheckLogin(username, password))
                 {
                     FormsAuthentication.SetAuthCookie(username, false);
                     string guid=Guid.NewGuid().ToString();
@@ -113,7 +113,7 @@ namespace WebApplication1.Controllers.Common
                             SingleUserAttribute.UserMap.Add(username, guid);
                         }
                     }
-                    return Json(new Result { code = 0, data = new { leftMenus = SystemService.LoadLeftMenus() } }, JsonRequestBehavior.AllowGet);
+                    return Json(new Result { code = 0, data = new { leftMenus = UserService.LoadLeftMenus(User.Identity.Name) } }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {

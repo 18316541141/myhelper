@@ -49,8 +49,6 @@ namespace WebApplication1.App_Start
                 ipNum += Convert.ToInt32(parts[0]) << ((3 - i) * 8);
             }
             IdWorker idWorker = new IdWorker((ipNum >> 27) & 31, ipNum & 31);
-            //ConnectionFactory factory = new ConnectionFactory { HostName = "hostname", UserName = "root", Password = "root001", VirtualHost = "hostserver" };
-            //containerBuilder.RegisterInstance(factory.CreateConnection()).As<IConnection>().SingleInstance().PropertiesAutowired();
             AllStatic.IdWorker = idWorker;
             containerBuilder.RegisterInstance(idWorker).As<IdWorker>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterInstance(new MyLog()).As<ILog>().SingleInstance().PropertiesAutowired();

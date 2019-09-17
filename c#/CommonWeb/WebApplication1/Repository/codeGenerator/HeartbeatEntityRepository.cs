@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
-using WebApplication1.Entity;
-using WebApplication1.Params;
 using CommonHelper.staticVar;
 using CommonHelper.EFRepository;
 using System.Linq.Expressions;
@@ -178,7 +176,7 @@ namespace WebApplication1.Repository
 
         public override BaseDbContext CreateDbContext()
         {
-            return new MyDbContext2();
+            return null;
         }
 
         public override InverseRepository<HeartbeatEntity> CurrentInverse()
@@ -192,7 +190,7 @@ namespace WebApplication1.Repository
         public override List<BaseDbContext> CreateAllDbContext()
         {
             List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
-            baseDbContextList.Add(new MyDbContext2());
+            //baseDbContextList.Add(new MyDbContext2());
             return baseDbContextList;
         }
 

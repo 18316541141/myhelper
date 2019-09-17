@@ -8,17 +8,24 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Entity.Common;
 using WebApplication1.Filter.Common;
+using WebApplication1.Intf;
 using WebApplication1.Service;
 namespace WebApplication1.Controllers.Common
 {
     /// <summary>
     /// 通用控制器
     /// </summary>
-    public sealed class IndexController : FastController
+    public sealed partial class IndexController : FastController
     {
-        public SystemService SystemService { set; get; }
+        /// <summary>
+        /// 首次刷新的业务处理类
+        /// </summary>
+        public IRealTimeInitService RealTimeInitService { set; get; }
 
-        public RealTimeInitService RealTimeInitService { set; get; }
+        /// <summary>
+        /// 用户专用的接口类，提供用户操作的业务逻辑
+        /// </summary>
+        public IUserService UserService { set; get; }
 
         /// <summary>
         /// 等待池表
@@ -47,7 +54,7 @@ namespace WebApplication1.Controllers.Common
         public JsonResult LoadLoginData()
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("leftMenus", SystemService.LoadLeftMenus());
+            data.Add("leftMenus", UserService.LoadLeftMenus(User.Identity.Name));
             return MyJson(new Result { code = 0, data = data });
         }
 
@@ -61,10 +68,16 @@ namespace WebApplication1.Controllers.Common
         [Sign(new string[] { "realTimePool", "realTimeVersion", "createDate", "r" })]
         public JsonResult AnonymousRealTime(string realTimePool, string realTimeVersion,string signKey)
         {
-            return RealTime(realTimePool, realTimeVersion,/*SystemService.LoadUsernameBySignKey(signKey)*/"zhang");
+            return RealTime(realTimePool, realTimeVersion,UserService.LoadUsernameBySignKey(signKey));
         }
 
-
+        /// <summary>
+        /// 实时刷新
+        /// </summary>
+        /// <param name="realTimePool"></param>
+        /// <param name="realTimeVersion"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
 		private JsonResult RealTime(string realTimePool,string realTimeVersion,string username)
 		{
 			if (WaitPoolSet.Contains(realTimePool))
@@ -135,134 +148,6 @@ namespace WebApplication1.Controllers.Common
         public JsonResult RealTime(string realTimePool,string realTimeVersion)
         {
 			return RealTime(realTimePool,realTimeVersion,User.Identity.Name);   
-        }
-
-        /// <summary>
-        /// 加载最新提醒消息
-        /// </summary>
-        /// <param name="version"></param>
-        /// <returns></returns>
-        [Compress]
-        public JsonResult LoadNewsAlarm()
-        {
-            return MyJson(new Result { code = 0, data = SystemService.LoadNewsAlarm() });
-        }
-
-        /// <summary>
-        /// 加载树节点测试方法，正式上线时删除
-        /// </summary>
-        /// <returns></returns>
-        [Compress]
-        public JsonResult LoadTreeNode()
-        {
-            List<TreeFormNode> treeNodeList = new List<TreeFormNode>();
-            treeNodeList.Add(new TreeFormNode
-            {
-                Id = "01",
-                Name = "广东"
-            });
-            treeNodeList.Add(new TreeFormNode
-            {
-                Id = "02",
-                Name = "佛山"
-            });
-            TreeFormNode treeNode;
-            treeNodeList.Add(treeNode = new TreeFormNode
-            {
-                Id = "03",
-                Name = "顺德"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "31",
-                Name = "陈村"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "32",
-                Name = "陳村"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "33",
-                Name = "陳邨"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "34",
-                Name = "陈村1"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "35",
-                Name = "陳村1"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "36",
-                Name = "陳邨1"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "37",
-                Name = "陈村2"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "38",
-                Name = "陳村2"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "39",
-                Name = "陳邨2"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "40",
-                Name = "陈村3"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "41",
-                Name = "陳村3"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "42",
-                Name = "陳邨3"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "43",
-                Name = "陈村4"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "44",
-                Name = "陳村4"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "45",
-                Name = "陳邨4"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "46",
-                Name = "陈村5"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "47",
-                Name = "陳村5"
-            });
-            treeNode.Children.Add(new TreeFormNode
-            {
-                Id = "48",
-                Name = "陳邨5"
-            });
-            return MyJson(new Result { code = 0, data = treeNodeList });
         }
 
         /// <summary>
@@ -404,17 +289,6 @@ namespace WebApplication1.Controllers.Common
             {
                 Response.StatusCode = 404;
             }
-        }
-
-        /// <summary>
-        /// 加载地区选择json
-        /// </summary>
-        /// <returns></returns>
-        [OutputCache(Duration = int.MaxValue)]
-        [Compress]
-        public JsonResult AreaSelect()
-        {
-            return MyJson(new Result { code = 0, data = SystemService.LoadAreaTree() });
         }
 
         /// <summary>

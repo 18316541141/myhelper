@@ -11,7 +11,7 @@ namespace WebApplication1.AutoThread
     /// <summary>
     /// 所有的定时线程
     /// </summary>
-    public class AllAutoThread
+    public sealed partial class AllAutoThread
     {
         HeartbeatEntityRepository heartbeatEntityRepository { set; get; }
 

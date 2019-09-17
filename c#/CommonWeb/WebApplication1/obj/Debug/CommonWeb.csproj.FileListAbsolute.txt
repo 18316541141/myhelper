@@ -1,0 +1,1 @@
+D:\git_project\myhelper\c#\CommonWeb\WebApplication1\obj\Debug\CommonWeb.csprojResolveAssemblyReference.cache
