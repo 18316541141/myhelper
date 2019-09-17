@@ -26,6 +26,38 @@ namespace CommonHelper.EFMap
         /// 机器人id
         /// </summary>
         public virtual string RobotId { set; get; }
+
+        /// <summary>
+        /// 状态：0：已停止、1：运行中
+        /// </summary>
+        [NotMapped]
+        public sbyte Status
+        {
+            get
+            {
+                return (sbyte)((DateTime.Now - LastHeartbeatTime).Value.TotalMinutes > 10?0:1);
+            }
+        }
+
+        /// <summary>
+        /// 状态的中文描述
+        /// </summary>
+        [NotMapped]
+        public string StatusDesc
+        {
+            get
+            {
+                if (Status == 0)
+                {
+                    return "已停止";
+                }
+                else if (Status == 1)
+                {
+                    return "运行中";
+                }
+                return null;
+            }
+        }
         /*
             [NotMapped]
             public long? Key

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Urls xmlns="http://wx.qq.com/http.xsd"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+      xs:schemaLocation="http://wx.qq.com/http.xsd http.xsd">
+  <Url xmlns="" prefix="https://webpush.wx2.qq.com/cgi-bin/mmwebwx-bin/synccheck">
+    <!--<Connection><![CDATA[keep-alive]]></Connection>-->
+    <KeepAlive>false</KeepAlive>
+    <UserAgent><![CDATA[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36]]></UserAgent>
+    <Accept><![CDATA[*/*]]></Accept>
+    <Referer><![CDATA[https://wx2.qq.com/?&lang=zh_CN]]></Referer>
+    <AcceptEncoding><![CDATA[gzip, deflate, br]]></AcceptEncoding>
+    <AcceptLanguage><![CDATA[zh-CN,zh;q=0.9]]></AcceptLanguage>
+  </Url>
+  <Url xmlns="" prefix="https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck">
+    <!--<Connection><![CDATA[keep-alive]]></Connection>-->
+    <KeepAlive>false</KeepAlive>
+    <UserAgent><![CDATA[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36]]></UserAgent>
+    <Accept><![CDATA[*/*]]></Accept>
+    <Referer><![CDATA[https://wx.qq.com/?&lang=zh_CN]]></Referer>
+    <AcceptEncoding><![CDATA[gzip, deflate, br]]></AcceptEncoding>
+    <AcceptLanguage><![CDATA[zh-CN,zh;q=0.9]]></AcceptLanguage>
+  </Url>
+  <Url xmlns="" prefix="https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxstatreport
+       https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxinit
+       https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxsync
+       https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact
+       https://wx2.qq.com/cgi-bin/mmwebwx-bin/webwxbatchgetcontact">
+    <Connection><![CDATA[keep-alive]]></Connection>
+    <ContentType><![CDATA[application/json;charset=UTF-8]]></ContentType>
+    <Origin><![CDATA[https://wx2.qq.com]]></Origin>
+    <Referer><![CDATA[https://wx2.qq.com/?&lang=zh_CN]]></Referer>
+    <Accept><![CDATA[application/json, text/plain, */*]]></Accept>
+    <UserAgent><![CDATA[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36]]></UserAgent>
+    <AcceptEncoding><![CDATA[gzip, deflate, br]]></AcceptEncoding>
+    <AcceptLanguage><![CDATA[zh-CN,zh;q=0.9]]></AcceptLanguage>
+  </Url>
+  <Url xmlns="" prefix="https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxstatreport
+       https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit
+       https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsync
+       https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact
+       https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxbatchgetcontact">
+    <Connection><![CDATA[keep-alive]]></Connection>
+    <ContentType><![CDATA[application/json;charset=UTF-8]]></ContentType>
+    <Origin><![CDATA[https://wx.qq.com]]></Origin>
+    <Referer><![CDATA[https://wx.qq.com/?&lang=zh_CN]]></Referer>
+    <Accept><![CDATA[application/json, text/plain, */*]]></Accept>
+    <UserAgent><![CDATA[Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36]]></UserAgent>
+    <AcceptEncoding><![CDATA[gzip, deflate, br]]></AcceptEncoding>
+    <AcceptLanguage><![CDATA[zh-CN,zh;q=0.9]]></AcceptLanguage>
+  </Url>
+</Urls>
