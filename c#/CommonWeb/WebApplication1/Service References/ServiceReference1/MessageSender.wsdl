@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="SendSms">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="toMobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="content" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="appId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSmsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXin">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="toOpenId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="templateName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="appId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWeiXinResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinForTrade">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="toOpenId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="appId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinForTradeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWeiXinForTradeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinForWarning">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="toOpenId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinForWarningResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWeiXinForWarningResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinForTemplate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="toOpenId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="templateName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWeiXinForTemplateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendWeiXinForTemplateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SendSmsSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSms" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSmsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWeiXin" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWeiXinResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinForTradeSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWeiXinForTrade" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinForTradeSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWeiXinForTradeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinForWarningSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWeiXinForWarning" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinForWarningSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWeiXinForWarningResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinForTemplateSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWeiXinForTemplate" />
+  </wsdl:message>
+  <wsdl:message name="SendWeiXinForTemplateSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWeiXinForTemplateResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MessageSenderSoap">
+    <wsdl:operation name="SendSms">
+      <wsdl:input message="tns:SendSmsSoapIn" />
+      <wsdl:output message="tns:SendSmsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXin">
+      <wsdl:input message="tns:SendWeiXinSoapIn" />
+      <wsdl:output message="tns:SendWeiXinSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForTrade">
+      <wsdl:input message="tns:SendWeiXinForTradeSoapIn" />
+      <wsdl:output message="tns:SendWeiXinForTradeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForWarning">
+      <wsdl:input message="tns:SendWeiXinForWarningSoapIn" />
+      <wsdl:output message="tns:SendWeiXinForWarningSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForTemplate">
+      <wsdl:input message="tns:SendWeiXinForTemplateSoapIn" />
+      <wsdl:output message="tns:SendWeiXinForTemplateSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MessageSenderSoap" type="tns:MessageSenderSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendSms">
+      <soap:operation soapAction="http://tempuri.org/SendSms" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXin">
+      <soap:operation soapAction="http://tempuri.org/SendWeiXin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForTrade">
+      <soap:operation soapAction="http://tempuri.org/SendWeiXinForTrade" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForWarning">
+      <soap:operation soapAction="http://tempuri.org/SendWeiXinForWarning" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForTemplate">
+      <soap:operation soapAction="http://tempuri.org/SendWeiXinForTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MessageSenderSoap12" type="tns:MessageSenderSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="SendSms">
+      <soap12:operation soapAction="http://tempuri.org/SendSms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXin">
+      <soap12:operation soapAction="http://tempuri.org/SendWeiXin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForTrade">
+      <soap12:operation soapAction="http://tempuri.org/SendWeiXinForTrade" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForWarning">
+      <soap12:operation soapAction="http://tempuri.org/SendWeiXinForWarning" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendWeiXinForTemplate">
+      <soap12:operation soapAction="http://tempuri.org/SendWeiXinForTemplate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MessageSender">
+    <wsdl:port name="MessageSenderSoap" binding="tns:MessageSenderSoap">
+      <soap:address location="http://msgsend.banshiyi.com/MessageSender.asmx" />
+    </wsdl:port>
+    <wsdl:port name="MessageSenderSoap12" binding="tns:MessageSenderSoap12">
+      <soap12:address location="http://msgsend.banshiyi.com/MessageSender.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
