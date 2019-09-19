@@ -13,13 +13,16 @@ import org.apache.logging.log4j.util.Supplier;
 public class MyLog implements Logger {
 
 	private Logger log;
+	private SnowFlakeHelper snowFlakeHelper;
 
 	private MyLog(Logger log) {
 		this.log = log;
 	}
 
 	public static MyLog getLogger(Class clazz) {
-		return new MyLog(LogManager.getLogger(clazz));
+		MyLog myLog = new MyLog(LogManager.getLogger(clazz));
+		myLog.snowFlakeHelper = BeanUtils.getBean(SnowFlakeHelper.class);
+		return myLog;
 	}
 
 	@Override
@@ -34,7 +37,6 @@ public class MyLog implements Logger {
 
 	@Override
 	public void debug(Message arg0) {
-		MDC
 		log.debug(arg0);
 	}
 
@@ -294,250 +296,298 @@ public class MyLog implements Logger {
 
 	@Override
 	public void error(Message arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0);
 	}
 
 	@Override
 	public void error(MessageSupplier arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0);
 	}
 
 	@Override
 	public void error(CharSequence arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0);
 	}
 
 	@Override
 	public void error(Object arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0);
 	}
 
 	@Override
 	public void error(String arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0);
 	}
 
 	@Override
 	public void error(Supplier<?> arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0);
 	}
 
 	@Override
 	public void error(Marker arg0, Message arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Marker arg0, MessageSupplier arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Marker arg0, CharSequence arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Marker arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Marker arg0, Supplier<?> arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Message arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(MessageSupplier arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(CharSequence arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Object arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(String arg0, Object... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(String arg0, Supplier<?>... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(String arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Supplier<?> arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Marker arg0, Message arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, MessageSupplier arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, CharSequence arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, Object arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Supplier<?>... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, Supplier<?> arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void error(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void error(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10, Object arg11) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 	}
 
@@ -553,250 +603,298 @@ public class MyLog implements Logger {
 
 	@Override
 	public void fatal(Message arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0);
 	}
 
 	@Override
 	public void fatal(MessageSupplier arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0);
 	}
 
 	@Override
 	public void fatal(CharSequence arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0);
 	}
 
 	@Override
 	public void fatal(Object arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0);
 	}
 
 	@Override
 	public void fatal(String arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0);
 	}
 
 	@Override
 	public void fatal(Supplier<?> arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Message arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Marker arg0, MessageSupplier arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Marker arg0, CharSequence arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Supplier<?> arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Message arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(MessageSupplier arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(CharSequence arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Object arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(String arg0, Object... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(String arg0, Supplier<?>... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(String arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Supplier<?> arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Message arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, MessageSupplier arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, CharSequence arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Object arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Supplier<?>... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Supplier<?> arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void fatal(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10, Object arg11) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.fatal(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 	}
 
@@ -817,250 +915,298 @@ public class MyLog implements Logger {
 
 	@Override
 	public void info(Message arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0);
 	}
 
 	@Override
 	public void info(MessageSupplier arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0);
 	}
 
 	@Override
 	public void info(CharSequence arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0);
 	}
 
 	@Override
 	public void info(Object arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0);
 	}
 
 	@Override
 	public void info(String arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0);
 	}
 
 	@Override
 	public void info(Supplier<?> arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0);
 	}
 
 	@Override
 	public void info(Marker arg0, Message arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Marker arg0, MessageSupplier arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Marker arg0, CharSequence arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Marker arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Marker arg0, Supplier<?> arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Message arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(MessageSupplier arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(CharSequence arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Object arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(String arg0, Object... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(String arg0, Supplier<?>... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(String arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Supplier<?> arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Marker arg0, Message arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, MessageSupplier arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, CharSequence arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, Object arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Supplier<?>... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, Supplier<?> arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void info(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void info(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10, Object arg11) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.info(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 	}
 
@@ -1408,250 +1554,298 @@ public class MyLog implements Logger {
 
 	@Override
 	public void trace(Message arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0);
 	}
 
 	@Override
 	public void trace(MessageSupplier arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0);
 	}
 
 	@Override
 	public void trace(CharSequence arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0);
 	}
 
 	@Override
 	public void trace(Object arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0);
 	}
 
 	@Override
 	public void trace(String arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0);
 	}
 
 	@Override
 	public void trace(Supplier<?> arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0);
 	}
 
 	@Override
 	public void trace(Marker arg0, Message arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Marker arg0, MessageSupplier arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Marker arg0, CharSequence arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Marker arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Marker arg0, Supplier<?> arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Message arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(MessageSupplier arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(CharSequence arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Object arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(String arg0, Object... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(String arg0, Supplier<?>... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(String arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Supplier<?> arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Marker arg0, Message arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, MessageSupplier arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, CharSequence arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, Object arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Supplier<?>... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, Supplier<?> arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void trace(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void trace(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10, Object arg11) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.trace(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 	}
 
@@ -1712,250 +1906,298 @@ public class MyLog implements Logger {
 
 	@Override
 	public void warn(Message arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0);
 	}
 
 	@Override
 	public void warn(MessageSupplier arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0);
 	}
 
 	@Override
 	public void warn(CharSequence arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0);
 	}
 
 	@Override
 	public void warn(Object arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0);
 	}
 
 	@Override
 	public void warn(String arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0);
 	}
 
 	@Override
 	public void warn(Supplier<?> arg0) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0);
 	}
 
 	@Override
 	public void warn(Marker arg0, Message arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Marker arg0, MessageSupplier arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Marker arg0, CharSequence arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Marker arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Marker arg0, Supplier<?> arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Message arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(MessageSupplier arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(CharSequence arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Object arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(String arg0, Object... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(String arg0, Supplier<?>... arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(String arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Supplier<?> arg0, Throwable arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Marker arg0, Message arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, MessageSupplier arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, CharSequence arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, Object arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Supplier<?>... arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, Supplier<?> arg1, Throwable arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void warn(String arg0, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
 	}
 
 	@Override
 	public void warn(Marker arg0, String arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6,
 			Object arg7, Object arg8, Object arg9, Object arg10, Object arg11) {
+		MDC.put("Id",  snowFlakeHelper.nextId());
 		log.warn(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
 	}
 }

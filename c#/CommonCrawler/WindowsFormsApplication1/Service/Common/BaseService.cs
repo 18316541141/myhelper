@@ -9,7 +9,7 @@ using System.Linq;
 using System.Web;
 using WebApplication1.Entity.Common;
 
-namespace WebApplication1.Service.Common
+namespace CommonCrawler.Service.Common
 {
     /// <summary>
     /// 基础业务类

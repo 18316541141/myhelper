@@ -81,6 +81,22 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 数字转中文，数字转中文不能直接逐个数字去读，要按照个、十、百、位去读，并且
+        /// 按照口语习惯进行转换，例如“二”读作“两”
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static string NumConvertToChineseSpeak(long num)
+        {
+            string ret = NumConvertToChinese(Convert.ToString(num));
+            if (ret == "二")
+            {
+                ret = "两";
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// 数字转中文，数字转中文不能直接逐个数字去读，要按照个、十、百、位去读
         /// </summary>
         /// <param name="num">字符串类型的数字</param>

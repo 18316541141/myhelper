@@ -35,8 +35,8 @@ public abstract class BaseService {
 	 * 异常往外抛出统一处理的方法
 	 * @param msg 异常信息
 	 */
-	protected void ex(String msg){
-		ex(msg, -1);
+	protected void ret(String msg){
+		ret(msg, -1);
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public abstract class BaseService {
 	 * @param msg 异常信息
 	 * @param code 异常的错误码
 	 */
-	protected void ex(String msg, int code)
+	protected void ret(String msg, int code)
     {
 		ResultException resultException=new ResultException(msg);
 		resultException.getResult().setCode(code);

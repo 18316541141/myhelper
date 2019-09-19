@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82B77463-F71A-4EC8-B70B-6E6A48340C57}</ProjectGuid>
+    <ProjectGuid>{1D6D2026-1F0D-4B1A-8DA8-CD7124563E7A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommonCrawler</RootNamespace>

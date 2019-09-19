@@ -14,6 +14,7 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\System.Reflecti
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\vbc.exe
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\VBCSCompiler.exe
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\VBCSCompiler.exe.config
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\CommonWeb.dll.config
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\CommonWeb.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\CommonWeb.pdb
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Antlr3.Runtime.dll
@@ -26,7 +27,6 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\EntityFramework.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\EntityFramework.SqlServer.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\EntityFramework.SqlServerCompact.dll
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\ICSharpCode.SharpZipLib.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\log4net.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.AI.Agent.Intercept.dll
@@ -41,11 +41,7 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.AspNet.Ident
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.Diagnostics.Tracing.EventSource.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.Web.Infrastructure.dll
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\MySql.Data.dll
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\MySql.Data.Entity.EF6.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Newtonsoft.Json.dll
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Oracle.ManagedDataAccess.dll
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Oracle.ManagedDataAccess.EntityFramework.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\RabbitMQ.Client.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Snowflake.Net.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\System.Data.SqlServerCe.dll
@@ -58,6 +54,7 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\System.Web.WebPages.dl
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\System.Web.WebPages.Razor.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Webdiyer.MvcPager.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\WebGrease.dll
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\zxing.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\NPOI.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\NPOI.OOXML.dll
@@ -76,8 +73,6 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Castle.Core.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\EntityFramework.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\EntityFramework.SqlServer.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\EntityFramework.SqlServerCompact.xml
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.pdb
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\ICSharpCode.SharpZipLib.pdb
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\ICSharpCode.SharpZipLib.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\log4net.xml
@@ -102,6 +97,8 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Webdiyer.MvcPager.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Antlr3.Runtime.pdb
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.AspNet.Identity.Core.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Microsoft.AspNet.Identity.Owin.xml
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.pdb
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\zxing.pdb
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\zxing.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\WebDriver.xml
