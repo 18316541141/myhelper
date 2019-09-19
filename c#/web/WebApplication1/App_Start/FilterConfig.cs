@@ -1,8 +1,7 @@
-﻿using log4net.Repository.Hierarchy;
+﻿using CommonWeb.Filter.Common;
+using log4net.Repository.Hierarchy;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Filter;
-using WebApplication1.Filter.Common;
 
 namespace WebApplication1
 {

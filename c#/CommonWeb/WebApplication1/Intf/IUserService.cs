@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Intf
+namespace CommonWeb.Intf
 {
     /// <summary>
-    ///用户专用的接口类
+    /// 用户操作的业务逻辑接口类，
+    /// 所有用户操作的业务逻辑必须实现这些方法。
     /// </summary>
     public interface IUserService
     {

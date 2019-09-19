@@ -7,10 +7,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using WebApplication1.Entity;
-using WebApplication1.Entity.Common;
-
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 单用户拦截器，检测多个用户名相同的用户登录时产生的guid是不一样的，

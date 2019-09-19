@@ -1,17 +1,15 @@
 ﻿using CommonHelper.CommonEntity;
 using CommonHelper.Helper.CommonEntity;
+using CommonWeb.Controllers.Common;
+using CommonWeb.Filter.Common;
+using CommonWeb.Service;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Controllers.Common;
-using WebApplication1.Entity;
-using WebApplication1.Filter.Common;
-using WebApplication1.Service;
-
-namespace WebApplication1.Controllers
+namespace CommonWeb.Controllers
 {
     /// <summary>
     /// “日志管理”模块的控制器类

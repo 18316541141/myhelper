@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 压缩过滤器

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using CommonHelper.AopInterceptor;
-using WebApplication1.Service.Common;
 using CommonHelper.EFRepository;
 using WebApplication1.Entity.Common;
 using CommonHelper.EFMap;
 using CommonHelper.CommonEntity;
-using WebApplication1.Repository;
 using System.Threading;
+using CommonWeb.Service.Common;
+using CommonWeb.Repository;
 
-namespace WebApplication1.Service
+namespace CommonWeb.Service
 {
 	/// <summary>
     /// “心跳监测”模块的业务类

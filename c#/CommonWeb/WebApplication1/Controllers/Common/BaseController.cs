@@ -1,5 +1,4 @@
-﻿using CommonHelper.Helper;
-using Entity.Common;
+﻿using CommonWeb.Entity.Common;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Web.SessionState;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 
-namespace WebApplication1.Controllers.Common
+namespace CommonWeb.Controllers.Common
 {
     /// <summary>
     /// 基础控制器

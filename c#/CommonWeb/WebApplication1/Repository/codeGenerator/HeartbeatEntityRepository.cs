@@ -14,11 +14,11 @@ using CommonHelper.EFRepository;
 using System.Linq.Expressions;
 using CommonHelper.EFMap;
 
-namespace WebApplication1.Repository
+namespace CommonWeb.Repository
 {
     //启用分布式事务
     //[Intercept(typeof(DistributeRepository))]
-    public partial class HeartbeatEntityRepository : BaseRepository<HeartbeatEntity, HeartbeatEntityParams, HeartbeatEntitySetNullParams>
+    public abstract class HeartbeatEntityRepository : BaseRepository<HeartbeatEntity, HeartbeatEntityParams, HeartbeatEntitySetNullParams>
     {
         /// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -174,24 +174,12 @@ namespace WebApplication1.Repository
             CheckTransactionFinish(primaryKeyVal, "Heartbeat_Entity");
         }
 
-        public override BaseDbContext CreateDbContext()
-        {
-            return null;
-        }
-
         public override InverseRepository<HeartbeatEntity> CurrentInverse()
         {
             using (BaseDbContext db = CreateDbContext())
             {
                 return AllStatic.InverseRepositoryMap[db.Database.Connection.ConnectionString]["IRobot_QrCodePayTask"];
             }
-        }
-
-        public override List<BaseDbContext> CreateAllDbContext()
-        {
-            List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
-            //baseDbContextList.Add(new MyDbContext2());
-            return baseDbContextList;
         }
 
         /// <summary>

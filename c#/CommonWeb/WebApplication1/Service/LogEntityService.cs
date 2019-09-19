@@ -1,10 +1,10 @@
 ﻿
-using WebApplication1.Service.Common;
-using WebApplication1.Repository;
 using WebApplication1.Entity.Common;
 using CommonHelper.CommonEntity;
+using CommonWeb.Service.Common;
+using CommonWeb.Repository;
 
-namespace WebApplication1.Service
+namespace CommonWeb.Service
 {
 	/// <summary>
     /// “日志管理”模块的业务类

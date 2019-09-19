@@ -8,9 +8,9 @@ using CommonHelper.CommonEntity;
 using Snowflake.Net;
 using System.Reflection;
 using System.Diagnostics;
-using WebApplication1.Repository;
+using CommonWeb.Repository;
 
-namespace WebApplication1.Entity.Common
+namespace CommonWeb.Entity.Common
 {
     /// <summary>
     /// 自定义的log日志代理类，用法和原本的ILog一致，但容易扩展

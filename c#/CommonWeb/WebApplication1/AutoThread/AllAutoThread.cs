@@ -1,12 +1,11 @@
 ﻿using CommonHelper.EFMap;
+using CommonWeb.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Web;
-using WebApplication1.Repository;
 
-namespace WebApplication1.AutoThread
+namespace CommonWeb.AutoThread
 {
     /// <summary>
     /// 所有的定时线程

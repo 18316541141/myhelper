@@ -13,13 +13,11 @@ using WebApplication1.Entity;
 using CommonHelper.staticVar;
 using CommonHelper.EFRepository;
 using System.Linq.Expressions;
-using WebApplication1;
-
-namespace WebApplication1.Repository
+namespace CommonWeb.Repository
 {
     //启用分布式事务
     //[Intercept(typeof(DistributeRepository))]
-    public partial class LogEntityRepository : BaseRepository<LogEntity, LogEntityParams, LogEntitySetNullParams>
+    public abstract partial class LogEntityRepository : BaseRepository<LogEntity, LogEntityParams, LogEntitySetNullParams>
     {
         /// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -355,24 +353,12 @@ namespace WebApplication1.Repository
             CheckTransactionFinish(primaryKeyVal, "Log_Entity");
         }
 
-        public override BaseDbContext CreateDbContext()
-        {
-            return null;
-        }
-
         public override InverseRepository<LogEntity> CurrentInverse()
         {
             using (BaseDbContext db = CreateDbContext())
             {
                 return AllStatic.InverseRepositoryMap[db.Database.Connection.ConnectionString]["IRobot_QrCodePayTask"];
             }
-        }
-
-        public override List<BaseDbContext> CreateAllDbContext()
-        {
-            List<BaseDbContext> baseDbContextList = new List<BaseDbContext>();
-            //baseDbContextList.Add(new MyDbContext2());
-            return baseDbContextList;
         }
 
         /// <summary>

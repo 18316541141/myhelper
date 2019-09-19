@@ -7,8 +7,7 @@ using System;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Entity.Common;
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 统一的异常处理器，对于任何未处理，或意料之外的异常都会

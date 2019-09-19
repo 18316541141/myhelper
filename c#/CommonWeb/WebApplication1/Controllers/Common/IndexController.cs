@@ -1,15 +1,13 @@
 ﻿using CommonHelper.Helper;
 using CommonHelper.Helper.CommonEntity;
+using CommonWeb.Filter.Common;
+using CommonWeb.Intf;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Entity.Common;
-using WebApplication1.Filter.Common;
-using WebApplication1.Intf;
-using WebApplication1.Service;
 namespace WebApplication1.Controllers.Common
 {
     /// <summary>

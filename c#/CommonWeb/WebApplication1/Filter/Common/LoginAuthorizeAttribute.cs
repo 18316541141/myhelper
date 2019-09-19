@@ -10,7 +10,7 @@ using System.Web.Security;
 using WebApplication1.Entity;
 using WebApplication1.Entity.Common;
 
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 登录校验模块

@@ -6,9 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Entity.Common;
-
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 操作记录

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Entity.Common
+namespace CommonWeb.Entity.Common
 {
     /// <summary>
     /// 自定义jsonResult，可以控制日期的格式化，以及是否使用jsonp跨域

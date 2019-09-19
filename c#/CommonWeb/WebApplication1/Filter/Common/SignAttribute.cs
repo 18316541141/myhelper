@@ -1,5 +1,6 @@
 ﻿using CommonHelper.Helper;
 using CommonHelper.Helper.CommonEntity;
+using CommonWeb.Intf;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Intf;
-
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 签名校验拦截器
@@ -36,7 +35,7 @@ namespace WebApplication1.Filter.Common
         /// <param name="filterContext"></param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ISignFilterService signFilterService = DependencyResolver.Current.GetService<ISignFilterService>();
+            IUserService signFilterService = DependencyResolver.Current.GetService<IUserService>();
             HttpContextBase httpContextBase = filterContext.HttpContext;
             HttpRequestBase request = httpContextBase.Request;
             NameValueCollection headers = httpContextBase.Request.Headers;

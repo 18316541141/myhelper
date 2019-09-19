@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
 using CommonHelper.AopInterceptor;
-using CommonHelper.EFRepository;
 using CommonHelper.Helper;
 using CommonHelper.staticVar;
 using CX_Task_Center.Code.Message;
@@ -18,8 +17,6 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WebApplication1.Entity;
-using WebApplication1.Service;
-using WindowsFormsApplication1.ServiceReference1;
 
 namespace WindowsFormsApplication1
 {
@@ -50,10 +47,10 @@ namespace WindowsFormsApplication1
                 ip = ipe.AddressList[4].ToString();
             }
             int ipNum = 0;
-            string[] parts=ip.Split('.');
-            for(int i=0,len= parts.Length;i<len ;i++)
+            string[] parts = ip.Split('.');
+            for (int i = 0, len = parts.Length; i < len; i++)
             {
-                ipNum += Convert.ToInt32(parts[0])<<((3-i)*8);
+                ipNum += Convert.ToInt32(parts[0]) << ((3 - i) * 8);
             }
             IdWorker idWorker = new IdWorker((ipNum >> 27) & 31, ipNum & 31);
             AllStatic.IdWorker = idWorker;
@@ -65,10 +62,6 @@ namespace WindowsFormsApplication1
             containerBuilder.RegisterAssemblyTypes(typeof(Program).Assembly).Where(n => n.Name.EndsWith("Repository") || n.Name.EndsWith("Service") || n.Name.EndsWith("Controller"))
                 .SingleInstance().AsSelf().PropertiesAutowired().EnableClassInterceptors();
             Container = containerBuilder.Build();
-            //AllStatic.InverseRepositoryMap["Data Source=183.2.233.235;Initial Catalog=BusinessAssistantDB_Test;User ID=BusinessHeplerTestManager;Password=BusinessHeplerTestManager123;MultipleActiveResultSets=True;"] = new Dictionary<string, dynamic>
-            //{
-            //    ["IRobot_QrCodePayTask"] = Container.Resolve<IRobotQrCodePayTaskInverseRepository>()
-            //};
         }
 
         /// <summary>

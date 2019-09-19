@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="62bcd5e8-777a-4cfc-8e95-c738cf03a254" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c187b81b-3c2c-4f5b-a02b-75223cd229b0" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,8 +22,8 @@
     <MetadataSource Address="http://msgsend.banshiyi.com/MessageSender.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MessageSender.disco" MetadataType="Disco" ID="8b80a157-76d4-4480-b004-71aaafc1d02c" SourceId="1" SourceUrl="http://msgsend.banshiyi.com/MessageSender.asmx?disco" />
-    <MetadataFile FileName="MessageSender.wsdl" MetadataType="Wsdl" ID="2a677f7c-54dc-4de6-a29f-c2373ce725f7" SourceId="1" SourceUrl="http://msgsend.banshiyi.com/MessageSender.asmx?wsdl" />
+    <MetadataFile FileName="MessageSender.disco" MetadataType="Disco" ID="fd700b49-5908-41ab-97f4-c9061157bf06" SourceId="1" SourceUrl="http://msgsend.banshiyi.com/MessageSender.asmx?disco" />
+    <MetadataFile FileName="MessageSender.wsdl" MetadataType="Wsdl" ID="79fd5293-bd3e-4720-9c19-d98161ee8349" SourceId="1" SourceUrl="http://msgsend.banshiyi.com/MessageSender.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

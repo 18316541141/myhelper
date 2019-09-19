@@ -1,5 +1,8 @@
 ﻿using CommonHelper.Helper;
 using CommonHelper.Helper.CommonEntity;
+using CommonWeb.Controllers.Common;
+using CommonWeb.Filter.Common;
+using CommonWeb.Intf;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,11 +11,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using WebApplication1.Entity;
-using WebApplication1.Entity.Common;
-using WebApplication1.Filter.Common;
-using WebApplication1.Intf;
-using WebApplication1.Service;
 
 namespace WebApplication1.Controllers.Common
 {
@@ -60,7 +58,7 @@ namespace WebApplication1.Controllers.Common
         [Sign(new string[] { "callback", "signKey", "createDate", "r" })]
         public JsonResult JsonpLogin(string callback,string signKey)
         {
-            string username = "zhang";
+            string username = UserService.LoadUsernameBySignKey(signKey);
             FormsAuthentication.SetAuthCookie(username, false);
             string guid = Guid.NewGuid().ToString();
             Session.Add("loginGuid", guid);

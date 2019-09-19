@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebAppli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonHelper", "..\CommonHelper\CommonHelper\CommonHelper.csproj", "{894851A0-8849-4F2F-8C14-936694B97F60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonWeb", "..\CommonWeb\WebApplication1\CommonWeb.csproj", "{07160ACC-7AF0-4123-AD6B-A7D99B13B246}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{894851A0-8849-4F2F-8C14-936694B97F60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{894851A0-8849-4F2F-8C14-936694B97F60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{894851A0-8849-4F2F-8C14-936694B97F60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07160ACC-7AF0-4123-AD6B-A7D99B13B246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07160ACC-7AF0-4123-AD6B-A7D99B13B246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07160ACC-7AF0-4123-AD6B-A7D99B13B246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07160ACC-7AF0-4123-AD6B-A7D99B13B246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

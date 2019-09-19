@@ -1,14 +1,12 @@
 ﻿using CommonHelper.Helper.CommonEntity;
+using CommonWeb.Filter.Common;
 using log4net;
 using Newtonsoft.Json;
 using Snowflake.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using WebApplication1.Entity.Common;
-using WebApplication1.Filter.Common;
-
-namespace WebApplication1.Service.Common
+namespace CommonWeb.Service.Common
 {
     /// <summary>
     /// 基础业务类

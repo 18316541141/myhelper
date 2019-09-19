@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Controllers.Common;
 
-namespace WebApplication1.Filter.Common
+namespace CommonWeb.Filter.Common
 {
     /// <summary>
     /// 版本更新拦截器，会使得实时加载的版本号更新，并唤醒等待池。
