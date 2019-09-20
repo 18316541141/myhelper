@@ -38,7 +38,7 @@ namespace CommonHelper.Helper
                 ['9'] = '九',
                 ['.'] = '点'
             };
-            ChineseUnits = new char[] {'十','百', '千', '万', '十', '百', '千', '亿', '十', '百', '千', '兆', '京', '十', '百', '千', '垓', '十', '百', '千', '秭', '十', '百', '千', '穰', '十', '百', '千', '沟', '十', '百', '千', '涧', '十', '百', '千', '正', '十', '百', '千', '载', '十', '百', '千', '极' };
+            ChineseUnits = new char[] {' ','十','百', '千', '万', '十', '百', '千', '亿', '十', '百', '千', '兆', '京', '十', '百', '千', '垓', '十', '百', '千', '秭', '十', '百', '千', '穰', '十', '百', '千', '沟', '十', '百', '千', '涧', '十', '百', '千', '正', '十', '百', '千', '载', '十', '百', '千', '极' };
         }
 
         /// <summary>
@@ -108,24 +108,21 @@ namespace CommonHelper.Helper
             for (int j=0,i= beforeNumPart.Length-1;i>=0 ;i--,j++)
             {
                 char n =ChineseNumMap[beforeNumPart[i]];
-                if (n == '〇')
-                {
-                    beforeChinesePart[0]=n;
-                }
-                else
-                {
-                    beforeChinesePart.Insert(0, n);
-                }
-                if (i != 0)
+                if (n != '〇')
                 {
                     beforeChinesePart.Insert(0, ChineseUnits[j]);
                 }
+                beforeChinesePart.Insert(0, n);
             }
             string full = beforeChinesePart.ToString();
             full = full.StartsWith("一十") ? full.Substring(1) : full;
-            while (full.IndexOf("〇〇")>-1)
+            while (full.IndexOf("〇〇") > -1)
             {
                 full = full.Replace("〇〇", "〇");
+            }
+            if (!full.StartsWith("〇"))
+            {
+                full = full.TrimEnd('〇');
             }
             string afterChinesePart = num.Contains('.')? "点" + NoConvertToChinese(FindDataHelper.FindDataByPrefix(num, ".")):"";
             return full+ afterChinesePart;
