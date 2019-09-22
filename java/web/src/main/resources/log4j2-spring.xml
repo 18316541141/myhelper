@@ -18,3 +18,20 @@ log4j.appender.DB.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
 log4j.appender.DB.user=BusinessHeplerTestManager
 log4j.appender.DB.password=BusinessHeplerTestManager123
 log4j.appender.DB.sql=INSERT INTO LOG_ENTITY (ID,CREATE_DATE,THREAD_NO,LEVEL,TYPE_NAME,EXCEPTION,FUNC_NAME) VALUES (%X{Id},NOW(),%t,'%p', '%c','%m','%M')
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug" monitorInterval="86400">
+	<loggers>
+		<!--过滤掉spring和hibernate的一些无用的debug信息-->
+		<logger name="org.springframework" level="INFO">
+		</logger>
+		<logger name="org.mybatis" level="INFO">
+		</logger>
+		<root level="all">
+			<appender-ref ref="Console"/>
+			<appender-ref ref="RollingFileInfo"/>
+			<appender-ref ref="RollingFileWarn"/>
+			<appender-ref ref="RollingFileError"/>
+		</root>
+	</loggers>
+</configuration>
