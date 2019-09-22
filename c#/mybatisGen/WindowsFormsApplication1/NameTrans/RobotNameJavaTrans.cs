@@ -19,8 +19,15 @@ namespace WindowsFormsApplication1.NameTrans
         /// <returns>返回属性名称</returns>
         public string ColNameToPropName(string colName)
         {
-            String[] names=colName.Split('_');
-            return names[0].ToLower()+ names[1];
+            if (colName.IndexOf('_') > -1)
+            {
+                string[] names=colName.Split('_');
+                return names[0].ToLower()+ names[1];
+            }
+            else
+            {
+                return colName.ToLower();
+            }
         }
 
         /// <summary>

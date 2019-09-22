@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.template.mapper.db1.IRobotUserMapper">
+	<resultMap type="IRobotUser" id="IRobotUserMap">
+		<id property="iuId" column="IU_Id" />
+
+		<result property="iuId" column="IU_Id" />
+
+		<result property="iuUsername" column="IU_Username" />
+
+
+		<result property="iuPassword" column="IU_Password" />
+
+
+		<result property="iuSignKey" column="IU_SignKey" />
+
+
+		<result property="iuSignSecret" column="IU_SignSecret" />
+
+
+		<result property="iuCreateDate" column="IU_CreateDate" />
+
+
+
+	</resultMap>
+	<sql id="colNames">
+
+		IU_Id ,IU_Username ,IU_Password ,IU_SignKey ,IU_SignSecret ,IU_CreateDate
+	</sql>
+	<sql id="insertParamPart">
+		insert into IRobot_User(
+		<include refid="colNames"></include>
+		)values
+	</sql>
+	<sql id="insertValPart">
+		(
+
+		#{iuId}
+		#{iuUsername} ,#{iuUsernameLike}
+		#{iuPassword} ,#{iuPasswordLike}
+		#{iuSignKey} ,#{iuSignKeyLike}
+		#{iuSignSecret} ,#{iuSignSecretLike}
+		#{iuCreateDate} ,#{iuCreateDateStart} ,#{iuCreateDateEnd}
+		)
+	</sql>
+	<insert id="insert" parameterType="IRobotUser">
+		<include refid="insertParamPart"></include>
+		<include refid="insertValPart"></include>
+	</insert>
+
+	<insert id="insertList" parameterType="List">
+		<include refid="insertParamPart"></include>
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			<include refid="insertValPart"></include>
+		</foreach>
+	</insert>
+
+	<delete id="delete" parameterType="IRobotUserParams">
+		delete from IRobot_User where
+		IU_Id=#{iuId}
+	</delete>
+
+	<delete id="deleteList" parameterType="List">
+		delete from IRobot_User where IU_Id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item.iuId}</foreach>
+	</delete>
+
+
+	<delete id="deleteByParams" parameterType="IRobotUserParams">
+		delete from IRobot_User
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</delete>
+
+	<select id="findEntity" resultMap="IRobotUserMap" parameterType="IRobotUser">
+		select
+		<include refid="colNames"></include>
+		from IRobot_User where IU_Id=#{iuId}
+	</select>
+
+	<select id="findEntitiesByIn" resultMap="IRobotUserMap"
+		parameterType="List">
+		select
+		<include refid="colNames"></include>
+		from IRobot_User where IU_Id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item.iuId}</foreach>
+	</select>
+
+	<sql id="selectWherePart">
+
+		<if test="params.iuId!=null">AND IU_Id=#{params.iuId}</if>
+
+
+		<if test="params.iuUsername!=null">AND IU_Username=#{params.iuUsername}</if>
+
+
+		<if test="params.iuUsernameLike!=null and params.iuUsernameLike!=''">AND IU_Username like '%'+#{params.iuUsernameLike}+'%'</if>
+		<if test="params.iuPassword!=null">AND IU_Password=#{params.iuPassword}</if>
+
+
+		<if test="params.iuPasswordLike!=null and params.iuPasswordLike!=''">AND IU_Password like '%'+#{params.iuPasswordLike}+'%'</if>
+		<if test="params.iuSignKey!=null">AND IU_SignKey=#{params.iuSignKey}</if>
+
+
+		<if test="params.iuSignKeyLike!=null and params.iuSignKeyLike!=''">AND IU_SignKey like '%'+#{params.iuSignKeyLike}+'%'</if>
+		<if test="params.iuSignSecret!=null">AND IU_SignSecret=#{params.iuSignSecret}</if>
+
+
+		<if test="params.iuSignSecretLike!=null and params.iuSignSecretLike!=''">AND IU_SignSecret like '%'+#{params.iuSignSecretLike}+'%'
+		</if>
+		<if test="params.iuCreateDate!=null">AND IU_CreateDate=#{params.iuCreateDate}</if>
+
+
+		<if test="params.iuCreateDateStart!=null">AND IU_CreateDate &gt;= #{params.iuCreateDateStart}</if>
+
+		<if test="params.iuCreateDateEnd!=null">AND IU_CreateDate &lt;= #{params.iuCreateDateEnd}</if>
+
+		<if test="nparams!=null">
+
+			<if test="nparams.iuId!=null">AND IU_Id!=#{nparams.iuId}</if>
+
+
+			<if test="nparams.iuUsername!=null">AND IU_Username!=#{nparams.iuUsername}</if>
+
+
+			<if test="nparams.iuUsernameLike!=null and nparams.iuUsernameLike!=''">AND IU_Username not like
+				'%'+#{nparams.iuUsernameLike}+'%'</if>
+			<if test="nparams.iuPassword!=null">AND IU_Password!=#{nparams.iuPassword}</if>
+
+
+			<if test="nparams.iuPasswordLike!=null and nparams.iuPasswordLike!=''">AND IU_Password not like
+				'%'+#{nparams.iuPasswordLike}+'%'</if>
+			<if test="nparams.iuSignKey!=null">AND IU_SignKey!=#{nparams.iuSignKey}</if>
+
+
+			<if test="nparams.iuSignKeyLike!=null and nparams.iuSignKeyLike!=''">AND IU_SignKey not like '%'+#{nparams.iuSignKeyLike}+'%'
+			</if>
+			<if test="nparams.iuSignSecret!=null">AND IU_SignSecret!=#{nparams.iuSignSecret}</if>
+
+
+			<if test="nparams.iuSignSecretLike!=null and nparams.iuSignSecretLike!=''">AND IU_SignSecret not like
+				'%'+#{nparams.iuSignSecretLike}+'%'</if>
+			<if test="nparams.iuCreateDate!=null">AND IU_CreateDate!=#{nparams.iuCreateDate}</if>
+
+
+
+
+		</if>
+	</sql>
+
+	<select id="findEntityByParams" resultMap="IRobotUserMap">
+		select
+		<include refid="colNames"></include>
+		from IRobot_User
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.iuId">IU_Id DESC,</if>
+
+					<if test="params.orderByDesc.iuUsername">IU_Username DESC,</if>
+
+
+					<if test="params.orderByDesc.iuPassword">IU_Password DESC,</if>
+
+
+					<if test="params.orderByDesc.iuSignKey">IU_SignKey DESC,</if>
+
+
+					<if test="params.orderByDesc.iuSignSecret">IU_SignSecret DESC,</if>
+
+
+					<if test="params.orderByDesc.iuCreateDate">IU_CreateDate DESC,</if>
+
+
+
+				</when>
+				<otherwise>IU_Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByDesc.iuId">IU_Id ASC,</if>
+
+				<if test="params.orderByDesc.iuUsername">IU_Username ASC,</if>
+
+
+				<if test="params.orderByDesc.iuPassword">IU_Password ASC,</if>
+
+
+				<if test="params.orderByDesc.iuSignKey">IU_SignKey ASC,</if>
+
+
+				<if test="params.orderByDesc.iuSignSecret">IU_SignSecret ASC,</if>
+
+
+				<if test="params.orderByDesc.iuCreateDate">IU_CreateDate ASC,</if>
+
+
+
+			</if>
+		</trim>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(IU_Id) from IRobot_User
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</select>
+
+	<select id="findAllByParams" resultMap="IRobotUserMap">
+		select
+		<include refid="colNames"></include>
+		from IRobot_User
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.iuId">IU_Id DESC,</if>
+
+					<if test="params.orderByDesc.iuUsername">IU_Username DESC,</if>
+
+
+					<if test="params.orderByDesc.iuPassword">IU_Password DESC,</if>
+
+
+					<if test="params.orderByDesc.iuSignKey">IU_SignKey DESC,</if>
+
+
+					<if test="params.orderByDesc.iuSignSecret">IU_SignSecret DESC,</if>
+
+
+					<if test="params.orderByDesc.iuCreateDate">IU_CreateDate DESC,</if>
+
+
+
+				</when>
+				<otherwise>IU_Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByAsc.iuId">IU_Id ASC,</if>
+
+				<if test="params.orderByAsc.iuUsername">IU_Username ASC,</if>
+
+
+				<if test="params.orderByAsc.iuPassword">IU_Password ASC,</if>
+
+
+				<if test="params.orderByAsc.iuSignKey">IU_SignKey ASC,</if>
+
+
+				<if test="params.orderByAsc.iuSignSecret">IU_SignSecret ASC,</if>
+
+
+				<if test="params.orderByAsc.iuCreateDate">IU_CreateDate ASC,</if>
+
+
+
+			</if>
+		</trim>
+	</select>
+
+	<update id="updateAll" parameterType="IRobotUser">
+		update IRobot_User set
+		IU_Id=#{iuId} ,IU_Username=#{iuUsername} ,IU_Password=#{iuPassword}
+		,IU_SignKey=#{iuSignKey} ,IU_SignSecret=#{iuSignSecret}
+		,IU_CreateDate=#{iuCreateDate}
+		where IU_Id=#{iuId}
+	</update>
+
+	<update id="updateChange" parameterType="IRobotUser">
+		update IRobot_User
+		<set>
+
+			<if test="iuId!=null">IU_Id=#{iuId},</if>
+
+
+			<if test="iuUsername!=null">IU_Username=#{iuUsername},</if>
+
+
+
+			<if test="iuPassword!=null">IU_Password=#{iuPassword},</if>
+
+
+
+			<if test="iuSignKey!=null">IU_SignKey=#{iuSignKey},</if>
+
+
+
+			<if test="iuSignSecret!=null">IU_SignSecret=#{iuSignSecret},</if>
+
+
+
+			<if test="iuCreateDate!=null">IU_CreateDate=#{iuCreateDate},</if>
+
+
+
+
+		</set>
+		where IU_Id=#{iuId}
+	</update>
+	<update id="setNull" parameterType="IRobotUserSetNullParams">
+		update IRobot_User
+		<set>
+
+
+			<if test="iuUsername!=null">IU_Username=#{iuUsername},</if>
+
+
+			<if test="iuPassword!=null">IU_Password=#{iuPassword},</if>
+
+
+			<if test="iuSignKey!=null">IU_SignKey=#{iuSignKey},</if>
+
+
+			<if test="iuSignSecret!=null">IU_SignSecret=#{iuSignSecret},</if>
+
+
+			<if test="iuCreateDate!=null">IU_CreateDate=#{iuCreateDate},</if>
+
+
+
+		</set>
+		where IU_Id=#{iuId}
+	</update>
+	<select id="findListByParams" resultMap="IRobotUserMap">
+		select
+		<include refid="colNames"></include>
+		from IRobot_User where IU_Id in(
+		select b.IU_Id from(
+		select IU_Id,ROW_NUMBER() OVER(Order by
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.iuId">IU_Id DESC,</if>
+
+					<if test="params.orderByDesc.iuUsername">IU_Username DESC,</if>
+
+
+					<if test="params.orderByDesc.iuPassword">IU_Password DESC,</if>
+
+
+					<if test="params.orderByDesc.iuSignKey">IU_SignKey DESC,</if>
+
+
+					<if test="params.orderByDesc.iuSignSecret">IU_SignSecret DESC,</if>
+
+
+					<if test="params.orderByDesc.iuCreateDate">IU_CreateDate DESC,</if>
+
+
+
+				</when>
+				<otherwise>IU_Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByAsc.iuId">IU_Id ASC,</if>
+
+				<if test="params.orderByAsc.iuUsername">IU_Username ASC,</if>
+
+
+				<if test="params.orderByAsc.iuPassword">IU_Password ASC,</if>
+
+
+				<if test="params.orderByAsc.iuSignKey">IU_SignKey ASC,</if>
+
+
+				<if test="params.orderByAsc.iuSignSecret">IU_SignSecret ASC,</if>
+
+
+				<if test="params.orderByAsc.iuCreateDate">IU_CreateDate ASC,</if>
+
+
+
+			</if>
+		</trim>
+		) AS RowId
+		from IRobot_User
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		) b
+		where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and
+		#{currentPageIndex}*#{pageSize}
+		)
+	</select>
+
+	<insert id="insertPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.insertPart"></include>
+	</insert>
+
+	<select id="selectPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.selectPart"></include>
+	</select>
+</mapper>

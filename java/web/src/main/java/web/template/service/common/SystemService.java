@@ -7,10 +7,10 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.txj.common.entity.LeftMenu;
 import com.txj.common.entity.MyPagedList;
 
 import web.template.entity.common.AreaTree;
-import web.template.entity.common.LeftMenu;
 import web.template.entity.common.NewsAlarm;
 
 /**

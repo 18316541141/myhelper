@@ -1,0 +1,523 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.template.mapper.common.LogEntityMapper">
+	<resultMap type="LogEntity" id="LogEntityMap">
+		<id property="id" column="Id" />
+
+		<result property="id" column="Id" />
+
+		<result property="createDate" column="Create_Date" />
+
+
+
+		<result property="level" column="Level" />
+
+
+		<result property="threadNo" column="Thread_No" />
+
+
+		<result property="message" column="Message" />
+
+
+		<result property="projectName" column="Project_Name" />
+
+
+		<result property="typeName" column="Type_Name" />
+
+
+		<result property="funcName" column="Func_Name" />
+
+
+		<result property="exception" column="Exception" />
+
+
+	</resultMap>
+	<sql id="colNames">
+
+		Id ,Create_Date ,Level ,Thread_No ,Message ,Project_Name ,Type_Name
+		,Func_Name ,Exception
+	</sql>
+	<sql id="insertParamPart">
+		insert into Log_Entity(
+		<include refid="colNames"></include>
+		)values
+	</sql>
+	<sql id="insertValPart">
+		(
+
+		#{id}
+		#{createDate} ,#{createDateStart} ,#{createDateEnd}
+		#{level} ,#{levelLike}
+		#{threadNo} ,#{threadNoLike}
+		#{message} ,#{messageLike}
+		#{projectName} ,#{projectNameLike}
+		#{typeName} ,#{typeNameLike}
+		#{funcName} ,#{funcNameLike}
+		#{exception} ,#{exceptionLike}
+		)
+	</sql>
+	<insert id="insert" parameterType="LogEntity">
+		<include refid="insertParamPart"></include>
+		<include refid="insertValPart"></include>
+	</insert>
+
+	<insert id="insertList" parameterType="List">
+		<include refid="insertParamPart"></include>
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			<include refid="insertValPart"></include>
+		</foreach>
+	</insert>
+
+	<delete id="delete" parameterType="LogEntityParams">
+		delete from Log_Entity where
+		Id=#{id}
+	</delete>
+
+	<delete id="deleteList" parameterType="List">
+		delete from Log_Entity where Id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item.id}</foreach>
+	</delete>
+
+
+	<delete id="deleteByParams" parameterType="LogEntityParams">
+		delete from Log_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</delete>
+
+	<select id="findEntity" resultMap="LogEntityMap" parameterType="LogEntity">
+		select
+		<include refid="colNames"></include>
+		from Log_Entity where Id=#{id}
+	</select>
+
+	<select id="findEntitiesByIn" resultMap="LogEntityMap"
+		parameterType="List">
+		select
+		<include refid="colNames"></include>
+		from Log_Entity where Id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item.id}</foreach>
+	</select>
+
+	<sql id="selectWherePart">
+
+		<if test="params.id!=null">AND Id=#{params.id}</if>
+
+
+		<if test="params.createDate!=null">AND Create_Date=#{params.createDate}</if>
+
+
+		<if test="params.createDateStart!=null">AND Create_Date &gt;= #{params.createDateStart}</if>
+
+		<if test="params.createDateEnd!=null">AND Create_Date &lt;= #{params.createDateEnd}</if>
+
+		<if test="params.level!=null">AND Level=#{params.level}</if>
+
+
+		<if test="params.levelLike!=null and params.levelLike!=''">AND Level like '%'+#{params.levelLike}+'%'</if>
+		<if test="params.threadNo!=null">AND Thread_No=#{params.threadNo}</if>
+
+
+		<if test="params.threadNoLike!=null and params.threadNoLike!=''">AND Thread_No like '%'+#{params.threadNoLike}+'%'</if>
+		<if test="params.message!=null">AND Message=#{params.message}</if>
+
+
+		<if test="params.messageLike!=null and params.messageLike!=''">AND Message like '%'+#{params.messageLike}+'%'</if>
+		<if test="params.projectName!=null">AND Project_Name=#{params.projectName}</if>
+
+
+		<if test="params.projectNameLike!=null and params.projectNameLike!=''">AND Project_Name like '%'+#{params.projectNameLike}+'%'
+		</if>
+		<if test="params.typeName!=null">AND Type_Name=#{params.typeName}</if>
+
+
+		<if test="params.typeNameLike!=null and params.typeNameLike!=''">AND Type_Name like '%'+#{params.typeNameLike}+'%'</if>
+		<if test="params.funcName!=null">AND Func_Name=#{params.funcName}</if>
+
+
+		<if test="params.funcNameLike!=null and params.funcNameLike!=''">AND Func_Name like '%'+#{params.funcNameLike}+'%'</if>
+		<if test="params.exception!=null">AND Exception=#{params.exception}</if>
+
+
+		<if test="params.exceptionLike!=null and params.exceptionLike!=''">AND Exception like '%'+#{params.exceptionLike}+'%'</if>
+		<if test="nparams!=null">
+
+			<if test="nparams.id!=null">AND Id!=#{nparams.id}</if>
+
+
+			<if test="nparams.createDate!=null">AND Create_Date!=#{nparams.createDate}</if>
+
+
+
+
+			<if test="nparams.level!=null">AND Level!=#{nparams.level}</if>
+
+
+			<if test="nparams.levelLike!=null and nparams.levelLike!=''">AND Level not like '%'+#{nparams.levelLike}+'%'</if>
+			<if test="nparams.threadNo!=null">AND Thread_No!=#{nparams.threadNo}</if>
+
+
+			<if test="nparams.threadNoLike!=null and nparams.threadNoLike!=''">AND Thread_No not like '%'+#{nparams.threadNoLike}+'%'
+			</if>
+			<if test="nparams.message!=null">AND Message!=#{nparams.message}</if>
+
+
+			<if test="nparams.messageLike!=null and nparams.messageLike!=''">AND Message not like '%'+#{nparams.messageLike}+'%'</if>
+			<if test="nparams.projectName!=null">AND Project_Name!=#{nparams.projectName}</if>
+
+
+			<if test="nparams.projectNameLike!=null and nparams.projectNameLike!=''">AND Project_Name not like
+				'%'+#{nparams.projectNameLike}+'%'</if>
+			<if test="nparams.typeName!=null">AND Type_Name!=#{nparams.typeName}</if>
+
+
+			<if test="nparams.typeNameLike!=null and nparams.typeNameLike!=''">AND Type_Name not like '%'+#{nparams.typeNameLike}+'%'
+			</if>
+			<if test="nparams.funcName!=null">AND Func_Name!=#{nparams.funcName}</if>
+
+
+			<if test="nparams.funcNameLike!=null and nparams.funcNameLike!=''">AND Func_Name not like '%'+#{nparams.funcNameLike}+'%'
+			</if>
+			<if test="nparams.exception!=null">AND Exception!=#{nparams.exception}</if>
+
+
+			<if test="nparams.exceptionLike!=null and nparams.exceptionLike!=''">AND Exception not like '%'+#{nparams.exceptionLike}+'%'
+			</if>
+		</if>
+	</sql>
+
+	<select id="findEntityByParams" resultMap="LogEntityMap">
+		select
+		<include refid="colNames"></include>
+		from Log_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.id">Id DESC,</if>
+
+					<if test="params.orderByDesc.createDate">Create_Date DESC,</if>
+
+
+
+					<if test="params.orderByDesc.level">Level DESC,</if>
+
+
+					<if test="params.orderByDesc.threadNo">Thread_No DESC,</if>
+
+
+					<if test="params.orderByDesc.message">Message DESC,</if>
+
+
+					<if test="params.orderByDesc.projectName">Project_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.typeName">Type_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.funcName">Func_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.exception">Exception DESC,</if>
+
+
+				</when>
+				<otherwise>Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByDesc.id">Id ASC,</if>
+
+				<if test="params.orderByDesc.createDate">Create_Date ASC,</if>
+
+
+
+				<if test="params.orderByDesc.level">Level ASC,</if>
+
+
+				<if test="params.orderByDesc.threadNo">Thread_No ASC,</if>
+
+
+				<if test="params.orderByDesc.message">Message ASC,</if>
+
+
+				<if test="params.orderByDesc.projectName">Project_Name ASC,</if>
+
+
+				<if test="params.orderByDesc.typeName">Type_Name ASC,</if>
+
+
+				<if test="params.orderByDesc.funcName">Func_Name ASC,</if>
+
+
+				<if test="params.orderByDesc.exception">Exception ASC,</if>
+
+
+			</if>
+		</trim>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(Id) from Log_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</select>
+
+	<select id="findAllByParams" resultMap="LogEntityMap">
+		select
+		<include refid="colNames"></include>
+		from Log_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.id">Id DESC,</if>
+
+					<if test="params.orderByDesc.createDate">Create_Date DESC,</if>
+
+
+
+					<if test="params.orderByDesc.level">Level DESC,</if>
+
+
+					<if test="params.orderByDesc.threadNo">Thread_No DESC,</if>
+
+
+					<if test="params.orderByDesc.message">Message DESC,</if>
+
+
+					<if test="params.orderByDesc.projectName">Project_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.typeName">Type_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.funcName">Func_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.exception">Exception DESC,</if>
+
+
+				</when>
+				<otherwise>Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByAsc.id">Id ASC,</if>
+
+				<if test="params.orderByAsc.createDate">Create_Date ASC,</if>
+
+
+
+				<if test="params.orderByAsc.level">Level ASC,</if>
+
+
+				<if test="params.orderByAsc.threadNo">Thread_No ASC,</if>
+
+
+				<if test="params.orderByAsc.message">Message ASC,</if>
+
+
+				<if test="params.orderByAsc.projectName">Project_Name ASC,</if>
+
+
+				<if test="params.orderByAsc.typeName">Type_Name ASC,</if>
+
+
+				<if test="params.orderByAsc.funcName">Func_Name ASC,</if>
+
+
+				<if test="params.orderByAsc.exception">Exception ASC,</if>
+
+
+			</if>
+		</trim>
+	</select>
+
+	<update id="updateAll" parameterType="LogEntity">
+		update Log_Entity set
+		Id=#{id} ,Create_Date=#{createDate} ,Level=#{level} ,Thread_No=#{threadNo}
+		,Message=#{message} ,Project_Name=#{projectName}
+		,Type_Name=#{typeName} ,Func_Name=#{funcName} ,Exception=#{exception}
+		where Id=#{id}
+	</update>
+
+	<update id="updateChange" parameterType="LogEntity">
+		update Log_Entity
+		<set>
+
+			<if test="id!=null">Id=#{id},</if>
+
+
+			<if test="createDate!=null">Create_Date=#{createDate},</if>
+
+
+
+
+			<if test="level!=null">Level=#{level},</if>
+
+
+
+			<if test="threadNo!=null">Thread_No=#{threadNo},</if>
+
+
+
+			<if test="message!=null">Message=#{message},</if>
+
+
+
+			<if test="projectName!=null">Project_Name=#{projectName},</if>
+
+
+
+			<if test="typeName!=null">Type_Name=#{typeName},</if>
+
+
+
+			<if test="funcName!=null">Func_Name=#{funcName},</if>
+
+
+
+			<if test="exception!=null">Exception=#{exception},</if>
+
+
+
+		</set>
+		where Id=#{id}
+	</update>
+	<update id="setNull" parameterType="LogEntitySetNullParams">
+		update Log_Entity
+		<set>
+
+
+			<if test="createDate!=null">Create_Date=#{createDate},</if>
+
+
+
+			<if test="level!=null">Level=#{level},</if>
+
+
+			<if test="threadNo!=null">Thread_No=#{threadNo},</if>
+
+
+			<if test="message!=null">Message=#{message},</if>
+
+
+			<if test="projectName!=null">Project_Name=#{projectName},</if>
+
+
+			<if test="typeName!=null">Type_Name=#{typeName},</if>
+
+
+			<if test="funcName!=null">Func_Name=#{funcName},</if>
+
+
+			<if test="exception!=null">Exception=#{exception},</if>
+
+
+		</set>
+		where Id=#{id}
+	</update>
+	<select id="findListByParams" resultMap="LogEntityMap">
+		select
+		<include refid="colNames"></include>
+		from Log_Entity where Id in(
+		select b.Id from(
+		select Id,ROW_NUMBER() OVER(Order by
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.id">Id DESC,</if>
+
+					<if test="params.orderByDesc.createDate">Create_Date DESC,</if>
+
+
+
+					<if test="params.orderByDesc.level">Level DESC,</if>
+
+
+					<if test="params.orderByDesc.threadNo">Thread_No DESC,</if>
+
+
+					<if test="params.orderByDesc.message">Message DESC,</if>
+
+
+					<if test="params.orderByDesc.projectName">Project_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.typeName">Type_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.funcName">Func_Name DESC,</if>
+
+
+					<if test="params.orderByDesc.exception">Exception DESC,</if>
+
+
+				</when>
+				<otherwise>Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByAsc.id">Id ASC,</if>
+
+				<if test="params.orderByAsc.createDate">Create_Date ASC,</if>
+
+
+
+				<if test="params.orderByAsc.level">Level ASC,</if>
+
+
+				<if test="params.orderByAsc.threadNo">Thread_No ASC,</if>
+
+
+				<if test="params.orderByAsc.message">Message ASC,</if>
+
+
+				<if test="params.orderByAsc.projectName">Project_Name ASC,</if>
+
+
+				<if test="params.orderByAsc.typeName">Type_Name ASC,</if>
+
+
+				<if test="params.orderByAsc.funcName">Func_Name ASC,</if>
+
+
+				<if test="params.orderByAsc.exception">Exception ASC,</if>
+
+
+			</if>
+		</trim>
+		) AS RowId
+		from Log_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		) b
+		where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and
+		#{currentPageIndex}*#{pageSize}
+		)
+	</select>
+
+	<insert id="insertPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.insertPart"></include>
+	</insert>
+
+	<select id="selectPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.selectPart"></include>
+	</select>
+</mapper>

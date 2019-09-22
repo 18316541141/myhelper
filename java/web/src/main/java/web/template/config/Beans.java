@@ -1,5 +1,6 @@
 package web.template.config;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,20 +30,24 @@ import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
 import web.template.filter.CompressFilter;
-import web.template.interceptor.OperCountInterceptor;
-import web.template.interceptor.OperIntervalInterceptor;
+import web.template.formDataConverter.DateConverter;
 import web.template.interceptor.SignInterceptor;
 import web.template.interceptor.SizeFilterInterceptor;
 import web.template.interceptor.SizeFilterInterceptor.SizeInfo;
 import web.template.interceptor.UpdateVersionInterceptor;
-import web.template.interceptor.OperCountInterceptor.ClearInfo;
-import web.template.service.common.SystemService;
+import web.template.intf.IUserService;
 import web.template.shiro.MyFormAuthenticationFilter;
 import web.template.shiro.MyPermissionResolver;
 import web.template.shiro.MyPermissionsAuthorizationFilter;
 import web.template.shiro.UserRealm;
 @Configuration
 public class Beans {
+	
+	@Bean
+    public Converter<String, Date> dateConverter() {
+        return new DateConverter();
+    }
+	
 	@Bean(name="defaultKaptcha")
 	public DefaultKaptcha defaultKaptcha(){
 		final Properties properties=new Properties();
@@ -119,7 +126,7 @@ public class Beans {
 	}
 	
 	@Bean(name="shiroFilter")
-	public ShiroFilterFactoryBean shiroFilter(@Autowired final SecurityManager securityManager,@Autowired final MyPermissionsAuthorizationFilter myPermissionsAuthorizationFilter,@Autowired final ObjectMapper objectMapper,@Autowired final SystemService systemService){
+	public ShiroFilterFactoryBean shiroFilter(@Autowired final SecurityManager securityManager,@Autowired final MyPermissionsAuthorizationFilter myPermissionsAuthorizationFilter,@Autowired final ObjectMapper objectMapper,@Autowired final IUserService userService){
 		final ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		
@@ -136,7 +143,7 @@ public class Beans {
 		myFormAuthenticationFilter.setUsernameParam("username");
 		myFormAuthenticationFilter.setPasswordParam("password");
 		myFormAuthenticationFilter.setObjectMapper(objectMapper);
-		myFormAuthenticationFilter.setSystemService(systemService);
+		myFormAuthenticationFilter.setUserService(userService);
 		filterMap.put("authc",myFormAuthenticationFilter);
 		filterMap.put("perms", myPermissionsAuthorizationFilter);
 		return shiroFilterFactoryBean;

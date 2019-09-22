@@ -95,3 +95,4 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
+D:\git_project\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache

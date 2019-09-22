@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.template.mapper.common.HeartbeatEntityMapper">
+	<resultMap type="HeartbeatEntity" id="HeartbeatEntityMap">
+		<id property="id" column="Id" />
+		<result property="id" column="Id" />
+		<result property="lastHeartbeat" column="Last_Heartbeat_Time" />
+		<result property="robotId" column="Robot_Id" />
+	</resultMap>
+	<sql id="colNames">
+
+		Id ,Last_Heartbeat_Time ,Robot_Id
+	</sql>
+	<sql id="insertParamPart">
+		insert into Heartbeat_Entity(
+		<include refid="colNames"></include>
+		)values
+	</sql>
+	<sql id="insertValPart">
+		(
+
+		#{id}
+		#{lastHeartbeat} ,#{lastHeartbeatStart} ,#{lastHeartbeatEnd}
+		#{robotId} ,#{robotIdLike}
+		)
+	</sql>
+	<insert id="insert" parameterType="HeartbeatEntity">
+		<include refid="insertParamPart"></include>
+		<include refid="insertValPart"></include>
+	</insert>
+
+	<insert id="insertList" parameterType="List">
+		<include refid="insertParamPart"></include>
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			<include refid="insertValPart"></include>
+		</foreach>
+	</insert>
+
+	<delete id="delete" parameterType="HeartbeatEntityParams">
+		delete from Heartbeat_Entity
+		where Id=#{id}
+	</delete>
+
+	<delete id="deleteList" parameterType="List">
+		delete from Heartbeat_Entity where Id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item.id}</foreach>
+	</delete>
+
+
+	<delete id="deleteByParams" parameterType="HeartbeatEntityParams">
+		delete from Heartbeat_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</delete>
+
+	<select id="findEntity" resultMap="HeartbeatEntityMap"
+		parameterType="HeartbeatEntity">
+		select
+		<include refid="colNames"></include>
+		from Heartbeat_Entity where Id=#{id}
+	</select>
+
+	<select id="findEntitiesByIn" resultMap="HeartbeatEntityMap"
+		parameterType="List">
+		select
+		<include refid="colNames"></include>
+		from Heartbeat_Entity where Id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">#{item.id}</foreach>
+	</select>
+
+	<sql id="selectWherePart">
+
+		<if test="params.id!=null">AND Id=#{params.id}</if>
+
+
+		<if test="params.lastHeartbeat!=null">AND Last_Heartbeat_Time=#{params.lastHeartbeat}</if>
+
+
+		<if test="params.lastHeartbeatStart!=null">AND Last_Heartbeat_Time &gt;= #{params.lastHeartbeatStart}
+		</if>
+
+		<if test="params.lastHeartbeatEnd!=null">AND Last_Heartbeat_Time &lt;= #{params.lastHeartbeatEnd}
+		</if>
+
+		<if test="params.robotId!=null">AND Robot_Id=#{params.robotId}</if>
+
+
+		<if test="params.robotIdLike!=null and params.robotIdLike!=''">AND Robot_Id like '%'+#{params.robotIdLike}+'%'</if>
+		<if test="nparams!=null">
+
+			<if test="nparams.id!=null">AND Id!=#{nparams.id}</if>
+
+
+			<if test="nparams.lastHeartbeat!=null">AND Last_Heartbeat_Time!=#{nparams.lastHeartbeat}</if>
+
+
+
+
+			<if test="nparams.robotId!=null">AND Robot_Id!=#{nparams.robotId}</if>
+
+
+			<if test="nparams.robotIdLike!=null and nparams.robotIdLike!=''">AND Robot_Id not like '%'+#{nparams.robotIdLike}+'%'</if>
+		</if>
+	</sql>
+
+	<select id="findEntityByParams" resultMap="HeartbeatEntityMap">
+		select
+		<include refid="colNames"></include>
+		from Heartbeat_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.id">Id DESC,</if>
+
+					<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time DESC,</if>
+
+
+
+					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+
+
+				</when>
+				<otherwise>Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByDesc.id">Id ASC,</if>
+
+				<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time ASC,</if>
+
+
+
+				<if test="params.orderByDesc.robotId">Robot_Id ASC,</if>
+
+
+			</if>
+		</trim>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(Id) from Heartbeat_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+	</select>
+
+	<select id="findAllByParams" resultMap="HeartbeatEntityMap">
+		select
+		<include refid="colNames"></include>
+		from Heartbeat_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		ORDER BY
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.id">Id DESC,</if>
+
+					<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time DESC,</if>
+
+
+
+					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+
+
+				</when>
+				<otherwise>Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByAsc.id">Id ASC,</if>
+
+				<if test="params.orderByAsc.lastHeartbeat">Last_Heartbeat_Time ASC,</if>
+
+
+
+				<if test="params.orderByAsc.robotId">Robot_Id ASC,</if>
+
+
+			</if>
+		</trim>
+	</select>
+
+	<update id="updateAll" parameterType="HeartbeatEntity">
+		update Heartbeat_Entity set
+		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeat} ,Robot_Id=#{robotId}
+		where Id=#{id}
+	</update>
+
+	<update id="updateChange" parameterType="HeartbeatEntity">
+		update Heartbeat_Entity
+		<set>
+
+			<if test="id!=null">Id=#{id},</if>
+
+
+			<if test="lastHeartbeat!=null">Last_Heartbeat_Time=#{lastHeartbeat},</if>
+
+
+
+
+			<if test="robotId!=null">Robot_Id=#{robotId},</if>
+
+
+
+		</set>
+		where Id=#{id}
+	</update>
+	<update id="setNull" parameterType="HeartbeatEntitySetNullParams">
+		update Heartbeat_Entity
+		<set>
+
+
+			<if test="lastHeartbeat!=null">Last_Heartbeat_Time=#{lastHeartbeat},</if>
+
+
+
+			<if test="robotId!=null">Robot_Id=#{robotId},</if>
+
+
+		</set>
+		where Id=#{id}
+	</update>
+	<select id="findListByParams" resultMap="HeartbeatEntityMap">
+		select
+		<include refid="colNames"></include>
+		from Heartbeat_Entity where Id in(
+		select b.Id from(
+		select Id,ROW_NUMBER() OVER(Order by
+		<trim suffixOverrides=",">
+			<choose>
+				<when test="params.orderByDesc!=null">
+
+					<if test="params.orderByDesc.id">Id DESC,</if>
+
+					<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time DESC,</if>
+
+
+
+					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+
+
+				</when>
+				<otherwise>Id DESC,</otherwise>
+			</choose>
+			<if test="params.orderByAsc!=null">
+
+				<if test="params.orderByAsc.id">Id ASC,</if>
+
+				<if test="params.orderByAsc.lastHeartbeat">Last_Heartbeat_Time ASC,</if>
+
+
+
+				<if test="params.orderByAsc.robotId">Robot_Id ASC,</if>
+
+
+			</if>
+		</trim>
+		) AS RowId
+		from Heartbeat_Entity
+		<where>
+			<include refid="selectWherePart"></include>
+		</where>
+		) b
+		where b.RowId between (#{currentPageIndex}-1)*#{pageSize}+1 and
+		#{currentPageIndex}*#{pageSize}
+		)
+	</select>
+
+	<insert id="insertPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.insertPart"></include>
+	</insert>
+
+	<select id="selectPart" parameterType="com.txj.common.entity.DistributedTransactionPart">
+		<include refid="CommonMapper.selectPart"></include>
+	</select>
+</mapper>

@@ -116,6 +116,9 @@
     <None Include="AllTemplate\CSharpController">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="AllTemplate\JavaMemoruMapper">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="AllTemplate\JavaService">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

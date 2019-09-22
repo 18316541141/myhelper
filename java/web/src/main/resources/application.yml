@@ -5,3 +5,4 @@ spring.datasource:
     url: jdbc:sqlserver://183.2.233.235:1433;DatabaseName=BusinessAssistantDB_Test
     username: BusinessHeplerTestManager
     password: BusinessHeplerTestManager123
+logging.config: classpath:log4j-spring.properties
