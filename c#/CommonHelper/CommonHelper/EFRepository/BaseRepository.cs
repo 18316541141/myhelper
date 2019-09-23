@@ -547,15 +547,6 @@ namespace CommonHelper.Helper.EFRepository
         protected abstract DisPageEntity<TEntity> GetDisPageEntity(TParams paramz);
 
         /// <summary>
-        /// 跨库分页时，基准值查询
-        /// </summary>
-        /// <param name="paramz">查询参数，判断排序的重要依据</param>
-        /// <param name="baseVal">基准值，缩小查询范围</param>
-        /// <param name="queryType">查询类型，0：查询基准值跳过的数据量，1：查询比基准值大，并当中含有合适的基准值</param>
-        /// <returns></returns>
-        protected abstract Expression<Func<TEntity, bool>> BaseValQuery(TParams paramz,IComparable baseVal,int queryType);
-
-        /// <summary>
         /// 普通的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
         /// </summary>
         /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
@@ -593,7 +584,7 @@ namespace CommonHelper.Helper.EFRepository
                 int sumSkipCount = (pageIndex - 1) * pageSize; //期望的总跳过数据量
                 int totalCount = 0; //符合条件的总数据量
                 List<int> counts = new List<int>(); //各个数据源的符合条件数据
-                List<BaseDbContext> baseDbContextList = new List<BaseDbContext>(); //含有符合条件数据的数据库
+                List<IQueryable<TEntity>> baseDbContextList = new List<IQueryable<TEntity>>(); //含有符合条件数据的数据库
                 for (int i = 0, count, len = dbContexts.Count; i < len; i++)
                 {
                     IQueryable<TEntity> query = Query(dbContexts[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
@@ -602,59 +593,49 @@ namespace CommonHelper.Helper.EFRepository
                     {
                         totalCount += count;
                         counts.Add(count);
-                        baseDbContextList.Add(dbContexts[i]);
+                        baseDbContextList.Add(query);
                     }
                 }
-                bool orderType = true;
-                IComparable comparable; //临时变量
                 DisPageEntity<TEntity> disPageEntity = GetDisPageEntity(eqArgs);
-                List <IComparable> sortList = new List<IComparable>();
-                for (int i = 0, len = dbContexts.Count; i < len; i++)
+                List<IComparable> sortList = new List<IComparable>();
+                for (int i = 0, len = baseDbContextList.Count; i < len; i++)
                 {
-                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    comparable = query.Select(disPageEntity.OrderColLazy).Skip(counts[i] * sumSkipCount / totalCount).Take(1).FirstOrDefault();
+                    var comparable = baseDbContextList[i].Select(disPageEntity.OrderColLazy).Skip(counts[i] * sumSkipCount / totalCount).Take(1).FirstOrDefault();
                     if (comparable != null)
                     {
                         sortList.Add(comparable);
                     }
                 }
                 sortList.Sort();
-                IComparable baseVal = sortList[orderType ? 0 : sortList.Count - 1]; //得到基准值
+                IComparable baseVal = sortList[disPageEntity.OrderType ? 0 : sortList.Count - 1]; //得到基准值
                 int baseValSkip = 0; //基准值跳过数据量
-                for (int i = 0, len = dbContexts.Count; i < len; i++)
+                foreach (var baseDbContext in baseDbContextList)
                 {
-                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    query = query.Where(BaseValQuery(eqArgs, baseVal, 0));
-                    baseValSkip += query.Select(disPageEntity.OrderColLazy).Count();
-                    
+                    baseValSkip += baseDbContext.Where(disPageEntity.OrderType ? disPageEntity.LessThan(baseVal) : disPageEntity.GreatThan(baseVal)).Count();
                 }
                 int restSkipCount = sumSkipCount - baseValSkip; //剩余需要跳过的数据量
-                sortList.Clear();
-                for (int i = 0, len = dbContexts.Count; i < len; i++)
+                List<TEntity> keyOrderList = new List<TEntity>();
+                foreach (var baseDbContext in baseDbContextList)
                 {
-                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    query = query.Where(BaseValQuery(eqArgs,baseVal,1));
-                    sortList.AddRange(query.Select(disPageEntity.OrderColLazy).Take(restSkipCount).ToList());
+                    var query = baseDbContext.Where(disPageEntity.OrderType ? disPageEntity.GreatEqThan(baseVal) : disPageEntity.LessEqThan(baseVal));
+                    keyOrderList.AddRange(query.Select(disPageEntity.OrderColAndKeyLazy).Take(restSkipCount + pageSize).ToList());
                 }
-                sortList.Sort();
-                baseVal = sortList[orderType ? restSkipCount : sortList.Count - restSkipCount - 1]; //得到基准值,
-                List<TEntity> entities = new List<TEntity>();
-                for (int i = 0, len = dbContexts.Count; i < len; i++)
+                if (disPageEntity.OrderType)
                 {
-                    IQueryable<TEntity> query = Query(baseDbContextList[i].Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                    entities.AddRange(query.Take(pageSize).ToList());
-                }
-                if (orderType)
-                {
-                    entities = entities.OrderBy(disPageEntity.OrderCol).Take(pageSize).ToList();
+                    keyOrderList = keyOrderList.OrderBy(disPageEntity.OrderCol).Skip(restSkipCount).Take(pageSize).ToList();
                 }
                 else
                 {
-                    entities = entities.OrderByDescending(disPageEntity.OrderCol).Take(pageSize).ToList();
+                    keyOrderList = keyOrderList.OrderByDescending(disPageEntity.OrderCol).Skip(restSkipCount).Take(pageSize).ToList();
+                }
+                List<TEntity> entities = new List<TEntity>();
+                foreach (var baseDbContext in baseDbContextList)
+                {
+                    entities.AddRange(baseDbContext.Where(disPageEntity.InCondition(entities)).ToList());
                 }
                 return new MyPagedList<TEntity>
                 {
-                    PageDataList = entities,
+                    PageDataList = entities.OrderBy(disPageEntity.OrderCol).ToList(),
                     CurrentPageIndex = pageIndex,
                     EndItemIndex = pageIndex * pageSize + entities.Count,
                     PageSize = pageSize,

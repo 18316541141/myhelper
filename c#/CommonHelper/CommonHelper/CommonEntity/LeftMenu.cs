@@ -21,10 +21,10 @@ namespace CommonHelper.Helper.CommonEntity
         public string Title { set; get; }
 
         /// <summary>
-        /// 菜单id
+        /// 菜单名称，系统内唯一，用于关联组件
         /// </summary>
-        [JsonProperty("id")]
-        public string Id { set; get; }
+        [JsonProperty("name")]
+        public string Name { set; get; }
 
         /// <summary>
         /// 菜单点击时，打开的页面所在的url

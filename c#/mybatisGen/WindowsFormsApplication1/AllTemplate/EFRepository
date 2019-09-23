@@ -182,6 +182,11 @@ namespace WebApplication1.Repository
         protected override DisPageEntity<$entity.EntityName$> GetDisPageEntity($entity.EntityName$Params paramz)
 		{
 			DisPageEntity<$entity.EntityName$> disPageEntity = new DisPageEntity<$entity.EntityName$>();
+			disPageEntity.InCondition = (entities) =>
+            {
+                List<$entity.KeyType$> keys = entities.Select(a => a.$entity.KeyName$).ToList();
+                return a => keys.Contains(a.$entity.KeyName$);
+            };
 			$entity.EntityName$OrderBy orderBy = paramz.orderByAsc;
 			if (orderBy != null)
             {
@@ -191,6 +196,15 @@ namespace WebApplication1.Repository
 				{
 					disPageEntity.OrderCol= a => a.$it.PropName$;
 					disPageEntity.OrderColLazy = a => a.$it.PropName$;
+					$if(it.IsKey)$
+						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
+					$else$
+						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$, $it.PropName$ = a.$it.PropName$ };
+					$endif$
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$it.PropName$) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$it.PropName$) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.$it.PropName$) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$it.PropName$) >= 0;
 					return disPageEntity;
 				}
 			$endif$}$
@@ -205,6 +219,15 @@ namespace WebApplication1.Repository
 				{ 
 					disPageEntity.OrderCol= a => a.$it.PropName$;
 					disPageEntity.OrderColLazy = a => a.$it.PropName$;
+					$if(it.IsKey)$
+						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
+					$else$
+						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$, $it.PropName$ = a.$it.PropName$ };
+					$endif$
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$it.PropName$) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$it.PropName$) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.$it.PropName$) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$it.PropName$) >= 0;
 					return disPageEntity;
 				}
 			$endif$};separator="else "$
@@ -212,6 +235,15 @@ namespace WebApplication1.Repository
 				{
 					disPageEntity.OrderCol= a => a.$entity.KeyName$;
 					disPageEntity.OrderColLazy = a => a.$entity.KeyName$;
+					$if(it.IsKey)$
+						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
+					$else$
+						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$, $it.PropName$ = a.$it.PropName$ };
+					$endif$
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$it.PropName$) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$it.PropName$) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.$it.PropName$) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$it.PropName$) >= 0;
 					return disPageEntity;
 				}
 			}
@@ -219,76 +251,17 @@ namespace WebApplication1.Repository
 			{
 				disPageEntity.OrderCol= a => a.$entity.KeyName$;
 				disPageEntity.OrderColLazy = a => a.$entity.KeyName$;
+				$if(it.IsKey)$
+					disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
+				$else$
+					disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$, $it.PropName$ = a.$it.PropName$ };
+				$endif$
+                disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$it.PropName$) < 0;
+                disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$it.PropName$) <= 0;
+                disPageEntity.LessThan = (val) => a => val.CompareTo(a.$it.PropName$) > 0;
+                disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$it.PropName$) >= 0;
 				return disPageEntity;
 			}
-		}
-
-		/// <summary>
-        /// 跨库分页时，基准值查询
-        /// </summary>
-        /// <param name="paramz">查询参数，判断排序的重要依据</param>
-        /// <param name="baseVal">基准值，缩小查询范围</param>
-        /// <param name="queryType">查询类型，0：查询基准值跳过的数据量，1：查询比基准值大，并当中含有合适的基准值</param>
-        /// <returns></returns>
-        protected override Expression<Func<$entity.EntityName$, bool>> BaseValQuery($entity.EntityName$Params paramz,IComparable baseVal,int queryType)
-		{
-			$entity.EntityName$OrderBy orderBy = paramz.orderByAsc;
-			if (orderBy != null)
-            {
-			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
-				if (orderBy.$it.PropName$) 
-				{
-					if(queryType==0)
-					{
-						return a=> baseVal.CompareTo(a.$it.PropName$) > 0;
-					}
-					else if (queryType==1)
-					{
-						return a=> baseVal.CompareTo(a.$it.PropName$) < 0;
-					}
-				}
-			$endif$}$
-            }
-			orderBy = paramz.orderByDesc;
-			if (orderBy != null)
-			{
-			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
-				if (orderBy.$it.PropName$) 
-				{ 
-					if(queryType==0)
-					{
-						return a=> baseVal.CompareTo(a.$it.PropName$) < 0;
-					}
-					else if (queryType==1)
-					{
-						return a=> baseVal.CompareTo(a.$it.PropName$) > 0;
-					}
-				}
-			$endif$};separator="else "$
-				else
-				{
-					if(queryType==0)
-					{
-						return a=> baseVal.CompareTo(a.$entity.KeyName$) < 0;
-					}
-					else if (queryType==1)
-					{
-						return a=> baseVal.CompareTo(a.$entity.KeyName$) > 0;
-					}
-				}
-			}
-			else
-			{
-				if(queryType==0)
-				{
-					return a=> baseVal.CompareTo(a.$entity.KeyName$) < 0;
-				}
-				else if (queryType==1)
-				{
-					return a=> baseVal.CompareTo(a.$entity.KeyName$) > 0;
-				}
-			}
-			return null;
 		}
     }
 }

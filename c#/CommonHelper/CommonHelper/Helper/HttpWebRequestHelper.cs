@@ -826,8 +826,12 @@ namespace CommonHelper.Helper
         /// <param name="param">请求参数</param>
         /// <param name="Encoding">编码方式</param>
         /// <returns>返回url上的请求参数和值</returns>
-        static string QueryParamsMapToStr(Dictionary<string, string> param, Encoding Encoding = null)
+        static string QueryParamsMapToStr(Dictionary<string, string> param, Encoding encoding = null)
         {
+            if(encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
             StringBuilder sb = new StringBuilder();
             string connChar = "";
             foreach (KeyValuePair<string, string> kv in param)
@@ -836,7 +840,7 @@ namespace CommonHelper.Helper
                 if (kv.Key == "skey")
                     sb.Append(kv.Value);
                 else
-                    sb.Append(HttpUtility.UrlEncode(kv.Value, Encoding));
+                    sb.Append(HttpUtility.UrlEncode(kv.Value, encoding));
                 connChar = "&";
             }
             return sb.ToString();

@@ -33,6 +33,11 @@ namespace WindowsFormsApplication1.entity
         public string KeyName { set; get; }
 
         /// <summary>
+        /// 主键类型
+        /// </summary>
+        public string KeyType { set; get; }
+
+        /// <summary>
         /// 主键列
         /// </summary>
         public string KeyCol { set; get; }
