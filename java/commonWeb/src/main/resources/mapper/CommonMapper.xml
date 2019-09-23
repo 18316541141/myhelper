@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommonMapper">
+	<resultMap type="com.txj.common.entity.DistributedTransactionPart" id="DistributedTransactionPartMap">
+		<id property="id" column="ID"/>
+		<result property="distributedTransactionMainId" column="DISTRIBUTED_TRANSACTION_MAIN_ID"/>
+		<result property="inverseOper" column="INVERSE_OPER"/>
+		<result property="inverseOperType" column="INVERSE_OPER_TYPE"/>
+		<result property="transTableName" column="TRANS_TABLE_NAME"/>
+		<result property="transPrimaryKeyVal" column="TRANS_PRIMARY_KEY_VAL"/>
+		<result property="transactionStatus" column="TRANSACTION_STATUS"/>
+		<result property="createDate" column="CREATE_DATE"/>
+	</resultMap>
+	<sql id="insertPart">
+		INSERT INTO DISTRIBUTED_TRANSACTION_PART(
+			ID,
+			DISTRIBUTED_TRANSACTION_MAIN_ID,
+			INVERSE_OPER,
+			INVERSE_OPER_TYPE,
+			TRANS_TABLE_NAME,
+			TRANS_PRIMARY_KEY_VAL,
+			TRANSACTION_STATUS,
+			CREATE_DATE
+		)VALUES(
+			#{id},
+			#{distributedTransactionMainId},
+			#{inverseOper},
+			#{inverseOperType},
+			#{transTableName},
+			#{transPrimaryKeyVal},
+			#{transactionStatus},
+			#{createDate}
+		)
+	</sql>
+	<sql id="selectPart">
+		SELECT
+			ID,
+			DISTRIBUTED_TRANSACTION_MAIN_ID,
+			INVERSE_OPER,
+			INVERSE_OPER_TYPE,
+			TRANS_TABLE_NAME,
+			TRANS_PRIMARY_KEY_VAL,
+			TRANSACTION_STATUS,
+			CREATE_DATE
+		FROM DISTRIBUTED_TRANSACTION_PART
+		<where>
+			<if test="id!=null">AND Id=#{id} </if>
+			<if test="distributedTransactionMainId!=null">AND DISTRIBUTED_TRANSACTION_MAIN_ID=#{distributedTransactionMainId} </if>
+			<if test="inverseOperTyp!=null">AND INVERSE_OPER_TYPE=#{inverseOperType} </if>
+			<if test="transTableName!=null">AND TRANS_TABLE_NAME=#{transTableName} </if>
+			<if test="transPrimaryKeyVal!=null">AND TRANS_PRIMARY_KEY_VAL=#{transPrimaryKeyVal} </if>
+			<if test="transactionStatus!=null">AND TRANSACTION_STATUS=#{transactionStatus} </if>
+		</where>
+	</sql>
+</mapper>

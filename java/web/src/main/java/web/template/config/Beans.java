@@ -29,6 +29,7 @@ import com.google.code.kaptcha.util.Config;
 import com.txj.common.IpHelper;
 import com.txj.common.SnowFlakeHelper;
 
+import web.template.entity.common.MyLog;
 import web.template.filter.CompressFilter;
 import web.template.formDataConverter.DateConverter;
 import web.template.interceptor.SignInterceptor;
@@ -47,6 +48,10 @@ public class Beans {
     public Converter<String, Date> dateConverter() {
         return new DateConverter();
     }
+	
+	public MyLog myLog(){
+		
+	}
 	
 	@Bean(name="defaultKaptcha")
 	public DefaultKaptcha defaultKaptcha(){

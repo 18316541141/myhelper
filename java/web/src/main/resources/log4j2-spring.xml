@@ -1,14 +1,16 @@
+
 # Root logger option
 log4j.rootLogger=INFO, stdout, DB
- 
-# Direct log messages to stdout
+
+# Direct log
+messages to stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.Target=System.out
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m %t
 
 log4j.logger.org.apache.commons=INFO
-log4j.logger.org.apache.http = INFO 
+log4j.logger.org.apache.http = INFO
 log4j.logger.org.hibernate.SQL=ERROR
 log4j.logger.org.hibernate.type=ERROR
 
@@ -17,21 +19,38 @@ log4j.appender.DB.URL=jdbc:sqlserver://183.2.233.235:1433;DatabaseName=BusinessA
 log4j.appender.DB.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
 log4j.appender.DB.user=BusinessHeplerTestManager
 log4j.appender.DB.password=BusinessHeplerTestManager123
-log4j.appender.DB.sql=INSERT INTO LOG_ENTITY (ID,CREATE_DATE,THREAD_NO,LEVEL,TYPE_NAME,EXCEPTION,FUNC_NAME) VALUES (%X{Id},NOW(),%t,'%p', '%c','%m','%M')
+log4j.appender.DB.sql=INSERT INTO LOG_ENTITY
+(ID,CREATE_DATE,THREAD_NO,LEVEL,TYPE_NAME,EXCEPTION,FUNC_NAME) VALUES
+(%X{Id},NOW(),%t,'%p', '%c','%m','%M')
 
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="debug" monitorInterval="86400">
+	<appenders>
+		<console name="Console" target="SYSTEM_OUT">
+			<!--输出日志的格式 -->
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+		</console>
+		<JDBC name="databaseAppender" tableName="LOG_ENTITY">
+			<ConnectionFactory class="web.template.utils.ConnectionFactory" method="getDataSourceConnection" />
+			<Column name="ID" pattern="%X{ID}"/>
+			<Column name="CREATE_DATE" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}"/>
+			<Column name="THREAD_NO" pattern="%t"/>
+			<Column name="LEVEL" pattern="%p"/>
+			<Column name="TYPE_NAME" pattern="%c"/>
+			<Column name="EXCEPTION" pattern="%m"/>
+			<Column name="PROJECT_NAME" pattern="%X{PROJECT_NAME}"/>
+			<Column name="FUNC_NAME" pattern="%M"/>
+		</JDBC>
+	</appenders>
 	<loggers>
-		<!--过滤掉spring和hibernate的一些无用的debug信息-->
+		<!--过滤掉spring和hibernate的一些无用的debug信息 -->
 		<logger name="org.springframework" level="INFO">
 		</logger>
 		<logger name="org.mybatis" level="INFO">
 		</logger>
 		<root level="all">
-			<appender-ref ref="Console"/>
-			<appender-ref ref="RollingFileInfo"/>
-			<appender-ref ref="RollingFileWarn"/>
-			<appender-ref ref="RollingFileError"/>
+			<appender-ref ref="Console" />
+			<appender-ref ref="databaseAppender" />
 		</root>
 	</loggers>
 </configuration>

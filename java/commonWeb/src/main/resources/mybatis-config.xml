@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- 设置但JDBC类型为空时,某些驱动程序 要指定值,default:OTHER，插入空值时不需要指定类型 -->
+    	<setting name="jdbcTypeForNull" value="NULL"/>
+		<!-- 启用批处理功能 -->
+		<setting name="defaultExecutorType" value="BATCH"/>
+	</settings>
+	<typeAliases>
+		<typeAlias type="web.template.entity.common.HeartbeatEntity" alias="HeartbeatEntity"/>
+		<typeAlias type="web.template.orderBy.HeartbeatEntityOrderBy" alias="HeartbeatEntityOrderBy"/>
+		<typeAlias type="web.template.params.HeartbeatEntityParams" alias="HeartbeatEntityParams"/>
+		<typeAlias type="web.template.setNullParams.HeartbeatEntitySetNullParams" alias="HeartbeatEntitySetNullParams"/>
+		
+		<typeAlias type="web.template.entity.common.LogEntity" alias="LogEntity"/>
+		<typeAlias type="web.template.orderBy.LogEntityOrderBy" alias="LogEntityOrderBy"/>
+		<typeAlias type="web.template.params.LogEntityParams" alias="LogEntityParams"/>
+		<typeAlias type="web.template.setNullParams.LogEntitySetNullParams" alias="LogEntitySetNullParams"/>
+	</typeAliases>
+</configuration>
