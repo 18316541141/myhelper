@@ -2,12 +2,9 @@
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.txj.common.entity.LeftMenu;
-
 import web.template.entity.common.LogEntity;
 import web.template.entity.db1.codeGenerator.IRobotUser;
 import web.template.intf.IUserService;
@@ -54,16 +51,16 @@ public class IRobotUserService extends BaseService implements IUserService {
 	public List<LeftMenu> loadLeftMenus(String username) {
 		List<LeftMenu> leftMenuList = new ArrayList<LeftMenu>();
 		LeftMenu sysMenu = new LeftMenu();
-		sysMenu.setId("system");
+		sysMenu.setName("system");
 		sysMenu.setSortIndex(0);
 		sysMenu.setTitle("系统管理");
 		LeftMenu heartbeatMenu = new LeftMenu();
-		heartbeatMenu.setId("heartbeatEntity");
+		heartbeatMenu.setName("heartbeatEntity");
 		heartbeatMenu.setSortIndex(0);
 		heartbeatMenu.setTitle("心跳监测");
 		sysMenu.getLeftMenus().add(heartbeatMenu);
 		LeftMenu logEntityMenu = new LeftMenu();
-		logEntityMenu.setId("logEntity");
+		logEntityMenu.setName("logEntity");
 		logEntityMenu.setSortIndex(1);
 		logEntityMenu.setTitle("系统日志");
 		sysMenu.getLeftMenus().add(logEntityMenu);

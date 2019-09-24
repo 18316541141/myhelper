@@ -2,19 +2,23 @@ package web.template.controller.common;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.ServletContextResource;
+
 import com.txj.common.SnowFlakeHelper;
 import com.txj.common.entity.Result;
 import com.txj.common.exception.ResultException;
+
 import web.template.entity.common.MyLog;
 import web.template.view.MyExcelView;
 
@@ -26,11 +30,21 @@ import web.template.view.MyExcelView;
 @RestController
 public abstract class BaseController {
 
-	@Autowired
 	protected SnowFlakeHelper snowFlakeHelper;
 
 	@Autowired
+	public void setSnowFlakeHelper(SnowFlakeHelper snowFlakeHelper) {
+		this.snowFlakeHelper = snowFlakeHelper;
+		log.setSnowFlakeHelper(snowFlakeHelper);
+	}
+
+	@Autowired
 	protected MyExcelView myExcelView;
+
+	@Value("${projectName}")
+	public void setProjectName(String projectName) {
+		log.setProjectName(projectName);
+	}
 
 	/**
 	 * 跨平台的斜杠
@@ -44,8 +58,11 @@ public abstract class BaseController {
 	/**
 	 * 日志输出类
 	 */
-	@Autowired
-	protected Logger log;
+	protected MyLog log;
+
+	public BaseController() {
+		log = MyLog.getLogger(this.getClass());
+	}
 
 	/**
 	 * 

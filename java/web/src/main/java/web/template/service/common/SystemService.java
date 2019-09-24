@@ -80,21 +80,21 @@ public class SystemService {
 		List<LeftMenu> leftMenuList = new ArrayList<LeftMenu>();
         List<LeftMenu> leftMenuList11 = new ArrayList<LeftMenu>();
         LeftMenu leftMenuCharts = new LeftMenu();
-    	leftMenuCharts.setId("m312");
+    	leftMenuCharts.setName("m312");
     	leftMenuCharts.setTitle("统计图");
     	leftMenuCharts.setUrl("menus/testMenus1/charts.html");
     	leftMenuCharts.setSortIndex(3);
         	
         leftMenuList11.add(leftMenuCharts);
         LeftMenu leftMenuNewAlarm = new LeftMenu();
-        leftMenuNewAlarm.setId("n11");
+        leftMenuNewAlarm.setName("n11");
         leftMenuNewAlarm.setTitle("实时刷最新消息");
         leftMenuNewAlarm.setUrl("menus/testMenus1/testNewAlarm.html");
         leftMenuNewAlarm.setSortIndex(4);
         
         leftMenuList11.add(leftMenuNewAlarm);
         LeftMenu leftMenu111 = new LeftMenu();
-    	leftMenu111.setId("m101");
+    	leftMenu111.setName("m101");
     	leftMenu111.setTitle("测试1-1");
     	leftMenu111.setUrl("menus/testMenus1/treeForm.html");
     	leftMenu111.setSortIndex(5);
@@ -102,7 +102,7 @@ public class SystemService {
         leftMenuList11.add(leftMenu111);
 
         LeftMenu leftMenu112 = new LeftMenu();
-    	leftMenu112.setId("m12");
+    	leftMenu112.setName("m12");
     	leftMenu112.setTitle("测试1-2");
     	leftMenu112.setUrl("menus/testMenus1/uploadImage.html");
     	leftMenu112.setSortIndex(6);
@@ -110,7 +110,7 @@ public class SystemService {
         leftMenuList11.add(leftMenu112);
 
         LeftMenu leftMenu13 = new LeftMenu();
-    	leftMenu13.setId("m13");
+    	leftMenu13.setName("m13");
     	leftMenu13.setTitle("测试1-3");
     	leftMenu13.setUrl("menus/testMenus1/bigImg.html");
     	leftMenu13.setSortIndex(7);
@@ -118,7 +118,7 @@ public class SystemService {
         leftMenuList11.add(leftMenu13);
 
         LeftMenu leftMenu14 = new LeftMenu();
-    	leftMenu14.setId("m14");
+    	leftMenu14.setName("m14");
     	leftMenu14.setTitle("测试1-4");
     	leftMenu14.setUrl("menus/testMenus1/uploadFiles.html");
     	leftMenu14.setSortIndex(8);
@@ -126,7 +126,7 @@ public class SystemService {
         leftMenuList11.add(leftMenu14);
 
         LeftMenu leftMenu15 = new LeftMenu();
-    	leftMenu15.setId("m15");
+    	leftMenu15.setName("m15");
     	leftMenu15.setTitle("测试1-5");
     	leftMenu15.setUrl("menus/testMenus1/areaSelect.html");
     	leftMenu15.setSortIndex(9);
@@ -134,7 +134,7 @@ public class SystemService {
         leftMenuList11.add(leftMenu15);
 
         LeftMenu leftMenu17 = new LeftMenu();
-        leftMenu17.setId("m17");
+        leftMenu17.setName("m17");
         leftMenu17.setTitle("测试1-7");
         leftMenu17.setUrl("menus/testMenus1/pageTable2.html");
         leftMenu17.setSortIndex(10);
@@ -142,27 +142,27 @@ public class SystemService {
         leftMenuList11.add(leftMenu17);
 
         LeftMenu leftMenu18 = new LeftMenu();
-    	leftMenu18.setId("m18");
+    	leftMenu18.setName("m18");
     	leftMenu18.setTitle("测试1-8");
     	leftMenu18.setUrl("menus/testMenus1/uploadExcel.html");
     	leftMenu18.setSortIndex(11);
         
         leftMenuList11.add(leftMenu18);
         LeftMenu leftMenu1 = new LeftMenu();
-    	leftMenu1.setId("m1");
+    	leftMenu1.setName("m1");
     	leftMenu1.setTitle("测试1");
     	leftMenu1.setSortIndex(0);
         
         leftMenu1.setLeftMenus(leftMenuList11);
         leftMenuList.add(leftMenu1);
         LeftMenu leftMenu2 = new LeftMenu();
-    	leftMenu2.setId("m2");
+    	leftMenu2.setName("m2");
     	leftMenu2.setTitle("测试2");
     	leftMenu2.setSortIndex(1);
 
         leftMenuList.add(leftMenu2);
         LeftMenu leftMenu3 = new LeftMenu();
-    	leftMenu3.setId("m3");
+    	leftMenu3.setName("m3");
     	leftMenu3.setTitle("测试3");
     	leftMenu3.setSortIndex(2);
 

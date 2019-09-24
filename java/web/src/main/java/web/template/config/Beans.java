@@ -12,7 +12,9 @@ import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,14 +50,6 @@ public class Beans {
     public Converter<String, Date> dateConverter() {
         return new DateConverter();
     }
-	
-	@Bean
-	public MyLog myLog(@Value("projectName") final String projectName,@Autowired final SnowFlakeHelper snowFlakeHelper){
-		final MyLog myLog = new MyLog();
-		myLog.setProjectName(projectName);
-		myLog.setSnowFlakeHelper(snowFlakeHelper);
-		return myLog;
-	}
 	
 	@Bean(name="defaultKaptcha")
 	public DefaultKaptcha defaultKaptcha(){

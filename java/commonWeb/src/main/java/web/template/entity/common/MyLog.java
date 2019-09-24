@@ -1,4 +1,5 @@
 package web.template.entity.common;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,25 +10,26 @@ import org.apache.logging.log4j.message.MessageFactory;
 import org.apache.logging.log4j.util.MessageSupplier;
 import org.apache.logging.log4j.util.Supplier;
 import org.slf4j.MDC;
-
 import com.txj.common.SnowFlakeHelper;
+
 public class MyLog implements Logger {
 
 	private Logger log;
+
 	private SnowFlakeHelper snowFlakeHelper;
-	
+
 	private String projectName;
-
-	public MyLog() {
-		this.log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
-	}
-
-	public SnowFlakeHelper getSnowFlakeHelper() {
-		return snowFlakeHelper;
-	}
 
 	public void setSnowFlakeHelper(SnowFlakeHelper snowFlakeHelper) {
 		this.snowFlakeHelper = snowFlakeHelper;
+	}
+
+	private MyLog(Class<?> clazz) {
+		this.log = LogManager.getLogger(clazz);
+	}
+
+	public static MyLog getLogger(Class<?> clazz) {
+		return new MyLog(clazz);
 	}
 
 	public String getProjectName() {
@@ -307,11 +309,11 @@ public class MyLog implements Logger {
 		log.entry(arg0);
 	}
 
-	private void  initSnow(){
+	private void initSnow() {
 		MDC.put("PROJECT_NAME", projectName);
-		MDC.put("ID",  String.valueOf(snowFlakeHelper.nextId()));
+		MDC.put("ID", String.valueOf(snowFlakeHelper.nextId()));
 	}
-	
+
 	@Override
 	public void error(Message arg0) {
 		initSnow();

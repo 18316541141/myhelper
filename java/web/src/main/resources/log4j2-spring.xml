@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="debug" monitorInterval="86400">
+<configuration status="error" monitorInterval="86400">
 	<appenders>
 		<console name="Console" target="SYSTEM_OUT">
 			<!--输出日志的格式 -->
@@ -18,12 +18,7 @@
 		</JDBC>
 	</appenders>
 	<loggers>
-		<!--过滤掉spring和hibernate的一些无用的debug信息 -->
-		<logger name="org.springframework" level="INFO">
-		</logger>
-		<logger name="org.mybatis" level="INFO">
-		</logger>
-		<root level="all">
+		<root level="error">
 			<appender-ref ref="Console" />
 			<appender-ref ref="databaseAppender" />
 		</root>
