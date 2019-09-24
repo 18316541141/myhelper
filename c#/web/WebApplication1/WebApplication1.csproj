@@ -997,6 +997,9 @@
     <Content Include="Content\ie8\angular-1.2.30\i18n\angular-locale_zh.js" />
     <Content Include="Content\ie8\angular-1.2.30\i18n\angular-locale_zu-za.js" />
     <Content Include="Content\ie8\angular-1.2.30\i18n\angular-locale_zu.js" />
+    <Content Include="Content\ie8\menus\system\editLogEntity.html" />
+    <Content Include="Content\ie8\menus\system\logEntity.html" />
+    <Content Include="Content\ie8\my-js\menus\system\logEntity.js" />
     <Content Include="Content\images\256x256\accdb-256.png" />
     <Content Include="Content\images\256x256\avi-256.png" />
     <Content Include="Content\images\256x256\bmp-256.png" />

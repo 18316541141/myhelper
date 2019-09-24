@@ -15,109 +15,109 @@ namespace CommonHelper.CommonEntity
         /// <summary>
         /// 主键id，由分布式雪花id生成
         /// </summary>
-        public long? Id { set; get; }
+        public long? id { set; get; }
 
 
         /// <summary>
         /// 日志日期
         /// </summary>
-        public DateTime? CreateDate { set; get; }
+        public DateTime? createDate { set; get; }
 
 
         /// <summary>
         /// 日志日期
         /// </summary>
-        public DateTime? CreateDateStart { set; get; }
+        public DateTime? createDateStart { set; get; }
 
 
         /// <summary>
         /// 日志日期
         /// </summary>
-        public DateTime? CreateDateEnd { set; get; }
+        public DateTime? createDateEnd { set; get; }
 
 
         /// <summary>
         /// 日志分级
         /// </summary>
-        public string Level { set; get; }
+        public string level { set; get; }
 
 
         /// <summary>
         /// 日志分级
         /// </summary>
-        public string LevelLike { set; get; }
+        public string levelLike { set; get; }
 
 
         /// <summary>
         /// 线程号
         /// </summary>
-        public string ThreadNo { set; get; }
+        public string threadNo { set; get; }
 
 
         /// <summary>
         /// 线程号
         /// </summary>
-        public string ThreadNoLike { set; get; }
+        public string threadNoLike { set; get; }
 
 
         /// <summary>
         /// 日志内容
         /// </summary>
-        public string Message { set; get; }
+        public string message { set; get; }
 
 
         /// <summary>
         /// 日志内容
         /// </summary>
-        public string MessageLike { set; get; }
+        public string messageLike { set; get; }
 
 
         /// <summary>
         /// 日志发生的命名空间
         /// </summary>
-        public string ProjectName { set; get; }
+        public string projectName { set; get; }
 
 
         /// <summary>
         /// 日志发生的命名空间
         /// </summary>
-        public string ProjectNameLike { set; get; }
+        public string projectNameLike { set; get; }
 
 
         /// <summary>
         /// 日志发生的类型
         /// </summary>
-        public string TypeName { set; get; }
+        public string typeName { set; get; }
 
 
         /// <summary>
         /// 日志发生的类型
         /// </summary>
-        public string TypeNameLike { set; get; }
+        public string typeNameLike { set; get; }
 
 
         /// <summary>
         /// 日志发生的方法名称
         /// </summary>
-        public string FuncName { set; get; }
+        public string funcName { set; get; }
 
 
         /// <summary>
         /// 日志发生的方法名称
         /// </summary>
-        public string FuncNameLike { set; get; }
+        public string funcNameLike { set; get; }
 
 
         /// <summary>
         /// 日志的异常堆栈信息
         /// </summary>
-        public string Exception { set; get; }
+        public string exception { set; get; }
 
 
         /// <summary>
         /// 日志的异常堆栈信息
         /// </summary>
-        public string ExceptionLike { set; get; }
+        public string exceptionLike { set; get; }
 
         /// <summary>
         /// 升序排序

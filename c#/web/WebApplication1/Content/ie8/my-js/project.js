@@ -289,12 +289,13 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
             layuiElement.render('nav');
         });
     });
-    $scope.findLeftMenuById = function (id) {
+    //根据菜单名称找出菜单
+    $scope.findLeftMenuByName = function (name) {
         var leftMenus=$scope.leftMenus;
         for (var i = 0, len = leftMenus.length; i < len; i++) {
             var childMenus = leftMenus[i].leftMenus;
             for (var j = 0, len = childMenus.length; j < len; j++) {
-                if (childMenus[j].id === id) {
+                if (childMenus[j].name === name) {
                     return childMenus[j];
                 }
             }
@@ -302,10 +303,10 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
         return null;
     };
     $scope.menus = [];
-    $scope.close = function (id) {
+    $scope.close = function (name) {
         var menus = $scope.menus;
         for (var i = 0, len = menus.length; i < len; i++) {
-            if (menus[i].id === id) {
+            if (menus[i].name === name) {
                 i++;
                 break;
             }
@@ -319,7 +320,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
         $timeout(function () {
             var len = $('[lay-filter="docDemoTabBrief"] .layui-this').length;
             if (len === 0) {
-                $('[data-menu-id="' + menus[0].id + '"]').click();
+                $('[data-menu-name="' + menus[0].name + '"]').click();
             } else if (len > 1) {
                 $('[lay-filter="docDemoTabBrief"] .layui-this:eq(0)').click();
             }
@@ -329,25 +330,25 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
     /**
 	 * 打开指定菜单页
 	 */
-    $scope.openMenuPage = function (id) {
+    $scope.openMenuPage = function (name) {
         var menus = $scope.menus;
         var exist = false;
         for (var i = 0, len = menus.length; i < len; i++) {
-            if (menus[i].id == id) {
+            if (menus[i].name == name) {
                 exist = true;
                 break;
             }
         }
         if (!exist) {
-            var ret=$scope.findLeftMenuById(id);
+            var ret = $scope.findLeftMenuByName(name);
             $scope.menus[$scope.menus.length] = {
                 title: ret.title,
                 url: ret.url,
-                id: id
+                name: name
             };
         }
         $timeout(function () {
-            $('[data-menu-id="' + id + '"]').click();
+            $('[data-menu-name="' + name + '"]').click();
         });
     };
 

@@ -430,7 +430,7 @@
      <ul class="layui-nav layui-nav-tree" lay-filter="left-menus"> 
       <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0"><a href="javascript:;" ng-bind="x.title"></a> 
        <dl class="layui-nav-child"> 
-        <dd ng-repeat="y in x.leftMenus" ng-click="openMenuPage(y.id);"> 
+        <dd ng-repeat="y in x.leftMenus" ng-click="openMenuPage(y.name);"> 
          <a href="javascript:void(0);" ng-bind="y.title"></a> 
         </dd> 
        </dl></li> 
@@ -443,7 +443,7 @@
    <div class="layui-body"> 
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"> 
      <ul class="layui-tab-title"> 
-      <li ng-repeat="x in menus" data-menu-id="{{x.id}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.id);">ဆ</i> </li> 
+      <li ng-repeat="x in menus" data-menu-name="{{x.name}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.name);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
       <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132743'"></div> 
@@ -516,17 +516,18 @@
   <script src="../plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
      <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
-    <![endif]-->
-  <script src="my-js/project.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/charts.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/edit1.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/treeform.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190712132742" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190712132742" charset="utf-8"></script> 
+    <![endif]-->     
+  <script src="my-js/project.js?v=20190712132746" charset="utf-8"></script> 
+     <script src="my-js/menus/system/logEntity.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/charts.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/edit1.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/treeform.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190712132746" charset="utf-8"></script> 
+    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190712132746" charset="utf-8"></script> 
  </body>
 </html>

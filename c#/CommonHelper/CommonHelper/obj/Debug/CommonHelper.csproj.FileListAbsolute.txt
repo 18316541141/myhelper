@@ -66,6 +66,8 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXml4Net
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXmlFormats.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\SeleniumExtras.WaitHelpers.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Snowflake.Net.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Data.SQLite.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Data.SQLite.EF6.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Webdiyer.MvcPager.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\WebDriver.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.dll
@@ -84,6 +86,7 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\ICSharpCode.Shar
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\ICSharpCode.SharpZipLib.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Newtonsoft.Json.pdb
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Newtonsoft.Json.xml
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Data.SQLite.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Webdiyer.MvcPager.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\WebDriver.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.pdb

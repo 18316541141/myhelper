@@ -15,37 +15,37 @@ namespace CommonHelper.CommonEntity
         /// <summary>
         /// 主键id
         /// </summary>
-        public long? Id { set; get; }
+        public long? id { set; get; }
 
 
         /// <summary>
         /// 最近一次的心跳时间
         /// </summary>
-        public DateTime? LastHeartbeatTime { set; get; }
+        public DateTime? lastHeartbeatTime { set; get; }
 
 
         /// <summary>
         /// 最近一次的心跳时间
         /// </summary>
-        public DateTime? LastHeartbeatTimeStart { set; get; }
+        public DateTime? lastHeartbeatTimeStart { set; get; }
 
 
         /// <summary>
         /// 最近一次的心跳时间
         /// </summary>
-        public DateTime? LastHeartbeatTimeEnd { set; get; }
+        public DateTime? lastHeartbeatTimeEnd { set; get; }
 
 
         /// <summary>
         /// 机器人id
         /// </summary>
-        public string RobotId { set; get; }
+        public string robotId { set; get; }
 
 
         /// <summary>
         /// 机器人id
         /// </summary>
-        public string RobotIdLike { set; get; }
+        public string robotIdLike { set; get; }
 
         /// <summary>
         /// 升序排序

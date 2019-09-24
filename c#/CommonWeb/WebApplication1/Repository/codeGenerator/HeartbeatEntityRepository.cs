@@ -33,56 +33,56 @@ namespace CommonWeb.Repository
             if (eqArgs != null)
             {
 
-                if (eqArgs.Id != null)
+                if (eqArgs.id != null)
                 {
-                    query = query.Where(a => a.Id == eqArgs.Id);
+                    query = query.Where(a => a.Id == eqArgs.id);
                 }
 
-                if (eqArgs.LastHeartbeatTime != null)
+                if (eqArgs.lastHeartbeatTime != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime == eqArgs.LastHeartbeatTime);
+                    query = query.Where(a => a.LastHeartbeatTime == eqArgs.lastHeartbeatTime);
                 }
 
-                if (eqArgs.LastHeartbeatTimeStart != null)
+                if (eqArgs.lastHeartbeatTimeStart != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime >= eqArgs.LastHeartbeatTimeStart);
+                    query = query.Where(a => a.LastHeartbeatTime >= eqArgs.lastHeartbeatTimeStart);
                 }
-                if (eqArgs.LastHeartbeatTimeEnd != null)
+                if (eqArgs.lastHeartbeatTimeEnd != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime <= eqArgs.LastHeartbeatTimeEnd);
+                    query = query.Where(a => a.LastHeartbeatTime <= eqArgs.lastHeartbeatTimeEnd);
                 }
-                if (eqArgs.RobotId != null)
+                if (eqArgs.robotId != null)
                 {
-                    query = query.Where(a => a.RobotId == eqArgs.RobotId);
+                    query = query.Where(a => a.RobotId == eqArgs.robotId);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.RobotIdLike))
+                if (!string.IsNullOrEmpty(eqArgs.robotIdLike))
                 {
-                    query = query.Where(a => a.RobotId.Contains(eqArgs.RobotIdLike));
+                    query = query.Where(a => a.RobotId.Contains(eqArgs.robotIdLike));
                 }
                 query = OrderBy(query, eqArgs);
             }
             if (neqArgs != null)
             {
 
-                if (neqArgs.Id != null)
+                if (neqArgs.id != null)
                 {
-                    query = query.Where(a => a.Id != neqArgs.Id);
+                    query = query.Where(a => a.Id != neqArgs.id);
                 }
 
-                if (neqArgs.LastHeartbeatTime != null)
+                if (neqArgs.lastHeartbeatTime != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime != neqArgs.LastHeartbeatTime);
+                    query = query.Where(a => a.LastHeartbeatTime != neqArgs.lastHeartbeatTime);
                 }
 
-                if (neqArgs.RobotId != null)
+                if (neqArgs.robotId != null)
                 {
-                    query = query.Where(a => a.RobotId != neqArgs.RobotId);
+                    query = query.Where(a => a.RobotId != neqArgs.robotId);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.RobotIdLike))
+                if (!string.IsNullOrEmpty(neqArgs.robotIdLike))
                 {
-                    query = query.Where(a => !a.RobotId.Contains(neqArgs.RobotIdLike));
+                    query = query.Where(a => !a.RobotId.Contains(neqArgs.robotIdLike));
                 }
             }
             return query;
@@ -101,21 +101,21 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
 
-                if (orderBy.Id) { return query = query.OrderBy(a => a.Id); }
+                if (orderBy.id) { return query = query.OrderBy(a => a.Id); }
                 else
-                if (orderBy.LastHeartbeatTime) { return query = query.OrderBy(a => a.LastHeartbeatTime); }
+                if (orderBy.lastHeartbeatTime) { return query = query.OrderBy(a => a.LastHeartbeatTime); }
                 else
-                if (orderBy.RobotId) { return query = query.OrderBy(a => a.RobotId); }
+                if (orderBy.robotId) { return query = query.OrderBy(a => a.RobotId); }
             }
             orderBy = eqArgs.orderByDesc;
             if (orderBy != null)
             {
 
-                if (orderBy.Id) { return query = query.OrderByDescending(a => a.Id); }
+                if (orderBy.id) { return query = query.OrderByDescending(a => a.Id); }
                 else
-                if (orderBy.LastHeartbeatTime) { return query = query.OrderByDescending(a => a.LastHeartbeatTime); }
+                if (orderBy.lastHeartbeatTime) { return query = query.OrderByDescending(a => a.LastHeartbeatTime); }
                 else
-                if (orderBy.RobotId) { return query = query.OrderByDescending(a => a.RobotId); }
+                if (orderBy.robotId) { return query = query.OrderByDescending(a => a.RobotId); }
                 else
                 {
                     return query = query.OrderByDescending(a => a.Id);
@@ -153,13 +153,13 @@ namespace CommonWeb.Repository
         /// <param name="param"></param>
         protected override void SetNull(BaseDbContext dbContext, HeartbeatEntitySetNullParams param)
         {
-            HeartbeatEntity updateBefore = FindEntity(param.Id);
+            HeartbeatEntity updateBefore = FindEntity(param.id);
             dbContext.Set<HeartbeatEntity>().Attach(updateBefore);
-            if (param.LastHeartbeatTime)
+            if (param.lastHeartbeatTime)
             {
                 updateBefore.LastHeartbeatTime = null;
             }
-            if (param.RobotId)
+            if (param.robotId)
             {
                 updateBefore.RobotId = null;
             }
@@ -193,19 +193,19 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
                 disPageEntity.OrderType = true;
-                if (orderBy.Id)
+                if (orderBy.id)
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
                     return disPageEntity;
                 }
-                if (orderBy.LastHeartbeatTime)
+                if (orderBy.lastHeartbeatTime)
                 {
                     disPageEntity.OrderCol = a => a.LastHeartbeatTime;
                     disPageEntity.OrderColLazy = a => a.LastHeartbeatTime;
                     return disPageEntity;
                 }
-                if (orderBy.RobotId)
+                if (orderBy.robotId)
                 {
                     disPageEntity.OrderCol = a => a.RobotId;
                     disPageEntity.OrderColLazy = a => a.RobotId;
@@ -217,21 +217,21 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
 
-                if (orderBy.Id)
+                if (orderBy.id)
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.LastHeartbeatTime)
+                if (orderBy.lastHeartbeatTime)
                 {
                     disPageEntity.OrderCol = a => a.LastHeartbeatTime;
                     disPageEntity.OrderColLazy = a => a.LastHeartbeatTime;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.RobotId)
+                if (orderBy.robotId)
                 {
                     disPageEntity.OrderCol = a => a.RobotId;
                     disPageEntity.OrderColLazy = a => a.RobotId;

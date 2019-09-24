@@ -16,7 +16,6 @@ E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\New
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\Snowflake.Net.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\System.Data.SQLite.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\System.Data.SQLite.EF6.dll
-E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\System.Data.SQLite.Linq.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\Webdiyer.MvcPager.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\Antlr3.StringTemplate.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\HtmlAgilityPack.dll

@@ -162,6 +162,7 @@ E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\WebDriver.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Webdiyer.MvcPager.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Castle.Core.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\SeleniumExtras.WaitHelpers.dll
+E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\ICSharpCode.SharpZipLib.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\NPOI.OpenXml4Net.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\NPOI.OpenXmlFormats.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\System.Web.Mvc.dll
@@ -180,6 +181,8 @@ E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\zxing.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\WebDriver.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Webdiyer.MvcPager.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\Castle.Core.xml
+E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\ICSharpCode.SharpZipLib.pdb
+E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\ICSharpCode.SharpZipLib.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\System.Web.Mvc.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll

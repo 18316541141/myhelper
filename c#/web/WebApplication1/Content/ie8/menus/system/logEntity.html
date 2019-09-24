@@ -1,0 +1,58 @@
+﻿<fieldset class="layui-elem-field layui-field-title">
+    <legend>系统日志</legend>
+</fieldset>
+<div ng-controller="logEntity">
+    <form class="layui-form">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="threadNoLike" ng-model="postData.threadNoLike" placeholder="线程号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="messageLike" ng-model="postData.messageLike" placeholder="异常信息" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="exceptionLike" ng-model="postData.exceptionLike" placeholder="堆栈信息" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="projectNameLike" ng-model="postData.projectNameLike" placeholder="项目名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="typeNameLike" ng-model="postData.typeNameLike" placeholder="异常发生类" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="funcNameLike" ng-model="postData.funcNameLike" placeholder="异常发生方法" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="createDateStart" ng-model="postData.createDateStart" placeholder="起始日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="createDateEnd" ng-model="postData.createDateEnd" placeholder="结束日期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button class="layui-btn" type="button" ng-click="search();"><i class="layui-icon">&#xe615;</i> 搜索</button>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-primary" type="button" ng-click="refresh();"><i class="layui-icon">&#xe669;</i> 刷新</button>
+            </div>
+        </div>
+    </form>
+    <div page-data-table perms="perms" height="full-289" url="/LogEntity/page" table-toolbar="#tableToolbar" show-check-col="true" show-default-oper-col="true" post-data="postData" cols="cols"></div>
+</div>

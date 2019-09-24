@@ -32,164 +32,164 @@ namespace CommonWeb.Repository
             if (eqArgs != null)
             {
 
-                if (eqArgs.Id != null)
+                if (eqArgs.id != null)
                 {
-                    query = query.Where(a => a.Id == eqArgs.Id);
+                    query = query.Where(a => a.Id == eqArgs.id);
                 }
 
-                if (eqArgs.CreateDate != null)
+                if (eqArgs.createDate != null)
                 {
-                    query = query.Where(a => a.CreateDate == eqArgs.CreateDate);
+                    query = query.Where(a => a.CreateDate == eqArgs.createDate);
                 }
 
-                if (eqArgs.CreateDateStart != null)
+                if (eqArgs.createDateStart != null)
                 {
-                    query = query.Where(a => a.CreateDate >= eqArgs.CreateDateStart);
+                    query = query.Where(a => a.CreateDate >= eqArgs.createDateStart);
                 }
-                if (eqArgs.CreateDateEnd != null)
+                if (eqArgs.createDateEnd != null)
                 {
-                    query = query.Where(a => a.CreateDate <= eqArgs.CreateDateEnd);
+                    query = query.Where(a => a.CreateDate <= eqArgs.createDateEnd);
                 }
-                if (eqArgs.Level != null)
+                if (eqArgs.level != null)
                 {
-                    query = query.Where(a => a.Level == eqArgs.Level);
-                }
-
-                if (!string.IsNullOrEmpty(eqArgs.LevelLike))
-                {
-                    query = query.Where(a => a.Level.Contains(eqArgs.LevelLike));
-                }
-                if (eqArgs.ThreadNo != null)
-                {
-                    query = query.Where(a => a.ThreadNo == eqArgs.ThreadNo);
+                    query = query.Where(a => a.Level == eqArgs.level);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.ThreadNoLike))
+                if (!string.IsNullOrEmpty(eqArgs.levelLike))
                 {
-                    query = query.Where(a => a.ThreadNo.Contains(eqArgs.ThreadNoLike));
+                    query = query.Where(a => a.Level.Contains(eqArgs.levelLike));
                 }
-                if (eqArgs.Message != null)
+                if (eqArgs.threadNo != null)
                 {
-                    query = query.Where(a => a.Message == eqArgs.Message);
-                }
-
-                if (!string.IsNullOrEmpty(eqArgs.MessageLike))
-                {
-                    query = query.Where(a => a.Message.Contains(eqArgs.MessageLike));
-                }
-                if (eqArgs.ProjectName != null)
-                {
-                    query = query.Where(a => a.ProjectName == eqArgs.ProjectName);
+                    query = query.Where(a => a.ThreadNo == eqArgs.threadNo);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.ProjectNameLike))
+                if (!string.IsNullOrEmpty(eqArgs.threadNoLike))
                 {
-                    query = query.Where(a => a.ProjectName.Contains(eqArgs.ProjectNameLike));
+                    query = query.Where(a => a.ThreadNo.Contains(eqArgs.threadNoLike));
                 }
-                if (eqArgs.TypeName != null)
+                if (eqArgs.message != null)
                 {
-                    query = query.Where(a => a.TypeName == eqArgs.TypeName);
-                }
-
-                if (!string.IsNullOrEmpty(eqArgs.TypeNameLike))
-                {
-                    query = query.Where(a => a.TypeName.Contains(eqArgs.TypeNameLike));
-                }
-                if (eqArgs.FuncName != null)
-                {
-                    query = query.Where(a => a.FuncName == eqArgs.FuncName);
+                    query = query.Where(a => a.Message == eqArgs.message);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.FuncNameLike))
+                if (!string.IsNullOrEmpty(eqArgs.messageLike))
                 {
-                    query = query.Where(a => a.FuncName.Contains(eqArgs.FuncNameLike));
+                    query = query.Where(a => a.Message.Contains(eqArgs.messageLike));
                 }
-                if (eqArgs.Exception != null)
+                if (eqArgs.projectName != null)
                 {
-                    query = query.Where(a => a.Exception == eqArgs.Exception);
+                    query = query.Where(a => a.ProjectName == eqArgs.projectName);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.ExceptionLike))
+                if (!string.IsNullOrEmpty(eqArgs.projectNameLike))
                 {
-                    query = query.Where(a => a.Exception.Contains(eqArgs.ExceptionLike));
+                    query = query.Where(a => a.ProjectName.Contains(eqArgs.projectNameLike));
+                }
+                if (eqArgs.typeName != null)
+                {
+                    query = query.Where(a => a.TypeName == eqArgs.typeName);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.typeNameLike))
+                {
+                    query = query.Where(a => a.TypeName.Contains(eqArgs.typeNameLike));
+                }
+                if (eqArgs.funcName != null)
+                {
+                    query = query.Where(a => a.FuncName == eqArgs.funcName);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.funcNameLike))
+                {
+                    query = query.Where(a => a.FuncName.Contains(eqArgs.funcNameLike));
+                }
+                if (eqArgs.exception != null)
+                {
+                    query = query.Where(a => a.Exception == eqArgs.exception);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.exceptionLike))
+                {
+                    query = query.Where(a => a.Exception.Contains(eqArgs.exceptionLike));
                 }
                 query = OrderBy(query, eqArgs);
             }
             if (neqArgs != null)
             {
 
-                if (neqArgs.Id != null)
+                if (neqArgs.id != null)
                 {
-                    query = query.Where(a => a.Id != neqArgs.Id);
+                    query = query.Where(a => a.Id != neqArgs.id);
                 }
 
-                if (neqArgs.CreateDate != null)
+                if (neqArgs.createDate != null)
                 {
-                    query = query.Where(a => a.CreateDate != neqArgs.CreateDate);
+                    query = query.Where(a => a.CreateDate != neqArgs.createDate);
                 }
 
-                if (neqArgs.Level != null)
+                if (neqArgs.level != null)
                 {
-                    query = query.Where(a => a.Level != neqArgs.Level);
+                    query = query.Where(a => a.Level != neqArgs.level);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.LevelLike))
+                if (!string.IsNullOrEmpty(neqArgs.levelLike))
                 {
-                    query = query.Where(a => !a.Level.Contains(neqArgs.LevelLike));
+                    query = query.Where(a => !a.Level.Contains(neqArgs.levelLike));
                 }
-                if (neqArgs.ThreadNo != null)
+                if (neqArgs.threadNo != null)
                 {
-                    query = query.Where(a => a.ThreadNo != neqArgs.ThreadNo);
-                }
-
-                if (!string.IsNullOrEmpty(neqArgs.ThreadNoLike))
-                {
-                    query = query.Where(a => !a.ThreadNo.Contains(neqArgs.ThreadNoLike));
-                }
-                if (neqArgs.Message != null)
-                {
-                    query = query.Where(a => a.Message != neqArgs.Message);
+                    query = query.Where(a => a.ThreadNo != neqArgs.threadNo);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.MessageLike))
+                if (!string.IsNullOrEmpty(neqArgs.threadNoLike))
                 {
-                    query = query.Where(a => !a.Message.Contains(neqArgs.MessageLike));
+                    query = query.Where(a => !a.ThreadNo.Contains(neqArgs.threadNoLike));
                 }
-                if (neqArgs.ProjectName != null)
+                if (neqArgs.message != null)
                 {
-                    query = query.Where(a => a.ProjectName != neqArgs.ProjectName);
-                }
-
-                if (!string.IsNullOrEmpty(neqArgs.ProjectNameLike))
-                {
-                    query = query.Where(a => !a.ProjectName.Contains(neqArgs.ProjectNameLike));
-                }
-                if (neqArgs.TypeName != null)
-                {
-                    query = query.Where(a => a.TypeName != neqArgs.TypeName);
+                    query = query.Where(a => a.Message != neqArgs.message);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.TypeNameLike))
+                if (!string.IsNullOrEmpty(neqArgs.messageLike))
                 {
-                    query = query.Where(a => !a.TypeName.Contains(neqArgs.TypeNameLike));
+                    query = query.Where(a => !a.Message.Contains(neqArgs.messageLike));
                 }
-                if (neqArgs.FuncName != null)
+                if (neqArgs.projectName != null)
                 {
-                    query = query.Where(a => a.FuncName != neqArgs.FuncName);
-                }
-
-                if (!string.IsNullOrEmpty(neqArgs.FuncNameLike))
-                {
-                    query = query.Where(a => !a.FuncName.Contains(neqArgs.FuncNameLike));
-                }
-                if (neqArgs.Exception != null)
-                {
-                    query = query.Where(a => a.Exception != neqArgs.Exception);
+                    query = query.Where(a => a.ProjectName != neqArgs.projectName);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.ExceptionLike))
+                if (!string.IsNullOrEmpty(neqArgs.projectNameLike))
                 {
-                    query = query.Where(a => !a.Exception.Contains(neqArgs.ExceptionLike));
+                    query = query.Where(a => !a.ProjectName.Contains(neqArgs.projectNameLike));
+                }
+                if (neqArgs.typeName != null)
+                {
+                    query = query.Where(a => a.TypeName != neqArgs.typeName);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.typeNameLike))
+                {
+                    query = query.Where(a => !a.TypeName.Contains(neqArgs.typeNameLike));
+                }
+                if (neqArgs.funcName != null)
+                {
+                    query = query.Where(a => a.FuncName != neqArgs.funcName);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.funcNameLike))
+                {
+                    query = query.Where(a => !a.FuncName.Contains(neqArgs.funcNameLike));
+                }
+                if (neqArgs.exception != null)
+                {
+                    query = query.Where(a => a.Exception != neqArgs.exception);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.exceptionLike))
+                {
+                    query = query.Where(a => !a.Exception.Contains(neqArgs.exceptionLike));
                 }
             }
             return query;
@@ -208,45 +208,45 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
 
-                if (orderBy.Id) { return query = query.OrderBy(a => a.Id); }
+                if (orderBy.id) { return query = query.OrderBy(a => a.Id); }
                 else
-                if (orderBy.CreateDate) { return query = query.OrderBy(a => a.CreateDate); }
+                if (orderBy.createDate) { return query = query.OrderBy(a => a.CreateDate); }
                 else
-                if (orderBy.Level) { return query = query.OrderBy(a => a.Level); }
+                if (orderBy.level) { return query = query.OrderBy(a => a.Level); }
                 else
-                if (orderBy.ThreadNo) { return query = query.OrderBy(a => a.ThreadNo); }
+                if (orderBy.threadNo) { return query = query.OrderBy(a => a.ThreadNo); }
                 else
-                if (orderBy.Message) { return query = query.OrderBy(a => a.Message); }
+                if (orderBy.message) { return query = query.OrderBy(a => a.Message); }
                 else
-                if (orderBy.ProjectName) { return query = query.OrderBy(a => a.ProjectName); }
+                if (orderBy.projectName) { return query = query.OrderBy(a => a.ProjectName); }
                 else
-                if (orderBy.TypeName) { return query = query.OrderBy(a => a.TypeName); }
+                if (orderBy.typeName) { return query = query.OrderBy(a => a.TypeName); }
                 else
-                if (orderBy.FuncName) { return query = query.OrderBy(a => a.FuncName); }
+                if (orderBy.funcName) { return query = query.OrderBy(a => a.FuncName); }
                 else
-                if (orderBy.Exception) { return query = query.OrderBy(a => a.Exception); }
+                if (orderBy.exception) { return query = query.OrderBy(a => a.Exception); }
             }
             orderBy = eqArgs.orderByDesc;
             if (orderBy != null)
             {
 
-                if (orderBy.Id) { return query = query.OrderByDescending(a => a.Id); }
+                if (orderBy.id) { return query = query.OrderByDescending(a => a.Id); }
                 else
-                if (orderBy.CreateDate) { return query = query.OrderByDescending(a => a.CreateDate); }
+                if (orderBy.createDate) { return query = query.OrderByDescending(a => a.CreateDate); }
                 else
-                if (orderBy.Level) { return query = query.OrderByDescending(a => a.Level); }
+                if (orderBy.level) { return query = query.OrderByDescending(a => a.Level); }
                 else
-                if (orderBy.ThreadNo) { return query = query.OrderByDescending(a => a.ThreadNo); }
+                if (orderBy.threadNo) { return query = query.OrderByDescending(a => a.ThreadNo); }
                 else
-                if (orderBy.Message) { return query = query.OrderByDescending(a => a.Message); }
+                if (orderBy.message) { return query = query.OrderByDescending(a => a.Message); }
                 else
-                if (orderBy.ProjectName) { return query = query.OrderByDescending(a => a.ProjectName); }
+                if (orderBy.projectName) { return query = query.OrderByDescending(a => a.ProjectName); }
                 else
-                if (orderBy.TypeName) { return query = query.OrderByDescending(a => a.TypeName); }
+                if (orderBy.typeName) { return query = query.OrderByDescending(a => a.TypeName); }
                 else
-                if (orderBy.FuncName) { return query = query.OrderByDescending(a => a.FuncName); }
+                if (orderBy.funcName) { return query = query.OrderByDescending(a => a.FuncName); }
                 else
-                if (orderBy.Exception) { return query = query.OrderByDescending(a => a.Exception); }
+                if (orderBy.exception) { return query = query.OrderByDescending(a => a.Exception); }
                 else
                 {
                     return query = query.OrderByDescending(a => a.Id);
@@ -308,37 +308,37 @@ namespace CommonWeb.Repository
         /// <param name="param"></param>
         protected override void SetNull(BaseDbContext dbContext, LogEntitySetNullParams param)
         {
-            LogEntity updateBefore = FindEntity(param.Id);
+            LogEntity updateBefore = FindEntity(param.id);
             dbContext.Set<LogEntity>().Attach(updateBefore);
-            if (param.CreateDate)
+            if (param.createDate)
             {
                 updateBefore.CreateDate = null;
             }
-            if (param.Level)
+            if (param.level)
             {
                 updateBefore.Level = null;
             }
-            if (param.ThreadNo)
+            if (param.threadNo)
             {
                 updateBefore.ThreadNo = null;
             }
-            if (param.Message)
+            if (param.message)
             {
                 updateBefore.Message = null;
             }
-            if (param.ProjectName)
+            if (param.projectName)
             {
                 updateBefore.ProjectName = null;
             }
-            if (param.TypeName)
+            if (param.typeName)
             {
                 updateBefore.TypeName = null;
             }
-            if (param.FuncName)
+            if (param.funcName)
             {
                 updateBefore.FuncName = null;
             }
-            if (param.Exception)
+            if (param.exception)
             {
                 updateBefore.Exception = null;
             }
@@ -372,55 +372,55 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
                 disPageEntity.OrderType = true;
-                if (orderBy.Id)
+                if (orderBy.id)
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
                     return disPageEntity;
                 }
-                if (orderBy.CreateDate)
+                if (orderBy.createDate)
                 {
                     disPageEntity.OrderCol = a => a.CreateDate;
                     disPageEntity.OrderColLazy = a => a.CreateDate;
                     return disPageEntity;
                 }
-                if (orderBy.Level)
+                if (orderBy.level)
                 {
                     disPageEntity.OrderCol = a => a.Level;
                     disPageEntity.OrderColLazy = a => a.Level;
                     return disPageEntity;
                 }
-                if (orderBy.ThreadNo)
+                if (orderBy.threadNo)
                 {
                     disPageEntity.OrderCol = a => a.ThreadNo;
                     disPageEntity.OrderColLazy = a => a.ThreadNo;
                     return disPageEntity;
                 }
-                if (orderBy.Message)
+                if (orderBy.message)
                 {
                     disPageEntity.OrderCol = a => a.Message;
                     disPageEntity.OrderColLazy = a => a.Message;
                     return disPageEntity;
                 }
-                if (orderBy.ProjectName)
+                if (orderBy.projectName)
                 {
                     disPageEntity.OrderCol = a => a.ProjectName;
                     disPageEntity.OrderColLazy = a => a.ProjectName;
                     return disPageEntity;
                 }
-                if (orderBy.TypeName)
+                if (orderBy.typeName)
                 {
                     disPageEntity.OrderCol = a => a.TypeName;
                     disPageEntity.OrderColLazy = a => a.TypeName;
                     return disPageEntity;
                 }
-                if (orderBy.FuncName)
+                if (orderBy.funcName)
                 {
                     disPageEntity.OrderCol = a => a.FuncName;
                     disPageEntity.OrderColLazy = a => a.FuncName;
                     return disPageEntity;
                 }
-                if (orderBy.Exception)
+                if (orderBy.exception)
                 {
                     disPageEntity.OrderCol = a => a.Exception;
                     disPageEntity.OrderColLazy = a => a.Exception;
@@ -432,63 +432,63 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
 
-                if (orderBy.Id)
+                if (orderBy.id)
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.CreateDate)
+                if (orderBy.createDate)
                 {
                     disPageEntity.OrderCol = a => a.CreateDate;
                     disPageEntity.OrderColLazy = a => a.CreateDate;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.Level)
+                if (orderBy.level)
                 {
                     disPageEntity.OrderCol = a => a.Level;
                     disPageEntity.OrderColLazy = a => a.Level;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.ThreadNo)
+                if (orderBy.threadNo)
                 {
                     disPageEntity.OrderCol = a => a.ThreadNo;
                     disPageEntity.OrderColLazy = a => a.ThreadNo;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.Message)
+                if (orderBy.message)
                 {
                     disPageEntity.OrderCol = a => a.Message;
                     disPageEntity.OrderColLazy = a => a.Message;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.ProjectName)
+                if (orderBy.projectName)
                 {
                     disPageEntity.OrderCol = a => a.ProjectName;
                     disPageEntity.OrderColLazy = a => a.ProjectName;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.TypeName)
+                if (orderBy.typeName)
                 {
                     disPageEntity.OrderCol = a => a.TypeName;
                     disPageEntity.OrderColLazy = a => a.TypeName;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.FuncName)
+                if (orderBy.funcName)
                 {
                     disPageEntity.OrderCol = a => a.FuncName;
                     disPageEntity.OrderColLazy = a => a.FuncName;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.Exception)
+                if (orderBy.exception)
                 {
                     disPageEntity.OrderCol = a => a.Exception;
                     disPageEntity.OrderColLazy = a => a.Exception;

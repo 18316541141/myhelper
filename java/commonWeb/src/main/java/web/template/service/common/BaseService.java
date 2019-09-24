@@ -25,11 +25,8 @@ public abstract class BaseService {
 	/**
 	 * 日志输出类
 	 */
+	@Autowired
 	protected Logger log;
-	
-	public BaseService(){
-		log=MyLog.getLogger();
-	}
 	
 	/**
 	 * 异常往外抛出统一处理的方法

@@ -24,12 +24,7 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 10000; i++)
-            {
-                sb.Append(i).Append("=").Append(NumToChinese.NumConvertToChineseSpeak(i)).Append("\r\n");
-            }
-            string s = sb.ToString();
+            string s = NumToChinese.NumConvertToChineseSpeak(long.MaxValue);
             Console.WriteLine();
             //IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
             //Console.WriteLine(ipe.AddressList[4]);

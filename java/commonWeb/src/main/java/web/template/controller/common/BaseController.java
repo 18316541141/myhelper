@@ -44,11 +44,8 @@ public abstract class BaseController {
 	/**
 	 * 日志输出类
 	 */
+	@Autowired
 	protected Logger log;
-
-	public BaseController() {
-		log = MyLog.getLogger();
-	}
 
 	/**
 	 * 

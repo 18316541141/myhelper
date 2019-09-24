@@ -57,10 +57,14 @@ namespace WebApplication1.App_Start
             containerBuilder.RegisterInstance(new MyLog()).As<ILog>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterType<RealTimeInitService>().As<IRealTimeInitService>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterType<UserService>().As<IUserService>().SingleInstance().PropertiesAutowired();
+            containerBuilder.RegisterType<MyHeartbeatEntityRepository>().AsSelf().As<HeartbeatEntityRepository>().SingleInstance().PropertiesAutowired();
+            containerBuilder.RegisterType<MyLogEntityRepository>().AsSelf().As<LogEntityRepository>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(
                 typeof(MvcApplication).Assembly,
                 typeof(BaseController).Assembly).
-            Where(n => (n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")) && n.Name!= "RealTimeInitService" && n.Name!= "UserService").SingleInstance().AsSelf().PropertiesAutowired();
+            Where(n => (n.Name.EndsWith("Repository") || n.Name.EndsWith("Service")) 
+            && n.Name!= "RealTimeInitService" && n.Name!= "UserService"
+            && n.Name!= "MyHeartbeatEntityRepository" && n.Name!= "MyLogEntityRepository").SingleInstance().AsSelf().PropertiesAutowired();
             containerBuilder.RegisterControllers(
                 typeof(MvcApplication).Assembly,
                 typeof(BaseController).Assembly

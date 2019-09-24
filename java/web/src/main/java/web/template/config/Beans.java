@@ -49,8 +49,12 @@ public class Beans {
         return new DateConverter();
     }
 	
-	public MyLog myLog(){
-		
+	@Bean
+	public MyLog myLog(@Value("projectName") final String projectName,@Autowired final SnowFlakeHelper snowFlakeHelper){
+		final MyLog myLog = new MyLog();
+		myLog.setProjectName(projectName);
+		myLog.setSnowFlakeHelper(snowFlakeHelper);
+		return myLog;
 	}
 	
 	@Bean(name="defaultKaptcha")

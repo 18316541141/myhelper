@@ -13,9 +13,9 @@ public class LeftMenu {
 	private String title;
 	
 	/**
-	 * 菜单id
+	 * 菜单名称，系统内唯一名称，用于匹配菜单组件
 	 */
-	private String id;
+	private String name;
 	
 	/**
 	 * 菜单点击时，打开的页面所在的url
