@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers.Common
     public sealed partial class IndexController : FastController
     {
         /// <summary>
-        /// 首次刷新的业务处理类
+        /// 实时刷新的业务处理类
         /// </summary>
         public IRealTimeInitService RealTimeInitService { set; get; }
 
@@ -26,9 +26,9 @@ namespace WebApplication1.Controllers.Common
         public IUserService UserService { set; get; }
 
         /// <summary>
-        /// 等待池表
+        /// 系统业务接口类，提供系统的信息
         /// </summary>
-        public static HashSet<string> WaitPoolSet { set; get; }
+        public ISystemService SystemService { set; get; }
 
         /// <summary>
         /// 用户和等待池表，确保每个用户只能在同一个等待池上等待。
@@ -37,10 +37,6 @@ namespace WebApplication1.Controllers.Common
 
         static IndexController()
         {
-
-            WaitPoolSet = new HashSet<string>();
-            WaitPoolSet.Add("newsAlarm");
-
             UsernameAndPoolSet = new HashSet<string>();
         }
 
@@ -78,7 +74,7 @@ namespace WebApplication1.Controllers.Common
         /// <returns></returns>
 		private JsonResult RealTime(string realTimePool,string realTimeVersion,string username)
 		{
-			if (WaitPoolSet.Contains(realTimePool))
+			if (RealTimeInitService.GetWaitPoolSet().Contains(realTimePool))
             {
                 string newestVersion;
                 bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
@@ -167,12 +163,12 @@ namespace WebApplication1.Controllers.Common
             }
             try
             {
-                string imgName = FileHelper.SaveImageBySha1(image, $"{Server.MapPath("~/uploadFiles/")}");
-                using (Image img = Image.FromFile($"{Server.MapPath("~/uploadFiles/")}{s}{imgName}"))
+                string imgName = FileHelper.SaveImageBySha1(image, SystemService.UploadFilePath());
+                using (Image img = Image.FromFile($"{SystemService.UploadFilePath()}{s}{imgName}"))
                 {
                     using (Image thumbnailImg = img.GetThumbnailImage(150, img.Height * 150 / img.Width, () => false, IntPtr.Zero))
                     {
-                        string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}");
+                        string thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, SystemService.UploadFilePath());
                         return MyJson(new Result { code = 0, data = new { thumbnailName = thumbnailName, imgName = imgName, imgWidth = img.Width, imgHeight = img.Height } });
                     }
                 }
@@ -193,7 +189,7 @@ namespace WebApplication1.Controllers.Common
         [OperCount(CountLimit = 100, ClearMillisecond = 60000)]
         public JsonResult UploadFiles(HttpPostedFileBase fileUploads)
         {
-            return MyJson(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, $"{Server.MapPath("~/uploadFiles/")}") });
+            return MyJson(new Result { code = 0, data = FileHelper.SaveFileNameBySha1(fileUploads.InputStream, SystemService.UploadFilePath()) });
         }
 
         /// <summary>
@@ -208,7 +204,7 @@ namespace WebApplication1.Controllers.Common
         /// <param name="h">切割高度</param>
         public JsonResult SingleImageCrop(string imgName, int imgWidth, int imgHeight, int x, int y, int w, int h)
         {
-            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{s}{imgName}";
+            string imgPath = $"{SystemService.UploadFilePath()}{s}{imgName}";
             if (System.IO.File.Exists(imgPath))
             {
                 Bitmap bitmap = null;
@@ -234,8 +230,8 @@ namespace WebApplication1.Controllers.Common
                                     code = 0,
                                     data = new
                                     {
-                                        thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, $"{Server.MapPath("~/uploadFiles/")}"),
-                                        imgName = FileHelper.SaveImageBySha1(cutImg, $"{Server.MapPath("~/uploadFiles/")}")
+                                        thumbnailName = FileHelper.SaveImageBySha1(thumbnailImg, SystemService.UploadFilePath()),
+                                        imgName = FileHelper.SaveImageBySha1(cutImg, SystemService.UploadFilePath())
                                     }
                                 });
                             }
@@ -275,7 +271,7 @@ namespace WebApplication1.Controllers.Common
         public void ShowImage(string imgName)
         {
             Response.ContentType = "image/jpeg";
-            string imgPath = $"{Server.MapPath("~/uploadFiles/")}{s}{imgName}";
+            string imgPath = $"{SystemService.UploadFilePath()}{s}{imgName}";
             if (System.IO.File.Exists(imgPath))
             {
                 using (Stream stream = System.IO.File.OpenRead(imgPath))
@@ -299,7 +295,7 @@ namespace WebApplication1.Controllers.Common
         [OutputCache(Duration = int.MaxValue)]
         public FilePathResult DownFile(string fileName, string fileDesc)
         {
-            string filePath = $"{Server.MapPath("~/uploadFiles/")}{s}{fileName}";
+            string filePath = $"{SystemService.UploadFilePath()}{s}{fileName}";
             if (System.IO.File.Exists(filePath))
             {
                 return File(filePath, MimeMapping.GetMimeMapping(filePath), fileDesc);

@@ -17,5 +17,11 @@ namespace CommonWeb.Intf
         /// <param name="username">用户名</param>
         /// <returns>返回true，需进入等待池。返回false则马上刷新</returns>
         bool Init(string realTimePool, string username);
+
+        /// <summary>
+        /// 获取等待池表，里面保存有允许使用的等待池。
+        /// </summary>
+        /// <returns></returns>
+        HashSet<string> GetWaitPoolSet();
     }
 }

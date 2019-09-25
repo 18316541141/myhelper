@@ -1,9 +1,11 @@
 ﻿
+using log4net;
 using System;
 using System.Xml;
 using WindowsFormsApplication1.ServiceReference1;
 
-namespace CX_Task_Center.Code.Message{
+namespace CX_Task_Center.Code.Message
+{
     /// <summary>
     /// 办事易预警帮助类
     /// </summary>
@@ -40,8 +42,9 @@ namespace CX_Task_Center.Code.Message{
         public BsyWarningHelper()
         {
             MessageSenderSoapClient = new MessageSenderSoapClient();
-
         }
+
+        public ILog log { set; get; }
 
         /// <summary>
         /// 发生报警，传入模板xml参数
@@ -50,19 +53,25 @@ namespace CX_Task_Center.Code.Message{
         public void SendWarning(string templateXml)
         {
             XmlDocument doc = new XmlDocument();
+            XmlElement warning;
+            XmlElement title;
+            XmlElement source;
+            XmlElement datetime;
+            XmlElement content;
+            XmlElement remark;
+            XmlElement url;
             try
             {
                 doc.LoadXml(templateXml);
-                XmlElement warning = (XmlElement)doc.SelectSingleNode("//warning");
+                warning = (XmlElement)doc.SelectSingleNode("//warning");
                 if (warning.GetAttribute("type") == "01")
                 {
-                    XmlElement title = (XmlElement)doc.SelectSingleNode("//title");
-                    XmlElement source = (XmlElement)doc.SelectSingleNode("//source");
-                    XmlElement datetime = (XmlElement)doc.SelectSingleNode("//datetime");
-                    XmlElement content = (XmlElement)doc.SelectSingleNode("//content");
-                    XmlElement remark = (XmlElement)doc.SelectSingleNode("//remark");
-                    XmlElement url = (XmlElement)doc.SelectSingleNode("//url");
-                    MessageSenderSoapClient.SendWeiXinForWarning(warning.GetAttribute("openId"), "{\"first\":{\"value\":\"" + title.InnerText + "\"},\"keynote1\":{\"value\":\"" + source.InnerText + "\"},\"keynote2\":{\"value\":\"" + datetime.InnerText + "\"},\"keynote3\":{\"value\":\"" + content.InnerText + "\"},\"remark\":{\"value\":\"" + remark.InnerText + "\"}}", url.InnerText);
+                    title = (XmlElement)doc.SelectSingleNode("//title");
+                    source = (XmlElement)doc.SelectSingleNode("//source");
+                    datetime = (XmlElement)doc.SelectSingleNode("//datetime");
+                    content = (XmlElement)doc.SelectSingleNode("//content");
+                    remark = (XmlElement)doc.SelectSingleNode("//remark");
+                    url = (XmlElement)doc.SelectSingleNode("//url");
                 }
                 else
                 {
@@ -73,11 +82,19 @@ namespace CX_Task_Center.Code.Message{
             {
                 throw new Exception("模板解析错误，请确保模板结构正确。");
             }
+            try
+            {
+                MessageSenderSoapClient.SendWeiXinForWarning(warning.GetAttribute("openId"), "{\"first\":{\"value\":\"" + title.InnerText + "\"},\"keynote1\":{\"value\":\"" + source.InnerText + "\"},\"keynote2\":{\"value\":\"" + datetime.InnerText + "\"},\"keynote3\":{\"value\":\"" + content.InnerText + "\"},\"remark\":{\"value\":\"" + remark.InnerText + "\"}}", url.InnerText);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
+            }
         }
 
         /// <summary>
         /// 办事易发送类
         /// </summary>
-        public MessageSenderSoapClient MessageSenderSoapClient { set; get; }
+        private MessageSenderSoapClient MessageSenderSoapClient { set; get; }
     }
 }

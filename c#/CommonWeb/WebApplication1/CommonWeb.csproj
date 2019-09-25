@@ -240,6 +240,7 @@
     <Compile Include="Filter\Common\SizeFilterAttribute.cs" />
     <Compile Include="Filter\Common\UpdateVersionAttribute.cs" />
     <Compile Include="Intf\IRealTimeInitService.cs" />
+    <Compile Include="Intf\ISystemService.cs" />
     <Compile Include="Intf\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\codeGenerator\HeartbeatEntityRepository.cs" />
