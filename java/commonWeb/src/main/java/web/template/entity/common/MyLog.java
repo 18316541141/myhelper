@@ -1,5 +1,8 @@
 package web.template.entity.common;
 
+import java.io.PrintWriter;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -310,6 +313,20 @@ public class MyLog implements Logger {
 	}
 
 	private void initSnow() {
+		initSnow(null);
+	}
+
+	private void initSnow(Throwable t) {
+		StackTraceElement[] stackTraces=Thread.currentThread().getStackTrace();
+		MDC.put("FUNC_NAME", stackTraces[3].getMethodName());
+		if(t==null){
+		}else{
+			StringBuilder sb=new StringBuilder();
+			for(int i=0,len=t.getStackTrace().length;i<len;i++){
+				sb.append(t.getStackTrace()[i].toString()).append("\r\n");
+			}
+			MDC.put("EXCEPTION", sb.toString());			
+		}
 		MDC.put("PROJECT_NAME", projectName);
 		MDC.put("ID", String.valueOf(snowFlakeHelper.nextId()));
 	}
@@ -388,25 +405,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void error(Message arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(MessageSupplier arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(CharSequence arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Object arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.error(arg0, arg1);
 	}
 
@@ -424,13 +441,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void error(String arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.error(arg0, arg1);
 	}
 
 	@Override
 	public void error(Supplier<?> arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.error(arg0, arg1);
 	}
 
@@ -442,25 +459,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void error(Marker arg0, Message arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, MessageSupplier arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, CharSequence arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, Object arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.error(arg0, arg1, arg2);
 	}
 
@@ -478,13 +495,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void error(Marker arg0, String arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.error(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void error(Marker arg0, Supplier<?> arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.error(arg0, arg1, arg2);
 	}
 
@@ -701,19 +718,19 @@ public class MyLog implements Logger {
 
 	@Override
 	public void fatal(MessageSupplier arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(CharSequence arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Object arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.fatal(arg0, arg1);
 	}
 
@@ -731,13 +748,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void fatal(String arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.fatal(arg0, arg1);
 	}
 
 	@Override
 	public void fatal(Supplier<?> arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.fatal(arg0, arg1);
 	}
 
@@ -749,25 +766,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void fatal(Marker arg0, Message arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, MessageSupplier arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, CharSequence arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Object arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.fatal(arg0, arg1, arg2);
 	}
 
@@ -785,13 +802,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void fatal(Marker arg0, String arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.fatal(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void fatal(Marker arg0, Supplier<?> arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.fatal(arg0, arg1, arg2);
 	}
 
@@ -1007,25 +1024,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void info(Message arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(MessageSupplier arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(CharSequence arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Object arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.info(arg0, arg1);
 	}
 
@@ -1043,13 +1060,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void info(String arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.info(arg0, arg1);
 	}
 
 	@Override
 	public void info(Supplier<?> arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.info(arg0, arg1);
 	}
 
@@ -1061,25 +1078,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void info(Marker arg0, Message arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, MessageSupplier arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, CharSequence arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, Object arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.info(arg0, arg1, arg2);
 	}
 
@@ -1097,13 +1114,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void info(Marker arg0, String arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.info(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void info(Marker arg0, Supplier<?> arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.info(arg0, arg1, arg2);
 	}
 
@@ -1646,25 +1663,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void trace(Message arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(MessageSupplier arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(CharSequence arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Object arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.trace(arg0, arg1);
 	}
 
@@ -1682,13 +1699,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void trace(String arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.trace(arg0, arg1);
 	}
 
 	@Override
 	public void trace(Supplier<?> arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.trace(arg0, arg1);
 	}
 
@@ -1700,25 +1717,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void trace(Marker arg0, Message arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, MessageSupplier arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, CharSequence arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, Object arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.trace(arg0, arg1, arg2);
 	}
 
@@ -1736,13 +1753,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void trace(Marker arg0, String arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.trace(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void trace(Marker arg0, Supplier<?> arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.trace(arg0, arg1, arg2);
 	}
 
@@ -1998,25 +2015,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void warn(Message arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(MessageSupplier arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(CharSequence arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Object arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.warn(arg0, arg1);
 	}
 
@@ -2034,13 +2051,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void warn(String arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.warn(arg0, arg1);
 	}
 
 	@Override
 	public void warn(Supplier<?> arg0, Throwable arg1) {
-		initSnow();
+		initSnow(arg1);
 		log.warn(arg0, arg1);
 	}
 
@@ -2052,25 +2069,25 @@ public class MyLog implements Logger {
 
 	@Override
 	public void warn(Marker arg0, Message arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, MessageSupplier arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, CharSequence arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, Object arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.warn(arg0, arg1, arg2);
 	}
 
@@ -2088,13 +2105,13 @@ public class MyLog implements Logger {
 
 	@Override
 	public void warn(Marker arg0, String arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.warn(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void warn(Marker arg0, Supplier<?> arg1, Throwable arg2) {
-		initSnow();
+		initSnow(arg2);
 		log.warn(arg0, arg1, arg2);
 	}
 

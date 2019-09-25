@@ -9,12 +9,13 @@
 			<ConnectionFactory class="web.template.utils.ConnectionFactory" method="getDataSourceConnection" />
 			<Column name="ID" pattern="%X{ID}"/>
 			<Column name="CREATE_DATE" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}"/>
+			<Column name="Message" pattern="%m"/>
 			<Column name="THREAD_NO" pattern="%t"/>
 			<Column name="LEVEL" pattern="%p"/>
 			<Column name="TYPE_NAME" pattern="%c"/>
-			<Column name="EXCEPTION" pattern="%m"/>
+			<Column name="EXCEPTION" pattern="%X{EXCEPTION}"/>
 			<Column name="PROJECT_NAME" pattern="%X{PROJECT_NAME}"/>
-			<Column name="FUNC_NAME" pattern="%M"/>
+			<Column name="FUNC_NAME" pattern="%X{FUNC_NAME}"/>
 		</JDBC>
 	</appenders>
 	<loggers>
