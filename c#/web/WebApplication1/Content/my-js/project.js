@@ -15,43 +15,43 @@
 (function () {
     var images = [
 		//256x256的图标
-		"../images/256x256/accdb-256.png",
-		"../images/256x256/avi-256.png",
-		"../images/256x256/bmp-256.png",
-		"../images/256x256/css-256.png",
-		"../images/256x256/docx-256.png",
-		"../images/256x256/eml-256.png",
-		"../images/256x256/eps-256.png",
-		"../images/256x256/fla-256.png",
-		"../images/256x256/gif-256.png",
-		"../images/256x256/html-256.png",
-		"../images/256x256/ind-256.png",
-		"../images/256x256/ini-256.png",
-		"../images/256x256/jpeg-256.png",
-		"../images/256x256/jsf-256.png",
-		"../images/256x256/mdi-256.png",
-		"../images/256x256/mov-256.png",
-		"../images/256x256/mp3-256.png",
-		"../images/256x256/mpeg-256.png",
-		"../images/256x256/pdf-256.png",
-		"../images/256x256/png-256.png",
-		"../images/256x256/pptx-256.png",
-		"../images/256x256/proj-256.png",
-		"../images/256x256/psd-256.png",
-		"../images/256x256/pst-256.png",
-		"../images/256x256/pub-256.png",
-		"../images/256x256/rar-256.png",
-		"../images/256x256/read-256.png",
-		"../images/256x256/set-256.png",
-		"../images/256x256/tiff-256.png",
-		"../images/256x256/txt-256.png",
-		"../images/256x256/url-256.png",
-		"../images/256x256/vsd-256.png",
-		"../images/256x256/wav-256.png",
-		"../images/256x256/wma-256.png",
-		"../images/256x256/wmv-256.png",
-		"../images/256x256/xlsx-256.png",
-		"../images/256x256/zip-256.png"
+		"images/256x256/accdb-256.png",
+		"images/256x256/avi-256.png",
+		"images/256x256/bmp-256.png",
+		"images/256x256/css-256.png",
+		"images/256x256/docx-256.png",
+		"images/256x256/eml-256.png",
+		"images/256x256/eps-256.png",
+		"images/256x256/fla-256.png",
+		"images/256x256/gif-256.png",
+		"images/256x256/html-256.png",
+		"images/256x256/ind-256.png",
+		"images/256x256/ini-256.png",
+		"images/256x256/jpeg-256.png",
+		"images/256x256/jsf-256.png",
+		"images/256x256/mdi-256.png",
+		"images/256x256/mov-256.png",
+		"images/256x256/mp3-256.png",
+		"images/256x256/mpeg-256.png",
+		"images/256x256/pdf-256.png",
+		"images/256x256/png-256.png",
+		"images/256x256/pptx-256.png",
+		"images/256x256/proj-256.png",
+		"images/256x256/psd-256.png",
+		"images/256x256/pst-256.png",
+		"images/256x256/pub-256.png",
+		"images/256x256/rar-256.png",
+		"images/256x256/read-256.png",
+		"images/256x256/set-256.png",
+		"images/256x256/tiff-256.png",
+		"images/256x256/txt-256.png",
+		"images/256x256/url-256.png",
+		"images/256x256/vsd-256.png",
+		"images/256x256/wav-256.png",
+		"images/256x256/wma-256.png",
+		"images/256x256/wmv-256.png",
+		"images/256x256/xlsx-256.png",
+		"images/256x256/zip-256.png"
     ];
     for (var i = 0, len = images.length; i < len; i++) {
         new Image().src = images[i];
@@ -897,7 +897,7 @@ myApp.factory('$realTime', function ($http) {
             $timeout(function () {
                 var index;
                 $scope.uploader = new WebUploader.Uploader({
-                    swf: '../plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
                     auto: $scope.type === 'line',//选中文件后自动上传
                     server: $scope.url,//处理上传excel的控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
@@ -1121,7 +1121,7 @@ myApp.factory('$realTime', function ($http) {
             };
             $timeout(function () {
                 $scope.uploader = new WebUploader.Uploader({
-                    swf: '../plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
+                    swf: 'plugin/webuploader/Uploader.swf',//当浏览器不支持XMLHttpWebRequest时，使用flash插件上传。
                     auto: true,//选中文件后自动上传
                     server: '/index/uploadSingleImage',//处理上传文件的统一控制器
                     fileVal: 'fileUpload',//服务端接收二进制文件的参数名称
@@ -1416,7 +1416,7 @@ myApp.factory('$realTime', function ($http) {
                 var fileMap = {};
                 //创建一个上传插件
                 new WebUploader.Uploader({
-                    swf: '../plugin/webuploader/Uploader.swf',//插件所需的flash路径，用于兼容不支持XMLHttpWebRequest对象的浏览器
+                    swf: 'plugin/webuploader/Uploader.swf',//插件所需的flash路径，用于兼容不支持XMLHttpWebRequest对象的浏览器
                     auto: true,//拖动后自动上传
                     duplicate: true,//对每一个文件添加唯一hash值，用于区分文件操作进度条
                     server: '/index/uploadFiles',//统一上传的控制器
@@ -1526,7 +1526,7 @@ function downExcel(url,fileName,postData,totalCount) {
  * @param ext  附件的mime类型
  */
 function typeImgByMime(ext) {
-    var basePath = '../images/256x256/';
+    var basePath = 'images/256x256/';
     ext = ext.toLowerCase();
     if (ext === 'png') {
         basePath += "png-256.png";

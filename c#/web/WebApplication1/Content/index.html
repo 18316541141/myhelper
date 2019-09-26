@@ -12,11 +12,11 @@
   <meta name="format-detection" content="telephone=no"> 
   <link rel="stylesheet" href="layui/css/layui.css" media="all"> 
   <link rel="stylesheet" href="layui/css/login.css" media="all"> 
-  <link rel="stylesheet" href="../plugin-animate/animate.css" media="all"> 
-  <link rel="stylesheet" href="../plugin/webuploader/webuploader.css" media="all"> 
+  <link rel="stylesheet" href="plugin-animate/animate.css" media="all"> 
+  <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all"> 
   <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all"> 
-  <link rel="stylesheet" href="../Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
-  <link rel="stylesheet" href="../jquery-viewer/dist/viewer.css" media="all"> 
+  <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
+  <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all"> 
   <style type="text/css">
       .news-alarm> .layui-border-box{
           margin:5px 5px 0;
@@ -206,7 +206,7 @@
          <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
              <label class="layui-form-label">预览</label>
              <div class="layui-input-block">
-                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="../images/256x256/xlsx-256.png" width="96" class="thumbnail-img"/>
+                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="images/256x256/xlsx-256.png" width="96" class="thumbnail-img"/>
              </div>
          </div>
      </script>
@@ -446,7 +446,7 @@
       <li ng-repeat="x in menus" data-menu-name="{{x.name}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.name);">ဆ</i> </li> 
      </ul> 
      <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=20190712132743'"></div> 
+      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=666'"></div> 
      </div> 
     </div> 
    </div> 
@@ -496,24 +496,24 @@
     </div> 
    </div> 
   </div> 
-    <script src="../plugin/UUID.js" charset="utf-8"></script> 
-  <script src="../plugin/jquery.min.js" charset="utf-8"></script> 
+    <script src="plugin/UUID.js" charset="utf-8"></script> 
+  <script src="plugin/jquery.min.js" charset="utf-8"></script> 
   <script src="layui/layui.all.js" charset="utf-8"></script> 
-  <script src="../plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
+  <script src="plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
   <script src="plugin/jquery.cookie.js" charset="utf-8"></script> 
   <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script> 
   <script src="zTree_v3-master/js/jquery.ztree.exhide.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script> 
   <script src="angular-1.2.30/angular-sanitize.min.js"></script> 
   <script src="angular-1.2.30/angular-animate.min.js"></script> 
-  <script src="../plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
+  <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
   <script src="plugin/ng-layer.js" charset="utf-8"></script> 
-  <script src="../Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
-  <script src="../jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
+  <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
+  <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
     <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie-polyfills.js"></script>
     <![endif]-->
-  <script src="../plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
+  <script src="plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
      <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
     <![endif]-->     

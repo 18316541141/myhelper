@@ -1,4 +1,5 @@
-﻿using CommonHelper.Helper;
+﻿using CommonCrawler.Intf;
+using CommonHelper.Helper;
 using CommonHelper.staticVar;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -14,10 +15,6 @@ namespace WebApplication1.Controllers.Common
     /// </summary>
     public abstract class BaseController
     {
-        /// <summary>
-        /// 最近一次发送心跳的时间
-        /// </summary>
-        static DateTime _lastHeartbeatDate { set; get; }
 
 		/// <summary>
         /// 跨平台的斜杠
@@ -26,7 +23,7 @@ namespace WebApplication1.Controllers.Common
 
         static BaseController()
         {
-            _lastHeartbeatDate = DateTime.Now;
+            LastHeartbeatDate = DateTime.Now;
 			s = Path.DirectorySeparatorChar;
         }
 
@@ -34,6 +31,11 @@ namespace WebApplication1.Controllers.Common
         /// 日志输出类
         /// </summary>
         public ILog Log { set; get; }
+
+        /// <summary>
+        /// 爬虫定制化功能
+        /// </summary>
+        public ICrawlerService CrawlerService { set; get; }
 
         /// <summary>
         /// 监视服务器的域名地址
@@ -70,6 +72,33 @@ namespace WebApplication1.Controllers.Common
             foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.OpenIds"]))
             {
                 OpenIds.Add(Convert.ToString(val));
+            }
+        }
+
+        /// <summary>
+        /// 最近一次心跳时间，避免频繁发送心跳
+        /// </summary>
+        private static DateTime LastHeartbeatDate { set; get; }
+
+        /// <summary>
+        /// 发送心跳报文
+        /// </summary>
+        public void SendHeartbeat()
+        {
+            if ((DateTime.Now - LastHeartbeatDate).TotalSeconds > 60)
+            {
+                try
+                {
+                    HttpWebRequestHelper.HttpGet($"{MonitorServer}HeartbeatEntity/Send", MySignHelper.New(SignKey, SignSecret)
+                        .Add("robotId", RobotId)
+                        .Params());
+                    LastHeartbeatDate = DateTime.Now;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"发送心跳报文出错，错误原因：{ex.Message}",ex);
+                    CrawlerService.HeartbeatException(ex);
+                }
             }
         }
     }

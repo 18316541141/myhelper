@@ -235,15 +235,11 @@ namespace WebApplication1.Repository
 				{
 					disPageEntity.OrderCol= a => a.$entity.KeyName$;
 					disPageEntity.OrderColLazy = a => a.$entity.KeyName$;
-					$if(it.IsKey)$
-						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
-					$else$
-						disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$, $it.PropName$ = a.$it.PropName$ };
-					$endif$
-                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$it.PropName$) < 0;
-                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$it.PropName$) <= 0;
-                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.$it.PropName$) > 0;
-                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$it.PropName$) >= 0;
+					disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$entity.KeyName$) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$entity.KeyName$) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.$entity.KeyName$) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$entity.KeyName$) >= 0;
 					return disPageEntity;
 				}
 			}
@@ -251,15 +247,11 @@ namespace WebApplication1.Repository
 			{
 				disPageEntity.OrderCol= a => a.$entity.KeyName$;
 				disPageEntity.OrderColLazy = a => a.$entity.KeyName$;
-				$if(it.IsKey)$
-					disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
-				$else$
-					disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$, $it.PropName$ = a.$it.PropName$ };
-				$endif$
-                disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$it.PropName$) < 0;
-                disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$it.PropName$) <= 0;
-                disPageEntity.LessThan = (val) => a => val.CompareTo(a.$it.PropName$) > 0;
-                disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$it.PropName$) >= 0;
+				disPageEntity.OrderColAndKeyLazy = a => new IRobotErrorMsg { $entity.KeyName$ = a.$entity.KeyName$ };
+                disPageEntity.GreatThan = (val) => a => val.CompareTo(a.$entity.KeyName$) < 0;
+                disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.$entity.KeyName$) <= 0;
+                disPageEntity.LessThan = (val) => a => val.CompareTo(a.$entity.KeyName$) > 0;
+                disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.$entity.KeyName$) >= 0;
 				return disPageEntity;
 			}
 		}

@@ -38,6 +38,7 @@ namespace CommonWeb.Controllers
         /// </summary>
         /// <param name="robotId"></param>
         /// <returns></returns>
+        [OperInterval(IntervalMillisecond= 60000)]
         [Sign(new string[] { "robotId", "createDate", "r" })]
         [AllowAnonymous]
         public JsonResult Send(string robotId)
