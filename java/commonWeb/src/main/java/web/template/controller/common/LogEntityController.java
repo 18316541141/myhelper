@@ -34,7 +34,6 @@ public class LogEntityController extends BaseController {
 	 */
 	@RequestMapping("/page")
 	public Result page(LogEntityParams param, int currentPageIndex, int pageSize) {
-		log.error("测试日志", new RuntimeException("致命错误"));
 		return new Result(0, null, service.page(param, currentPageIndex, pageSize));
 	}
 

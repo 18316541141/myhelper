@@ -77,14 +77,14 @@ $endif$}$
   </select>
   
 	<sql id="selectWherePart">
-$entity.PropList:{
-	$if(it.ParamsTypeIsEqual)$
+$entity.PropList:{	
+	$if(it.ParamsTypeIsRangeStart)$
 		<if test="params.$it.PropName$!=null">AND $it.ColName$=#{params.$it.PropName$}</if>
-	$elseif(it.ParamsTypeIsRangeStart)$
 		<if test="params.$it.PropName$!=null">AND $it.ColName$ &gt;= #{params.$it.PropName$}</if>
 	$elseif(it.ParamsTypeIsRangeEnd)$
 		<if test="params.$it.PropName$!=null">AND $it.ColName$ &lt;= #{params.$it.PropName$}</if>
 	$elseif(it.ParamsTypeIsLike)$
+		<if test="params.$it.PropName$!=null and params.$it.PropName$!=''">AND $it.ColName$=#{params.$it.PropName$}</if>
 		<if test="params.$it.PropName$!=null and params.$it.PropName$!=''">AND $it.ColName$ like '%'+#{params.$it.PropName$}+'%'</if>
 	$endif$
 }$

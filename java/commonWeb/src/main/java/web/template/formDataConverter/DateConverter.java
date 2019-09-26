@@ -3,7 +3,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.convert.converter.Converter;
+
+import web.template.entity.common.MyLog;
 
 /**
  * form表单请求日期格式转换器
@@ -12,6 +15,12 @@ import org.springframework.core.convert.converter.Converter;
  */
 public class DateConverter implements Converter<String, Date> {
 
+	private Logger log;
+	
+	public DateConverter(){
+		log=MyLog.getLogger(this.getClass());
+	}
+	
 	private static final SimpleDateFormat[] DATE_FORMATS;
 
 	static {
@@ -28,11 +37,10 @@ public class DateConverter implements Converter<String, Date> {
 				try {
 					return DATE_FORMATS[i].parse(source);
 				} catch (ParseException e) {
-					e.printStackTrace();
+					log.debug(e.getMessage());
 				}
 			}
 		}
 		return null;
 	}
-
 }
