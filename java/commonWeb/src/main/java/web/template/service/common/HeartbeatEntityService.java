@@ -8,7 +8,7 @@ import web.template.params.HeartbeatEntityParams;
 import web.template.service.common.BaseService;
 
 /**
- * “心跳监测”模块的业务类
+ * ***模块的业务类
  * 
  * @author admin
  */
@@ -19,7 +19,6 @@ public class HeartbeatEntityService extends BaseService {
 	private HeartbeatEntityMapper mapper;
 
 	/**
-	 * 分页查询***模块，并返回查询结果
 	 * 
 	 * @param param
 	 *            查询参数
@@ -40,14 +39,20 @@ public class HeartbeatEntityService extends BaseService {
 	 * --------------------------------------------------- HeartbeatEntity data
 	 * = new HeartbeatEntity();
 	 * data.setId(nextId());data.setLastHeartbeat(param.getLastHeartbeat());data
-	 * .setRobotId(param.getRobotId());
+	 * .setRobotIp(param.getRobotIp());data.setRemark(param.getRemark());data.
+	 * setExtendField(param.getExtendField());data.setMonitorServer(param.
+	 * getMonitorServer());
 	 * -------------------------------------------------------------------------
 	 * --------------------------------------------------- HeartbeatEntityParams
 	 * param = new HeartbeatEntityParams();
 	 * param.setId(param.getId());param.setLastHeartbeat(param.getLastHeartbeat(
 	 * ));param.setLastHeartbeatStart(param.getLastHeartbeatStart());param.
-	 * setLastHeartbeatEnd(param.getLastHeartbeatEnd());param.setRobotId(param.
-	 * getRobotId());param.setRobotIdLike(param.getRobotIdLike());
+	 * setLastHeartbeatEnd(param.getLastHeartbeatEnd());param.setRobotIp(param.
+	 * getRobotIp());param.setRobotIpLike(param.getRobotIpLike());param.
+	 * setRemark(param.getRemark());param.setRemarkLike(param.getRemarkLike());
+	 * param.setExtendField(param.getExtendField());param.setExtendFieldLike(
+	 * param.getExtendFieldLike());param.setMonitorServer(param.getMonitorServer
+	 * ());param.setMonitorServerLike(param.getMonitorServerLike());
 	 * -------------------------------------------------------------------------
 	 * --------------------------------------------------- 分页查询***模块，并返回查询结果
 	 * 
@@ -94,7 +99,9 @@ public class HeartbeatEntityService extends BaseService {
 	 * update(HeartbeatEntity data){ HeartbeatEntity param=new
 	 * HeartbeatEntity();
 	 * param.setId(nextId());param.setLastHeartbeat(data.getLastHeartbeat());
-	 * param.setRobotId(data.getRobotId()); mapper.updateChange(param); }
+	 * param.setRobotIp(data.getRobotIp());param.setRemark(data.getRemark());
+	 * param.setExtendField(data.getExtendField());param.setMonitorServer(data.
+	 * getMonitorServer()); mapper.updateChange(param); }
 	 * -------------------------------------------------------------------------
 	 * --------------------------------------------------- 新增多条数据
 	 * 

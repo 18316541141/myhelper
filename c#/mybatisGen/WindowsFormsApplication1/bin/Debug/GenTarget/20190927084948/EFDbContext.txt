@@ -1,7 +1,0 @@
-﻿/// <summary>
-/// 心跳监测表
-/// </summary>
-public readonly DbSet<HeartbeatEntity> HeartbeatEntities;
-
-
-modelBuilder.Configurations.Add(new HeartbeatEntityMap());

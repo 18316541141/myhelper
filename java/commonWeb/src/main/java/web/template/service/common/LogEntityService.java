@@ -33,7 +33,7 @@ public class LogEntityService extends BaseService {
 	 */
 	public MyPagedList<LogEntity> page(LogEntityParams param, int currentPageIndex, int pageSize) {
 		if("".equals(param.getLevel())){
-			param.setLevel("");
+			param.setLevel(null);
 		}
 		return mapper.pageList(param, currentPageIndex, pageSize);
 	}

@@ -22,7 +22,12 @@ namespace WindowsFormsApplication1.NameTrans
             if (colName.IndexOf('_') > -1)
             {
                 string[] names=colName.Split('_');
-                return names[0].ToLower()+ names[1];
+                StringBuilder sb = new StringBuilder(names[0].ToLower());
+                for (int i=1,len=names.Length;i<len ;i++)
+                {
+                    sb.Append(names[1]);
+                }
+                return sb.ToString();
             }
             else
             {

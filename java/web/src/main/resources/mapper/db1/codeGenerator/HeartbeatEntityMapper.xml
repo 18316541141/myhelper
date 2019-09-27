@@ -3,13 +3,29 @@
 <mapper namespace="web.template.mapper.common.HeartbeatEntityMapper">
 	<resultMap type="HeartbeatEntity" id="HeartbeatEntityMap">
 		<id property="id" column="Id" />
+
 		<result property="id" column="Id" />
-		<result property="lastHeartbeat" column="Last_Heartbeat_Time" />
-		<result property="robotId" column="Robot_Id" />
+
+		<result property="lastHeartbeatTime" column="Last_Heartbeat_Time" />
+
+
+
+		<result property="robotIp" column="Robot_Ip" />
+
+
+		<result property="remark" column="Remark" />
+
+
+		<result property="extendField" column="Extend_Field" />
+
+
+		<result property="monitorServer" column="Monitor_Server" />
+
+
 	</resultMap>
 	<sql id="colNames">
 
-		Id ,Last_Heartbeat_Time ,Robot_Id
+		Id ,Last_Heartbeat_Time ,Robot_Ip ,Remark ,Extend_Field ,Monitor_Server
 	</sql>
 	<sql id="insertParamPart">
 		insert into Heartbeat_Entity(
@@ -20,8 +36,11 @@
 		(
 
 		#{id}
-		#{lastHeartbeat} ,#{lastHeartbeatStart} ,#{lastHeartbeatEnd}
-		#{robotId} ,#{robotIdLike}
+		#{lastHeartbeatTime} ,#{lastHeartbeatTimeStart} ,#{lastHeartbeatTimeEnd}
+		#{robotIp} ,#{robotIpLike}
+		#{remark} ,#{remarkLike}
+		#{extendField} ,#{extendFieldLike}
+		#{monitorServer} ,#{monitorServerLike}
 		)
 	</sql>
 	<insert id="insert" parameterType="HeartbeatEntity">
@@ -76,34 +95,51 @@
 
 		<if test="params.id!=null">AND Id=#{params.id}</if>
 
-
-		<if test="params.lastHeartbeat!=null">AND Last_Heartbeat_Time=#{params.lastHeartbeat}</if>
-
-
-		<if test="params.lastHeartbeatStart!=null">AND Last_Heartbeat_Time &gt;= #{params.lastHeartbeatStart}
-		</if>
-
-		<if test="params.lastHeartbeatEnd!=null">AND Last_Heartbeat_Time &lt;= #{params.lastHeartbeatEnd}
-		</if>
-
-		<if test="params.robotId!=null">AND Robot_Id=#{params.robotId}</if>
+		<if test="params.lastHeartbeatTime!=null">AND Last_Heartbeat_Time=#{params.lastHeartbeatTime}</if>
 
 
-		<if test="params.robotIdLike!=null and params.robotIdLike!=''">AND Robot_Id like '%'+#{params.robotIdLike}+'%'</if>
+
+		<if test="params.robotIp!=null">AND Robot_Ip=#{params.robotIp}</if>
+
+
+		<if test="params.remark!=null">AND Remark=#{params.remark}</if>
+
+
+		<if test="params.extendField!=null">AND Extend_Field=#{params.extendField}</if>
+
+
+		<if test="params.monitorServer!=null">AND Monitor_Server=#{params.monitorServer}</if>
+
+
 		<if test="nparams!=null">
 
 			<if test="nparams.id!=null">AND Id!=#{nparams.id}</if>
 
 
-			<if test="nparams.lastHeartbeat!=null">AND Last_Heartbeat_Time!=#{nparams.lastHeartbeat}</if>
+			<if test="nparams.lastHeartbeatTime!=null">AND Last_Heartbeat_Time!=#{nparams.lastHeartbeatTime}</if>
 
 
 
 
-			<if test="nparams.robotId!=null">AND Robot_Id!=#{nparams.robotId}</if>
+			<if test="nparams.robotIp!=null">AND Robot_Ip!=#{nparams.robotIp}</if>
 
 
-			<if test="nparams.robotIdLike!=null and nparams.robotIdLike!=''">AND Robot_Id not like '%'+#{nparams.robotIdLike}+'%'</if>
+			<if test="nparams.robotIpLike!=null and nparams.robotIpLike!=''">AND Robot_Ip not like '%'+#{nparams.robotIpLike}+'%'</if>
+			<if test="nparams.remark!=null">AND Remark!=#{nparams.remark}</if>
+
+
+			<if test="nparams.remarkLike!=null and nparams.remarkLike!=''">AND Remark not like '%'+#{nparams.remarkLike}+'%'</if>
+			<if test="nparams.extendField!=null">AND Extend_Field!=#{nparams.extendField}</if>
+
+
+			<if test="nparams.extendFieldLike!=null and nparams.extendFieldLike!=''">AND Extend_Field not like
+				'%'+#{nparams.extendFieldLike}+'%'</if>
+			<if test="nparams.monitorServer!=null">AND Monitor_Server!=#{nparams.monitorServer}</if>
+
+
+			<if
+				test="nparams.monitorServerLike!=null and nparams.monitorServerLike!=''">AND Monitor_Server not like
+				'%'+#{nparams.monitorServerLike}+'%'</if>
 		</if>
 	</sql>
 
@@ -121,11 +157,20 @@
 
 					<if test="params.orderByDesc.id">Id DESC,</if>
 
-					<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time DESC,</if>
+					<if test="params.orderByDesc.lastHeartbeatTime">Last_Heartbeat_Time DESC,</if>
 
 
 
-					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+					<if test="params.orderByDesc.robotIp">Robot_Ip DESC,</if>
+
+
+					<if test="params.orderByDesc.remark">Remark DESC,</if>
+
+
+					<if test="params.orderByDesc.extendField">Extend_Field DESC,</if>
+
+
+					<if test="params.orderByDesc.monitorServer">Monitor_Server DESC,</if>
 
 
 				</when>
@@ -135,11 +180,20 @@
 
 				<if test="params.orderByDesc.id">Id ASC,</if>
 
-				<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time ASC,</if>
+				<if test="params.orderByDesc.lastHeartbeatTime">Last_Heartbeat_Time ASC,</if>
 
 
 
-				<if test="params.orderByDesc.robotId">Robot_Id ASC,</if>
+				<if test="params.orderByDesc.robotIp">Robot_Ip ASC,</if>
+
+
+				<if test="params.orderByDesc.remark">Remark ASC,</if>
+
+
+				<if test="params.orderByDesc.extendField">Extend_Field ASC,</if>
+
+
+				<if test="params.orderByDesc.monitorServer">Monitor_Server ASC,</if>
 
 
 			</if>
@@ -167,11 +221,20 @@
 
 					<if test="params.orderByDesc.id">Id DESC,</if>
 
-					<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time DESC,</if>
+					<if test="params.orderByDesc.lastHeartbeatTime">Last_Heartbeat_Time DESC,</if>
 
 
 
-					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+					<if test="params.orderByDesc.robotIp">Robot_Ip DESC,</if>
+
+
+					<if test="params.orderByDesc.remark">Remark DESC,</if>
+
+
+					<if test="params.orderByDesc.extendField">Extend_Field DESC,</if>
+
+
+					<if test="params.orderByDesc.monitorServer">Monitor_Server DESC,</if>
 
 
 				</when>
@@ -181,11 +244,20 @@
 
 				<if test="params.orderByAsc.id">Id ASC,</if>
 
-				<if test="params.orderByAsc.lastHeartbeat">Last_Heartbeat_Time ASC,</if>
+				<if test="params.orderByAsc.lastHeartbeatTime">Last_Heartbeat_Time ASC,</if>
 
 
 
-				<if test="params.orderByAsc.robotId">Robot_Id ASC,</if>
+				<if test="params.orderByAsc.robotIp">Robot_Ip ASC,</if>
+
+
+				<if test="params.orderByAsc.remark">Remark ASC,</if>
+
+
+				<if test="params.orderByAsc.extendField">Extend_Field ASC,</if>
+
+
+				<if test="params.orderByAsc.monitorServer">Monitor_Server ASC,</if>
 
 
 			</if>
@@ -194,7 +266,9 @@
 
 	<update id="updateAll" parameterType="HeartbeatEntity">
 		update Heartbeat_Entity set
-		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeat} ,Robot_Id=#{robotId}
+		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeatTime} ,Robot_Ip=#{robotIp}
+		,Remark=#{remark} ,Extend_Field=#{extendField}
+		,Monitor_Server=#{monitorServer}
 		where Id=#{id}
 	</update>
 
@@ -205,12 +279,24 @@
 			<if test="id!=null">Id=#{id},</if>
 
 
-			<if test="lastHeartbeat!=null">Last_Heartbeat_Time=#{lastHeartbeat},</if>
+			<if test="lastHeartbeatTime!=null">Last_Heartbeat_Time=#{lastHeartbeatTime},</if>
 
 
 
 
-			<if test="robotId!=null">Robot_Id=#{robotId},</if>
+			<if test="robotIp!=null">Robot_Ip=#{robotIp},</if>
+
+
+
+			<if test="remark!=null">Remark=#{remark},</if>
+
+
+
+			<if test="extendField!=null">Extend_Field=#{extendField},</if>
+
+
+
+			<if test="monitorServer!=null">Monitor_Server=#{monitorServer},</if>
 
 
 
@@ -222,11 +308,20 @@
 		<set>
 
 
-			<if test="lastHeartbeat!=null">Last_Heartbeat_Time=#{lastHeartbeat},</if>
+			<if test="lastHeartbeatTime!=null">Last_Heartbeat_Time=#{lastHeartbeatTime},</if>
 
 
 
-			<if test="robotId!=null">Robot_Id=#{robotId},</if>
+			<if test="robotIp!=null">Robot_Ip=#{robotIp},</if>
+
+
+			<if test="remark!=null">Remark=#{remark},</if>
+
+
+			<if test="extendField!=null">Extend_Field=#{extendField},</if>
+
+
+			<if test="monitorServer!=null">Monitor_Server=#{monitorServer},</if>
 
 
 		</set>
@@ -244,11 +339,20 @@
 
 					<if test="params.orderByDesc.id">Id DESC,</if>
 
-					<if test="params.orderByDesc.lastHeartbeat">Last_Heartbeat_Time DESC,</if>
+					<if test="params.orderByDesc.lastHeartbeatTime">Last_Heartbeat_Time DESC,</if>
 
 
 
-					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+					<if test="params.orderByDesc.robotIp">Robot_Ip DESC,</if>
+
+
+					<if test="params.orderByDesc.remark">Remark DESC,</if>
+
+
+					<if test="params.orderByDesc.extendField">Extend_Field DESC,</if>
+
+
+					<if test="params.orderByDesc.monitorServer">Monitor_Server DESC,</if>
 
 
 				</when>
@@ -258,11 +362,20 @@
 
 				<if test="params.orderByAsc.id">Id ASC,</if>
 
-				<if test="params.orderByAsc.lastHeartbeat">Last_Heartbeat_Time ASC,</if>
+				<if test="params.orderByAsc.lastHeartbeatTime">Last_Heartbeat_Time ASC,</if>
 
 
 
-				<if test="params.orderByAsc.robotId">Robot_Id ASC,</if>
+				<if test="params.orderByAsc.robotIp">Robot_Ip ASC,</if>
+
+
+				<if test="params.orderByAsc.remark">Remark ASC,</if>
+
+
+				<if test="params.orderByAsc.extendField">Extend_Field ASC,</if>
+
+
+				<if test="params.orderByAsc.monitorServer">Monitor_Server ASC,</if>
 
 
 			</if>

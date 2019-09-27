@@ -151,7 +151,6 @@
       <Name>CommonHelper</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="AllTemplate\CSharpEntity">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
