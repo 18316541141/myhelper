@@ -32,6 +32,9 @@ public class LogEntityService extends BaseService {
 	 *            每页显示的数据量
 	 */
 	public MyPagedList<LogEntity> page(LogEntityParams param, int currentPageIndex, int pageSize) {
+		if("".equals(param.getLevel())){
+			param.setLevel("");
+		}
 		return mapper.pageList(param, currentPageIndex, pageSize);
 	}
 

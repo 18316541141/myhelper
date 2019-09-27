@@ -1,5 +1,3 @@
-E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.Properties.Resources.resources
-E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.csproj.GenerateResource.Cache
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\Log4net.config
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\Guess.xml
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\http.xml
@@ -55,5 +53,7 @@ E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\ICS
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.csprojResolveAssemblyReference.cache
+E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.Properties.Resources.resources
+E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.csproj.GenerateResource.Cache
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.dll
 E:\git_projects\myhelper\c#\CommonCrawler\WindowsFormsApplication1\obj\Debug\CommonCrawler.pdb

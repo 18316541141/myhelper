@@ -40,7 +40,7 @@ namespace CommonWeb.Filter.Common
             HttpContextBase httpContextBase = filterContext.HttpContext;
             HttpRequestBase request = httpContextBase.Request;
             string key = request.UserHostAddress + request.Path.ToLower();
-            bool temp = false;
+            bool temp = true;
             lock (RecordMap)
             {
                 if (RecordMap.ContainsKey(key))

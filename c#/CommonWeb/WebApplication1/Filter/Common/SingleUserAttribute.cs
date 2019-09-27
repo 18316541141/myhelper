@@ -34,11 +34,13 @@ namespace CommonWeb.Filter.Common
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+#if debugger
+#else
             HttpContextBase httpContextBase = filterContext.HttpContext;
             if (!IgnoreRequests.Contains(httpContextBase.Request.Url.AbsolutePath.ToLower()))
             {
                 string username=httpContextBase.User.Identity.Name;
-                if (UserMap.ContainsKey(username) && UserMap[username] == (string)httpContextBase.Session["loginGuid"]){
+                if (string.IsNullOrEmpty(username) || UserMap.ContainsKey(username) && UserMap[username] == (string)httpContextBase.Session["loginGuid"]){
                     base.OnActionExecuting(filterContext);
                 }
                 else
@@ -55,6 +57,7 @@ namespace CommonWeb.Filter.Common
                 }
             }
             else
+#endif
             {
                 base.OnActionExecuting(filterContext);
             }

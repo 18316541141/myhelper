@@ -11,14 +11,15 @@ using System.Linq;
 using System.Web;
 using CommonHelper.staticVar;
 using CommonHelper.EFRepository;
-using System.Linq.Expressions;
-using CommonHelper.EFMap;
+using CommonHelper.Entity;
+using CommonHelper.Params;
+using CommonHelper.OrderBy;
 
 namespace CommonWeb.Repository
 {
     //启用分布式事务
     //[Intercept(typeof(DistributeRepository))]
-    public abstract class HeartbeatEntityRepository : BaseRepository<HeartbeatEntity, HeartbeatEntityParams, HeartbeatEntitySetNullParams>
+    public abstract partial class HeartbeatEntityRepository : BaseRepository<HeartbeatEntity, HeartbeatEntityParams, HeartbeatEntitySetNullParams>
     {
         /// <summary>
         /// 通用的设置查询参数方法，只有在参数不为null的情况下才会设置，
@@ -33,56 +34,112 @@ namespace CommonWeb.Repository
             if (eqArgs != null)
             {
 
-                if (eqArgs.id != null)
+                if (eqArgs.Id != null)
                 {
-                    query = query.Where(a => a.Id == eqArgs.id);
+                    query = query.Where(a => a.Id == eqArgs.Id);
                 }
 
-                if (eqArgs.lastHeartbeatTime != null)
+                if (eqArgs.LastHeartbeatTime != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime == eqArgs.lastHeartbeatTime);
+                    query = query.Where(a => a.LastHeartbeatTime == eqArgs.LastHeartbeatTime);
                 }
 
-                if (eqArgs.lastHeartbeatTimeStart != null)
+                if (eqArgs.LastHeartbeatTimeStart != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime >= eqArgs.lastHeartbeatTimeStart);
+                    query = query.Where(a => a.LastHeartbeatTime >= eqArgs.LastHeartbeatTimeStart);
                 }
-                if (eqArgs.lastHeartbeatTimeEnd != null)
+                if (eqArgs.LastHeartbeatTimeEnd != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime <= eqArgs.lastHeartbeatTimeEnd);
+                    query = query.Where(a => a.LastHeartbeatTime <= eqArgs.LastHeartbeatTimeEnd);
                 }
-                if (eqArgs.robotId != null)
+                if (eqArgs.RobotIp != null)
                 {
-                    query = query.Where(a => a.RobotId == eqArgs.robotId);
+                    query = query.Where(a => a.RobotIp == eqArgs.RobotIp);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.robotIdLike))
+                if (!string.IsNullOrEmpty(eqArgs.RobotIpLike))
                 {
-                    query = query.Where(a => a.RobotId.Contains(eqArgs.robotIdLike));
+                    query = query.Where(a => a.RobotIp.Contains(eqArgs.RobotIpLike));
+                }
+                if (eqArgs.Remark != null)
+                {
+                    query = query.Where(a => a.Remark == eqArgs.Remark);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.RemarkLike))
+                {
+                    query = query.Where(a => a.Remark.Contains(eqArgs.RemarkLike));
+                }
+                if (eqArgs.ExtendField != null)
+                {
+                    query = query.Where(a => a.ExtendField == eqArgs.ExtendField);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.ExtendFieldLike))
+                {
+                    query = query.Where(a => a.ExtendField.Contains(eqArgs.ExtendFieldLike));
+                }
+
+                if (eqArgs.MonitorServer != null)
+                {
+                    query = query.Where(a => a.MonitorServer == eqArgs.MonitorServer);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.MonitorServerLike))
+                {
+                    query = query.Where(a => a.MonitorServer.Contains(eqArgs.MonitorServerLike));
                 }
                 query = OrderBy(query, eqArgs);
             }
             if (neqArgs != null)
             {
 
-                if (neqArgs.id != null)
+                if (neqArgs.Id != null)
                 {
-                    query = query.Where(a => a.Id != neqArgs.id);
+                    query = query.Where(a => a.Id != neqArgs.Id);
                 }
 
-                if (neqArgs.lastHeartbeatTime != null)
+                if (neqArgs.LastHeartbeatTime != null)
                 {
-                    query = query.Where(a => a.LastHeartbeatTime != neqArgs.lastHeartbeatTime);
+                    query = query.Where(a => a.LastHeartbeatTime != neqArgs.LastHeartbeatTime);
                 }
 
-                if (neqArgs.robotId != null)
+                if (neqArgs.RobotIp != null)
                 {
-                    query = query.Where(a => a.RobotId != neqArgs.robotId);
+                    query = query.Where(a => a.RobotIp != neqArgs.RobotIp);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.robotIdLike))
+                if (!string.IsNullOrEmpty(neqArgs.RobotIpLike))
                 {
-                    query = query.Where(a => !a.RobotId.Contains(neqArgs.robotIdLike));
+                    query = query.Where(a => !a.RobotIp.Contains(neqArgs.RobotIpLike));
+                }
+                if (neqArgs.Remark != null)
+                {
+                    query = query.Where(a => a.Remark != neqArgs.Remark);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.RemarkLike))
+                {
+                    query = query.Where(a => !a.Remark.Contains(neqArgs.RemarkLike));
+                }
+                if (neqArgs.ExtendField != null)
+                {
+                    query = query.Where(a => a.ExtendField != neqArgs.ExtendField);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.ExtendFieldLike))
+                {
+                    query = query.Where(a => !a.ExtendField.Contains(neqArgs.ExtendFieldLike));
+                }
+
+                if (neqArgs.MonitorServer != null)
+                {
+                    query = query.Where(a => a.MonitorServer != neqArgs.MonitorServer);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.MonitorServerLike))
+                {
+                    query = query.Where(a => !a.MonitorServer.Contains(neqArgs.MonitorServerLike));
                 }
             }
             return query;
@@ -101,21 +158,33 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
 
-                if (orderBy.id) { return query = query.OrderBy(a => a.Id); }
+                if (orderBy.Id) { return query = query.OrderBy(a => a.Id); }
                 else
-                if (orderBy.lastHeartbeatTime) { return query = query.OrderBy(a => a.LastHeartbeatTime); }
+                if (orderBy.LastHeartbeatTime) { return query = query.OrderBy(a => a.LastHeartbeatTime); }
                 else
-                if (orderBy.robotId) { return query = query.OrderBy(a => a.RobotId); }
+                if (orderBy.RobotIp) { return query = query.OrderBy(a => a.RobotIp); }
+                else
+                if (orderBy.Remark) { return query = query.OrderBy(a => a.Remark); }
+                else
+                if (orderBy.ExtendField) { return query = query.OrderBy(a => a.ExtendField); }
+                else
+                if (orderBy.MonitorServer) { return query = query.OrderBy(a => a.MonitorServer); }
             }
             orderBy = eqArgs.orderByDesc;
             if (orderBy != null)
             {
 
-                if (orderBy.id) { return query = query.OrderByDescending(a => a.Id); }
+                if (orderBy.Id) { return query = query.OrderByDescending(a => a.Id); }
                 else
-                if (orderBy.lastHeartbeatTime) { return query = query.OrderByDescending(a => a.LastHeartbeatTime); }
+                if (orderBy.LastHeartbeatTime) { return query = query.OrderByDescending(a => a.LastHeartbeatTime); }
                 else
-                if (orderBy.robotId) { return query = query.OrderByDescending(a => a.RobotId); }
+                if (orderBy.RobotIp) { return query = query.OrderByDescending(a => a.RobotIp); }
+                else
+                if (orderBy.Remark) { return query = query.OrderByDescending(a => a.Remark); }
+                else
+                if (orderBy.ExtendField) { return query = query.OrderByDescending(a => a.ExtendField); }
+                else
+                if (orderBy.MonitorServer) { return query = query.OrderByDescending(a => a.MonitorServer); }
                 else
                 {
                     return query = query.OrderByDescending(a => a.Id);
@@ -140,9 +209,21 @@ namespace CommonWeb.Repository
             {
                 updateBefore.LastHeartbeatTime = entity.LastHeartbeatTime;
             }
-            if (entity.RobotId != null)
+            if (entity.RobotIp != null)
             {
-                updateBefore.RobotId = entity.RobotId;
+                updateBefore.RobotIp = entity.RobotIp;
+            }
+            if (entity.Remark != null)
+            {
+                updateBefore.Remark = entity.Remark;
+            }
+            if (entity.ExtendField != null)
+            {
+                updateBefore.ExtendField = entity.ExtendField;
+            }
+            if (entity.MonitorServer != null)
+            {
+                updateBefore.MonitorServer = entity.MonitorServer;
             }
         }
 
@@ -153,15 +234,27 @@ namespace CommonWeb.Repository
         /// <param name="param"></param>
         protected override void SetNull(BaseDbContext dbContext, HeartbeatEntitySetNullParams param)
         {
-            HeartbeatEntity updateBefore = FindEntity(param.id);
+            HeartbeatEntity updateBefore = FindEntity(param.Id);
             dbContext.Set<HeartbeatEntity>().Attach(updateBefore);
-            if (param.lastHeartbeatTime)
+            if (param.LastHeartbeatTime)
             {
                 updateBefore.LastHeartbeatTime = null;
             }
-            if (param.robotId)
+            if (param.RobotIp)
             {
-                updateBefore.RobotId = null;
+                updateBefore.RobotIp = null;
+            }
+            if (param.Remark)
+            {
+                updateBefore.Remark = null;
+            }
+            if (param.ExtendField)
+            {
+                updateBefore.ExtendField = null;
+            }
+            if (param.MonitorServer)
+            {
+                updateBefore.MonitorServer = null;
             }
         }
 
@@ -189,26 +282,79 @@ namespace CommonWeb.Repository
         protected override DisPageEntity<HeartbeatEntity> GetDisPageEntity(HeartbeatEntityParams paramz)
         {
             DisPageEntity<HeartbeatEntity> disPageEntity = new DisPageEntity<HeartbeatEntity>();
+            disPageEntity.InCondition = (entities) =>
+            {
+                List<long?> keys = entities.Select(a => a.Id).ToList();
+                return a => keys.Contains(a.Id);
+            };
             HeartbeatEntityOrderBy orderBy = paramz.orderByAsc;
             if (orderBy != null)
             {
                 disPageEntity.OrderType = true;
-                if (orderBy.id)
+                if (orderBy.Id)
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.Id) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.Id) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.Id) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.Id) >= 0;
                     return disPageEntity;
                 }
-                if (orderBy.lastHeartbeatTime)
+                if (orderBy.LastHeartbeatTime)
                 {
                     disPageEntity.OrderCol = a => a.LastHeartbeatTime;
                     disPageEntity.OrderColLazy = a => a.LastHeartbeatTime;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, LastHeartbeatTime = a.LastHeartbeatTime };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) >= 0;
                     return disPageEntity;
                 }
-                if (orderBy.robotId)
+                if (orderBy.RobotIp)
                 {
-                    disPageEntity.OrderCol = a => a.RobotId;
-                    disPageEntity.OrderColLazy = a => a.RobotId;
+                    disPageEntity.OrderCol = a => a.RobotIp;
+                    disPageEntity.OrderColLazy = a => a.RobotIp;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, RobotIp = a.RobotIp };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.RobotIp) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.RobotIp) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.RobotIp) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.RobotIp) >= 0;
+                    return disPageEntity;
+                }
+                if (orderBy.Remark)
+                {
+                    disPageEntity.OrderCol = a => a.Remark;
+                    disPageEntity.OrderColLazy = a => a.Remark;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, Remark = a.Remark };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.Remark) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.Remark) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.Remark) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.Remark) >= 0;
+                    return disPageEntity;
+                }
+                if (orderBy.ExtendField)
+                {
+                    disPageEntity.OrderCol = a => a.ExtendField;
+                    disPageEntity.OrderColLazy = a => a.ExtendField;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, ExtendField = a.ExtendField };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.ExtendField) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.ExtendField) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.ExtendField) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.ExtendField) >= 0;
+                    return disPageEntity;
+                }
+                if (orderBy.MonitorServer)
+                {
+                    disPageEntity.OrderCol = a => a.MonitorServer;
+                    disPageEntity.OrderColLazy = a => a.MonitorServer;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, MonitorServer = a.MonitorServer };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.MonitorServer) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.MonitorServer) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.MonitorServer) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.MonitorServer) >= 0;
                     return disPageEntity;
                 }
             }
@@ -217,30 +363,86 @@ namespace CommonWeb.Repository
             if (orderBy != null)
             {
 
-                if (orderBy.id)
+                if (orderBy.Id)
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.Id) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.Id) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.Id) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.Id) >= 0;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.lastHeartbeatTime)
+                if (orderBy.LastHeartbeatTime)
                 {
                     disPageEntity.OrderCol = a => a.LastHeartbeatTime;
                     disPageEntity.OrderColLazy = a => a.LastHeartbeatTime;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, LastHeartbeatTime = a.LastHeartbeatTime };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) >= 0;
                     return disPageEntity;
                 }
                 else
-                if (orderBy.robotId)
+                if (orderBy.RobotIp)
                 {
-                    disPageEntity.OrderCol = a => a.RobotId;
-                    disPageEntity.OrderColLazy = a => a.RobotId;
+                    disPageEntity.OrderCol = a => a.RobotIp;
+                    disPageEntity.OrderColLazy = a => a.RobotIp;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, RobotIp = a.RobotIp };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.RobotIp) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.RobotIp) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.RobotIp) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.RobotIp) >= 0;
+                    return disPageEntity;
+                }
+                else
+                if (orderBy.Remark)
+                {
+                    disPageEntity.OrderCol = a => a.Remark;
+                    disPageEntity.OrderColLazy = a => a.Remark;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, Remark = a.Remark };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.Remark) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.Remark) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.Remark) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.Remark) >= 0;
+                    return disPageEntity;
+                }
+                else
+                if (orderBy.ExtendField)
+                {
+                    disPageEntity.OrderCol = a => a.ExtendField;
+                    disPageEntity.OrderColLazy = a => a.ExtendField;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, ExtendField = a.ExtendField };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.ExtendField) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.ExtendField) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.ExtendField) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.ExtendField) >= 0;
+                    return disPageEntity;
+                }
+                else
+                if (orderBy.MonitorServer)
+                {
+                    disPageEntity.OrderCol = a => a.MonitorServer;
+                    disPageEntity.OrderColLazy = a => a.MonitorServer;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, MonitorServer = a.MonitorServer };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.MonitorServer) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.MonitorServer) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.MonitorServer) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.MonitorServer) >= 0;
                     return disPageEntity;
                 }
                 else
                 {
                     disPageEntity.OrderCol = a => a.Id;
                     disPageEntity.OrderColLazy = a => a.Id;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.Id) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.Id) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.Id) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.Id) >= 0;
                     return disPageEntity;
                 }
             }
@@ -248,6 +450,11 @@ namespace CommonWeb.Repository
             {
                 disPageEntity.OrderCol = a => a.Id;
                 disPageEntity.OrderColLazy = a => a.Id;
+                disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id };
+                disPageEntity.GreatThan = (val) => a => val.CompareTo(a.Id) < 0;
+                disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.Id) <= 0;
+                disPageEntity.LessThan = (val) => a => val.CompareTo(a.Id) > 0;
+                disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.Id) >= 0;
                 return disPageEntity;
             }
         }

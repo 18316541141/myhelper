@@ -1,4 +1,5 @@
 ﻿using CommonCrawler.Intf;
+using CommonHelper.Entity;
 using CommonHelper.Helper;
 using CommonHelper.staticVar;
 using log4net;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using WebApplication1.Entity;
 
 namespace WebApplication1.Controllers.Common
 {
@@ -23,7 +25,7 @@ namespace WebApplication1.Controllers.Common
 
         static BaseController()
         {
-            LastHeartbeatDate = DateTime.Now;
+            LastHeartbeatDate = DateTime.MinValue;
 			s = Path.DirectorySeparatorChar;
         }
 
@@ -57,17 +59,11 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         protected List<string> OpenIds { set; get; }
 
-        /// <summary>
-        /// 机器人id
-        /// </summary>
-        protected string RobotId { set; get; }
-
         public BaseController()
         {
             MonitorServer = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.MonitorServer"];
             SignKey = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.SignKey"];
             SignSecret = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.SignSecret"];
-            RobotId = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.RobotId"];
             OpenIds = new List<string>();
             foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.OpenIds"]))
             {
@@ -81,17 +77,20 @@ namespace WebApplication1.Controllers.Common
         private static DateTime LastHeartbeatDate { set; get; }
 
         /// <summary>
-        /// 发送心跳报文
+        /// 发送心跳报文，冷却时间为5分钟一次。
         /// </summary>
         public void SendHeartbeat()
         {
-            if ((DateTime.Now - LastHeartbeatDate).TotalSeconds > 60)
+            if ((DateTime.Now - LastHeartbeatDate).TotalMinutes > 5)
             {
                 try
                 {
-                    HttpWebRequestHelper.HttpGet($"{MonitorServer}HeartbeatEntity/Send", MySignHelper.New(SignKey, SignSecret)
-                        .Add("robotId", RobotId)
-                        .Params());
+                    HeartbeatEntity heartbeatEntity = CrawlerService.GetHeartbeatEntityInfo();
+                    var param = MySignHelper.New(SignKey, SignSecret).Params();
+                    param.Add("Remark", heartbeatEntity.Remark);
+                    param.Add("ExtendField", heartbeatEntity.ExtendField);
+                    param.Add("MonitorServer", heartbeatEntity.MonitorServer);
+                    string text = HttpWebRequestHelper.HttpGet($"{MonitorServer}HeartbeatEntity/Send", param).GetText();
                     LastHeartbeatDate = DateTime.Now;
                 }
                 catch (Exception ex)

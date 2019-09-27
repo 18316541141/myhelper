@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace CommonHelper.EFMap
+namespace CommonHelper.Entity
 {
     /// <summary>
     /// 心跳监测表
@@ -27,26 +27,51 @@ namespace CommonHelper.EFMap
         public virtual DateTime? LastHeartbeatTime { set; get; }
 
         /// <summary>
-        /// 机器人id
+        /// 机器人的ip地址
         /// </summary>
-        [JsonProperty("robotId")]
-        public virtual string RobotId { set; get; }
+        [JsonProperty("robotIp")]
+        public virtual string RobotIp { set; get; }
 
         /// <summary>
-        /// 状态：0：已停止、1：运行中
+        /// 机器人备注
+        /// </summary>
+        [JsonProperty("remark")]
+        public virtual string Remark { set; get; }
+
+        /// <summary>
+        /// 扩展字段
+        /// </summary>
+        [JsonProperty("extendField")]
+        public virtual string ExtendField { set; get; }
+
+        /// <summary>
+        /// 监视服务器的url
+        /// </summary>
+        [JsonProperty("monitorServer")]
+        public virtual string MonitorServer { set; get; }
+
+        /// <summary>
+        /// 机器人状态
         /// </summary>
         [NotMapped]
         [JsonProperty("status")]
-        public sbyte Status
+        public sbyte? Status
         {
             get
             {
-                return (sbyte)((DateTime.Now - LastHeartbeatTime).Value.TotalMinutes > 10?0:1);
+                if (LastHeartbeatTime == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return (sbyte)((DateTime.Now - LastHeartbeatTime).Value.TotalMinutes > 10 ? 0 : 1);
+                }
             }
         }
 
         /// <summary>
-        /// 状态的中文描述
+        /// 状态中文描述
         /// </summary>
         [NotMapped]
         [JsonProperty("statusDesc")]
@@ -62,9 +87,10 @@ namespace CommonHelper.EFMap
                 {
                     return "运行中";
                 }
-                return null;
+                return "";
             }
         }
+
         /*
             [NotMapped]
             public long? Key

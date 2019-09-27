@@ -54,28 +54,65 @@ namespace CX_Task_Center.Code.Message{
         public void SendWarning(string templateXml)
         {
             XmlDocument doc = new XmlDocument();
+            XmlElement warning;
+            XmlElement title;
+            XmlElement source;
+            XmlElement datetime;
+            XmlElement content;
+            XmlElement remark;
+            XmlElement url;
             try
             {
                 doc.LoadXml(templateXml);
-                XmlElement warning = (XmlElement)doc.SelectSingleNode("//warning");
+                warning = (XmlElement)doc.SelectSingleNode("//warning");
                 if (warning.GetAttribute("type") == "01")
                 {
-                    XmlElement title = (XmlElement)doc.SelectSingleNode("//title");
-                    XmlElement source = (XmlElement)doc.SelectSingleNode("//source");
-                    XmlElement datetime = (XmlElement)doc.SelectSingleNode("//datetime");
-                    XmlElement content = (XmlElement)doc.SelectSingleNode("//content");
-                    XmlElement remark = (XmlElement)doc.SelectSingleNode("//remark");
-                    XmlElement url = (XmlElement)doc.SelectSingleNode("//url");
-                    MessageSenderSoapClient.SendWeiXinForWarning(warning.GetAttribute("openId"), "{\"first\":{\"value\":\"" + title.InnerText + "\"},\"keynote1\":{\"value\":\"" + source.InnerText + "\"},\"keynote2\":{\"value\":\"" + datetime.InnerText + "\"},\"keynote3\":{\"value\":\"" + content.InnerText + "\"},\"remark\":{\"value\":\"" + remark.InnerText + "\"}}", url.InnerText);
+                    title = (XmlElement)doc.SelectSingleNode("//title");
+                    source = (XmlElement)doc.SelectSingleNode("//source");
+                    datetime = (XmlElement)doc.SelectSingleNode("//datetime");
+                    content = (XmlElement)doc.SelectSingleNode("//content");
+                    remark = (XmlElement)doc.SelectSingleNode("//remark");
+                    url = (XmlElement)doc.SelectSingleNode("//url");
                 }
                 else
                 {
                     throw new Exception("模板不存在。");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("模板解析错误，请确保模板结构正确。");
+            }
+            try
+            {
+                JObject jsonObj = new JObject
+                {
+                    ["first"]= new JObject
+                    {
+                        ["value"] = title.InnerText,
+                    },
+                    ["keynote1"]= new JObject
+                    {
+                        ["value"] = source.InnerText,
+                    },
+                    ["keynote2"] = new JObject
+                    {
+                        ["value"] = datetime.InnerText,
+                    },
+                    ["keynote3"] = new JObject
+                    {
+                        ["value"] = content.InnerText,
+                    },
+                    ["remark"] = new JObject
+                    {
+                        ["value"] = remark.InnerText,
+                    }
+                };
+                MessageSenderSoapClient.SendWeiXinForWarning(warning.GetAttribute("openId"), JsonConvert.SerializeObject(jsonObj), url.InnerText);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message, ex);
             }
         }
 

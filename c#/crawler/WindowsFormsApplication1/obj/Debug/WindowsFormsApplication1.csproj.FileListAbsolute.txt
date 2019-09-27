@@ -50,14 +50,11 @@ E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\WindowsFormsApplica
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
-E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
-E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
-E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
-E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\Log4net.config
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\Guess.xml
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\http.xml
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\http.xsd
+E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\Autofac.dll
@@ -110,5 +107,8 @@ E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\ICSharpCo
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\ICSharpCode.SharpZipLib.xml
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
+E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 E:\git_projects\myhelper\c#\crawler\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb

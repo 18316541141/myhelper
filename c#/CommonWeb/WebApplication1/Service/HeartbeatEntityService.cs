@@ -10,16 +10,19 @@ using CommonHelper.CommonEntity;
 using System.Threading;
 using CommonWeb.Service.Common;
 using CommonWeb.Repository;
+using CommonHelper.Helper;
+using CommonHelper.Entity;
+using CommonHelper.Params;
 
 namespace CommonWeb.Service
 {
-	/// <summary>
+    /// <summary>
     /// “心跳监测”模块的业务类
     /// </summary>
-	//[Intercept(typeof(DistributedTransactionScan))]	//启用分布式事务扫描
-	public partial class HeartbeatEntityService : BaseService
+    //[Intercept(typeof(DistributedTransactionScan))]	//启用分布式事务扫描
+    public partial class HeartbeatEntityService : BaseService
     {
-		public HeartbeatEntityRepository Repository { set; get; }
+        public HeartbeatEntityRepository Repository { set; get; }
 
         /// <summary>
         /// 分页查询“心跳监测”模块，并返回查询结果
@@ -36,31 +39,50 @@ namespace CommonWeb.Service
         /// <summary>
         /// 记录心跳信息
         /// </summary>
-        /// <param name="robotId">机器人id</param>
-        public void RecordHeartbeat(string robotId)
+        /// <param name="robotIp">机器人ip</param>
+        public void RecordHeartbeat(HeartbeatEntity param)
         {
-            using (Mutex mutex = new Mutex(false, robotId))
+            CheckRecordHeartbeat(param);
+            using (Mutex mutex = new Mutex(false, param.RobotIp))
             {
                 mutex.WaitOne();
                 try
                 {
-
-                    HeartbeatEntity heartbeatEntity = Repository.FindEntity(a => a.RobotId == robotId);
-                    if (heartbeatEntity==null)
+                    HeartbeatEntity heartbeatEntity = Repository.FindEntity(a => a.RobotIp == param.RobotIp);
+                    if (heartbeatEntity == null)
                     {
                         Repository.Insert(new HeartbeatEntity
                         {
                             Id = NextId(),
-                            RobotId = robotId,
-                            LastHeartbeatTime = DateTime.Now
+                            LastHeartbeatTime = DateTime.Now,
+                            RobotIp = param.RobotIp,
+                            Remark = param.Remark,
+                            ExtendField = param.ExtendField,
+                            MonitorServer = param.MonitorServer
                         });
                     }
                     else
                     {
+                        if (string.IsNullOrEmpty(param.Remark))
+                        {
+                            param.Remark = null;
+                        }
+                        if (string.IsNullOrEmpty(param.ExtendField))
+                        {
+                            param.ExtendField = null;
+                        }
+                        if (string.IsNullOrEmpty(param.MonitorServer))
+                        {
+                            param.MonitorServer = null;
+                        }
                         Repository.UpdateChange(new HeartbeatEntity
                         {
                             Id = heartbeatEntity.Id,
-                            LastHeartbeatTime = DateTime.Now
+                            LastHeartbeatTime = DateTime.Now,
+                            RobotIp = param.RobotIp,
+                            Remark = param.Remark,
+                            ExtendField = param.ExtendField,
+                            MonitorServer = param.MonitorServer
                         });
                     }
                 }
@@ -68,6 +90,38 @@ namespace CommonWeb.Service
                 {
                     mutex.ReleaseMutex();
                 }
+            }
+        }
+
+        /// <summary>
+        /// 对RecordHeartbeat方法的入参进行校验基础（只校验是否为空，格式，长度，大小，不涉及
+        /// 数据库查询、流读取等其他复杂操作），校验不通过时，异常往外抛出
+        /// </summary>
+        /// <param name="param">待校验参数</param>
+        public void CheckRecordHeartbeat(HeartbeatEntity param)
+        {
+            if(string.IsNullOrEmpty(param.RobotIp))
+            {
+                Ret("ip地址不能为空！");
+            }
+            else
+            {
+                if (!CheckHelper.CheckIpv4(param.RobotIp))
+                {
+                    Ret("ip地址格式错误，必须是ipv4格式：xxx.xxx.xxx.xxx！");
+                }
+            }
+            if (!string.IsNullOrEmpty(param.MonitorServer) && param.MonitorServer.Length > 200)
+            {
+                Ret("监视服务器url长度不能超过200个字符！");
+            }
+            if (!string.IsNullOrEmpty(param.Remark) && param.Remark.Length > 30)
+            {
+                Ret("备注内容长度不能超过30个字符！");
+            }
+            if (!string.IsNullOrEmpty(param.ExtendField) && param.ExtendField.Length > 1000)
+            {
+                Ret("扩展字段长度不能超过1000个字符！");
             }
         }
 

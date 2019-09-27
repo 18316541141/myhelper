@@ -1,10 +1,12 @@
 ﻿using CommonHelper.EFMap;
+using CommonHelper.Entity;
+using CommonWeb.Intf;
 using CommonWeb.Repository;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-
 namespace CommonWeb.AutoThread
 {
     /// <summary>
@@ -13,6 +15,10 @@ namespace CommonWeb.AutoThread
     public sealed partial class AllAutoThread
     {
         HeartbeatEntityRepository heartbeatEntityRepository { set; get; }
+
+        public ISystemService SystemService { set; get; }
+
+        public ILog log { set; get; }
 
         public AllAutoThread(HeartbeatEntityRepository heartbeatEntityRepository)
         {
@@ -38,12 +44,12 @@ namespace CommonWeb.AutoThread
                     {
                         foreach (HeartbeatEntity heartbeatEntity in heartbeatEntityRepository.FindList(a => a.LastHeartbeatTime < temp))
                         {
-
+                            SystemService.SendWarning(heartbeatEntity);
                         }
                     }
                     catch (Exception ex)
                     {
-
+                        log.Error(ex.Message,ex);
                     }
                     Thread.Sleep(600000);
                 }

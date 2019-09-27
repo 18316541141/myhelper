@@ -78,13 +78,36 @@ namespace CX_Task_Center.Code.Message
                     throw new Exception("模板不存在。");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("模板解析错误，请确保模板结构正确。");
             }
             try
             {
-                MessageSenderSoapClient.SendWeiXinForWarning(warning.GetAttribute("openId"), "{\"first\":{\"value\":\"" + title.InnerText + "\"},\"keynote1\":{\"value\":\"" + source.InnerText + "\"},\"keynote2\":{\"value\":\"" + datetime.InnerText + "\"},\"keynote3\":{\"value\":\"" + content.InnerText + "\"},\"remark\":{\"value\":\"" + remark.InnerText + "\"}}", url.InnerText);
+                JObject jsonObj = new JObject
+                {
+                    ["first"]= new JObject
+                    {
+                        ["value"] = title.InnerText,
+                    },
+                    ["keynote1"]= new JObject
+                    {
+                        ["value"] = source.InnerText,
+                    },
+                    ["keynote2"] = new JObject
+                    {
+                        ["value"] = datetime.InnerText,
+                    },
+                    ["keynote3"] = new JObject
+                    {
+                        ["value"] = content.InnerText,
+                    },
+                    ["remark"] = new JObject
+                    {
+                        ["value"] = remark.InnerText,
+                    }
+                };
+                MessageSenderSoapClient.SendWeiXinForWarning(warning.GetAttribute("openId"), JsonConvert.SerializeObject(jsonObj), url.InnerText);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,7 @@
 ﻿using CommonHelper.CommonEntity;
+using CommonHelper.Entity;
 using CommonHelper.Helper.CommonEntity;
+using CommonHelper.Params;
 using CommonWeb.Controllers.Common;
 using CommonWeb.Filter.Common;
 using CommonWeb.Service;
@@ -9,7 +11,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Controllers.Common;
+
 namespace CommonWeb.Controllers
 {
 	/// <summary>
@@ -39,12 +41,16 @@ namespace CommonWeb.Controllers
         /// <param name="robotId"></param>
         /// <returns></returns>
         [OperInterval(IntervalMillisecond= 60000)]
-        [Sign(new string[] { "robotId", "createDate", "r" })]
+        [Sign(new string[] { "createDate", "r" })]
         [AllowAnonymous]
-        public JsonResult Send(string robotId)
+        public JsonResult Send(HeartbeatEntity heartbeatEntity)
         {
-            Service.RecordHeartbeat(robotId);
-            return MyJson(new Result { code = 0, msg="心跳发送成功！" });
+            if (heartbeatEntity != null)
+            {
+                heartbeatEntity.RobotIp = Request.UserHostAddress;
+            }
+            Service.RecordHeartbeat(heartbeatEntity);
+            return MyJson(new Result { code = 0, msg = "心跳发送成功！" });
         }
 
         /*抄考代码

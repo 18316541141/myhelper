@@ -45,7 +45,7 @@ namespace WebApplication1.Controllers.Common
         public JsonResult Logout()
         {
             FormsAuthentication.SignOut();
-            return Json(new Result { code = 0 }, JsonRequestBehavior.AllowGet);
+            return MyJson(new Result { code = 0 });
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace WebApplication1.Controllers.Common
 #else
                 if (!Convert.ToString(Session["vercode"]).Equals(vercode, StringComparison.OrdinalIgnoreCase))
                 {
-                    return Json(new Result { code = -1, msg = "验证码错误。" }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = -1, msg = "验证码错误。" });
                 }
 #endif
                 if (UserService.CheckLogin(username, password))
@@ -111,11 +111,11 @@ namespace WebApplication1.Controllers.Common
                             SingleUserAttribute.UserMap.Add(username, guid);
                         }
                     }
-                    return Json(new Result { code = 0, data = new { leftMenus = UserService.LoadLeftMenus(User.Identity.Name) } }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = 0, data = new { leftMenus = UserService.LoadLeftMenus(User.Identity.Name) } });
                 }
                 else
                 {
-                    return Json(new Result { code = -1, msg = "登录失败，账号或密码错误！" }, JsonRequestBehavior.AllowGet);
+                    return MyJson(new Result { code = -1, msg = "登录失败，账号或密码错误！" });
                 }
             }
             finally
