@@ -20,7 +20,7 @@ namespace CommonHelper.OrderBy
         /// <summary>
         /// 机器人的ip地址
         /// </summary>
-        public bool RobotIp { set; get; }
+        public bool RobotMac { set; get; }
 
         /// <summary>
         /// 机器人备注

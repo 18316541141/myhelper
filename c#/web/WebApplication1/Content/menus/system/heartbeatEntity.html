@@ -1,0 +1,33 @@
+﻿<fieldset class="layui-elem-field layui-field-title">
+    <legend>系统日志</legend>
+</fieldset>
+<div ng-controller="heartbeatEntity">
+    <form class="layui-form log-entity-query-form">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input style="width:100px;" type="text" name="robotMacLike" ng-model="postData.robotMacLike" placeholder="机器人的mac地址" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input style="width:100px;" type="text" name="remarkLike" ng-model="postData.remarkLike" placeholder="机器人备注" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input style="width:100px;" type="text" name="extendFieldLike" ng-model="postData.extendFieldLike" placeholder="扩展字段" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <span datetime placeholder="起始心跳时间" format="yyyy-MM-dd HH:mm:ss" value="postData.lastHeartbeatTimeStart"></span>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <span datetime placeholder="结束心跳时间" format="yyyy-MM-dd HH:mm:ss" value="postData.lastHeartbeatTimeEnd"></span>
+            </div>
+        </div>
+    </form>
+    <div page-data-table perms="perms" height="full-340" url="/HeartbeatEntity/page" table-toolbar="#tableToolbar" post-data="postData" cols="cols"></div>
+</div>

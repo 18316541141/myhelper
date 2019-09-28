@@ -40,7 +40,7 @@ namespace WebApplication1.Service
                 Name = "heartbeatEntity",
                 Title = "心跳监测",
                 SortIndex = 1,
-                Url = ""
+                Url = "menus/system/heartbeatEntity.html"
             });
             leftMenuList.Add(sysMenu);
             return leftMenuList;

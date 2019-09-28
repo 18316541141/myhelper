@@ -18,7 +18,7 @@ namespace CommonHelper.Mapping
             this.Property(u => u.Id).HasColumnName("Id").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             this.Property(u => u.Id).HasColumnName("Id");
             this.Property(u => u.LastHeartbeatTime).HasColumnName("Last_Heartbeat_Time");
-            this.Property(u => u.RobotIp).HasColumnName("Robot_Ip");
+            this.Property(u => u.RobotMac).HasColumnName("Robot_Mac");
             this.Property(u => u.Remark).HasColumnName("Remark");
             this.Property(u => u.ExtendField).HasColumnName("Extend_Field");
             this.Property(u => u.MonitorServer).HasColumnName("Monitor_Server");

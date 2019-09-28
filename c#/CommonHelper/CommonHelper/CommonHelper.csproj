@@ -206,7 +206,7 @@
     <Compile Include="Helper\GuessHelper.cs" />
     <Compile Include="Helper\HttpWebRequestHelper.cs" />
     <Compile Include="Helper\ImageHandleHelper.cs" />
-    <Compile Include="Helper\IpHelper.cs" />
+    <Compile Include="Helper\NetworkHelper.cs" />
     <Compile Include="Helper\Matrix.cs" />
     <Compile Include="Helper\MatrixHelper.cs" />
     <Compile Include="Helper\PasswordHelper.cs" />

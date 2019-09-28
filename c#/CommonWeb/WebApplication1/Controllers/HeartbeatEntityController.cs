@@ -45,12 +45,18 @@ namespace CommonWeb.Controllers
         [AllowAnonymous]
         public JsonResult Send(HeartbeatEntity heartbeatEntity)
         {
-            if (heartbeatEntity != null)
-            {
-                heartbeatEntity.RobotIp = Request.UserHostAddress;
-            }
             Service.RecordHeartbeat(heartbeatEntity);
             return MyJson(new Result { code = 0, msg = "心跳发送成功！" });
+        }
+
+        /// <summary>
+        /// 根据主键删除指定数据
+        /// </summary>
+        /// <param name="id">删除数据的主键</param>
+		public JsonResult Del(long? id)
+        {
+            Service.Del(id);
+            return MyJson(new Result { code = 0, msg = "数据已删除。" });
         }
 
         /*抄考代码

@@ -999,6 +999,10 @@
     <Content Include="Content\angular-1.2.30\i18n\angular-locale_zu.js" />
     <Content Include="Content\menus\system\editLogEntity.html" />
     <Content Include="Content\menus\system\logEntity.html" />
+    <Content Include="Content\my-css\menus\system\logEntity.css" />
+    <Content Include="Content\my-js\menus\system\editLogEntity.js" />
+    <Content Include="Content\menus\system\heartbeatEntity.html" />
+    <Content Include="Content\my-js\menus\system\heartbeatEntity.js" />
     <Content Include="Content\my-js\menus\system\logEntity.js" />
     <Content Include="Content\images\256x256\accdb-256.png" />
     <Content Include="Content\images\256x256\avi-256.png" />
@@ -1642,6 +1646,7 @@
     <Content Include="Content\plugin\jquery.cookie.js" />
     <Content Include="Content\plugin\jquery.min.js" />
     <Content Include="Content\plugin\jshashes-master\hashes.min.js" />
+    <Content Include="Content\plugin\moment.js" />
     <Content Include="Content\plugin\ng-layer.js" />
     <Content Include="Content\plugin\webuploader\Uploader.swf" />
     <Content Include="Content\plugin\webuploader\webuploader.css" />

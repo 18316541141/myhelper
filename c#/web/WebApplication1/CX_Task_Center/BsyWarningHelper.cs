@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -40,12 +42,12 @@ namespace CX_Task_Center.Code.Message{
         |详情 >>                     | （点击“详情”后跳转{url}）
         _____________________________
          */
-
         public BsyWarningHelper()
         {
             MessageSenderSoapClient = new MessageSenderSoapClient();
-
         }
+
+        public ILog log { set; get; }
 
         /// <summary>
         /// 发生报警，传入模板xml参数

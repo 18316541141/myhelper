@@ -38,7 +38,7 @@ namespace WebApplication1.App_Start
             string ip;
             try
             {
-                ip = IpHelper.GetOuterNetIP();
+                ip = NetworkHelper.GetOuterNetIP();
             }
             catch (Exception)
             {

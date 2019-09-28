@@ -87,6 +87,7 @@ namespace WebApplication1.Controllers.Common
                 {
                     HeartbeatEntity heartbeatEntity = CrawlerService.GetHeartbeatEntityInfo();
                     var param = MySignHelper.New(SignKey, SignSecret).Params();
+                    param.Add("RobotMac", NetworkHelper.GetMacAddress());
                     param.Add("Remark", heartbeatEntity.Remark);
                     param.Add("ExtendField", heartbeatEntity.ExtendField);
                     param.Add("MonitorServer", heartbeatEntity.MonitorServer);

@@ -29,8 +29,8 @@ namespace CommonHelper.Entity
         /// <summary>
         /// 机器人的ip地址
         /// </summary>
-        [JsonProperty("robotIp")]
-        public virtual string RobotIp { set; get; }
+        [JsonProperty("robotMac")]
+        public virtual string RobotMac { set; get; }
 
         /// <summary>
         /// 机器人备注

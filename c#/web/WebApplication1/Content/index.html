@@ -1,533 +1,557 @@
 ﻿<!DOCTYPE html>
 <html ng-app="my-app">
- <head> 
-  <meta charset="utf-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>中国广东省佛山市顺德区大良镇后台管理系统 &nbsp;</title> 
-  <meta name="renderer" content="webkit"> 
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
-  <meta name="apple-mobile-web-app-capable" content="yes"> 
-  <meta name="format-detection" content="telephone=no"> 
-  <link rel="stylesheet" href="layui/css/layui.css" media="all"> 
-  <link rel="stylesheet" href="layui/css/login.css" media="all"> 
-  <link rel="stylesheet" href="plugin-animate/animate.css" media="all"> 
-  <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all"> 
-  <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all"> 
-  <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all"> 
-  <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all"> 
-  <style type="text/css">
-      .news-alarm> .layui-border-box{
-          margin:5px 5px 0;
-      }
-#login-page {
-	position: fixed;
-	width: 100%;
-	left: 100%;
-	bottom: 0;
-	top: 0;
-	z-index: 10086;
-	background: #2F4056;
-	overflow: hidden;
-	opacity: 0;
-	transition: all .4s linear;
-}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>中国广东省佛山市顺德区大良镇后台管理系统 &nbsp;</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="layui/css/login.css" media="all">
+    <link rel="stylesheet" href="plugin-animate/animate.css" media="all">
+    <link rel="stylesheet" href="plugin/webuploader/webuploader.css" media="all">
+    <link rel="stylesheet" href="zTree_v3-master/css/zTreeStyle/zTreeStyle.css" media="all">
+    <link rel="stylesheet" href="Jcrop-0.9.12/css/jquery.Jcrop.min.css" media="all">
+    <link rel="stylesheet" href="jquery-viewer/dist/viewer.css" media="all">
+    <link rel="stylesheet" href="my-css/menus/system/logEntity.css" media="all">
+    <style type="text/css">
+        .news-alarm > .layui-border-box {
+            margin: 5px 5px 0;
+        }
 
-#login-page.logout {
-	opacity: 1;
-	left: 0%;
-}
+        #login-page {
+            position: fixed;
+            width: 100%;
+            left: 100%;
+            bottom: 0;
+            top: 0;
+            z-index: 10086;
+            background: #2F4056;
+            overflow: hidden;
+            opacity: 0;
+            transition: all .4s linear;
+        }
 
-#login-page .layui-form-checkbox[lay-skin=primary] span {
-	color: #fff;
-}
-.main-content {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	top: 50px;
-	overflow: auto;
-}
+            #login-page.logout {
+                opacity: 1;
+                left: 0%;
+            }
 
-.webuploader-pick {
-	top: 1px;
-	padding: 9px 15px;
-}
-.tree-container{
-    position:relative;
-}
-.tree-container>.left-tree {
-	width: 200px;
-	position: absolute;
-	animation-name: fadeInLeft;
-	animation-duration: .3s;
-	animation-timing-function: linear;
-}
+            #login-page .layui-form-checkbox[lay-skin=primary] span {
+                color: #fff;
+            }
 
-.tree-container>.right-content {
-    position:absolute;
-    left:200px;
-    right:0;
-	animation-name: fadeInRight;
-	animation-duration: .3s;
-	animation-timing-function: linear;
-}
+        .main-content {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            top: 50px;
+            overflow: auto;
+        }
 
-.left-tree>.left-tree-contain {
-	border: 1px solid #ddd;
-	overflow: hidden;
-	padding-bottom: 10px;
-	box-sizing: border-box;
-	position: absolute;
-	bottom: 0;
-	top: 48px;
-	width: 200px;
-}
+        .webuploader-pick {
+            top: 1px;
+            padding: 9px 15px;
+        }
 
-.layui-layout-body {
-	animation-name: fadeIn;
-	animation-duration: .3s;
-	animation-timing-function: linear;
-}
+        .tree-container {
+            position: relative;
+        }
 
-.show-image {
-	animation-name: flipInX;
-	animation-duration: .8s;
-	animation-timing-function: linear;
-}
+            .tree-container > .left-tree {
+                width: 200px;
+                position: absolute;
+                animation-name: fadeInLeft;
+                animation-duration: .3s;
+                animation-timing-function: linear;
+            }
 
-.layui-form-item {
-	animation-name: flipInX;
-	animation-duration: .8s;
-	animation-timing-function: linear;
-}
-/*表格行动画*/
-.layui-table>tbody>tr ,
-/*数据表格分页栏特效*/
-.layui-laypage-default{
-	animation-name: fadeIn;
-	animation-duration: .5s;
-	animation-timing-function: linear;
-}
-/*缩略图的外边框装饰样式*/
-.thumbnail-img {
-	box-sizing: border-box;
-	border: 1px solid #ddd;
-	padding: 4px;
-	border-radius: 4px;
-	-webkit-transition: border-color .30s linear;
-	-o-transition: border-color .30s linear;
-	transition: border-color .30s linear;
-}
+            .tree-container > .right-content {
+                position: absolute;
+                left: 200px;
+                right: 0;
+                animation-name: fadeInRight;
+                animation-duration: .3s;
+                animation-timing-function: linear;
+            }
 
-.thumbnail-img:hover {
-	border-color: #5FB878;
-}
+        .left-tree > .left-tree-contain {
+            border: 1px solid #ddd;
+            overflow: hidden;
+            padding-bottom: 10px;
+            box-sizing: border-box;
+            position: absolute;
+            bottom: 0;
+            top: 48px;
+            width: 200px;
+        }
 
-.thumbnail-img:active {
-	border-color: #009688;
-	border-width: 1.4px;
-}
+        .layui-layout-body {
+            animation-name: fadeIn;
+            animation-duration: .3s;
+            animation-timing-function: linear;
+        }
 
-.layer-body {
-	position: absolute;
-	top: 43px;
-	left: 0;
-	bottom: 50px;
-	right: 0;
-	overflow: auto;
-	padding: 5px 5px 0;
-}
-.layer-body>.layui-form{
-    margin-right:25px;
-}
-.layer-foot {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	height: 50px;
-	padding: 6px 15px;
-	background-color: #eee;
-	width: 100%;
-	box-sizing: border-box;
-}
+        .show-image {
+            animation-name: flipInX;
+            animation-duration: .8s;
+            animation-timing-function: linear;
+        }
 
-.layer-foot>.layui-inline {
-	float: right;
-}
+        .layui-form-item {
+            animation-name: flipInX;
+            animation-duration: .8s;
+            animation-timing-function: linear;
+        }
+        /*表格行动画*/
+        .layui-table > tbody > tr,
+        /*数据表格分页栏特效*/
+        .layui-laypage-default {
+            animation-name: fadeIn;
+            animation-duration: .5s;
+            animation-timing-function: linear;
+        }
+        /*缩略图的外边框装饰样式*/
+        .thumbnail-img {
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            padding: 4px;
+            border-radius: 4px;
+            -webkit-transition: border-color .30s linear;
+            -o-transition: border-color .30s linear;
+            transition: border-color .30s linear;
+        }
 
-.viewer-container {
-	background-color: rgba(47, 64, 86, .9);
-}
+            .thumbnail-img:hover {
+                border-color: #5FB878;
+            }
 
-.auto-col-width {
-	width: 1%;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
+            .thumbnail-img:active {
+                border-color: #009688;
+                border-width: 1.4px;
+            }
 
-.layui-layer-content {
-	white-space: pre-wrap;
-	word-wrap: break-word;
-}
+        .layer-body {
+            position: absolute;
+            top: 43px;
+            left: 0;
+            bottom: 50px;
+            right: 0;
+            overflow: auto;
+            padding: 5px 5px 0;
+        }
 
-.files-list.ng-leave.ng-leave-active,.files-list.ng-enter {
-	opacity: 0;
-	max-height: 0;
-}
-.files-list.ng-leave, .files-list.ng-enter.ng-enter-active {
-	opacity: 1;
-	max-height: 40px;
-}
-</style>
-  <script type="text/template" id="cropTemplate">
-            <div class="layer-body">
-                <form id="{{id}}-crop-form" class="layui-form">
-                    <img style="max-width:100%;" id="{{id}}-crop" />
-                </form>
+            .layer-body > .layui-form {
+                margin-right: 25px;
+            }
+
+        .layer-foot {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 50px;
+            padding: 6px 15px;
+            background-color: #eee;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+            .layer-foot > .layui-inline {
+                float: right;
+            }
+
+        .viewer-container {
+            background-color: rgba(47, 64, 86, .9);
+        }
+
+        .auto-col-width {
+            width: 1%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .layui-layer-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .files-list.ng-leave.ng-leave-active, .files-list.ng-enter {
+            opacity: 0;
+            max-height: 0;
+        }
+
+            .files-list.ng-leave, .files-list.ng-enter.ng-enter-active {
+                opacity: 1;
+                max-height: 40px;
+            }
+    </style>
+    <script type="text/template" id="cropTemplate">
+        <div class="layer-body">
+            <form id="{{id}}-crop-form" class="layui-form">
+                <img style="max-width:100%;" id="{{id}}-crop" />
+            </form>
+        </div>
+        <div class="layer-foot">
+            <div class="layui-inline">
+                <div class="layui-input-inline"><button id="{{id}}-crop-btn" class="layui-btn" type="button" ng-click="crop()">裁剪</button></div>
             </div>
-            <div class="layer-foot">
-                <div class="layui-inline">
-                    <div class="layui-input-inline"><button id="{{id}}-crop-btn" class="layui-btn" type="button" ng-click="crop()">裁剪</button></div>
+        </div>
+    </script>
+    <script type="text/template" id="uploadExcelTemplate">
+        <div id="uploadExcel{{id}}" ng-if="type == 'line'">上传Excel</div>
+        <div class="layui-form-item" ng-if="type == 'form'">
+            <label class="layui-form-label">上传Excel</label>
+            <div class="layui-input-block">
+                <div id="uploadExcel{{id}}">选择Excel</div>
+            </div>
+        </div>
+        <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
+            <label class="layui-form-label">预览</label>
+            <div class="layui-input-block">
+                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="images/256x256/xlsx-256.png" width="96" class="thumbnail-img" />
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="selectTemplate">
+        <select id="{{id}}" lay-filter="{{id}}">
+            <option ng-repeat="x in options" value="{{x.value}}">{{x.text}}</option>
+        </select>
+    </script>
+    <script type="text/template" id="datetimeTemplate">
+        <input type="text" class="layui-input" id="{{id}}" placeholder="{{placeholder}}" ng-model="value" style="width:{{width}}px;">
+    </script>
+    <script type="text/template" id="uploadImageTemplate">
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传图片</label>
+            <div class="layui-input-block">
+                <div id="uploadImage{{id}}">选择图片</div>
+            </div>
+        </div>
+        <div ng-if="isUploaded" class="layui-form-item show-image">
+            <label class="layui-form-label">预览</label>
+            <div class="layui-input-block">
+                <img style="max-width:100%;" ng-src="{{src}}" class="thumbnail-img" />
+            </div>
+        </div>
+        <div ng-if="showProgress">
+            <label class="layui-form-label">进度</label>
+            <div class="layui-input-block">
+                <div class="layui-progress" lay-showPercent="yes" style="top:16px;" lay-filter="upload-img-progress">
+                    <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
                 </div>
             </div>
-        </script>
-     <script type="text/template" id="uploadExcelTemplate">
-         <div id="uploadExcel{{id}}" ng-if="type == 'line'">上传Excel</div>
-         <div class="layui-form-item" ng-if="type == 'form'">
-             <label class="layui-form-label">上传Excel</label>
-             <div class="layui-input-block">
-                 <div id="uploadExcel{{id}}">选择Excel</div>
-             </div>
-         </div>
-         <div ng-show="isUploaded && type == 'form'" class="layui-form-item">
-             <label class="layui-form-label">预览</label>
-             <div class="layui-input-block">
-                <img ng-mouseover="showTip($event)" ng-mouseleave="hideTip();" src="images/256x256/xlsx-256.png" width="96" class="thumbnail-img"/>
-             </div>
-         </div>
-     </script>
-        <script type="text/template" id="uploadImageTemplate">
-            <div class="layui-form-item">
-                <label class="layui-form-label">上传图片</label>
-                <div class="layui-input-block">
-                    <div id="uploadImage{{id}}">选择图片</div>
+        </div>
+    </script>
+    <script type="text/template" id="pageDataTableTemplate">
+        <div class="layui-hide">
+            <div id="rowToolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="edit" type="button" ng-if="perms.edit">编辑</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del" type="button" ng-if="perms.del">删除</button>
                 </div>
             </div>
-            <div ng-if="isUploaded" class="layui-form-item show-image">
-                <label class="layui-form-label">预览</label>
-                <div class="layui-input-block">
-                    <img style="max-width:100%;" ng-src="{{src}}" class="thumbnail-img"/>
+            <div id="tableToolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="enabled" type="button" ng-if="perms.enabled"><i class="layui-icon ">&#xe605;</i> 启用</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="disabled" type="button" ng-if="perms.disabled"><i class="layui-icon ">&#x1006;</i> 禁用</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" type="button" ng-if="perms.add"><i class="layui-icon ">&#xe608;</i> 新增</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="export" type="button" ng-if="perms.export"><i class="layui-icon ">&#xe601;</i> 导出</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBatch" type="button" ng-if="perms.delBatch"><i class="layui-icon ">&#xe640;</i> 批量删除</button>
                 </div>
             </div>
-            <div ng-if="showProgress">
-                <label class="layui-form-label">进度</label>
-                <div class="layui-input-block">
-                    <div class="layui-progress" lay-showPercent="yes" style="top:16px;" lay-filter="upload-img-progress">
-                        <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
-                    </div>
+        </div>
+        <div id="data-table-{{id}}" lay-filter="dataTable{{id}}"></div>
+    </script>
+    <script type="text/template" id="treeFormTemplate">
+        <div class="tree-container" id="{{id}}">
+            <div class="left-tree">
+                <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()" />
+                <div class="left-tree-contain">
+                    <div id="tree-{{id}}" class="ztree layui-side-scroll"></div>
                 </div>
             </div>
-        </script>
-        <script type="text/template" id="pageDataTableTemplate">
-            <div class="layui-hide">
-                <div id="rowToolbar">
-                    <div class="layui-btn-container">
-                        <button class="layui-btn layui-btn-sm" lay-event="edit" type="button" ng-if="perms.edit">编辑</button>
-                        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del" type="button" ng-if="perms.del">删除</button>
-                    </div>
-                </div>
-                <div id="tableToolbar">
-                    <div class="layui-btn-container">
-                        <button class="layui-btn layui-btn-sm" lay-event="enabled" type="button" ng-if="perms.enabled"><i class="layui-icon ">&#xe605;</i> 启用</button>
-                        <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="disabled" type="button" ng-if="perms.disabled"><i class="layui-icon ">&#x1006;</i> 禁用</button>
-                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" type="button" ng-if="perms.add"><i class="layui-icon ">&#xe608;</i> 新增</button>
-                        <button class="layui-btn layui-btn-sm" lay-event="export" type="button" ng-if="perms.export"><i class="layui-icon ">&#xe601;</i> 导出</button>
-                        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBatch" type="button" ng-if="perms.delBatch"><i class="layui-icon ">&#xe640;</i> 批量删除</button>
-                    </div>
-                </div>
-            </div>
-            <div id="data-table-{{id}}" lay-filter="dataTable{{id}}"></div>
-        </script>
-        <script type="text/template" id="treeFormTemplate">
-            <div class="tree-container" id="{{id}}">
-                <div class="left-tree">
-                    <input placeholder="按节点名称搜索" autocomplete="off" class="layui-input" ng-model="searchParam" ng-blur="search()"/>
-                    <div class="left-tree-contain">
-                        <div id="tree-{{id}}" class="ztree layui-side-scroll"></div>
-                    </div>
-                </div>
-                <div class="right-content" ng-transclude></div>
-            </div>
-        </script> 
-  <script type="text/template" id="pageTemplate">
-            <div id="page{{id}}"></div>
-        </script> 
+            <div class="right-content" ng-transclude></div>
+        </div>
+    </script>
+    <script type="text/template" id="pageTemplate">
+        <div id="page{{id}}"></div>
+    </script>
     <script type="text/template" id="histogramTemplate">
         <div id="histogram{{id}}"></div>
     </script>
-     <script type="text/template" id="pieChartTemplate">
-         <div id="pieChart{{id}}"></div>
-     </script>
-  <script type="text/template" id="areaSelectTemplate">
-            <div ng-if="type=='line'">
-                <div class="layui-inline" ng-show="deep >= 0">
-                    <div class="layui-input-inline">
-                        <select name="province" lay-filter="province-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline" ng-show="deep >= 1">
-                    <div class="layui-input-inline">
-                        <select name="city" lay-filter="city-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline" ng-show="deep >= 2">
-                    <div class="layui-input-inline">
-                        <select name="county" lay-filter="county-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline" ng-show="deep >= 3">
-                    <div class="layui-input-inline">
-                        <select name="town" lay-filter="town-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
-                        </select>
-                    </div>
+    <script type="text/template" id="pieChartTemplate">
+        <div id="pieChart{{id}}"></div>
+    </script>
+    <script type="text/template" id="areaSelectTemplate">
+        <div ng-if="type=='line'">
+            <div class="layui-inline" ng-show="deep >= 0">
+                <div class="layui-input-inline">
+                    <select name="province" lay-filter="province-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
+                    </select>
                 </div>
             </div>
-            <div ng-if="type=='form'">
-                <div class="layui-form-item" ng-show="deep >= 0">
-                    <label class="layui-form-label">请选择省</label>
-                    <div class="layui-input-block">
-                        <select name="province" lay-filter="province-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item" ng-show="deep >= 1">
-                    <label class="layui-form-label">请选择市</label>
-                    <div class="layui-input-block">
-                        <select name="city" lay-filter="city-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item" ng-show="deep >= 2">
-                    <label class="layui-form-label">请选择区</label>
-                    <div class="layui-input-block">
-                        <select name="county" lay-filter="county-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item" ng-show="deep >= 3">
-                    <label class="layui-form-label">请选择镇</label>
-                    <div class="layui-input-block">
-                        <select name="town" lay-filter="town-select-{{id}}">
-                            <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
-                        </select>
-                    </div>
+            <div class="layui-inline" ng-show="deep >= 1">
+                <div class="layui-input-inline">
+                    <select name="city" lay-filter="city-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
+                    </select>
                 </div>
             </div>
-        </script>
-  <script type="text/template" id="uploadFilesTemplate">
-            <div class="layui-form-item">
-                <label class="layui-form-label">上传文件</label>
+            <div class="layui-inline" ng-show="deep >= 2">
+                <div class="layui-input-inline">
+                    <select name="county" lay-filter="county-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline" ng-show="deep >= 3">
+                <div class="layui-input-inline">
+                    <select name="town" lay-filter="town-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div ng-if="type=='form'">
+            <div class="layui-form-item" ng-show="deep >= 0">
+                <label class="layui-form-label">请选择省</label>
                 <div class="layui-input-block">
-                    <div id="uploadFiles{{id}}">选择文件</div>
+                    <select name="province" lay-filter="province-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in provinces">{{x.name}}</option>
+                    </select>
                 </div>
             </div>
-            <div ng-show="files.length>0">
-                <table class="layui-table" lay-skin="line" lay-size="sm">
-                    <thead>
-                        <tr>
-                            <th>类型</th>
-                            <th>文件名称</th>
-                            <th>进度</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="x in files" class="files-list">
-                            <td class="auto-col-width"><img width="36px" ng-src="{{x.typeImg}}"></td>
-                            <td ng-bind="x.fileDesc" class="auto-col-width" style="max-width:{{fileDescMaxWidth}}px;" ng-mouseover="showTip($event,x.fileDesc)" ng-mouseleave="hideTip();"></td>
-                            <td>
-                                <div class="layui-progress" lay-showPercent="yes" lay-filter="{{x.id}}">
-                                    <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
-                                </div>
-                            </td>
-                            <td class="auto-col-width">
-                                <span style="color:#FF5722;" ng-bind="x.isFinish?'（上传完毕）':x.progress+'%'"></span>
-                            </td>
-                            <td class="auto-col-width">
-                                <button ng-mouseover="showTip($event,'删除文件')" ng-mouseleave="hideTip();" type="button" class="layui-btn layui-btn-sm layui-btn-danger" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]"  ng-disabled="!x.isFinish" ng-click="delFile(x.fileName);">
-                                    <i class="layui-icon">&#xe640;</i>
-                                </button>
-                                <button ng-mouseover="showTip($event,'下载文件')" ng-mouseleave="hideTip();" class="layui-btn layui-btn-sm layui-btn-primary" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]" ng-disabled="!x.isFinish" ng-click="downFile(x);">
-                                    <i class="layui-icon">&#xe601;</i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="layui-form-item" ng-show="deep >= 1">
+                <label class="layui-form-label">请选择市</label>
+                <div class="layui-input-block">
+                    <select name="city" lay-filter="city-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in cities">{{x.name}}</option>
+                    </select>
+                </div>
             </div>
-        </script> 
- </head> 
- <body class="layui-layout-body" ng-controller="main-body">
+            <div class="layui-form-item" ng-show="deep >= 2">
+                <label class="layui-form-label">请选择区</label>
+                <div class="layui-input-block">
+                    <select name="county" lay-filter="county-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in counties">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item" ng-show="deep >= 3">
+                <label class="layui-form-label">请选择镇</label>
+                <div class="layui-input-block">
+                    <select name="town" lay-filter="town-select-{{id}}">
+                        <option value="{{x.value}}" ng-repeat="x in towns">{{x.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="uploadFilesTemplate">
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传文件</label>
+            <div class="layui-input-block">
+                <div id="uploadFiles{{id}}">选择文件</div>
+            </div>
+        </div>
+        <div ng-show="files.length>0">
+            <table class="layui-table" lay-skin="line" lay-size="sm">
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>文件名称</th>
+                        <th>进度</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in files" class="files-list">
+                        <td class="auto-col-width"><img width="36px" ng-src="{{x.typeImg}}"></td>
+                        <td ng-bind="x.fileDesc" class="auto-col-width" style="max-width:{{fileDescMaxWidth}}px;" ng-mouseover="showTip($event,x.fileDesc)" ng-mouseleave="hideTip();"></td>
+                        <td>
+                            <div class="layui-progress" lay-showPercent="yes" lay-filter="{{x.id}}">
+                                <div class="layui-progress-bar layui-bg-green" lay-percent=""></div>
+                            </div>
+                        </td>
+                        <td class="auto-col-width">
+                            <span style="color:#FF5722;" ng-bind="x.isFinish?'（上传完毕）':x.progress+'%'"></span>
+                        </td>
+                        <td class="auto-col-width">
+                            <button ng-mouseover="showTip($event,'删除文件')" ng-mouseleave="hideTip();" type="button" class="layui-btn layui-btn-sm layui-btn-danger" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]" ng-disabled="!x.isFinish" ng-click="delFile(x.fileName);">
+                                <i class="layui-icon">&#xe640;</i>
+                            </button>
+                            <button ng-mouseover="showTip($event,'下载文件')" ng-mouseleave="hideTip();" class="layui-btn layui-btn-sm layui-btn-primary" ng-class="{true:'',false:' layui-disabled'}[x.isFinish]" ng-disabled="!x.isFinish" ng-click="downFile(x);">
+                                <i class="layui-icon">&#xe601;</i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </script>
+</head>
+<body class="layui-layout-body" ng-controller="main-body">
     <!-- 头部菜单 -->
-  <div class="layui-layout layui-layout-admin"> 
-   <div class="layui-header"> 
-    <div class="layui-logo">
-      layui 后台布局 
-    </div> 
-    <!-- 头部左侧菜单 --> 
-    <ul class="layui-nav layui-layout-left"> 
-     <li class="layui-nav-item"><a href="">控制台</a></li> 
-     <li class="layui-nav-item"><a href="">商品管理</a></li> 
-     <li class="layui-nav-item"><a href="">用户</a></li> 
-     <li class="layui-nav-item"><a href="javascript:;">其它系统</a> 
-      <dl class="layui-nav-child"> 
-       <dd> 
-        <a href="">邮件管理</a> 
-       </dd> 
-       <dd> 
-        <a href="">消息管理</a> 
-       </dd> 
-       <dd> 
-        <a href="">授权管理</a> 
-       </dd> 
-      </dl></li> 
-    </ul> 
-    <!-- 头部右侧菜单 -->
-    <ul class="layui-nav layui-layout-right"> 
-     <li class="layui-nav-item"><a href="javascript:;"> <img src="" class="layui-nav-img"> 用户 </a> 
-      <dl class="layui-nav-child"> 
-       <dd> 
-        <a href="">基本资料</a> 
-       </dd> 
-       <dd> 
-        <a href="">安全设置</a> 
-       </dd> 
-        <dd>
-            <a href="javascript:void(0);" ng-click="newAlarm();">最新消息</a>
-        </dd>
-      </dl></li> 
-     <li class="layui-nav-item"><a href="javascript:void(0);" ng-click="logout();">退了</a></li> 
-    </ul> 
-   </div> 
-    <!-- 左侧导航区域（可配合layui已有的垂直导航） --> 
-   <div class="layui-side layui-bg-black"> 
-    <div class="layui-side-scroll"> 
-     <ul class="layui-nav layui-nav-tree" lay-filter="left-menus"> 
-      <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0"><a href="javascript:;" ng-bind="x.title"></a> 
-       <dl class="layui-nav-child"> 
-        <dd ng-repeat="y in x.leftMenus" ng-click="openMenuPage(y.name);"> 
-         <a href="javascript:void(0);" ng-bind="y.title"></a> 
-        </dd> 
-       </dl></li> 
-      <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0"><a href="javascript:;" ng-bind="x.title"></a></li> 
-      <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span> 
-     </ul> 
-    </div> 
-   </div> 
-    <!-- 内容主体区域 --> 
-   <div class="layui-body"> 
-    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"> 
-     <ul class="layui-tab-title"> 
-      <li ng-repeat="x in menus" data-menu-name="{{x.name}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.name);">ဆ</i> </li> 
-     </ul> 
-     <div class="layui-tab-content main-content"> 
-      <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=666'"></div> 
-     </div> 
-    </div> 
-   </div> 
-    <!-- 底部模块 -->
-   <div class="layui-footer">
-     © layui.com - 底部固定区域 
-   </div> 
-  </div> 
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">
+                layui 后台布局
+            </div>
+            <!-- 头部左侧菜单 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item"><a href="">控制台</a></li>
+                <li class="layui-nav-item"><a href="">商品管理</a></li>
+                <li class="layui-nav-item"><a href="">用户</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">其它系统</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="">邮件管理</a>
+                        </dd>
+                        <dd>
+                            <a href="">消息管理</a>
+                        </dd>
+                        <dd>
+                            <a href="">授权管理</a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+            <!-- 头部右侧菜单 -->
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;"> <img src="" class="layui-nav-img"> 用户 </a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="">基本资料</a>
+                        </dd>
+                        <dd>
+                            <a href="">安全设置</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:void(0);" ng-click="newAlarm();">最新消息</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="javascript:void(0);" ng-click="logout();">退了</a></li>
+            </ul>
+        </div>
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <ul class="layui-nav layui-nav-tree" lay-filter="left-menus">
+                    <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length>0">
+                        <a href="javascript:;" ng-bind="x.title"></a>
+                        <dl class="layui-nav-child">
+                            <dd ng-repeat="y in x.leftMenus" ng-click="openMenuPage(y.name);">
+                                <a href="javascript:void(0);" ng-bind="y.title"></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item" ng-repeat="x in leftMenus" ng-if="x.leftMenus.length==0"><a href="javascript:;" ng-bind="x.title"></a></li>
+                    <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
+                </ul>
+            </div>
+        </div>
+        <!-- 内容主体区域 -->
+        <div class="layui-body">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li ng-repeat="x in menus" data-menu-name="{{x.name}}" ng-class="{true:'layui-this',false:''}[$last]"><span ng-bind="x.title"></span> <i class="layui-icon layui-unselect layui-tab-close" ng-click="close(x.name);">ဆ</i> </li>
+                </ul>
+                <div class="layui-tab-content main-content">
+                    <div ng-repeat="x in menus" class="layui-tab-item" ng-class="{true:'layui-show',false:''}[$last]" ng-include="x.url+'?v=asdasd'"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 底部模块 -->
+        <div class="layui-footer">
+            © layui.com - 底部固定区域
+        </div>
+    </div>
     <!-- 登录页 -->
-  <div id="login-page"> 
-   <div class="layadmin-user-login layadmin-user-display-show"> 
-    <div class="layadmin-user-login-main"> 
-     <div class="layadmin-user-login-box layadmin-user-login-header"> 
-      <h2 style="color:white;">测试后台</h2> 
-      <p style="color:white;">xxxxxxxxx运营商后台</p> 
-     </div> 
-     <form class="layadmin-user-login-box layadmin-user-login-body layui-form" ng-submit="login();" name="loginForm" novalidate=""> 
-      <div class="layui-form-item"> 
-       <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label> 
-       <input ng-required2="" ng-maxlength2="20" type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off"> 
-      </div> 
-      <div class="layui-form-item"> 
-       <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label> 
-       <input ng-required2="" ng-maxlength2="20" type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off"> 
-      </div> 
-      <div class="layui-form-item"> 
-       <div class="layui-row"> 
-        <div class="layui-col-xs7"> 
-         <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label> 
-         <input ng-required2="" ng-length="4" type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off"> 
-        </div> 
-        <div class="layui-col-xs5"> 
-         <div style="margin-left: 10px;"> 
-          <img ng-click="refreshVercode()" ng-src="{{'/session/verificationCode?r='+loginData.rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode"> 
-         </div> 
-        </div> 
-       </div> 
-      </div> 
-      <div class="layui-form-item" style="margin-bottom: 20px;"> 
-       <input type="checkbox" lay-skin="primary" title="记住密码" ng-model="loginData.rememberPassword" id="rememberPassword"> 
-       <a href="/user/forget" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;color:white;">忘记密码？</a> 
-      </div> 
-      <div class="layui-form-item"> 
-       <button class="layui-btn layui-btn-fluid" type="submit" lay-filter="LAY-user-login-submit">登 入</button> 
-      </div> 
-     </form> 
-    </div> 
-   </div> 
-  </div> 
-    <script src="plugin/UUID.js" charset="utf-8"></script> 
-  <script src="plugin/jquery.min.js" charset="utf-8"></script> 
-  <script src="layui/layui.all.js" charset="utf-8"></script> 
-  <script src="plugin/jshashes-master/hashes.min.js" charset="utf-8"></script> 
-  <script src="plugin/jquery.cookie.js" charset="utf-8"></script> 
-  <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script> 
-  <script src="zTree_v3-master/js/jquery.ztree.exhide.js" charset="utf-8"></script> 
-  <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script> 
-  <script src="angular-1.2.30/angular-sanitize.min.js"></script> 
-  <script src="angular-1.2.30/angular-animate.min.js"></script> 
-  <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script> 
-  <script src="plugin/ng-layer.js" charset="utf-8"></script> 
-  <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script> 
-  <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script> 
+    <div id="login-page">
+        <div class="layadmin-user-login layadmin-user-display-show">
+            <div class="layadmin-user-login-main">
+                <div class="layadmin-user-login-box layadmin-user-login-header">
+                    <h2 style="color:white;">测试后台</h2>
+                    <p style="color:white;">xxxxxxxxx运营商后台</p>
+                </div>
+                <form class="layadmin-user-login-box layadmin-user-login-body layui-form" ng-submit="login();" name="loginForm" novalidate="">
+                    <div class="layui-form-item">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
+                        <input ng-required2="" ng-maxlength2="20" type="text" name="username" ng-model="loginData.username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input" autocomplate="off">
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+                        <input ng-required2="" ng-maxlength2="20" type="password" name="password" ng-model="loginData.password" id="LAY-user-login-password" lay-verify="required" placeholder="密码" class="layui-input" autocomplate="off">
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-col-xs7">
+                                <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label>
+                                <input ng-required2="" ng-length="4" type="text" name="vercode" ng-model="loginData.vercode" id="LAY-user-login-vercode" lay-verify="required" placeholder="图形验证码" class="layui-input" autocomplate="off">
+                            </div>
+                            <div class="layui-col-xs5">
+                                <div style="margin-left: 10px;">
+                                    <img ng-click="refreshVercode()" ng-src="{{'/session/verificationCode?r='+loginData.rNum}}" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="margin-bottom: 20px;">
+                        <input type="checkbox" lay-skin="primary" title="记住密码" ng-model="loginData.rememberPassword" id="rememberPassword">
+                        <a href="/user/forget" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;color:white;">忘记密码？</a>
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-fluid" type="submit" lay-filter="LAY-user-login-submit">登 入</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="plugin/UUID.js" charset="utf-8"></script>
+    <script src="plugin/jquery.min.js" charset="utf-8"></script>
+    <script src="layui/layui.all.js" charset="utf-8"></script>
+    <script src="plugin/jshashes-master/hashes.min.js" charset="utf-8"></script>
+    <script src="plugin/jquery.cookie.js" charset="utf-8"></script>
+    <script src="zTree_v3-master/js/jquery.ztree.all.min.js" charset="utf-8"></script>
+    <script src="zTree_v3-master/js/jquery.ztree.exhide.js" charset="utf-8"></script>
+    <script src="angular-1.2.30/angular.min.js" charset="utf-8"></script>
+    <script src="angular-1.2.30/angular-sanitize.min.js"></script>
+    <script src="angular-1.2.30/angular-animate.min.js"></script>
+    <script src="plugin/webuploader/webuploader.min.js" charset="utf-8"></script>
+    <script src="plugin/ng-layer.js" charset="utf-8"></script>
+    <script src="plugin/moment.js" charset="utf-8"></script>
+    <script src="Jcrop-0.9.12/js/jquery.Jcrop.min.js" charset="utf-8"></script>
+    <script src="jquery-viewer/dist/jquery-viewer.min.js" charset="utf-8"></script>
     <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie-polyfills.js"></script>
     <![endif]-->
-  <script src="plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script> 
-     <!--[if lt IE 9]>
+    <script src="plugin/Highcharts-7.1.2/code/highcharts.js" charset="utf-8"></script>
+    <!--[if lt IE 9]>
     <script src="plugin/Highcharts-7.1.2/code/modules/oldie.js"></script>
-    <![endif]-->     
-  <script src="my-js/project.js?v=20190712132746" charset="utf-8"></script> 
-     <script src="my-js/menus/system/logEntity.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/charts.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/edit1.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/treeform.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190712132746" charset="utf-8"></script> 
-    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190712132746" charset="utf-8"></script> 
- </body>
+    <![endif]-->
+    <script src="my-js/project.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/system/logEntity.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/system/editLogEntity.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/areaselect.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/bigimg.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/charts.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/edit1.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/pagetable2.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/testnewalarm.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/treeform.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/uploadexcel.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/uploadfiles.js?v=20190712132aa" charset="utf-8"></script>
+    <script src="my-js/menus/testMenus1/uploadimage.js?v=20190712132aa" charset="utf-8"></script>
+</body>
 </html>

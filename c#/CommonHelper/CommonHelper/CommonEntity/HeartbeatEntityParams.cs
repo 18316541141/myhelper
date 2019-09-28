@@ -39,13 +39,13 @@ namespace CommonHelper.Params
         /// <summary>
         /// 机器人的ip地址
         /// </summary>
-        public string RobotIp { set; get; }
+        public string RobotMac { set; get; }
 
 
         /// <summary>
         /// 机器人的ip地址
         /// </summary>
-        public string RobotIpLike { set; get; }
+        public string RobotMacLike { set; get; }
 
 
         /// <summary>

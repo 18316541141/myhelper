@@ -313,6 +313,16 @@ namespace CommonHelper.Helper
             new Regex(@"^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$").IsMatch(Convert.ToString(ipv4));
 
         /// <summary>
+        /// 校验mac格式是否合法
+        /// </summary>
+        /// <param name="mac">mac地址</param>
+        /// <returns>如果合法返回true</returns>
+        public static bool CheckMac(string mac)
+        {
+            return new Regex("^((([a-f0-9]{2}:){5})|(([a-f0-9]{2}-){5}))[a-f0-9]{2}$").IsMatch(Convert.ToString(mac));
+        }
+
+        /// <summary>
         /// 校验端口号是否合法
         /// </summary>
         /// <param name="port">端口号</param>

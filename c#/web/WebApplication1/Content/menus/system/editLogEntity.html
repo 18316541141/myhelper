@@ -1,1 +1,55 @@
-﻿
+﻿<div ng-controller="editLogEntity">
+    <div class="layer-body">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">日志日期</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.createDate" type="text" name="title" required lay-verify="required" placeholder="日志日期" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">日志分级</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.level" type="text" name="title" required lay-verify="required" placeholder="日志分级" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">线程号</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.threadNo" type="text" name="title" required lay-verify="required" placeholder="线程号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">项目名称</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.projectName" type="text" name="title" required lay-verify="required" placeholder="项目名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.typeName" type="text" name="title" required lay-verify="required" placeholder="类" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">方法名称</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.funcName" type="text" name="title" required lay-verify="required" placeholder="方法名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">日志内容</label>
+                <div class="layui-input-block">
+                    <textarea style="resize:none;" readonly ng-model="edit.formData.message" placeholder="日志内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">堆栈信息</label>
+                <div class="layui-input-block">
+                    <textarea style="resize:none;" readonly ng-model="edit.formData.exception" placeholder="堆栈信息" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="layer-foot"></div>
+</div>

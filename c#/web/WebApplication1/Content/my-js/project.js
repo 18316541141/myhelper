@@ -64,6 +64,7 @@ var layuiElement = layui.element;
 var layuiTree = layui.tree;
 var layuiTable = layui.table;
 var layuiLaypage = layui.laypage;
+var layuiLaydate = layui.laydate;
 
 /**
  * 扩展原有的jquery的ajax请求方法。
@@ -868,6 +869,53 @@ myApp.factory('$realTime', function ($http) {
             });
         }
     };
+}).directive('mySelect', function () {
+    return {
+        restrict: 'EA',
+        template: $('#selectTemplate').html(),
+        scope: { options: "=", value: "=" },
+        controller: function ($scope, $timeout) {
+            $scope.id = new UUID().id;
+            $timeout(function () {
+                var select = document.getElementById($scope.id);
+                select.selectedIndex = 0;
+                for (var i = 0, len = select.options.length;i<len ;i++) {
+                    if (select.options[i].value === ($scope.value + '')) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
+                layuiForm.render('select');
+                var scope = $scope;
+                layuiForm.on('select(' + $scope.id + ')', function (data) {
+                    scope.value = data.value;
+                    scope.$apply();
+                });
+            });
+        }
+    };
+}).directive('datetime', function () {
+    return {
+        restrict: 'EA',
+        template: $('#datetimeTemplate').html(),
+        scope: { placeholder: "@", format: "@",value:"=",width:"@" },
+        controller: function ($scope,$timeout) {
+            $scope.id = new UUID().id;
+            $timeout(function () {
+                layuiLaydate.render({
+                    elem: '#' + $scope.id,
+                    type: 'datetime',
+                    format: $scope.format,
+                });
+                $('#' + $scope.id).click(function () {
+                    $('#layui-laydate' + $(this).attr('lay-key')).one('click', '.laydate-btns-clear,.laydate-btns-now,.laydate-btns-confirm', function () {
+                        $scope.value = $('#' + $scope.id).val();
+                        $scope.$apply();
+                    });
+                });
+            });
+        }
+    };
 }).directive('uploadExcel', function () {
     return {
         restrict: 'EA',
@@ -966,7 +1014,8 @@ myApp.factory('$realTime', function ($http) {
                     done: function (res, curr, count) {
                         $scope.$emit('done', res, curr, count);
                     },
-                    cols: [$scope.cols]
+                    cols: [$scope.cols],
+                    where: $scope.postData
                 });
                 layuiTable.on('sort(dataTable' + $scope.id + ')', function (obj) {
                     if (obj.type === "asc") {

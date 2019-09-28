@@ -25,6 +25,15 @@ namespace CommonWeb.Service
         public HeartbeatEntityRepository Repository { set; get; }
 
         /// <summary>
+        /// 根据主键删除指定数据
+        /// </summary>
+        /// <param name="id">删除数据的主键</param>
+		public void Del(long? id)
+        {
+            Repository.Delete(a => a.Id == id);
+        }
+
+        /// <summary>
         /// 分页查询“心跳监测”模块，并返回查询结果
         /// </summary>
         /// <param name="param">查询参数</param>
@@ -39,23 +48,23 @@ namespace CommonWeb.Service
         /// <summary>
         /// 记录心跳信息
         /// </summary>
-        /// <param name="robotIp">机器人ip</param>
+        /// <param name="RobotMac">机器人ip</param>
         public void RecordHeartbeat(HeartbeatEntity param)
         {
             CheckRecordHeartbeat(param);
-            using (Mutex mutex = new Mutex(false, param.RobotIp))
+            using (Mutex mutex = new Mutex(false, param.RobotMac))
             {
                 mutex.WaitOne();
                 try
                 {
-                    HeartbeatEntity heartbeatEntity = Repository.FindEntity(a => a.RobotIp == param.RobotIp);
+                    HeartbeatEntity heartbeatEntity = Repository.FindEntity(a => a.RobotMac == param.RobotMac);
                     if (heartbeatEntity == null)
                     {
                         Repository.Insert(new HeartbeatEntity
                         {
                             Id = NextId(),
                             LastHeartbeatTime = DateTime.Now,
-                            RobotIp = param.RobotIp,
+                            RobotMac = param.RobotMac,
                             Remark = param.Remark,
                             ExtendField = param.ExtendField,
                             MonitorServer = param.MonitorServer
@@ -79,7 +88,7 @@ namespace CommonWeb.Service
                         {
                             Id = heartbeatEntity.Id,
                             LastHeartbeatTime = DateTime.Now,
-                            RobotIp = param.RobotIp,
+                            RobotMac = param.RobotMac,
                             Remark = param.Remark,
                             ExtendField = param.ExtendField,
                             MonitorServer = param.MonitorServer
@@ -100,15 +109,15 @@ namespace CommonWeb.Service
         /// <param name="param">待校验参数</param>
         public void CheckRecordHeartbeat(HeartbeatEntity param)
         {
-            if(string.IsNullOrEmpty(param.RobotIp))
+            if(string.IsNullOrEmpty(param.RobotMac))
             {
-                Ret("ip地址不能为空！");
+                Ret("mac地址不能为空！");
             }
             else
             {
-                if (!CheckHelper.CheckIpv4(param.RobotIp))
+                if (!CheckHelper.CheckMac(param.RobotMac))
                 {
-                    Ret("ip地址格式错误，必须是ipv4格式：xxx.xxx.xxx.xxx！");
+                    Ret("mac地址格式错误，必须是mac格式：xx:xx:xx:xx:xx:xx或xx-xx-xx-xx-xx-xx！");
                 }
             }
             if (!string.IsNullOrEmpty(param.MonitorServer) && param.MonitorServer.Length > 200)

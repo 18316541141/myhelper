@@ -130,9 +130,9 @@ namespace CommonHelper.IpProxy
                     while (CheckNeedAddWhite(retText))
                     {
                         Console.WriteLine($"获取代理ip时返回：{retText}");
-                        string whiteIp = IpHelper.GetOuterNetIP();
+                        string whiteIp = NetworkHelper.GetOuterNetIP();
                         Console.WriteLine($"需要添加 {whiteIp} 到白名单。");
-                        string ret = HttpWebRequestHelper.HttpGet(CurrentProxyUserInfo().GetWhiteIpUrl(IpHelper.GetOuterNetIP())).GetText();
+                        string ret = HttpWebRequestHelper.HttpGet(CurrentProxyUserInfo().GetWhiteIpUrl(NetworkHelper.GetOuterNetIP())).GetText();
                         Console.WriteLine($"添加白名单返回结果：{ret}");
                         retText = HttpWebRequestHelper.HttpGet(proxyUserInfo.GetProxyIpUrl).GetText();
                     }

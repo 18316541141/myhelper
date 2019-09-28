@@ -34,11 +34,11 @@ namespace CommonWeb.Controllers
         /// <summary>
         /// 根据主键id查询“日志管理”模块的数据实体
         /// </summary>
-        /// <param name="ID">主键id</param>
+        /// <param name="id">主键id</param>
 		/// <returns>返回“日志管理”模块的查询结果</returns>
-		public JsonResult Load(long ID)
+		public JsonResult Load(long id)
         {
-            return MyJson(new Result { code = 0, data = Service.Load(ID) });
+            return MyJson(new Result { code = 0, data = Service.Load(id) });
         }
 
         /*抄考代码

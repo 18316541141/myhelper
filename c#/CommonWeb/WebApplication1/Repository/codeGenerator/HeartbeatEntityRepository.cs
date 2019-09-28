@@ -52,14 +52,14 @@ namespace CommonWeb.Repository
                 {
                     query = query.Where(a => a.LastHeartbeatTime <= eqArgs.LastHeartbeatTimeEnd);
                 }
-                if (eqArgs.RobotIp != null)
+                if (eqArgs.RobotMac != null)
                 {
-                    query = query.Where(a => a.RobotIp == eqArgs.RobotIp);
+                    query = query.Where(a => a.RobotMac == eqArgs.RobotMac);
                 }
 
-                if (!string.IsNullOrEmpty(eqArgs.RobotIpLike))
+                if (!string.IsNullOrEmpty(eqArgs.RobotMacLike))
                 {
-                    query = query.Where(a => a.RobotIp.Contains(eqArgs.RobotIpLike));
+                    query = query.Where(a => a.RobotMac.Contains(eqArgs.RobotMacLike));
                 }
                 if (eqArgs.Remark != null)
                 {
@@ -104,14 +104,14 @@ namespace CommonWeb.Repository
                     query = query.Where(a => a.LastHeartbeatTime != neqArgs.LastHeartbeatTime);
                 }
 
-                if (neqArgs.RobotIp != null)
+                if (neqArgs.RobotMac != null)
                 {
-                    query = query.Where(a => a.RobotIp != neqArgs.RobotIp);
+                    query = query.Where(a => a.RobotMac != neqArgs.RobotMac);
                 }
 
-                if (!string.IsNullOrEmpty(neqArgs.RobotIpLike))
+                if (!string.IsNullOrEmpty(neqArgs.RobotMacLike))
                 {
-                    query = query.Where(a => !a.RobotIp.Contains(neqArgs.RobotIpLike));
+                    query = query.Where(a => !a.RobotMac.Contains(neqArgs.RobotMacLike));
                 }
                 if (neqArgs.Remark != null)
                 {
@@ -162,7 +162,7 @@ namespace CommonWeb.Repository
                 else
                 if (orderBy.LastHeartbeatTime) { return query = query.OrderBy(a => a.LastHeartbeatTime); }
                 else
-                if (orderBy.RobotIp) { return query = query.OrderBy(a => a.RobotIp); }
+                if (orderBy.RobotMac) { return query = query.OrderBy(a => a.RobotMac); }
                 else
                 if (orderBy.Remark) { return query = query.OrderBy(a => a.Remark); }
                 else
@@ -178,7 +178,7 @@ namespace CommonWeb.Repository
                 else
                 if (orderBy.LastHeartbeatTime) { return query = query.OrderByDescending(a => a.LastHeartbeatTime); }
                 else
-                if (orderBy.RobotIp) { return query = query.OrderByDescending(a => a.RobotIp); }
+                if (orderBy.RobotMac) { return query = query.OrderByDescending(a => a.RobotMac); }
                 else
                 if (orderBy.Remark) { return query = query.OrderByDescending(a => a.Remark); }
                 else
@@ -209,9 +209,9 @@ namespace CommonWeb.Repository
             {
                 updateBefore.LastHeartbeatTime = entity.LastHeartbeatTime;
             }
-            if (entity.RobotIp != null)
+            if (entity.RobotMac != null)
             {
-                updateBefore.RobotIp = entity.RobotIp;
+                updateBefore.RobotMac = entity.RobotMac;
             }
             if (entity.Remark != null)
             {
@@ -240,9 +240,9 @@ namespace CommonWeb.Repository
             {
                 updateBefore.LastHeartbeatTime = null;
             }
-            if (param.RobotIp)
+            if (param.RobotMac)
             {
-                updateBefore.RobotIp = null;
+                updateBefore.RobotMac = null;
             }
             if (param.Remark)
             {
@@ -313,15 +313,15 @@ namespace CommonWeb.Repository
                     disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.LastHeartbeatTime) >= 0;
                     return disPageEntity;
                 }
-                if (orderBy.RobotIp)
+                if (orderBy.RobotMac)
                 {
-                    disPageEntity.OrderCol = a => a.RobotIp;
-                    disPageEntity.OrderColLazy = a => a.RobotIp;
-                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, RobotIp = a.RobotIp };
-                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.RobotIp) < 0;
-                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.RobotIp) <= 0;
-                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.RobotIp) > 0;
-                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.RobotIp) >= 0;
+                    disPageEntity.OrderCol = a => a.RobotMac;
+                    disPageEntity.OrderColLazy = a => a.RobotMac;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, RobotMac = a.RobotMac };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.RobotMac) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.RobotMac) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.RobotMac) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.RobotMac) >= 0;
                     return disPageEntity;
                 }
                 if (orderBy.Remark)
@@ -387,15 +387,15 @@ namespace CommonWeb.Repository
                     return disPageEntity;
                 }
                 else
-                if (orderBy.RobotIp)
+                if (orderBy.RobotMac)
                 {
-                    disPageEntity.OrderCol = a => a.RobotIp;
-                    disPageEntity.OrderColLazy = a => a.RobotIp;
-                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, RobotIp = a.RobotIp };
-                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.RobotIp) < 0;
-                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.RobotIp) <= 0;
-                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.RobotIp) > 0;
-                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.RobotIp) >= 0;
+                    disPageEntity.OrderCol = a => a.RobotMac;
+                    disPageEntity.OrderColLazy = a => a.RobotMac;
+                    disPageEntity.OrderColAndKeyLazy = a => new HeartbeatEntity { Id = a.Id, RobotMac = a.RobotMac };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.RobotMac) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.RobotMac) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.RobotMac) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.RobotMac) >= 0;
                     return disPageEntity;
                 }
                 else

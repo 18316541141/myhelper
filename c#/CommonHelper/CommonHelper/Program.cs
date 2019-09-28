@@ -24,7 +24,7 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            string s = NumToChinese.NumConvertToChineseSpeak(long.MaxValue);
+            string s = NetworkHelper.GetMacAddress();
             Console.WriteLine();
             //IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
             //Console.WriteLine(ipe.AddressList[4]);
