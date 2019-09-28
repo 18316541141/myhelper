@@ -64,27 +64,27 @@ public final class HeartbeatEntityParams {
 	/**
 	 * 机器人的ip地址
 	 */
-	private String robotIp;
+	private String robotMac;
 
-	public final void setRobotIp(final String robotIp) {
-		this.robotIp = robotIp;
+	public final void setRobotMac(final String robotMac) {
+		this.robotMac = robotMac;
 	}
 
-	public final String getRobotIp() {
-		return this.robotIp;
+	public final String getRobotMac() {
+		return this.robotMac;
 	}
 
 	/**
 	 * 机器人的ip地址
 	 */
-	private String robotIpLike;
+	private String robotMacLike;
 
-	public final void setRobotIpLike(final String robotIpLike) {
-		this.robotIpLike = robotIpLike;
+	public final void setRobotIpLike(final String robotMacLike) {
+		this.robotMacLike = robotMacLike;
 	}
 
-	public final String getRobotIpLike() {
-		return this.robotIpLike;
+	public final String getRobotMacLike() {
+		return this.robotMacLike;
 	}
 
 	/**

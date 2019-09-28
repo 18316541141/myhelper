@@ -5,11 +5,11 @@
 		<id property="id" column="Id" />
 		<result property="id" column="Id" />
 		<result property="lastHeartbeat" column="Last_Heartbeat_Time" />
-		<result property="robotId" column="Robot_Id" />
+		<result property="robotMac" column="Robot_Mac" />
 	</resultMap>
 	<sql id="colNames">
 
-		Id ,Last_Heartbeat_Time ,Robot_Id
+		Id ,Last_Heartbeat_Time ,Robot_Mac
 	</sql>
 	<sql id="insertParamPart">
 		insert into Heartbeat_Entity(
@@ -21,7 +21,7 @@
 
 		#{id}
 		#{lastHeartbeat} ,#{lastHeartbeatStart} ,#{lastHeartbeatEnd}
-		#{robotId} ,#{robotIdLike}
+		#{robotMac} ,#{robotMacLike}
 		)
 	</sql>
 	<insert id="insert" parameterType="HeartbeatEntity">
@@ -86,10 +86,10 @@
 		<if test="params.lastHeartbeatEnd!=null">AND Last_Heartbeat_Time &lt;= #{params.lastHeartbeatEnd}
 		</if>
 
-		<if test="params.robotId!=null">AND Robot_Id=#{params.robotId}</if>
+		<if test="params.robotMac!=null">AND Robot_Mac=#{params.robotMac}</if>
 
 
-		<if test="params.robotIdLike!=null and params.robotIdLike!=''">AND Robot_Id like '%'+#{params.robotIdLike}+'%'</if>
+		<if test="params.robotMacLike!=null and params.robotMacLike!=''">AND Robot_Mac like '%'+#{params.robotMacLike}+'%'</if>
 		<if test="nparams!=null">
 
 			<if test="nparams.id!=null">AND Id!=#{nparams.id}</if>
@@ -100,10 +100,10 @@
 
 
 
-			<if test="nparams.robotId!=null">AND Robot_Id!=#{nparams.robotId}</if>
+			<if test="nparams.robotMac!=null">AND Robot_Mac!=#{nparams.robotMac}</if>
 
 
-			<if test="nparams.robotIdLike!=null and nparams.robotIdLike!=''">AND Robot_Id not like '%'+#{nparams.robotIdLike}+'%'</if>
+			<if test="nparams.robotMacLike!=null and nparams.robotMacLike!=''">AND Robot_Mac not like '%'+#{nparams.robotMacLike}+'%'</if>
 		</if>
 	</sql>
 
@@ -125,7 +125,7 @@
 
 
 
-					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+					<if test="params.orderByDesc.robotMac">Robot_Mac DESC,</if>
 
 
 				</when>
@@ -139,7 +139,7 @@
 
 
 
-				<if test="params.orderByDesc.robotId">Robot_Id ASC,</if>
+				<if test="params.orderByDesc.robotMac">Robot_Mac ASC,</if>
 
 
 			</if>
@@ -171,7 +171,7 @@
 
 
 
-					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+					<if test="params.orderByDesc.robotMac">Robot_Mac DESC,</if>
 
 
 				</when>
@@ -185,7 +185,7 @@
 
 
 
-				<if test="params.orderByAsc.robotId">Robot_Id ASC,</if>
+				<if test="params.orderByAsc.robotMac">Robot_Mac ASC,</if>
 
 
 			</if>
@@ -194,7 +194,7 @@
 
 	<update id="updateAll" parameterType="HeartbeatEntity">
 		update Heartbeat_Entity set
-		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeat} ,Robot_Id=#{robotId}
+		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeat} ,Robot_Mac=#{robotMac}
 		where Id=#{id}
 	</update>
 
@@ -210,7 +210,7 @@
 
 
 
-			<if test="robotId!=null">Robot_Id=#{robotId},</if>
+			<if test="robotMac!=null">Robot_Mac=#{robotMac},</if>
 
 
 
@@ -226,7 +226,7 @@
 
 
 
-			<if test="robotId!=null">Robot_Id=#{robotId},</if>
+			<if test="robotMac!=null">Robot_Mac=#{robotMac},</if>
 
 
 		</set>
@@ -248,7 +248,7 @@
 
 
 
-					<if test="params.orderByDesc.robotId">Robot_Id DESC,</if>
+					<if test="params.orderByDesc.robotMac">Robot_Mac DESC,</if>
 
 
 				</when>
@@ -262,7 +262,7 @@
 
 
 
-				<if test="params.orderByAsc.robotId">Robot_Id ASC,</if>
+				<if test="params.orderByAsc.robotMac">Robot_Mac ASC,</if>
 
 
 			</if>

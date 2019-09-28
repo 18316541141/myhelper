@@ -34,14 +34,14 @@ public final class HeartbeatEntitySetNullParams {
 	/**
 	 * 机器人id
 	 */
-	private boolean robotId;
+	private boolean robotMac;
 
-	public final void setRobotId(final boolean robotId) {
-		this.robotId = robotId;
+	public final void setRobotMac(final boolean robotMac) {
+		this.robotMac = robotMac;
 	}
 
-	public final boolean getRobotId() {
-		return this.robotId;
+	public final boolean getRobotMac() {
+		return this.robotMac;
 	}
 
 }

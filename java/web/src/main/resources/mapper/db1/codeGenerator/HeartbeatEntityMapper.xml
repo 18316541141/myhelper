@@ -10,7 +10,7 @@
 
 
 
-		<result property="robotIp" column="Robot_Ip" />
+		<result property="robotMac" column="Robot_Mac" />
 
 
 		<result property="remark" column="Remark" />
@@ -25,7 +25,7 @@
 	</resultMap>
 	<sql id="colNames">
 
-		Id ,Last_Heartbeat_Time ,Robot_Ip ,Remark ,Extend_Field ,Monitor_Server
+		Id ,Last_Heartbeat_Time ,Robot_Mac ,Remark ,Extend_Field ,Monitor_Server
 	</sql>
 	<sql id="insertParamPart">
 		insert into Heartbeat_Entity(
@@ -37,7 +37,7 @@
 
 		#{id}
 		#{lastHeartbeatTime} ,#{lastHeartbeatTimeStart} ,#{lastHeartbeatTimeEnd}
-		#{robotIp} ,#{robotIpLike}
+		#{robotMac} ,#{robotMacLike}
 		#{remark} ,#{remarkLike}
 		#{extendField} ,#{extendFieldLike}
 		#{monitorServer} ,#{monitorServerLike}
@@ -99,7 +99,7 @@
 
 
 
-		<if test="params.robotIp!=null">AND Robot_Ip=#{params.robotIp}</if>
+		<if test="params.robotMac!=null">AND Robot_Ip=#{params.robotMac}</if>
 
 
 		<if test="params.remark!=null">AND Remark=#{params.remark}</if>
@@ -121,10 +121,10 @@
 
 
 
-			<if test="nparams.robotIp!=null">AND Robot_Ip!=#{nparams.robotIp}</if>
+			<if test="nparams.robotMac!=null">AND Robot_Ip!=#{nparams.robotMac}</if>
 
 
-			<if test="nparams.robotIpLike!=null and nparams.robotIpLike!=''">AND Robot_Ip not like '%'+#{nparams.robotIpLike}+'%'</if>
+			<if test="nparams.robotMacLike!=null and nparams.robotMacLike!=''">AND Robot_Mac not like '%'+#{nparams.robotMacLike}+'%'</if>
 			<if test="nparams.remark!=null">AND Remark!=#{nparams.remark}</if>
 
 
@@ -161,7 +161,7 @@
 
 
 
-					<if test="params.orderByDesc.robotIp">Robot_Ip DESC,</if>
+					<if test="params.orderByDesc.robotMac">Robot_Mac DESC,</if>
 
 
 					<if test="params.orderByDesc.remark">Remark DESC,</if>
@@ -184,7 +184,7 @@
 
 
 
-				<if test="params.orderByDesc.robotIp">Robot_Ip ASC,</if>
+				<if test="params.orderByDesc.robotMac">Robot_Mac ASC,</if>
 
 
 				<if test="params.orderByDesc.remark">Remark ASC,</if>
@@ -225,7 +225,7 @@
 
 
 
-					<if test="params.orderByDesc.robotIp">Robot_Ip DESC,</if>
+					<if test="params.orderByDesc.robotMac">Robot_Mac DESC,</if>
 
 
 					<if test="params.orderByDesc.remark">Remark DESC,</if>
@@ -248,7 +248,7 @@
 
 
 
-				<if test="params.orderByAsc.robotIp">Robot_Ip ASC,</if>
+				<if test="params.orderByAsc.robotMac">Robot_Mac ASC,</if>
 
 
 				<if test="params.orderByAsc.remark">Remark ASC,</if>
@@ -266,7 +266,7 @@
 
 	<update id="updateAll" parameterType="HeartbeatEntity">
 		update Heartbeat_Entity set
-		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeatTime} ,Robot_Ip=#{robotIp}
+		Id=#{id} ,Last_Heartbeat_Time=#{lastHeartbeatTime} ,Robot_Ip=#{robotMac}
 		,Remark=#{remark} ,Extend_Field=#{extendField}
 		,Monitor_Server=#{monitorServer}
 		where Id=#{id}
@@ -284,7 +284,7 @@
 
 
 
-			<if test="robotIp!=null">Robot_Ip=#{robotIp},</if>
+			<if test="robotMac!=null">Robot_Ip=#{robotMac},</if>
 
 
 
@@ -312,7 +312,7 @@
 
 
 
-			<if test="robotIp!=null">Robot_Ip=#{robotIp},</if>
+			<if test="robotMac!=null">Robot_Ip=#{robotMac},</if>
 
 
 			<if test="remark!=null">Remark=#{remark},</if>
@@ -343,7 +343,7 @@
 
 
 
-					<if test="params.orderByDesc.robotIp">Robot_Ip DESC,</if>
+					<if test="params.orderByDesc.robotMac">Robot_Mac DESC,</if>
 
 
 					<if test="params.orderByDesc.remark">Remark DESC,</if>
@@ -366,7 +366,7 @@
 
 
 
-				<if test="params.orderByAsc.robotIp">Robot_Ip ASC,</if>
+				<if test="params.orderByAsc.robotMac">Robot_Mac ASC,</if>
 
 
 				<if test="params.orderByAsc.remark">Remark ASC,</if>

@@ -34,14 +34,14 @@ public final class HeartbeatEntityOrderBy {
 	/**
 	 * 机器人的ip地址
 	 */
-	private boolean robotIp;
+	private boolean robotMac;
 
-	public final void setRobotIp(final boolean robotIp) {
-		this.robotIp = robotIp;
+	public final void setRobotMac(final boolean robotMac) {
+		this.robotMac = robotMac;
 	}
 
-	public final boolean getRobotIp() {
-		return this.robotIp;
+	public final boolean getRobotMac() {
+		return this.robotMac;
 	}
 
 	/**

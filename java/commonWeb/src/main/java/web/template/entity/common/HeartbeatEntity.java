@@ -2,6 +2,8 @@
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 心跳监测表
  */
@@ -74,14 +76,14 @@ public class HeartbeatEntity {
 	/**
 	 * 机器人的ip地址
 	 */
-	private String robotIp;
+	private String robotMac;
 
-	public final void setRobotIp(final String robotIp) {
-		this.robotIp = robotIp;
+	public final void setRobotMac(final String robotMac) {
+		this.robotMac = robotMac;
 	}
 
-	public final String getRobotIp() {
-		return this.robotIp;
+	public final String getRobotMac() {
+		return this.robotMac;
 	}
 
 	/**

@@ -6,3 +6,6 @@ spring.datasource:
     username: BusinessHeplerTestManager
     password: BusinessHeplerTestManager123
 projectName: asdasdasdasd
+spring.jackson.date-format: yyyy-MM-dd
+spring.jackson.time-zone: GMT+8
+spring.jackson.serialization.write-dates-as-timestamps: false
