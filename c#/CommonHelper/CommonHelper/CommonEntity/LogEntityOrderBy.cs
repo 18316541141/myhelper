@@ -51,5 +51,10 @@ namespace CommonHelper.CommonEntity
         /// 日志的异常堆栈信息
         /// </summary>
         public bool exception { set; get; }
+
+        /// <summary>
+        /// 操作的用户名
+        /// </summary>
+        public bool username { set; get; }
     }
 }

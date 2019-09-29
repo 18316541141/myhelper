@@ -113,6 +113,15 @@ namespace CommonWeb.Repository
                 {
                     query = query.Where(a => a.Exception.Contains(eqArgs.exceptionLike));
                 }
+
+                if (eqArgs.username != null)
+                {
+                    query = query.Where(a => a.Username == eqArgs.username);
+                }
+                if (!string.IsNullOrEmpty(eqArgs.usernameLike))
+                {
+                    query = query.Where(a => a.Username.Contains(eqArgs.usernameLike));
+                }
                 query = OrderBy(query, eqArgs);
             }
             if (neqArgs != null)
@@ -186,10 +195,18 @@ namespace CommonWeb.Repository
                 {
                     query = query.Where(a => a.Exception != neqArgs.exception);
                 }
-
                 if (!string.IsNullOrEmpty(neqArgs.exceptionLike))
                 {
                     query = query.Where(a => !a.Exception.Contains(neqArgs.exceptionLike));
+                }
+
+                if (neqArgs.username != null)
+                {
+                    query = query.Where(a => a.Username != neqArgs.username);
+                }
+                if (!string.IsNullOrEmpty(neqArgs.usernameLike))
+                {
+                    query = query.Where(a => !a.Username.Contains(neqArgs.usernameLike));
                 }
             }
             return query;
@@ -225,6 +242,8 @@ namespace CommonWeb.Repository
                 if (orderBy.funcName) { return query = query.OrderBy(a => a.FuncName); }
                 else
                 if (orderBy.exception) { return query = query.OrderBy(a => a.Exception); }
+                else
+                if (orderBy.username) { return query = query.OrderBy(a => a.Username); }
             }
             orderBy = eqArgs.orderByDesc;
             if (orderBy != null)
@@ -247,6 +266,8 @@ namespace CommonWeb.Repository
                 if (orderBy.funcName) { return query = query.OrderByDescending(a => a.FuncName); }
                 else
                 if (orderBy.exception) { return query = query.OrderByDescending(a => a.Exception); }
+                else
+                if (orderBy.username) { return query = query.OrderByDescending(a => a.Username); }
                 else
                 {
                     return query = query.OrderByDescending(a => a.Id);
@@ -299,6 +320,10 @@ namespace CommonWeb.Repository
             {
                 updateBefore.Exception = entity.Exception;
             }
+            if (entity.Username != null)
+            {
+                updateBefore.Username = entity.Username;
+            }
         }
 
         /// <summary>
@@ -341,6 +366,10 @@ namespace CommonWeb.Repository
             if (param.exception)
             {
                 updateBefore.Exception = null;
+            }
+            if (param.username)
+            {
+                updateBefore.Username = null;
             }
         }
 

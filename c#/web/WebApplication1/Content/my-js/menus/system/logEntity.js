@@ -7,10 +7,12 @@
         projectNameLike: '',
         typeNameLike: '',
         funcNameLike: '',
+        usernameLike: $.cookie('username'),
         createDateStart: moment().subtract("seconds", 1800).format("YYYY-MM-DD HH:mm:ss"),
         createDateEnd: moment().format("YYYY-MM-DD HH:mm:ss"),
     };
     $scope.cols = [
+        { field: "username", title: '日志用户名', sort: true },
         { field: "createDate", title: '日志日期', sort: true },
         { field: "level", title: '日志等级', sort: true },
         { field: "threadNo", title: '线程号', sort: true },
@@ -44,7 +46,7 @@
         'export': false,
         delBatch: false,
         del: false,
-        edit: true
+        edit: false
     };
     $scope.search = function () {
         $scope.$broadcast('searchPage');
@@ -65,12 +67,11 @@
             };
             layer.ngOpen({
                 type: 1,
-                area: ['600px', '660px'],
+                area: ['630px', '700px'],
                 contentUrl: 'menus/system/editLogEntity.html',
                 scope: $scope,
                 title: '查看'
             });
         }
     });
-    layuiForm.render('select');
 });

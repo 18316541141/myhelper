@@ -26,6 +26,7 @@ namespace CommonHelper.EFMap
             Property(u => u.ProjectName).HasColumnName("Project_Name");
             Property(u => u.TypeName).HasColumnName("Type_Name");
             Property(u => u.FuncName).HasColumnName("Func_Name");
+            Property(u => u.Username).HasColumnName("Username");
             /* sql_server版的建表数据
                 CREATE TABLE [dbo].[Untitled] (
                   [Id] bigint NOT NULL,

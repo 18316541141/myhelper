@@ -2,6 +2,12 @@
     <div class="layer-body">
         <form class="layui-form" action="">
             <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input readonly ng-model="edit.formData.username" type="text" name="title" required lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">日志日期</label>
                 <div class="layui-input-block">
                     <input readonly ng-model="edit.formData.createDate" type="text" name="title" required lay-verify="required" placeholder="日志日期" autocomplete="off" class="layui-input">

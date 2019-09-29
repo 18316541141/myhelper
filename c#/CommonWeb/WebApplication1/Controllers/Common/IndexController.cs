@@ -49,6 +49,7 @@ namespace WebApplication1.Controllers.Common
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("leftMenus", UserService.LoadLeftMenus(User.Identity.Name));
+            data.Add("username", User.Identity.Name);
             return MyJson(new Result { code = 0, data = data });
         }
 

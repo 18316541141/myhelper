@@ -65,5 +65,11 @@ namespace CommonHelper.CommonEntity
         /// </summary>
         [JsonProperty("exception")]
         public virtual string Exception { set; get; }
+
+        /// <summary>
+        /// 操作的用户名
+        /// </summary>
+        [JsonProperty("username")]
+        public virtual string Username { set; get; }
     }
 }

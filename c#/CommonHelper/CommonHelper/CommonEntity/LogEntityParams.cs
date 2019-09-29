@@ -120,6 +120,16 @@ namespace CommonHelper.CommonEntity
         public string exceptionLike { set; get; }
 
         /// <summary>
+        /// 操作的用户名
+        /// </summary>
+        public string username { set; get; }
+
+        /// <summary>
+        /// 操作的用户名模糊查询条件
+        /// </summary>
+        public string usernameLike { set; get; }
+
+        /// <summary>
         /// 升序排序
         /// </summary>
         public LogEntityOrderBy orderByAsc { set; get; }

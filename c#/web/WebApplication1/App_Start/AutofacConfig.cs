@@ -71,6 +71,7 @@ namespace WebApplication1.App_Start
             ).PropertiesAutowired().InstancePerRequest();
             IContainer container = containerBuilder.Build();
             AllAutoThread allAutoThread = new AllAutoThread(container.Resolve<MyHeartbeatEntityRepository>());
+            allAutoThread.log = container.Resolve<ILog>();
             allAutoThread.Start();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }

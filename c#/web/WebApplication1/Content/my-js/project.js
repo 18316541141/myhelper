@@ -285,6 +285,7 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
     $myHttp.get('/index/loadLoginData').mySuccess(function (result) {
         var data=result.data;
         $scope.leftMenus = data.leftMenus;
+        $.cookie('username', data.username);
         $timeout(function () {
             $('.layui-nav-bar').remove();
             layuiElement.render('nav');
@@ -378,12 +379,11 @@ var myApp = angular.module('my-app', ['ngSanitize', 'ng-layer', 'ngAnimate']).co
     }
 
     $scope.login = function () {
+        $.cookie('username', $scope.loginData.username);
         if ($('#rememberPassword').prop('checked')) {
-            $.cookie('username', $scope.loginData.username);
             $.cookie('password', $scope.loginData.password);
             $.cookie('rememberPassword', true);
         } else {
-            $.cookie('username', null);
             $.cookie('password', null);
             $.cookie('rememberPassword', null);
         }
