@@ -293,7 +293,7 @@ namespace CommonWeb.Entity.Common
         void OtherProps(MethodBase methodBase)
         {
             LogicalThreadContext.Properties["Id"] = IdWorker.NextId();
-            LogicalThreadContext.Properties["Username"] = HttpContext.Current.User.Identity.Name;
+            LogicalThreadContext.Properties["Username"] = HttpContext.Current?.User.Identity.Name;
             LogicalThreadContext.Properties["ProjectName"] = Assembly.GetName().Name;
             LogicalThreadContext.Properties["TypeName"] = methodBase.DeclaringType.FullName;
             LogicalThreadContext.Properties["FuncName"] = methodBase.Name;

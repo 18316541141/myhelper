@@ -33,14 +33,16 @@ namespace WebApplication1.Service
                 Name = "logEntity",
                 Title = "系统日志",
                 SortIndex = 0,
-                Url = "menus/system/logEntity.html"
+                //Url = "menus/system/logEntity.html"
+                Url= "/static/common/system/logEntity.html"
             });
             sysMenu.LeftMenus.Add(new LeftMenu
             {
                 Name = "heartbeatEntity",
                 Title = "心跳监测",
                 SortIndex = 1,
-                Url = "menus/system/heartbeatEntity.html"
+                //Url = "menus/system/heartbeatEntity.html"
+                Url = "/static/common/system/heartbeatEntity.html"
             });
             leftMenuList.Add(sysMenu);
             return leftMenuList;

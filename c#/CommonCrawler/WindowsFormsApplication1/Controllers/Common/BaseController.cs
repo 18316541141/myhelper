@@ -83,6 +83,7 @@ namespace WebApplication1.Controllers.Common
         {
             if ((DateTime.Now - LastHeartbeatDate).TotalMinutes > 5)
             {
+                Log.Debug("发送心跳报文...");
                 try
                 {
                     HeartbeatEntity heartbeatEntity = CrawlerService.GetHeartbeatEntityInfo();
