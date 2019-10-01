@@ -11,7 +11,7 @@ namespace WebApplication1.Service
     {
         public bool CheckLogin(string username, string password)
         {
-            throw new NotImplementedException();
+            return username == "superAdmin";
         }
 
         public string FindSecretByKey(string signKey)
