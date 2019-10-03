@@ -319,7 +319,7 @@ namespace CommonHelper.Helper
         /// <returns>如果合法返回true</returns>
         public static bool CheckMac(string mac)
         {
-            return new Regex("^((([a-f0-9]{2}:){5})|(([a-f0-9]{2}-){5}))[a-f0-9]{2}$").IsMatch(Convert.ToString(mac));
+            return new Regex("^((([a-fA-F0-9]{2}:){5})|(([a-fA-F0-9]{2}-){5}))[a-fA-F0-9]{2}$").IsMatch(Convert.ToString(mac));
         }
 
         /// <summary>
