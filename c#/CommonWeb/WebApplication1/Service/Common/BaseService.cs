@@ -6,6 +6,9 @@ using Snowflake.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
+using System.Web;
+
 namespace CommonWeb.Service.Common
 {
     /// <summary>
@@ -40,6 +43,16 @@ namespace CommonWeb.Service.Common
         public long NextId()
         {
             return IdWorker.NextId();
+        }
+
+        /// <summary>
+        /// 获取session中的值
+        /// </summary>
+        /// <param name="key">session的键</param>
+        /// <returns>返回session中的值</returns>
+        public object Session(string key)
+        {
+            return HttpContext.Current.Session[key];
         }
 
         /// <summary>

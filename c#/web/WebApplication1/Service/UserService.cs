@@ -34,7 +34,7 @@ namespace WebApplication1.Service
                 Title = "系统日志",
                 SortIndex = 0,
                 //Url = "menus/system/logEntity.html"
-                Url= "/static/common/system/logEntity.html"
+                Url= "/assets/common/system/logEntity.html"
             });
             sysMenu.LeftMenus.Add(new LeftMenu
             {
@@ -42,7 +42,15 @@ namespace WebApplication1.Service
                 Title = "心跳监测",
                 SortIndex = 1,
                 //Url = "menus/system/heartbeatEntity.html"
-                Url = "/static/common/system/heartbeatEntity.html"
+                Url = "/assets/common/system/heartbeatEntity.html"
+            });
+            sysMenu.LeftMenus.Add(new LeftMenu
+            {
+                Name = "test",
+                Title = "测试节点",
+                SortIndex = 2,
+                //Url = "menus/system/heartbeatEntity.html"
+                Url = "/assets/menus/test.html"
             });
             leftMenuList.Add(sysMenu);
             return leftMenuList;
