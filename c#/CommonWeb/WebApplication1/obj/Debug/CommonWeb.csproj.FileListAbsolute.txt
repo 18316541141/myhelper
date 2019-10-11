@@ -114,11 +114,11 @@ D:\git_project\myhelper\c#\CommonWeb\WebApplication1\bin\zh-Hans\Microsoft.AspNe
 D:\git_project\myhelper\c#\CommonWeb\WebApplication1\obj\Debug\CommonWeb.csprojResolveAssemblyReference.cache
 D:\git_project\myhelper\c#\CommonWeb\WebApplication1\obj\Debug\CommonWeb.dll
 D:\git_project\myhelper\c#\CommonWeb\WebApplication1\obj\Debug\CommonWeb.pdb
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\csc.exe
-E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Log4net.config
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Guess.xml
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\ApplicationInsights.config
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\csc.exe
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll

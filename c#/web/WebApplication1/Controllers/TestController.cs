@@ -14,25 +14,30 @@ namespace WebApplication1.Controllers
             List<TreeFormNode> resultList = new List<TreeFormNode>();
             TreeFormNode tree1 = new TreeFormNode
             {
-                Id="1",
+                Id=1,
                 Name="广东省"
             };
+            tree1.Children.Add(new TreeFormNode
+            {
+                Id = 4,
+                Name = "北京镇"
+            });
             resultList.Add(tree1);
             TreeFormNode tree2 = new TreeFormNode
             {
-                Id = "2",
+                Id = 2,
                 Name = "顺德省"
             };
             resultList.Add(tree2);
             TreeFormNode tree3 = new TreeFormNode
             {
-                Id = "3",
+                Id = 3,
                 Name = "容桂省"
             };
             resultList.Add(tree3);
             return MyJson(new Result
             {
-                code=1,
+                code=0,
                 data = resultList
             });
         }

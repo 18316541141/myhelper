@@ -1,0 +1,53 @@
+﻿<!-- 抄考代码
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>菜单名称</legend>
+</fieldset>
+<div ng-controller="$entity.EntityName$">
+    <form class="layui-form log-entity-query-form">
+		$entity.PropList:{$if(it.ParamsTypeIsLike)$
+			<div class="layui-inline" style="padding-bottom: 5px;">
+				<label ng-if="$scope.supportPlaceholder===false" class="layui-form-label">$it.PropNotes$</label>
+				<div class="layui-input-inline">
+					<input style="width:150px;" type="text" name="$it.PropName$" ng-model="postData.$it.PropName$" placeholder="$it.PropNotes$" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		$endif$}$
+		$entity.PropList:{$if(it.ParamsTypeIsRangeStart)$
+			<div class="layui-inline" style="padding-bottom: 5px;">
+				<label ng-if="$scope.supportPlaceholder===false" class="layui-form-label">$it.PropNotes$</label>
+				<div class="layui-input-inline">
+					<input style="width:150px;" type="text" name="$it.PropName$" ng-model="postData.$it.PropName$" placeholder="$it.PropNotes$" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		$endif$}$
+		$entity.PropList:{$if(it.ParamsTypeIsRangeEnd)$
+			<div class="layui-inline" style="padding-bottom: 5px;">
+				<label ng-if="$scope.supportPlaceholder===false" class="layui-form-label">$it.PropNotes$</label>
+				<div class="layui-input-inline">
+					<input style="width:150px;" type="text" name="$it.PropName$" ng-model="postData.$it.PropName$" placeholder="$it.PropNotes$" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		$endif$}$
+		<div class="layui-inline" style="padding-bottom: 5px;">
+            <div class="layui-input-inline">
+                <button class="layui-btn" type="button" ng-click="search();"><i class="layui-icon">&#xe615;</i> 搜索</button>
+            </div>
+        </div>
+        <div class="layui-inline" style="padding-bottom: 5px;">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-primary" type="button" ng-click="refresh();"><i class="layui-icon">&#xe669;</i> 刷新</button>
+            </div>
+        </div>
+	</form>
+	<div id="tableToolbar">
+		<div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="enabled" type="button"><i class="layui-icon ">&#xe605;</i> 启用</button>
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="disabled" type="button"><i class="layui-icon ">&#x1006;</i> 禁用</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add" type="button"><i class="layui-icon ">&#xe608;</i> 新增</button>
+            <button class="layui-btn layui-btn-sm" lay-event="export" type="button"><i class="layui-icon ">&#xe601;</i> 导出</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBatch" type="button"><i class="layui-icon ">&#xe640;</i> 批量删除</button>
+        </div>
+	</div>
+	<div page-data-table height="full-340" url="{{\$scope.PROXY+'/$entity.EntityName$/page'}}" table-toolbar="#tableToolbar" post-data="postData" cols="cols"></div>
+</div>
+-->

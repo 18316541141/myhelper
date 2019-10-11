@@ -40,35 +40,47 @@ namespace CommonHelper.Helper.CommonJsonConverter
             return existingValue;
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        /// <summary>
+        /// 把一个字符串的指定数量的字符用特殊符号替换。
+        /// </summary>
+        /// <param name="beforeVal">替换前的字符串</param>
+        /// <param name="startIndex">起始替换索引</param>
+        /// <param name="len">替换长度</param>
+        /// <param name="star">替换所使用的字符串</param>
+        /// <returns></returns>
+        private static string ConvertStar(string beforeVal, int startIndex, int? len, char star = '*')
         {
-            string beforeVal=Convert.ToString(value);
             string afterVal;
-            if (beforeVal.Length < StartIndex + 1)
+            if (beforeVal.Length < startIndex + 1)
             {
                 afterVal = beforeVal;
             }
             else
             {
-                if (Len == null)
+                if (len == null)
                 {
-                    Len = beforeVal.Length - StartIndex;
+                    len = beforeVal.Length - startIndex;
                 }
                 char[] afterChars = new char[beforeVal.Length];
-                for (int i=0,len=beforeVal.Length;i<len ;i++)
+                for (int i = 0, len_i = beforeVal.Length; i < len_i; i++)
                 {
-                    if (i < StartIndex)
+                    if (i < startIndex || i >= startIndex + len)
                     {
                         afterChars[i] = beforeVal[i];
                     }
                     else
                     {
-                        afterChars[i] = Star;
+                        afterChars[i] = star;
                     }
                 }
                 afterVal = new string(afterChars);
             }
-            writer.WriteValue(beforeVal);
+            return afterVal;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(ConvertStar(Convert.ToString(value),StartIndex,Len,Star));
         }
     }
 }

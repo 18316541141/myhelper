@@ -15,7 +15,13 @@ namespace CommonHelper.Helper.CommonEntity
         /// 节点id
         /// </summary>
         [JsonProperty("id")]
-        public string Id { set; get; }
+        public long Id { set; get; }
+
+        /// <summary>
+        /// 顺序号，顺序号越大越靠后。
+        /// </summary>
+        [JsonProperty("sortIndex")]
+        public int SortIndex { set; get; }
 
         /// <summary>
         /// 节点标题
