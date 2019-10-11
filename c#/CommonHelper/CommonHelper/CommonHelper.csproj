@@ -181,6 +181,7 @@
     <Compile Include="EFRepository\BaseRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
     <Compile Include="Helper\NumToChinese.cs" />
+    <Compile Include="Helper\RelationDataHelper.cs" />
     <Compile Include="staticVar\AllStatic.cs" />
     <Compile Include="FindAttr\FindDataAttr.cs" />
     <Compile Include="FindAttr\FindDataConvertAttr.cs" />

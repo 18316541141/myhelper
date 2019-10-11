@@ -24,7 +24,7 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            string s = NetworkHelper.GetMacAddress();
+            string d=EncrypHelper.ImgStreamToBase64(File.OpenRead(@"C:\Users\Administrator\Desktop\selectArrow.png"));
             Console.WriteLine();
             //IPHostEntry ipe = Dns.GetHostEntry(Dns.GetHostName());
             //Console.WriteLine(ipe.AddressList[4]);

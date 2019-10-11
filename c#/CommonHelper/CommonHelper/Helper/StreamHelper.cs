@@ -52,7 +52,7 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 快速的拷贝流，这里不够是什么流都会使用缓冲流进行操作，如果本身就是缓冲流就
+        /// 快速的拷贝流，这里无论是什么流都会使用缓冲流进行操作，如果本身就是缓冲流就
         /// 直接使用CopyStream
         /// </summary>
         /// <param name="src"></param>

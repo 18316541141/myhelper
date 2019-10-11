@@ -52,7 +52,7 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 图片输入流转base64
+        /// 图片输入流转base64，会自动关闭流。
         /// </summary>
         /// <param name="inputStream"></param>
         /// <returns></returns>
@@ -61,7 +61,10 @@ namespace CommonHelper.Helper
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 StreamHelper.FastCopyStream(inputStream, memoryStream, false);
-                return Convert.ToBase64String(memoryStream.ToArray());
+                using (inputStream)
+                {
+                    return Convert.ToBase64String(memoryStream.ToArray());
+                }
             }
         }
 
