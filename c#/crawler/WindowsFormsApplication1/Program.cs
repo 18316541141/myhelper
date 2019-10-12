@@ -39,7 +39,7 @@ namespace WindowsFormsApplication1
             string ip;
             try
             {
-                ip = IpHelper.GetOuterNetIP();
+                ip = NetworkHelper.GetOuterNetIP();
             }
             catch (Exception)
             {

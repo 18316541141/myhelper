@@ -1,0 +1,8 @@
+﻿<!-- 抄考代码
+function edit$entity.EntityName$(\$scope, \$myHttp) {
+    \$myHttp.get(\$scope.PROXY+'/$entity.EntityName$/load', { id: $scope.edit.data.id }).mySuccess(function (result) {
+        $scope.edit.formData = result.data;
+    });
+}
+module.exports = edit$entity.EntityName$;
+-->

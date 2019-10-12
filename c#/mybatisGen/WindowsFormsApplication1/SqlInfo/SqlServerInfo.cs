@@ -10,6 +10,7 @@ using WindowsFormsApplication1.Intf;
 
 namespace WindowsFormsApplication1.SqlInfo
 {
+
     public sealed class SqlServerInfo : ISqlInfo
     {
 

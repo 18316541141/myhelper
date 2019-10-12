@@ -1,0 +1,17 @@
+﻿<!-- 抄考代码
+<div ng-controller="edit$entity.EntityName$">
+    <div class="layer-body">
+        <form class="layui-form" action="">
+			$entity.PropList:{$if(it.ParamsTypeIsEqual)$
+				<div class="layui-form-item">
+					<label class="layui-form-label">$it.PropNotes$</label>
+					<div class="layui-input-block">
+						<input readonly ng-model="edit.formData.$it.PropName$" type="text" name="title" required lay-verify="required" placeholder="$it.PropNotes$" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			$endif$}$
+        </form>
+    </div>
+    <div class="layer-foot"></div>
+</div>
+-->

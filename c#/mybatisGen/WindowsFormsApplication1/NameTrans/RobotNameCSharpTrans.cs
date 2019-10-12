@@ -1,4 +1,5 @@
 ﻿using WindowsFormsApplication1.Intf;
+using WindowsFormsApplication1.Service;
 
 namespace WindowsFormsApplication1.NameTrans
 {
@@ -7,6 +8,13 @@ namespace WindowsFormsApplication1.NameTrans
     /// </summary>
     public sealed class RobotNameCSharpTrans : INameTrans
     {
+        NameTransService nameTransService { set; get; }
+
+        public RobotNameCSharpTrans()
+        {
+            nameTransService = new NameTransService();
+        }
+
         /// <summary>
         /// 列名称转属性名称
         /// </summary>
@@ -14,7 +22,7 @@ namespace WindowsFormsApplication1.NameTrans
         /// <returns>返回属性名称</returns>
         public string ColNameToPropName(string colName)
         {
-            return colName.Replace("_", "");
+            return nameTransService.UnderlineToBigHump(colName);
         }
 
         /// <summary>
@@ -24,7 +32,7 @@ namespace WindowsFormsApplication1.NameTrans
         /// <returns>返回实体名称</returns>
         public string TableNameToEntityName(string tableName)
         {
-            return tableName.Replace("_","");
+            return nameTransService.UnderlineToBigHump(tableName);
         }
     }
 }

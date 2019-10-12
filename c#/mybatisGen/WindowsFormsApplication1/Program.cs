@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApplication1.DbTypeTrans;
 using WindowsFormsApplication1.entity;
 using WindowsFormsApplication1.NameTrans;
 using WindowsFormsApplication1.Service;
@@ -21,15 +22,18 @@ namespace WindowsFormsApplication1
             //Data Source = 183.2.233.235; Initial Catalog = BusinessAssistantDB_Test; User ID = BusinessHeplerTestManager; Password = BusinessHeplerTestManager123; MultipleActiveResultSets = True
             GenEntityService genEntityService = new GenEntityService
             {
-                NameTrans = new RobotNameJavaTrans(),
-                DbTypeTrans = new SqlServerToJavaTrans(),
+                NameTrans = new RobotNameCSharpTrans(),
+                DbTypeTrans = new MySqlToCSharpTrans(),
                 //DbTypeTrans = new SqliteToCSharpTrans(),
-                SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
+                //SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
                 //SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
+                //server=localhost;Database=database01;UID=root;PWD=;SslMode=none
+                SqlInfo = new MySqlInfo("localhost", "database01", "root","",3306)
             };
-            Entity entity = genEntityService.GenTemplateEntity("Heartbeat_Entity");
+            Entity entity = genEntityService.GenTemplateEntity("FisheryCrewSystem");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
-            entityTemplateToCode.MyBatisCode(entity);
+            entityTemplateToCode.EntityFrameworkCode(entity);
+            //entityTemplateToCode.MyBatisCode(entity);
             //------------------------------下面是内存表操作生成部分------------------------------
             //GenMemoryEntityService genMemoryEntityService = new GenMemoryEntityService();
             //Entity entity = genMemoryEntityService.GenTemplateEntity(new HeartbeatEntity

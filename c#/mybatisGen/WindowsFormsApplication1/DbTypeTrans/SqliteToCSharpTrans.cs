@@ -9,11 +9,6 @@ namespace WindowsFormsApplication1.Service
 {
     public sealed class SqliteToCSharpTrans : IDbTypeTrans
     {
-        public bool ColIsDeleteProp(string colName)
-        {
-            return colName.ToLower().EndsWith("isdelete");
-        }
-
         public string SqlType2EntityType(string sqlType)
         {
             if (sqlType == "integer")

@@ -18,14 +18,14 @@ namespace CX_Task_Center.Code.Message{
         /*
          * 通用模板一：
          ---------------------------------------------模板结构------------------------------------------------
-            <warning type='01' openId='$openId$'>
+            $@"<warning type='01' openId='$openId$'>
                 <title>$title$</title>
                 <source title='报警来源'>$source$</source>
                 <datetime title='发生时间'>$datetime$</datetime>
                 <content title='报警内容'>$content$</content>
                 <remark>$remark$</remark>
                 <url><![CDATA[$url$]]></url>
-            </warning>
+            </warning>"
         ---------------------------------------------实际效果------------------------------------------------
         |系统报警通知                |
         _____________________________

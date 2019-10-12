@@ -59,16 +59,32 @@ namespace WebApplication1.Controllers.Common
         /// </summary>
         protected List<string> OpenIds { set; get; }
 
+        /// <summary>
+        /// 机器人的mac地址
+        /// </summary>
+        protected string RobotMac { set; get; }
+
         public BaseController()
         {
-            MonitorServer = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.MonitorServer"];
-            SignKey = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.SignKey"];
-            SignSecret = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.SignSecret"];
+            RobotMac = NetworkHelper.GetMacAddress();
+            MonitorServer = AppSettings("MonitorServer");
+            SignKey = AppSettings("SignKey");
+            SignSecret = AppSettings("SignSecret");
             OpenIds = new List<string>();
-            foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.OpenIds"]))
+            foreach (JValue val in JArray.Parse(AppSettings("OpenIds")))
             {
                 OpenIds.Add(Convert.ToString(val));
             }
+        }
+
+        /// <summary>
+        /// 获取配置，不需要添加环境前缀
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected string AppSettings(string name)
+        {
+            return ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.{name}"];
         }
 
         /// <summary>

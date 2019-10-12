@@ -1,0 +1,101 @@
+﻿<!-- 抄考代码
+function $it.PropName$(\$scope, \$myHttp, layer) {
+    \$scope.postData = {
+        $entity.PropList:{
+			$it.PropName$:'',
+		}$
+    };
+    \$scope.cols = [
+        $entity.PropList:{
+        { field: "$it.PropName$", title: '$it.PropNotes$',sort: true },
+        }$
+        {
+            field: "id", title: '操作', templet: function (data) {
+                return '<div class="layui-btn-container">' +
+                    '<button class="layui-btn layui-btn-sm" lay-event="edit" type="button">编辑</button>' +
+                    '<button class="layui-btn layui-btn-sm" lay-event="delete" type="button">删除</button>' +
+                    '</div>';
+            }
+        }
+    ];
+    \$scope.search = function () {
+        \$scope.\$broadcast('searchPage');
+    };
+    \$scope.refresh = function () {
+        for (var key in \$scope.postData) {
+            if (\$scope.postData.hasOwnProperty(key)) {
+                \$scope.postData[key] = null;
+            }
+        }
+        \$scope.\$broadcast('searchPage');
+    };
+
+    \$scope.\$on('tableOper', function (event, type, data) {
+        if (type === 'enabled'){
+            var postData={};
+			var checkedDatas = this.checkedDatas;
+			for(var i=0,len=data.length;i<len;i++){
+				postData['datas['+i+'].$entity.KeyName$']=data[i].$entity.KeyName$;
+				/* 写变更的状态 */
+			}
+			\$myHttp.\$post(\$scope.PROXY+'/$entity.EntityName$/changeStatus',postData).mySuccess(function(result){
+				this.\$refs.table.refresh();
+			});
+        }else if (type === 'disabled'){
+            var postData={};
+			var checkedDatas = this.checkedDatas;
+			for(var i=0,len=data.length;i<len;i++){
+				postData['datas['+i+'].$entity.KeyName$']=data[i].$entity.KeyName$;
+				/* 写变更的状态 */
+			}
+			\$myHttp.\$post(\$scope.PROXY+'/$entity.EntityName$/changeStatus',postData).mySuccess(function(result){
+				this.\$refs.table.refresh();
+			});
+        }else if (type === 'add'){
+            $scope.edit = {
+                type: 'add',
+                data: data
+            };
+			layer.ngOpen({
+				type: 1,
+                area: ['630px', '700px'],
+				contentUrl: '/static/menus/****/edit$entity.KeyName$.html',
+                scope: $scope,
+                title: '新增'
+			});
+        }else if (type === 'export'){
+            
+        }else if (type === 'delBatch'){
+            var postData={};
+			var checkedDatas = this.checkedDatas;
+			for(var i=0,len=checkedDatas.length;i<len;i++){
+				postData['datas['+i+'].$entity.KeyName$']=checkedDatas[i];
+			}
+			\$myHttp.\$post(\$scope.PROXY+'/$entity.EntityName$/delBatch',postData).mySuccess(function(result){
+				this.\$refs.table.refresh();
+			});
+        }
+    });
+
+    \$scope.\$on('rowOper', function (event, type, data) {
+        if (type === 'delete') {
+            \$myHttp.\$post(\$scope.PROXY+'/$entity.EntityName$/del',{ $entity.KeyName$:key}).mySuccess(function(result){
+				this.\$refs.table.refresh();
+			});
+        }else if(type === 'edit'){
+			$scope.edit = {
+                type: 'edit',
+                data: data
+            };
+            layer.ngOpen({
+				type: 1,
+                area: ['630px', '700px'],
+				contentUrl: '/static/menus/****/edit$entity.KeyName$.html',
+                scope: $scope,
+                title: '编辑'
+			});
+        }
+    });
+}
+module.exports = $it.PropName$;
+-->
