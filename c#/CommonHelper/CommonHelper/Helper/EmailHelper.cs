@@ -13,11 +13,6 @@ using System.Threading.Tasks;
 namespace CommonHelper.Helper
 {
     /// <summary>
-    /// 这是延迟发送的委托，该委托只有在真正要发送邮件时才会被调用
-    /// </summary>
-    public delegate void SendLazyDelegate();
-
-    /// <summary>
     /// 邮件发送者实体类
     /// </summary>
     public sealed class EmailSenderEntity
@@ -43,22 +38,9 @@ namespace CommonHelper.Helper
         public DateTime LastSenderTime { set; get; }
 
         /// <summary>
-        /// 冷却时间，这里统一取60秒，冷却时间内不发送邮件由其他用户发送
+        /// 冷却时间，这里统一取60秒，冷却时间内不能发送邮件
         /// </summary>
         public int Cooldown { get { return 60; } }
-    }
-
-    public interface TryAgain
-    {
-        bool CheckTry(Exception ex);
-    }
-
-    public sealed class DefaultTryAgain : TryAgain
-    {
-        public bool CheckTry(Exception ex)
-        {
-            return false;
-        }
     }
 
     /// <summary>
@@ -67,9 +49,7 @@ namespace CommonHelper.Helper
     public static class EmailHelper
     {
 
-        static DefaultTryAgain _defaultTryAgain;
-
-        static List<EmailSenderEntity> _emailSenderEntityList;
+        public static List<EmailSenderEntity> EmailSenderEntityList { set; get; }
 
         /// <summary>
         /// 随机下标
@@ -78,22 +58,28 @@ namespace CommonHelper.Helper
 
         static EmailHelper()
         {
-            _defaultTryAgain = new DefaultTryAgain();
             _randomIndex = (uint)new Random().Next();
             //电子邮件发送者的json配置。
-            string emailSenderEntities = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.EmailSenderEntities"];
-            if (!string.IsNullOrEmpty(emailSenderEntities))
+            try
             {
-                _emailSenderEntityList = new List<EmailSenderEntity>();
-                foreach (JObject jobject in JArray.Parse(emailSenderEntities))
+                string emailSenderEntities = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.EmailSenderEntities"];
+                if (!string.IsNullOrEmpty(emailSenderEntities))
                 {
-                    _emailSenderEntityList.Add(new EmailSenderEntity
+                    EmailSenderEntityList = new List<EmailSenderEntity>();
+                    foreach (JObject jobject in JArray.Parse(emailSenderEntities))
                     {
-                        MailHost = Convert.ToString(jobject["MailHost"]),
-                        MailUserName = Convert.ToString(jobject["MailUserName"]),
-                        MailPassword = Convert.ToString(jobject["MailPassword"])
-                    });
+                        EmailSenderEntityList.Add(new EmailSenderEntity
+                        {
+                            MailHost = Convert.ToString(jobject["MailHost"]),
+                            MailUserName = Convert.ToString(jobject["MailUserName"]),
+                            MailPassword = Convert.ToString(jobject["MailPassword"])
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"读取邮箱配置失败，失败原因：{ex.Message}，请添加邮箱配置或手动设置EmailSenderEntityList列表。");
             }
             //SendLazyThread();
         }
@@ -106,13 +92,13 @@ namespace CommonHelper.Helper
         {
             int min = int.MaxValue;
             int temp;
-            lock (_emailSenderEntityList)
+            lock (EmailSenderEntityList)
             {
-                foreach (EmailSenderEntity emailSenderEntity in _emailSenderEntityList)
+                foreach (EmailSenderEntity emailSenderEntity in EmailSenderEntityList)
                 {
                     temp = (int)(emailSenderEntity.LastSenderTime.AddSeconds(emailSenderEntity.Cooldown) - DateTime.Now).TotalSeconds;
                     temp = temp < 0 ? 0 : temp;
-                    min=temp < min ? temp : min;
+                    min = temp < min ? temp : min;
                 }
             }
             return min;
@@ -125,21 +111,21 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="subject">邮件标题</param>
         /// <param name="body">邮件内容</param>
-        /// <param name="accept">邮件的单个接收人</param>
+        /// <param name="accept">邮件的单个接收人，可以有多个（例如：1320579501@qq.com、）</param>
         /// <param name="attachmentPaths">附件，可有可无</param>
         /// <returns>如果有空闲的账号，则发送成功，返回true，如果没有空闲账号，返回false</returns>
-        public static bool SendRightRow(string subject, string body, string accept, params string[] attachmentPaths)=>
-            SendRightRow(subject, body, new string[] { accept },attachmentPaths);
+        public static bool SendRightRow(string subject, string body, string accept, params string[] attachmentPaths) =>
+            SendRightRow(subject, body, new string[] { accept }, attachmentPaths);
 
         /// <summary>
         /// 马上发出邮件
         /// </summary>
         /// <param name="subject">邮件标题</param>
         /// <param name="body">邮件内容</param>
-        /// <param name="accepts">邮件接收人，可以有多个</param>
+        /// <param name="accepts">邮件接收人，可以有多个（例如：1320579501@qq.com、）</param>
         /// <param name="attachmentPaths">附件，可有可无</param>
         /// <returns>如果有空闲的账号，则发送成功，返回true，如果没有空闲账号，返回false</returns>
-        public static bool SendRightRow(string subject, string body,string[] accepts,params string[] attachmentPaths)
+        public static bool SendRightRow(string subject, string body, string[] accepts, params string[] attachmentPaths)
         {
             if (accepts.Length == 0)
             {
@@ -149,16 +135,15 @@ namespace CommonHelper.Helper
             {
                 throw new Exception("收件人数量不能超过20人！");
             }
-            TryAgain:
             EmailSenderEntity emailSenderEntity;
             int retryCount = 0;
-            lock (_emailSenderEntityList)
+            lock (EmailSenderEntityList)
             {
                 do
                 {
                     retryCount++;
-                    emailSenderEntity = _emailSenderEntityList[(int)++_randomIndex % _emailSenderEntityList.Count];
-                } while (emailSenderEntity.LastSenderTime.AddSeconds(emailSenderEntity.Cooldown) > DateTime.Now && retryCount < _emailSenderEntityList.Count);
+                    emailSenderEntity = EmailSenderEntityList[(int)++_randomIndex % EmailSenderEntityList.Count];
+                } while (emailSenderEntity.LastSenderTime.AddSeconds(emailSenderEntity.Cooldown) > DateTime.Now && retryCount < EmailSenderEntityList.Count);
             }
             if (emailSenderEntity.LastSenderTime.AddSeconds(emailSenderEntity.Cooldown) > DateTime.Now)
             {
@@ -198,10 +183,7 @@ namespace CommonHelper.Helper
             }
             catch (Exception ex)
             {
-                if (_defaultTryAgain.CheckTry(ex))
-                    goto TryAgain;
-                else
-                    throw ex;
+                throw ex;
             }
         }
     }

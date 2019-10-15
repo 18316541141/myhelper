@@ -84,7 +84,7 @@ namespace CommonWeb.Filter.Common
                 return;
             }
             sb.Append("&signKey=").Append(paramz["signKey"]).Append("&signSecret=").Append(signSecret);
-            string signChar = EncrypHelper.GetSha1FromStr(sb.ToString()).ToUpper();
+            string signChar = EncryptHelper.GetSha1FromStr(sb.ToString()).ToUpper();
             if (signChar == paramz["signChar"].ToUpper())
             {
                 base.OnActionExecuting(filterContext);

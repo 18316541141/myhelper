@@ -90,7 +90,7 @@ namespace CommonHelper.Helper
             string SHA1;
             using (Stream guidStream= File.OpenRead(basePath + Path.DirectorySeparatorChar + guid))
             {
-                SHA1 = EncrypHelper.GetSha1FromStream(guidStream);
+                SHA1 = EncryptHelper.GetSha1FromStream(guidStream);
             }
             using (Mutex mutex = new Mutex(false, SHA1))
             {
@@ -126,7 +126,7 @@ namespace CommonHelper.Helper
             Directory.CreateDirectory(basePath);
             string _Guid = Guid.NewGuid().ToString();
             StreamHelper.CopyStream(inputStream, File.OpenWrite(basePath + Path.DirectorySeparatorChar + _Guid));
-            string MD5 = EncrypHelper.GetMD5HashFromFile(basePath + Path.DirectorySeparatorChar + _Guid);
+            string MD5 = EncryptHelper.GetMD5HashFromFile(basePath + Path.DirectorySeparatorChar + _Guid);
             if (File.Exists(basePath + Path.DirectorySeparatorChar + MD5))
                 File.Delete(basePath + Path.DirectorySeparatorChar + _Guid);
             else
@@ -143,7 +143,7 @@ namespace CommonHelper.Helper
         public static string SaveFileNameBySHA1(string filePath, string basePath)
         {
             Directory.CreateDirectory(basePath);
-            string sha1 = EncrypHelper.GetSha1FromFilePath(filePath);
+            string sha1 = EncryptHelper.GetSha1FromFilePath(filePath);
             if (File.Exists(basePath + Path.DirectorySeparatorChar + sha1))
                 File.Delete(filePath);
             else
@@ -160,7 +160,7 @@ namespace CommonHelper.Helper
         public static string SaveFileNameByMd5(string filePath, string basePath)
         {
             Directory.CreateDirectory(basePath);
-            string MD5 = EncrypHelper.GetMD5HashFromFile(filePath);
+            string MD5 = EncryptHelper.GetMD5HashFromFile(filePath);
             if (File.Exists(basePath + Path.DirectorySeparatorChar + MD5))
                 File.Delete(filePath);
             else

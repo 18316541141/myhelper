@@ -22,3 +22,4 @@ c#/web/packages/*
 c#/crawler/packages/*
 c#/CommonCrawler/packages/*
 c#/CommonWeb/packages/*
+c#/notifySimulate/packages/*

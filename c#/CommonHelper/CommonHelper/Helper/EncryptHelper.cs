@@ -13,7 +13,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// 加密帮助类
     /// </summary>
-    public static class EncrypHelper
+    public static class EncryptHelper
     {
         /// <summary>
         /// 读取指定路径的图片，返回该图片的base64
@@ -83,6 +83,22 @@ namespace CommonHelper.Helper
             for (int i = 0; i < md5data.Length; i++)
                 str += md5data[i].ToString("x").PadLeft(2, '0');
             return str;
+        }
+
+        /// <summary>
+        /// HmacSHA256算法,返回的结果始终是32位
+        /// </summary>
+        /// <param name="content">待加密的内容</param>
+        /// <param name="key">加密的键，可以是任何数据</param>
+        /// <returns></returns>
+        public static string HmacSha256(string content, string key = "")
+        {
+            Encoding encoding = new ASCIIEncoding();
+            using (var hmacsha256 = new HMACSHA256(encoding.GetBytes(key)))
+            {
+                byte[] hashmessage = hmacsha256.ComputeHash(encoding.GetBytes(content));
+                return Convert.ToBase64String(hashmessage);
+            }
         }
 
         /// <summary>

@@ -197,7 +197,7 @@
     <Compile Include="Helper\DataImageConvertHelper.cs" />
     <Compile Include="Helper\DateHelper.cs" />
     <Compile Include="Helper\EmailHelper.cs" />
-    <Compile Include="Helper\EncrypHelper.cs" />
+    <Compile Include="Helper\EncryptHelper.cs" />
     <Compile Include="Helper\EnumerableHelper.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />

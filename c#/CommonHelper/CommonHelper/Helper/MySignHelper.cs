@@ -77,7 +77,7 @@ namespace CommonHelper.Helper
             }
             signParamList.Sort();
             retMap.Add("signKey", SignKey);
-            retMap.Add("signChar", EncrypHelper.GetSha1FromStr($"{string.Join("&", signParamList)}&signKey={SignKey}&signSecret={SignSecret}"));
+            retMap.Add("signChar", EncryptHelper.GetSha1FromStr($"{string.Join("&", signParamList)}&signKey={SignKey}&signSecret={SignSecret}"));
             return retMap;
         }
     }
