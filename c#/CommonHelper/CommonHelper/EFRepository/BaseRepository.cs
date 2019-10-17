@@ -16,6 +16,14 @@ using CommonHelper.staticVar;
 namespace CommonHelper.Helper.EFRepository
 {
     /// <summary>
+    /// 聚集函数枚举
+    /// </summary>
+    public enum AggregateFunc
+    {
+        MAX, MIN, SUM, AVG
+    }
+
+    /// <summary>
     /// 通用的数据操作基类
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
@@ -251,6 +259,50 @@ namespace CommonHelper.Helper.EFRepository
             }
         }
 
+        /// <summary>
+        /// 查询极值
+        /// </summary>
+        /// <typeparam name="C">极值的类型</typeparam>
+        /// <param name="predicate">查询条件</param>
+        /// <param name="selector">返回值</param>
+        /// <param name="aggregateFunc">返回的极值，极大值、极小值</param>
+        /// <returns>返回极值</returns>
+        public C FindExtreProp<C>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, C>> selector,AggregateFunc aggregateFunc)
+        {
+            using (DbContext dbContext = CreateDbContext())
+            {
+                IQueryable<TEntity> query = dbContext.Set<TEntity>().AsNoTracking().Where(predicate);
+                if(aggregateFunc== AggregateFunc.MAX)
+                {
+                    return query.Max(selector);
+                }
+                else if (aggregateFunc == AggregateFunc.MIN)
+                {
+                    return query.Min(selector);
+                }
+                else
+                {
+                    throw new Exception("枚举只能使用MAX、MIN");
+                }
+                return default(C);
+            }
+        }
+
+        /// <summary>
+        /// 根据查询条件查询单个属性。
+        /// </summary>
+        /// <typeparam name="C"></typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public C FindProp<C>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, C>> selector)
+        {
+            using (DbContext dbContext = CreateDbContext())
+            {
+                var entity = dbContext.Set<TEntity>().AsNoTracking().Where(predicate).Select(selector).FirstOrDefault();
+                return entity;
+            }
+        }
 
         /// <summary>
         /// 根据条件查找一个实体

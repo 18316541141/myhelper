@@ -185,7 +185,15 @@ namespace CommonHelper.Helper
         /// <returns>返回检查结果</returns>
         public static bool CheckPayQrcode(this Bitmap src, int candidateCount = 10)
         {
-            return Convert.ToString(QrcodeImgToText(src, 10, "UTF-8")).StartsWith("wxp://");
+            string text = QrcodeImgToText(src, 10, "UTF-8");
+            if (string.IsNullOrEmpty(text))
+            {
+                return false;
+            }
+            else
+            {
+                return text.StartsWith("wxp://");
+            }
         }
     }
 }

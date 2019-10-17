@@ -78,7 +78,6 @@
     <None Include="AllTemplate\EFMemoryRepository">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="AllTemplate\LayuiJs.txt" />
     <Compile Include="DbTypeTrans\MySqlToCSharpTrans.cs" />
     <Compile Include="Entity\KeyAttr.cs" />
     <Compile Include="NameTrans\RobotNameJavaTrans.cs" />
@@ -157,6 +156,9 @@
     <None Include="AllTemplate\JavaSetNullParams">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="AllTemplate\LayuiEdit" />
+    <None Include="AllTemplate\LayuiEditJs" />
+    <None Include="AllTemplate\LayuiListJs" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -337,9 +337,11 @@ E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\System.Reflection.Met
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\vbc.exe
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\VBCSCompiler.exe
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\roslyn\VBCSCompiler.exe.config
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Log4net.Release.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.Debug.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\Web.Release.config
+E:\git_projects\myhelper\c#\web\WebApplication1\bin\Log4net.Debug.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\WebApplication1.dll.config
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\WebApplication1.dll
 E:\git_projects\myhelper\c#\web\WebApplication1\bin\WebApplication1.pdb
