@@ -30,7 +30,7 @@ namespace WindowsFormsApplication1
                 //server=localhost;Database=database01;UID=root;PWD=;SslMode=none
                 SqlInfo = new MySqlInfo("localhost", "database01", "root","",3306)
             };
-            Entity entity = genEntityService.GenTemplateEntity("FisheryCrewSystem");
+            Entity entity = genEntityService.GenTemplateEntity("Agriculturalmachinerysafety_Vehiclequery");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
             //entityTemplateToCode.MyBatisCode(entity);

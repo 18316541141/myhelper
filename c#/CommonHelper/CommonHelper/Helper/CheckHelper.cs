@@ -81,11 +81,21 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 检查字符串是不是工商登记号，15位或18位都可以检测到。
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static bool IsBusinessRegisterCode(this string code)
+        {
+            return IsBusinessRegisterCode18(code) || IsBusinessRegisterCode15(code);
+        }
+
+        /// <summary>
         /// 检查字符串是不是18位工商登记号
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        static bool IsBusinessRegisterCode18(this string code)
+        public static bool IsBusinessRegisterCode18(this string code)
         {
             if (code.Length != 18)
                 return false;

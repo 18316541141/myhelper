@@ -1,0 +1,12 @@
+﻿2019-10-17 16:58:21,746 14 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-17 17:08:21,835 14 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-17 17:18:21,919 14 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-17 17:28:21,996 14 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
