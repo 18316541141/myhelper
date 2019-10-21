@@ -1,17 +1,11 @@
-﻿using CommonHelper.Helper;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 namespace CommonHelper.Helper
 {
     /// <summary>
@@ -76,11 +70,11 @@ namespace CommonHelper.Helper
     {
 
         /// <summary>
-        /// 
+        /// 集合类型数据以xls文件导出
         /// </summary>
-        /// <param name="dataList"></param>
-        /// <param name="outputStream"></param>
-        /// <param name="groupName"></param>
+        /// <param name="dataList">集合类型数据</param>
+        /// <param name="outputStream">输出流</param>
+        /// <param name="groupName">组名称</param>
         public static void ListToExcelXls<T>(List<T> dataList, Stream outputStream, string groupName = null)
         {
             ListToExcelXls(new List<T>[] { dataList }, outputStream, groupName);
@@ -89,8 +83,9 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 导出xls结尾的Excel数据，每个实体必须含有ExcelColNameAttr
         /// </summary>
-        /// <param name="dataList"></param>
-        /// <param name="outputStream"></param>
+        /// <param name="dataList">集合类型数据，分多个工作簿</param>
+        /// <param name="outputStream">输出流</param>
+        /// <param name="groupName">组名称</param>
         public static void ListToExcelXls<T>(List<T>[] dataListArrays, Stream outputStream, string groupName = null)
         {
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
@@ -122,10 +117,9 @@ namespace CommonHelper.Helper
                     foreach (ExcelColInfo excelColInfo in excelColInfoList)
                     {
                         excelCol = excelColInfo.ExcelCol;
-                        SetCellValue(
+                        width = SetCellValue(
                             (HSSFCell)hssfRow.CreateCell(excelCol.ColIndex),
-                            excelColInfo.PropertyInfo.GetValue(temp),
-                            out width
+                            excelColInfo.PropertyInfo.GetValue(temp)
                         );
                         if (width > colWidths[excelCol.ColIndex])
                         {
@@ -141,8 +135,8 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 设置列宽
         /// </summary>
-        /// <param name="sheet"></param>
-        /// <param name="colWidths"></param>
+        /// <param name="sheet">工作簿对象</param>
+        /// <param name="colWidths">列宽</param>
         static void UpdateColWidth(ISheet sheet, int[] colWidths)
         {
             for (var i = 0; i < colWidths.Length; i++)
@@ -154,9 +148,9 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 获取sheet名称
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="groupName"></param>
-        /// <returns></returns>
+        /// <param name="type">表数据类型</param>
+        /// <param name="groupName">组名称</param>
+        /// <returns>返回工作簿名称</returns>
         static string GetSheetName(Type type, string groupName = null)
         {
             foreach (ExcelSheet excelSheet in type.GetCustomAttributes(typeof(ExcelSheet)))
@@ -176,6 +170,12 @@ namespace CommonHelper.Helper
             return "sheet" + PasswordHelper.RandomPassword(6, 1);
         }
 
+        /// <summary>
+        /// 读取单元格的数据到数据对象。
+        /// </summary>
+        /// <param name="obj">数据实体对象</param>
+        /// <param name="cell">单个表格</param>
+        /// <param name="prop">属性对象</param>
         static void SetPropValue(object obj, ICell cell, PropertyInfo prop)
         {
             CellType cellType = cell.CellType;
@@ -222,14 +222,13 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 
+        /// 填写单元格数据
         /// </summary>
-        /// <param name="cell"></param>
-        /// <param name="val"></param>
-        /// <param name="width"></param>
-        static void SetCellValue(ICell cell, object val, out int width)
+        /// <param name="cell">单元格</param>
+        /// <param name="val">数据值</param>
+        static int SetCellValue(ICell cell, object val)
         {
-            width = 0;
+            int width = 0;
             if (val != null)
             {
                 Type type = val.GetType();
@@ -256,6 +255,7 @@ namespace CommonHelper.Helper
                 }
                 width = Encoding.GetEncoding(936).GetBytes(cellString).Length;
             }
+            return width;
         }
 
         /// <summary>
@@ -394,10 +394,9 @@ namespace CommonHelper.Helper
                     foreach (ExcelColInfo excelColInfo in excelColInfoList)
                     {
                         excelCol = excelColInfo.ExcelCol;
-                        SetCellValue(
+                        width = SetCellValue(
                             (XSSFCell)xssfRow.CreateCell(excelCol.ColIndex),
-                            excelColInfo.PropertyInfo.GetValue(temp),
-                            out width
+                            excelColInfo.PropertyInfo.GetValue(temp)
                         );
                         if (width > colWidths[excelCol.ColIndex])
                         {

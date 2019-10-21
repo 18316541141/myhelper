@@ -284,7 +284,6 @@ namespace CommonHelper.Helper.EFRepository
                 {
                     throw new Exception("枚举只能使用MAX、MIN");
                 }
-                return default(C);
             }
         }
 
