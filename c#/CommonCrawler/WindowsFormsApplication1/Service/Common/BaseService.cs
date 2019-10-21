@@ -51,13 +51,24 @@ namespace CommonCrawler.Service.Common
 
         public BaseService()
         {
-            MonitorServer = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.MonitorServer"];
-            RobotId = ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.RobotId"];
+            MonitorServer = AppSettings("MonitorServer");
+            RobotId = AppSettings("RobotId");
             OpenIds = new List<string>();
-            foreach (JValue val in JArray.Parse(ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.OpenIds"]))
+            foreach (JValue val in JArray.Parse(AppSettings("OpenIds")))
             {
                 OpenIds.Add(Convert.ToString(val));
             }
+        }
+
+
+        /// <summary>
+        /// 获取配置，不需要添加环境前缀
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected string AppSettings(string name)
+        {
+            return ConfigurationManager.AppSettings[$"{AllStatic.EnvironmentType}.{name}"];
         }
 
 
