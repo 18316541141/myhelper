@@ -1,0 +1,154 @@
+﻿2019-10-21 09:05:33,254 16 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 09:15:33,400 16 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 09:25:33,497 16 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 09:33:24,200 12 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 09:49:27,106 12 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 09:49:29,503 8 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+System.ArgumentException: 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-10-21 09:50:22,972 13 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+System.ArgumentException: 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-10-21 09:52:08,415 7 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+System.ArgumentException: 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-10-21 09:52:17,357 8 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+System.ArgumentException: 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-10-21 09:52:24,977 14 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+System.ArgumentException: 对于“WebApplication1.Controllers.TestController”中方法“CommonWeb.Entity.Common.ExcelResult`1[CommonHelper.CommonEntity.LogEntity] ExportExcelTest(CommonHelper.CommonEntity.LogEntityParams, Int32, Int32)”的不可以为 null 的类型“System.Int32”的参数“totalItemCount”，参数字典包含一个 null 项。可选参数必须为引用类型、可以为 null 的类型或声明为可选参数。
+参数名: parameters
+   在 System.Web.Mvc.ActionDescriptor.ExtractParameterFromDictionary(ParameterInfo parameterInfo, IDictionary`2 parameters, MethodInfo methodInfo)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-10-21 09:54:55,040 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 09:55:18,282 11 字段列表为空，不能导出数据！
+System.Exception: 字段列表为空，不能导出数据！
+   在 CommonHelper.Helper.ExcelHelper.ListToExcelXlsx[T](List`1[] dataListArrays, Stream outputStream, String groupName) 位置 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\Helper\ExcelHelper.cs:行号 378
+   在 CommonHelper.Helper.ExcelHelper.ListToExcelXlsx[T](List`1 dataList, Stream outputStream, String groupName) 位置 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\Helper\ExcelHelper.cs:行号 304
+   在 CommonWeb.Entity.Common.ExcelResult`1.ExecuteResult(ControllerContext context) 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\Entity\Common\ExcelResult.cs:行号 46
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+2019-10-21 09:56:27,738 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:00:14,814 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:15:53,555 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:21:39,494 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:23:28,490 12 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:26:36,313 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:29:20,107 10 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47
+2019-10-21 10:30:46,456 12 未将对象引用设置到对象的实例。
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 CommonWeb.AutoThread.AllAutoThread.<Heartbeat>b__14_0() 位置 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\AutoThread\AllAutoThread.cs:行号 47

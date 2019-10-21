@@ -83,7 +83,7 @@ namespace CommonHelper.Helper
         /// <param name="groupName"></param>
         public static void ListToExcelXls<T>(List<T> dataList, Stream outputStream, string groupName = null)
         {
-            ListToExcelXls(new List<T>[]{ dataList }, outputStream, groupName);
+            ListToExcelXls(new List<T>[] { dataList }, outputStream, groupName);
         }
 
         /// <summary>
@@ -91,21 +91,21 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="dataList"></param>
         /// <param name="outputStream"></param>
-        public static void ListToExcelXls<T>(List<T>[] dataListArrays, Stream outputStream,string groupName=null)
+        public static void ListToExcelXls<T>(List<T>[] dataListArrays, Stream outputStream, string groupName = null)
         {
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
             foreach (List<T> dataList in dataListArrays)
             {
-                if(dataList==null || dataList.Count == 0)
+                if (dataList == null || dataList.Count == 0)
                 {
                     throw new Exception("数据列表为空，未能导出数据！");
                 }
-                List<ExcelColInfo> excelColInfoList= ColFilter(dataList[0].GetType(), groupName);
+                List<ExcelColInfo> excelColInfoList = ColFilter(typeof(T), groupName);
                 if (excelColInfoList.Count == 0)
                 {
                     throw new Exception("字段列表为空，不能导出数据！");
                 }
-                HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.CreateSheet(GetSheetName(dataList[0].GetType(), groupName));
+                HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.CreateSheet(GetSheetName(typeof(T), groupName));
                 HSSFRow hssfRow = (HSSFRow)hssfSheet.CreateRow(0);
                 ExcelCol excelCol;
                 foreach (ExcelColInfo excelColInfo in excelColInfoList)
@@ -114,8 +114,8 @@ namespace CommonHelper.Helper
                     hssfRow.CreateCell(excelCol.ColIndex).SetCellValue(excelCol.ColName);
                 }
                 T temp;
-                int[] colWidths=new int[excelColInfoList.Count];
-                for (int i = 1,width, len = dataList.Count; i <= len; i++)
+                int[] colWidths = new int[excelColInfoList.Count];
+                for (int i = 1, width, len = dataList.Count; i <= len; i++)
                 {
                     temp = dataList[i];
                     hssfRow = (HSSFRow)hssfSheet.CreateRow(i);
@@ -123,11 +123,11 @@ namespace CommonHelper.Helper
                     {
                         excelCol = excelColInfo.ExcelCol;
                         SetCellValue(
-                            (HSSFCell)hssfRow.CreateCell(excelCol.ColIndex), 
+                            (HSSFCell)hssfRow.CreateCell(excelCol.ColIndex),
                             excelColInfo.PropertyInfo.GetValue(temp),
                             out width
                         );
-                        if(width> colWidths[excelCol.ColIndex])
+                        if (width > colWidths[excelCol.ColIndex])
                         {
                             colWidths[excelCol.ColIndex] = width;
                         }
@@ -147,7 +147,7 @@ namespace CommonHelper.Helper
         {
             for (var i = 0; i < colWidths.Length; i++)
             {
-                sheet.SetColumnWidth(i, ((colWidths[i] > 254 ? 254 : colWidths[i]) + 1) * 256);
+                sheet.SetColumnWidth(i, ((colWidths[i] > 64 ? 64 : colWidths[i]) + 1) * 256);
             }
         }
 
@@ -157,11 +157,11 @@ namespace CommonHelper.Helper
         /// <param name="obj"></param>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        static string GetSheetName(Type type, string groupName=null)
+        static string GetSheetName(Type type, string groupName = null)
         {
             foreach (ExcelSheet excelSheet in type.GetCustomAttributes(typeof(ExcelSheet)))
             {
-                if (groupName==null)
+                if (groupName == null)
                 {
                     return excelSheet.SheetName;
                 }
@@ -173,7 +173,7 @@ namespace CommonHelper.Helper
                     }
                 }
             }
-            return "sheet"+PasswordHelper.RandomPassword(6,1);
+            return "sheet" + PasswordHelper.RandomPassword(6, 1);
         }
 
         static void SetPropValue(object obj, ICell cell, PropertyInfo prop)
@@ -186,7 +186,7 @@ namespace CommonHelper.Helper
             else if (cellType == CellType.Numeric)
             {
                 Type type = prop.PropertyType;
-                if(type == typeof(double) || type == typeof(double?))
+                if (type == typeof(double) || type == typeof(double?))
                 {
                     prop.SetValue(obj, cell.NumericCellValue);
                 }
@@ -227,12 +227,12 @@ namespace CommonHelper.Helper
         /// <param name="cell"></param>
         /// <param name="val"></param>
         /// <param name="width"></param>
-        static void SetCellValue(ICell cell, object val,out int width)
+        static void SetCellValue(ICell cell, object val, out int width)
         {
             width = 0;
             if (val != null)
             {
-                Type type=val.GetType();
+                Type type = val.GetType();
                 string cellString;
                 if (type == typeof(double))
                 {
@@ -264,7 +264,7 @@ namespace CommonHelper.Helper
         /// <param name="obj"></param>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        static List<ExcelColInfo> ColFilter(Type type, string groupName=null)
+        static List<ExcelColInfo> ColFilter(Type type, string groupName = null)
         {
             List<ExcelColInfo> excelColInfoList = new List<ExcelColInfo>();
             foreach (PropertyInfo propertyInfo in type.GetProperties())
@@ -275,8 +275,8 @@ namespace CommonHelper.Helper
                     {
                         excelColInfoList.Add(new ExcelColInfo
                         {
-                            PropertyInfo= propertyInfo,
-                            ExcelCol= excelCol
+                            PropertyInfo = propertyInfo,
+                            ExcelCol = excelCol
                         });
                         break;
                     }
@@ -294,14 +294,14 @@ namespace CommonHelper.Helper
                     }
                 }
             }
-            excelColInfoList.Sort((x,y)=> x.ExcelCol.ColIndex - y.ExcelCol.ColIndex);
+            excelColInfoList.Sort((x, y) => x.ExcelCol.ColIndex - y.ExcelCol.ColIndex);
             return excelColInfoList;
         }
 
 
         public static void ListToExcelXlsx<T>(List<T> dataList, Stream outputStream, string groupName = null)
         {
-            ListToExcelXlsx(new List<T>[]{ dataList }, outputStream, groupName);
+            ListToExcelXlsx(new List<T>[] { dataList }, outputStream, groupName);
         }
 
         public static List<T> ExcelXlsToList<T>(Stream inputStream, string groupName = null)
@@ -334,21 +334,21 @@ namespace CommonHelper.Helper
         public static List<T> ExcelXlsxToList<T>(Stream inputStream, string groupName = null)
         {
             List<T> ret = new List<T>();
-            Type type=typeof(T);
-            string sheetName=GetSheetName(type, groupName);
+            Type type = typeof(T);
+            string sheetName = GetSheetName(type, groupName);
             List<ExcelColInfo> excelColInfoList = ColFilter(type, groupName);
             if (excelColInfoList.Count == 0)
             {
                 throw new Exception("字段列表为空，不能导入数据！");
             }
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(inputStream);
-            XSSFSheet xssfSheet=(XSSFSheet)xssfWorkbook.GetSheet(sheetName);
+            XSSFSheet xssfSheet = (XSSFSheet)xssfWorkbook.GetSheet(sheetName);
             XSSFRow xssfRow;
             T obj;
-            for (int i=1,len= xssfSheet.LastRowNum;i<=len ;i++)
+            for (int i = 1, len = xssfSheet.LastRowNum; i <= len; i++)
             {
                 xssfRow = (XSSFRow)xssfSheet.GetRow(i);
-                obj=(T)Activator.CreateInstance(type);
+                obj = (T)Activator.CreateInstance(type);
                 foreach (ExcelColInfo excelColInfo in excelColInfoList)
                 {
                     SetPropValue(obj, (XSSFCell)xssfRow.GetCell(excelColInfo.ExcelCol.ColIndex), excelColInfo.PropertyInfo);
@@ -372,12 +372,12 @@ namespace CommonHelper.Helper
                 {
                     throw new Exception("数据列表为空，未能导出数据！");
                 }
-                List<ExcelColInfo> excelColInfoList = ColFilter(dataList[0].GetType(), groupName);
+                List<ExcelColInfo> excelColInfoList = ColFilter(typeof(T), groupName);
                 if (excelColInfoList.Count == 0)
                 {
                     throw new Exception("字段列表为空，不能导出数据！");
                 }
-                XSSFSheet xssfSheet = (XSSFSheet)xssfWorkbook.CreateSheet(GetSheetName(dataList[0].GetType(),groupName));
+                XSSFSheet xssfSheet = (XSSFSheet)xssfWorkbook.CreateSheet(GetSheetName(typeof(T), groupName));
                 XSSFRow xssfRow = (XSSFRow)xssfSheet.CreateRow(0);
                 ExcelCol excelCol;
                 foreach (ExcelColInfo excelColInfo in excelColInfoList)
@@ -393,7 +393,7 @@ namespace CommonHelper.Helper
                     xssfRow = (XSSFRow)xssfSheet.CreateRow(i + 1);
                     foreach (ExcelColInfo excelColInfo in excelColInfoList)
                     {
-                        excelCol=excelColInfo.ExcelCol;
+                        excelCol = excelColInfo.ExcelCol;
                         SetCellValue(
                             (XSSFCell)xssfRow.CreateCell(excelCol.ColIndex),
                             excelColInfo.PropertyInfo.GetValue(temp),
