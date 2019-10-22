@@ -59,6 +59,7 @@ namespace WebApplication1.App_Start
             containerBuilder.RegisterType<UserService>().As<IUserService>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterType<MyHeartbeatEntityRepository>().AsSelf().As<HeartbeatEntityRepository>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterType<MyLogEntityRepository>().AsSelf().As<LogEntityRepository>().SingleInstance().PropertiesAutowired();
+            containerBuilder.RegisterType<MyGlobalVariableRepository>().AsSelf().As<GlobalVariableRepository>().SingleInstance().PropertiesAutowired();
             containerBuilder.RegisterAssemblyTypes(
                 typeof(MvcApplication).Assembly,
                 typeof(BaseController).Assembly).

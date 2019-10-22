@@ -1,0 +1,7 @@
+﻿/// <summary>
+/// 全局变量表
+/// </summary>
+public readonly DbSet<GlobalVariable> GlobalVariables;
+
+
+modelBuilder.Configurations.Add(new GlobalVariableMap());

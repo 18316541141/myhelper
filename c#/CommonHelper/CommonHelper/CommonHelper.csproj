@@ -151,6 +151,10 @@
     <Compile Include="CommonEntity\DistributedTransactionMain.cs" />
     <Compile Include="CommonEntity\DistributedTransactionMainDetail.cs" />
     <Compile Include="CommonEntity\DistributedTransactionPart.cs" />
+    <Compile Include="CommonEntity\GlobalVariable.cs" />
+    <Compile Include="CommonEntity\GlobalVariableOrderBy.cs" />
+    <Compile Include="CommonEntity\GlobalVariableParams.cs" />
+    <Compile Include="CommonEntity\GlobalVariableSetNullParams.cs" />
     <Compile Include="CommonEntity\HeartbeatEntity.cs" />
     <Compile Include="CommonEntity\HeartbeatEntityOrderBy.cs" />
     <Compile Include="CommonEntity\HeartbeatEntityParams.cs" />
@@ -175,10 +179,12 @@
     <Compile Include="EFMap\DistributedTransactionMainDetailMap.cs" />
     <Compile Include="EFMap\DistributedTransactionMainMap.cs" />
     <Compile Include="EFMap\DistributedTransactionPartMap.cs" />
+    <Compile Include="EFMap\GlobalVariableMap.cs" />
     <Compile Include="EFMap\HeartbeatEntityMap.cs" />
     <Compile Include="EFMap\LogEntityMap.cs" />
     <Compile Include="EFRepository\BaseMemoryRepository.cs" />
     <Compile Include="EFRepository\BaseRepository.cs" />
+    <Compile Include="EFRepository\GlobalVariableRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
     <Compile Include="Helper\NumToChinese.cs" />
     <Compile Include="Helper\RelationDataHelper.cs" />

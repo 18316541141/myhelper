@@ -16,6 +16,7 @@ namespace WebApplication1.Mapping
             HasKey(u => u.$entity.KeyName$);
             Property(u => u.$entity.KeyName$).HasColumnName("$entity.KeyCol$").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 		$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+
 			Property(u => u.$it.PropName$).HasColumnName("$it.ColName$");
 		$endif$$endif$}$
         }

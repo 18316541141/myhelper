@@ -9,6 +9,8 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using WebApplication1.Entity;
+using WebApplication1.Mapping;
 
 namespace CommonHelper.Helper.EFDbContext
 {
@@ -53,6 +55,11 @@ namespace CommonHelper.Helper.EFDbContext
         public readonly DbSet<DistributedTransactionPart> DistributedTransactionParts;
 
         /// <summary>
+        /// 全局变量表
+        /// </summary>
+        public readonly DbSet<GlobalVariable> GlobalVariables;
+
+        /// <summary>
         /// 日志表
         /// </summary>
         public readonly DbSet<LogEntity> LogEntities;
@@ -68,6 +75,7 @@ namespace CommonHelper.Helper.EFDbContext
             modelBuilder.Configurations.Add(new DistributedDataSrcMap());
             modelBuilder.Configurations.Add(new LogEntityMap());
             modelBuilder.Configurations.Add(new HeartbeatEntityMap());
+            modelBuilder.Configurations.Add(new GlobalVariableMap());
             base.OnModelCreating(modelBuilder);
         }
     }

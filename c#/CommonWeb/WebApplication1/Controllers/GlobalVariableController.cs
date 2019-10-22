@@ -1,38 +1,76 @@
-﻿using System;
+﻿using CommonHelper.Helper.CommonEntity;
+using CommonWeb.Controllers.Common;
+using CommonWeb.Filter.Common;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+using System.Web.Mvc;
 using WebApplication1.Entity;
+using WebApplication1.Service;
 namespace WebApplication1.Controllers
 {
-	/// <summary>
-	/// ***模块的控制器类
-	/// </summary>
-    public partial class $entity.EntityName$Controller : BaseController
+    /// <summary>
+    /// “全局变量”模块的控制器类
+    /// </summary>
+    public partial class GlobalVariableController : BaseController
     {
-		public $entity.EntityName$Service Service { set; get; }
+        public GlobalVariableService Service { set; get; }
 
-		/*抄考代码
+        /// <summary>
+        /// 获取所有的全局变量
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult ShowAllGlobalVariable()
+        {
+            return MyJson(new Result
+            {
+                code = 0,
+                data = Service.ShowAllGlobalVariable()
+            });
+        }
+
+        /// <summary>
+        /// 保存所有的全局变量
+        /// </summary>
+        /// <param name="globalVariableList">全局变量数据</param>
+        /// <returns></returns>
+        [OperInterval(IntervalMillisecond = 60000)]
+        public JsonResult SaveAllGlobalVariable(List<GlobalVariable> globalVariableList)
+        {
+            Service.SaveAllGlobalVariable(globalVariableList);
+            return MyJson(new Result
+            {
+                code = 0,
+                msg = "保存成功"
+            });
+        }
+
+        /*抄考代码
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$ data = new $entity.EntityName$
+		GlobalVariable data = new GlobalVariable
 		{
-	$entity.PropList:{
-		$if(it.ParamsTypeIsEqual)$
-			$if(it.IsKey)$
-				$it.PropName$ = Next(),
-			$else$
-				$it.PropName$ = param.$it.PropName$,
-			$endif$
-		$endif$
-	}$
+
+					Id = Next(),
+		
+					VarName = param.VarName,
+		
+		
+					VarValue = param.VarValue,
+		
+		
 		};
 ----------------------------------------------------------------------------------------------------------------------------
-		$entity.EntityName$Params param = new $entity.EntityName$Params
+		GlobalVariableParams param = new GlobalVariableParams
 		{
-	$entity.PropList:{
-		$it.PropName$ = param.$it.PropName$,
-	}$
+
+			Id = param.Id,
+		
+			VarName = param.VarName,
+		
+			VarNameLike = param.VarNameLike,
+		
+			VarValue = param.VarValue,
+		
+			VarValueLike = param.VarValueLike,
+		
 		};
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -43,7 +81,7 @@ namespace WebApplication1.Controllers
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
 		[Compress]
-		public JsonResult Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
+		public JsonResult Page(GlobalVariableParams param,int currentPageIndex = 1,int pageSize = 20)
 		{
 			return MyJson(new Result{code = 0, data = Service.Page(param, currentPageIndex, pageSize)});
 		}
@@ -58,9 +96,9 @@ namespace WebApplication1.Controllers
         /// <returns>返回***模块的导出结果</returns>
 		[OperInterval(IntervalMillisecond=10000)]
 		[Compress]
-		public ExcelResult<$entity.EntityName$> Export($entity.EntityName$Params param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
+		public ExcelResult<GlobalVariable> Export(GlobalVariableParams param, string excelType, int currentPageIndex = 1, int pageSize = 10000)
 		{
-			return new ExcelResult<$entity.EntityName$>
+			return new ExcelResult<GlobalVariable>
 			{
 				DataList = Service.Page(param, currentPageIndex, pageSize).pageDataList,
 				FileName = "测试excel."+excelType
@@ -76,26 +114,26 @@ namespace WebApplication1.Controllers
         /// <returns>返回***模块的导出结果</returns>
 		public JsonResult Import(HttpPostedFileBase fileUpload, 其他参数...)
 		{
-			List<$entity.EntityName$> $entity.EntityName$List;
+			List<GlobalVariable> GlobalVariableList;
             if (fileUpload.FileName.EndsWith("xlsx"))
             {
-                $entity.EntityName$List = ExcelHelper.ExcelXlsxToList<$entity.EntityName$>(fileUpload.InputStream);
+                GlobalVariableList = ExcelHelper.ExcelXlsxToList<GlobalVariable>(fileUpload.InputStream);
             }
             else if (fileUpload.FileName.EndsWith("xls"))
             {
-                $entity.EntityName$List = ExcelHelper.ExcelXlsToList<$entity.EntityName$>(fileUpload.InputStream);
+                GlobalVariableList = ExcelHelper.ExcelXlsToList<GlobalVariable>(fileUpload.InputStream);
             }
-			Service.AddBatch($entity.EntityName$List);
+			Service.AddBatch(GlobalVariableList);
 			return MyJson(new Result { code = 0, msg = "导入成功。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 根据主键删除指定数据
         /// </summary>
-        /// <param name="$entity.KeyName$">删除数据的主键</param>
-		public JsonResult Del(long $entity.KeyName$)
+        /// <param name="Id">删除数据的主键</param>
+		public JsonResult Del(long Id)
 		{
-            Service.Del($entity.KeyName$);
+            Service.Del(Id);
 			return MyJson(new Result { code = 0, msg = "数据已删除。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
@@ -103,7 +141,7 @@ namespace WebApplication1.Controllers
         /// 新增一条数据
         /// </summary>
         /// <param name="data">新增的数据</param>
-		public JsonResult Add($entity.EntityName$ data)
+		public JsonResult Add(GlobalVariable data)
 		{
 			Service.Add(data);
 			return MyJson(new Result { code = 0, msg = "保存成功。"});
@@ -113,28 +151,28 @@ namespace WebApplication1.Controllers
         /// 批量修改状态
         /// </summary>
         /// <param name="datas">修改状态的数据</param>
-		public JsonResult ChangeStatus($entity.EntityName$ datas)
+		public JsonResult ChangeStatus(GlobalVariable datas)
 		{
-			return MyJson(new Result { code = 0,msg=\$"修改成功，共{Service.ChangeStatus(datas)}条。"});
+			return MyJson(new Result { code = 0,msg=$"修改成功，共{Service.ChangeStatus(datas)}条。"});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 根据主键id查询***模块的数据实体
         /// </summary>
-        /// <param name="$entity.KeyName$">主键id</param>
+        /// <param name="Id">主键id</param>
 		/// <returns>返回***模块的查询结果</returns>
-		public JsonResult Load(long $entity.KeyName$)
+		public JsonResult Load(long Id)
 		{
-			return MyJson(new Result { code = 0, data = Service.Load($entity.KeyName$) });
+			return MyJson(new Result { code = 0, data = Service.Load(Id) });
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
         /// 批量删除数据
         /// </summary>
         /// <param name="datas">批量删除的数据</param>
-		public JsonResult DelBatch(List<$entity.EntityName$> datas)
+		public JsonResult DelBatch(List<GlobalVariable> datas)
 		{
-			return MyJson(new Result { code = 0 ,msg = \$"删除成功，共{Service.DelBatch(datas)}条。" });
+			return MyJson(new Result { code = 0 ,msg = $"删除成功，共{Service.DelBatch(datas)}条。" });
 		}
 		*/
     }

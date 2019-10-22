@@ -249,6 +249,7 @@
     </Compile>
     <Compile Include="EFDbContext\MyDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\MyGlobalVariableRepository.cs" />
     <Compile Include="Repository\MyHeartbeatEntityRepository.cs" />
     <Compile Include="Repository\MyLogEntityRepository.cs" />
     <Compile Include="Service References\ServiceReference1\Reference.cs">
@@ -1842,7 +1843,7 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
-	<TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
+    <TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
   </Target>
   <Target Name="AfterBuild">
   </Target>

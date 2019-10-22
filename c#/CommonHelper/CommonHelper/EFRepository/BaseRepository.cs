@@ -201,6 +201,22 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
+        /// 删除整张表的数据，慎用。
+        /// </summary>
+        /// <returns>返回删除数量</returns>
+        public virtual int DeleteAll()
+        {
+            using (DbContext dbContext = CreateDbContext())
+            {
+                foreach (TEntity entity in dbContext.Set<TEntity>().AsNoTracking().ToList())
+                {
+                    dbContext.Entry(entity).State = EntityState.Deleted;
+                }
+                return dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// 删除一个对象
         /// </summary>
         /// <param name="entity">对象实体</param>
@@ -394,7 +410,7 @@ namespace CommonHelper.Helper.EFRepository
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate = null)
+        public List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate)
         {
             using (DbContext dbContext = CreateDbContext())
             {
@@ -529,12 +545,24 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
+        /// 不加任何条件，查询所有数据
+        /// </summary>
+        /// <returns>返回所有数据</returns>
+        public List<TEntity> FindAllList()
+        {
+            using (DbContext dbContext = CreateDbContext())
+            {
+                return dbContext.Set<TEntity>().AsNoTracking().ToList();
+            }
+        }
+
+        /// <summary>
         /// 查询符合查询条件的数据，数据不宜过大，如果数据过大建议使用分页查询
         /// </summary>
         /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
         /// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回符合查询条件的数</returns>
-        public List<TEntity> FindList(TParams eqArgs = null, TParams neqArgs = null)
+        public List<TEntity> FindList(TParams eqArgs, TParams neqArgs = null)
         {
             using (DbContext dbContext = CreateDbContext())
             {

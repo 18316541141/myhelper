@@ -46,9 +46,17 @@ namespace WebApplication1.Service
             });
             sysMenu.LeftMenus.Add(new LeftMenu
             {
+                Name = "globalVariable",
+                Title = "全局变量",
+                SortIndex = 2,
+                //Url = "menus/system/heartbeatEntity.html"
+                Url = "/static/common/system/globalVariable.html"
+            });
+            sysMenu.LeftMenus.Add(new LeftMenu
+            {
                 Name = "test",
                 Title = "测试节点",
-                SortIndex = 2,
+                SortIndex = 3,
                 //Url = "menus/system/heartbeatEntity.html"
                 Url = "/static/menus/test.html"
             });

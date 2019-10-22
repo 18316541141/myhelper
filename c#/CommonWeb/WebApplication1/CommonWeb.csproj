@@ -223,6 +223,7 @@
     <Compile Include="Controllers\Common\FastController.cs" />
     <Compile Include="Controllers\Common\IndexController.cs" />
     <Compile Include="Controllers\Common\WeixinController.cs" />
+    <Compile Include="Controllers\GlobalVariableController.cs" />
     <Compile Include="Controllers\HeartbeatEntityController.cs" />
     <Compile Include="Controllers\Common\SessionController.cs" />
     <Compile Include="Controllers\LogEntityController.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Repository\codeGenerator\LogEntityRepository.cs" />
     <Compile Include="Service\Common\BaseService.cs" />
     <Compile Include="Entity\Common\MyLog.cs" />
+    <Compile Include="Service\GlobalVariableService.cs" />
     <Compile Include="Service\HeartbeatEntityService.cs" />
     <Compile Include="Service\LogEntityService.cs" />
   </ItemGroup>
