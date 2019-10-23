@@ -20,6 +20,10 @@ namespace WebApplication1.Entity
 			/// </summary>
 			public bool VarSortIndex { set; get; }
 			/// <summary>
+			/// 变量备注
+			/// </summary>
+			public bool VarRemark { set; get; }
+			/// <summary>
 			/// 变量名称
 			/// </summary>
 			public bool VarName { set; get; }

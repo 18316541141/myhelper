@@ -45,6 +45,18 @@ namespace WebApplication1.Params
 
 
         /// <summary>
+        /// 变量备注
+        /// </summary>
+        public string VarRemark { set; get; }
+
+
+        /// <summary>
+        /// 变量备注
+        /// </summary>
+        public string VarRemarkLike { set; get; }
+
+
+        /// <summary>
         /// 变量名称
         /// </summary>
         public string VarName { set; get; }

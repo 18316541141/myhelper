@@ -53,6 +53,15 @@ namespace WebApplication1.Repository
                 {
                     query = query.Where(a => a.VarSortIndex <= eqArgs.VarSortIndexEnd);
                 }
+                if (eqArgs.VarRemark != null)
+                {
+                    query = query.Where(a => a.VarRemark == eqArgs.VarRemark);
+                }
+
+                if (!string.IsNullOrEmpty(eqArgs.VarRemarkLike))
+                {
+                    query = query.Where(a => a.VarRemark.Contains(eqArgs.VarRemarkLike));
+                }
                 if (eqArgs.VarName != null)
                 {
                     query = query.Where(a => a.VarName == eqArgs.VarName);
@@ -86,6 +95,15 @@ namespace WebApplication1.Repository
                     query = query.Where(a => a.VarSortIndex != neqArgs.VarSortIndex);
                 }
 
+                if (neqArgs.VarRemark != null)
+                {
+                    query = query.Where(a => a.VarRemark != neqArgs.VarRemark);
+                }
+
+                if (!string.IsNullOrEmpty(neqArgs.VarRemarkLike))
+                {
+                    query = query.Where(a => !a.VarRemark.Contains(neqArgs.VarRemarkLike));
+                }
                 if (neqArgs.VarName != null)
                 {
                     query = query.Where(a => a.VarName != neqArgs.VarName);
@@ -125,6 +143,8 @@ namespace WebApplication1.Repository
                 else
                 if (orderBy.VarSortIndex) { return query = query.OrderBy(a => a.VarSortIndex); }
                 else
+                if (orderBy.VarRemark) { return query = query.OrderBy(a => a.VarRemark); }
+                else
                 if (orderBy.VarName) { return query = query.OrderBy(a => a.VarName); }
                 else
                 if (orderBy.VarValue) { return query = query.OrderBy(a => a.VarValue); }
@@ -136,6 +156,8 @@ namespace WebApplication1.Repository
                 if (orderBy.Id) { return query = query.OrderByDescending(a => a.Id); }
                 else
                 if (orderBy.VarSortIndex) { return query = query.OrderByDescending(a => a.VarSortIndex); }
+                else
+                if (orderBy.VarRemark) { return query = query.OrderByDescending(a => a.VarRemark); }
                 else
                 if (orderBy.VarName) { return query = query.OrderByDescending(a => a.VarName); }
                 else
@@ -164,6 +186,10 @@ namespace WebApplication1.Repository
             {
                 updateBefore.VarSortIndex = entity.VarSortIndex;
             }
+            if (entity.VarRemark != null)
+            {
+                updateBefore.VarRemark = entity.VarRemark;
+            }
             if (entity.VarName != null)
             {
                 updateBefore.VarName = entity.VarName;
@@ -186,6 +212,10 @@ namespace WebApplication1.Repository
             if (param.VarSortIndex)
             {
                 updateBefore.VarSortIndex = null;
+            }
+            if (param.VarRemark)
+            {
+                updateBefore.VarRemark = null;
             }
             if (param.VarName)
             {
@@ -252,6 +282,17 @@ namespace WebApplication1.Repository
                     disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.VarSortIndex) >= 0;
                     return disPageEntity;
                 }
+                if (orderBy.VarRemark)
+                {
+                    disPageEntity.OrderCol = a => a.VarRemark;
+                    disPageEntity.OrderColLazy = a => a.VarRemark;
+                    disPageEntity.OrderColAndKeyLazy = a => new GlobalVariable { Id = a.Id, VarRemark = a.VarRemark };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.VarRemark) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.VarRemark) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.VarRemark) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.VarRemark) >= 0;
+                    return disPageEntity;
+                }
                 if (orderBy.VarName)
                 {
                     disPageEntity.OrderCol = a => a.VarName;
@@ -301,6 +342,18 @@ namespace WebApplication1.Repository
                     disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.VarSortIndex) <= 0;
                     disPageEntity.LessThan = (val) => a => val.CompareTo(a.VarSortIndex) > 0;
                     disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.VarSortIndex) >= 0;
+                    return disPageEntity;
+                }
+                else
+                if (orderBy.VarRemark)
+                {
+                    disPageEntity.OrderCol = a => a.VarRemark;
+                    disPageEntity.OrderColLazy = a => a.VarRemark;
+                    disPageEntity.OrderColAndKeyLazy = a => new GlobalVariable { Id = a.Id, VarRemark = a.VarRemark };
+                    disPageEntity.GreatThan = (val) => a => val.CompareTo(a.VarRemark) < 0;
+                    disPageEntity.GreatEqThan = (val) => a => val.CompareTo(a.VarRemark) <= 0;
+                    disPageEntity.LessThan = (val) => a => val.CompareTo(a.VarRemark) > 0;
+                    disPageEntity.LessEqThan = (val) => a => val.CompareTo(a.VarRemark) >= 0;
                     return disPageEntity;
                 }
                 else

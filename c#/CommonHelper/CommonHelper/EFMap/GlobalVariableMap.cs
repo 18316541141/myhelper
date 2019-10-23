@@ -17,6 +17,7 @@ namespace WebApplication1.Mapping
             Property(u => u.Id).HasColumnName("ID").HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
 					Property(u => u.VarSortIndex).HasColumnName("VAR_SORT_INDEX");
+					Property(u => u.VarRemark).HasColumnName("VAR_REMARK");
 					Property(u => u.VarName).HasColumnName("VAR_NAME");
 					Property(u => u.VarValue).HasColumnName("VAR_VALUE");
         }

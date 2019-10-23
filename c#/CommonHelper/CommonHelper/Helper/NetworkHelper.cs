@@ -5,6 +5,7 @@ using System.Management;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CommonHelper.Helper
@@ -21,19 +22,23 @@ namespace CommonHelper.Helper
         public static string GetOuterNetIP()
         {
             using (var webClient = new WebClient())
-                try
+            {
+                while (true)
                 {
-                    webClient.Credentials = CredentialCache.DefaultCredentials;
-                    byte[] pageDate = webClient.DownloadData("http://pv.sohu.com/cityjson?ie=utf-8");
-                    String ip = Encoding.UTF8.GetString(pageDate);
-                    webClient.Dispose();
-                    Match rebool = Regex.Match(ip, @"\d{2,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}");
-                    return rebool.Value;
+                    try
+                    {
+                        string text = HttpWebRequestHelper.HttpGet("http://pv.sohu.com/cityjson?ie=utf-8").GetText();
+                        Match rebool = Regex.Match(text, @"\d{2,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}");
+                        return rebool.Value;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("获取本机的外网ip失败，5秒后重试...");
+                        Console.WriteLine(ex.StackTrace);
+                        Thread.Sleep(5000);
+                    }
                 }
-                catch (Exception e)
-                {
-                    return "";
-                }
+            }
         }
         /// <summary>  
         /// 获取本机MAC地址  

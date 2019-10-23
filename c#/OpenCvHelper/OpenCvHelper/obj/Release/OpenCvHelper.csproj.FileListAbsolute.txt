@@ -8,10 +8,10 @@ E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Emgu.CV.UI.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Emgu.CV.UI.GL.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Emgu.CV.World.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\ZedGraph.dll
+E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\EntityFramework.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Newtonsoft.Json.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\HtmlAgilityPack.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Snowflake.Net.dll
-E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\EntityFramework.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\zxing.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\NPOI.dll
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\NPOI.OOXML.dll
@@ -28,11 +28,11 @@ E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\CommonHelper.p
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Emgu.CV.UI.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Emgu.CV.UI.GL.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Emgu.CV.World.xml
+E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\EntityFramework.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Newtonsoft.Json.pdb
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\Newtonsoft.Json.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\HtmlAgilityPack.pdb
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\HtmlAgilityPack.xml
-E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\EntityFramework.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\zxing.pdb
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\zxing.xml
 E:\git_projects\myhelper\c#\OpenCvHelper\OpenCvHelper\bin\Release\WebDriver.xml

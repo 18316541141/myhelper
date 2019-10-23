@@ -27,6 +27,12 @@ namespace WebApplication1.Entity
         public virtual int? VarSortIndex { set; get; }
 
         /// <summary>
+        /// 变量备注
+        /// </summary>
+        [JsonProperty("varRemark")]
+        public virtual string VarRemark { set; get; }
+
+        /// <summary>
         /// 变量名称
         /// </summary>
         [JsonProperty("varName")]

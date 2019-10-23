@@ -50,4 +50,3 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Release\zh-CHS\Webdiye
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Release\zh-CHT\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Release\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Release\CommonHelper.pdb
-E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Release\CommonHelper.csprojResolveAssemblyReference.cache

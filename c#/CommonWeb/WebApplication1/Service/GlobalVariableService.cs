@@ -96,6 +96,10 @@ namespace WebApplication1.Service
                             Ret($"全局变量值不能大于50个字符！");
                         }
                     }
+                    if (!string.IsNullOrEmpty(globalVariable.VarRemark) && globalVariable.VarRemark.Length>200)
+                    {
+                        Ret($"全局变量备注不能大于200个字符！");
+                    }
                     nameSet.Add(globalVariable.VarName);
                 }
             }

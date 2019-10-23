@@ -6,7 +6,6 @@ using CommonHelper.Helper.CommonEntity;
 using CommonWeb.Intf;
 namespace WebApplication1.Service
 {
-
     public class UserService : IUserService
     {
         public bool CheckLogin(string username, string password)
