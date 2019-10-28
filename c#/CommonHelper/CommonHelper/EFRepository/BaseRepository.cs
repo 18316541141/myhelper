@@ -640,25 +640,6 @@ namespace CommonHelper.Helper.EFRepository
         /// <returns></returns>
         protected abstract DisPageEntity<TEntity> GetDisPageEntity(TParams paramz);
 
-
-        /// <summary>
-        /// 按特定查询条件查询出多个实体后，用序号获取实体类。
-        /// </summary>
-        /// <param name="entityIndex">实体类的索引位置</param>
-        /// <param name="eqArgs">等于条件</param>
-        /// <param name="neqArgs">不等条件</param>
-        /// <returns></returns>
-        public TEntity FindEntity(int entityIndex, TParams eqArgs, TParams neqArgs = null)
-        {
-            List<BaseDbContext> dbContexts = CreateAllDbContext();
-            using (DbContext dbContext = dbContexts[0])
-            {
-                IQueryable<TEntity> query = Query(dbContext.Set<TEntity>().AsNoTracking().AsQueryable(), eqArgs, neqArgs);
-                List<TEntity> entityList = query.Skip(entityIndex - 1).Take(1).ToList();
-                return entityList.Count==0?null: entityList[0];
-            }
-        }
-
         /// <summary>
         /// 普通的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
         /// </summary>
