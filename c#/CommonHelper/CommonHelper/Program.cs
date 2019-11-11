@@ -25,21 +25,29 @@ namespace PA_Robot
         static void Main()
         {
 
-            for (int i=0;i<100 ;i++)
+            new Thread(()=> 
             {
-                new Thread(() =>
-                {
-                    test();
-                }).Start();
-            }
+                test("lockA");
+            }).Start();
+            new Thread(() =>
+            {
+                test("lockA");
+            }).Start();
+            new Thread(() =>
+            {
+                test("lockB");
+            }).Start();
+            Console.ReadKey();
         }
-
-        private static void test()
+        static void test(string lockName)
         {
-            lock (typeof(Program))
+            lock (string.Intern(lockName))
             {
-                Thread.Sleep(int.MaxValue);
-                Console.WriteLine("据说锁很耗cpu？");
+                for (var i =0;i<5;i++)
+                {
+                    Console.WriteLine($"当前线程正在占用：{lockName}，线程号：{Thread.CurrentThread.ManagedThreadId}");
+                    Thread.Sleep(1000);
+                }
             }
         }
     }

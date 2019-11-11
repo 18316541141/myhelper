@@ -52,52 +52,44 @@ namespace CommonWeb.Service
         public void RecordHeartbeat(HeartbeatEntity param)
         {
             CheckRecordHeartbeat(param);
-            using (Mutex mutex = new Mutex(false, param.RobotMac))
+            lock(string.Intern(param.RobotMac))
             {
-                mutex.WaitOne();
-                try
+                HeartbeatEntity heartbeatEntity = Repository.FindEntity(a => a.RobotMac == param.RobotMac);
+                if (heartbeatEntity == null)
                 {
-                    HeartbeatEntity heartbeatEntity = Repository.FindEntity(a => a.RobotMac == param.RobotMac);
-                    if (heartbeatEntity == null)
+                    Repository.Insert(new HeartbeatEntity
                     {
-                        Repository.Insert(new HeartbeatEntity
-                        {
-                            Id = NextId(),
-                            LastHeartbeatTime = DateTime.Now,
-                            RobotMac = param.RobotMac,
-                            Remark = param.Remark,
-                            ExtendField = param.ExtendField,
-                            MonitorServer = param.MonitorServer
-                        });
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(param.Remark))
-                        {
-                            param.Remark = null;
-                        }
-                        if (string.IsNullOrEmpty(param.ExtendField))
-                        {
-                            param.ExtendField = null;
-                        }
-                        if (string.IsNullOrEmpty(param.MonitorServer))
-                        {
-                            param.MonitorServer = null;
-                        }
-                        Repository.UpdateChange(new HeartbeatEntity
-                        {
-                            Id = heartbeatEntity.Id,
-                            LastHeartbeatTime = DateTime.Now,
-                            RobotMac = param.RobotMac,
-                            Remark = param.Remark,
-                            ExtendField = param.ExtendField,
-                            MonitorServer = param.MonitorServer
-                        });
-                    }
+                        Id = NextId(),
+                        LastHeartbeatTime = DateTime.Now,
+                        RobotMac = param.RobotMac,
+                        Remark = param.Remark,
+                        ExtendField = param.ExtendField,
+                        MonitorServer = param.MonitorServer
+                    });
                 }
-                finally
+                else
                 {
-                    mutex.ReleaseMutex();
+                    if (string.IsNullOrEmpty(param.Remark))
+                    {
+                        param.Remark = null;
+                    }
+                    if (string.IsNullOrEmpty(param.ExtendField))
+                    {
+                        param.ExtendField = null;
+                    }
+                    if (string.IsNullOrEmpty(param.MonitorServer))
+                    {
+                        param.MonitorServer = null;
+                    }
+                    Repository.UpdateChange(new HeartbeatEntity
+                    {
+                        Id = heartbeatEntity.Id,
+                        LastHeartbeatTime = DateTime.Now,
+                        RobotMac = param.RobotMac,
+                        Remark = param.Remark,
+                        ExtendField = param.ExtendField,
+                        MonitorServer = param.MonitorServer
+                    });
                 }
             }
         }

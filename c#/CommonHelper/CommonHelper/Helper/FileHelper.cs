@@ -92,9 +92,8 @@ namespace CommonHelper.Helper
             {
                 SHA1 = EncryptHelper.GetSha1FromStream(guidStream);
             }
-            using (Mutex mutex = new Mutex(false, SHA1))
+            lock(string.Intern(SHA1))
             {
-                mutex.WaitOne();
                 if (File.Exists(basePath + Path.DirectorySeparatorChar + SHA1))
                 {
                     try
@@ -110,7 +109,6 @@ namespace CommonHelper.Helper
                 {
                     File.Move(basePath + Path.DirectorySeparatorChar + guid, basePath + Path.DirectorySeparatorChar + SHA1);
                 }
-                mutex.ReleaseMutex();
             }
             return SHA1;
         }

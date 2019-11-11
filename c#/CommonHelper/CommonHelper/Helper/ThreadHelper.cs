@@ -129,10 +129,9 @@ namespace CommonHelper.Helper
         public static bool CompareControllerVersion(string controllerName,string userVersion,out string newestVersion)
         {
             controllerName = controllerName + "Version";
-            using (Mutex mut = new Mutex(false, controllerName))
+            lock (string.Intern(controllerName)){
                 try
                 {
-                    mut.WaitOne();
                     if (_controllerVersionMap.ContainsKey(controllerName))
                     {
                         newestVersion = _controllerVersionMap[controllerName];
@@ -148,10 +147,7 @@ namespace CommonHelper.Helper
                 {
                     throw ex;
                 }
-                finally
-                {
-                    mut.ReleaseMutex();
-                }
+            }
         }
 
         /// <summary>
@@ -163,15 +159,13 @@ namespace CommonHelper.Helper
         public static string EditControllerVersion(string controllerName)
         {
             controllerName = controllerName + "Version";
-            using (Mutex mut = new Mutex(false, controllerName))
+            lock (string.Intern(controllerName))
             {
-                mut.WaitOne();
                 string newestVersion=Guid.NewGuid().ToString();
                 if (_controllerVersionMap.ContainsKey(controllerName))
                     _controllerVersionMap[controllerName] = newestVersion;
                 else
                     _controllerVersionMap.Add(controllerName, newestVersion);
-                mut.ReleaseMutex();
                 return newestVersion;
             }
         }
@@ -185,28 +179,24 @@ namespace CommonHelper.Helper
         {
             controllerName = controllerName + "Wait";
             AutoResetEvent autoResetEvent;
-            using (Mutex mut = new Mutex(false, controllerName))
+            lock (string.Intern(controllerName))
             {
-                mut.WaitOne();
                 if (!_waitMap.ContainsKey(controllerName)) {
                     lock(_waitMap)
                         _waitMap.Add(controllerName, new HashSet<AutoResetEvent>());
                 }
                 _waitMap[controllerName].Add(autoResetEvent = new AutoResetEvent(false));
-                mut.ReleaseMutex();
             }
             autoResetEvent.WaitOne(millisecondsTimeout);
 
             if (_waitMap.ContainsKey(controllerName))
             {
-                using (Mutex mut = new Mutex(false, controllerName))
+                lock (string.Intern(controllerName))
                 {
-                    mut.WaitOne();
                     if (_waitMap.ContainsKey(controllerName))
                     {
                         _waitMap[controllerName].Remove(autoResetEvent);
                     }
-                    mut.ReleaseMutex();
                 }
             }
             autoResetEvent.Dispose();
@@ -221,9 +211,8 @@ namespace CommonHelper.Helper
             controllerName = controllerName + "Wait";
             if (_waitMap.ContainsKey(controllerName))
             {
-                using (Mutex mut = new Mutex(false, controllerName))
+                lock (string.Intern(controllerName))
                 {
-                    mut.WaitOne();
                     if (_waitMap.ContainsKey(controllerName))
                     {
                         foreach (AutoResetEvent autoResetEvent in _waitMap[controllerName])
@@ -232,7 +221,6 @@ namespace CommonHelper.Helper
                         }
                         _waitMap.Remove(controllerName);
                     }
-                    mut.ReleaseMutex();
                 }
             }
         }
@@ -245,13 +233,13 @@ namespace CommonHelper.Helper
         public static void AddEditLockLimitDate(string key,string username)
         {
             if (_editLockMap.ContainsKey(key))
-                using (Mutex mut = new Mutex(false, key))
+            {
+                lock (string.Intern(key))
                 {
-                    mut.WaitOne();
                     if (_editLockMap.ContainsKey(key) && _editLockMap[key]?.Username==username)
                         _editLockMap[key].LimitDate.AddSeconds(5);
-                    mut.ReleaseMutex();
                 }
+            }
         }
 
         /// <summary>
@@ -263,34 +251,28 @@ namespace CommonHelper.Helper
         public static bool UserEditLock(string key,string editUsername, out string username)
         {
             UserEditLockVal val = new UserEditLockVal {Username= editUsername, LimitDate=DateTime.Now.AddSeconds(10) };
-            using (Mutex mut = new Mutex(false, key))
-                try
-                {
-                    mut.WaitOne();
-                    EnumerableHelper.DelEleFromMap(_editLockMap,(value)=> value.LimitDate < DateTime.Now);
-                    if (_editLockMap.ContainsKey(key))
-                        if (_editLockMap[key].Username!= editUsername && _editLockMap[key].LimitDate >= DateTime.Now)
-                        {
-                            username = _editLockMap[key].Username;
-                            return false;
-                        }
-                        else
-                        {
-                            username = null;
-                            _editLockMap[key]= val;
-                            return true;
-                        }
+            lock (string.Intern(key))
+            {
+                EnumerableHelper.DelEleFromMap(_editLockMap,(value)=> value.LimitDate < DateTime.Now);
+                if (_editLockMap.ContainsKey(key))
+                    if (_editLockMap[key].Username!= editUsername && _editLockMap[key].LimitDate >= DateTime.Now)
+                    {
+                        username = _editLockMap[key].Username;
+                        return false;
+                    }
                     else
                     {
                         username = null;
-                        _editLockMap.Add(key, val);
+                        _editLockMap[key]= val;
                         return true;
                     }
-                }
-                finally
+                else
                 {
-                    mut.ReleaseMutex();
+                    username = null;
+                    _editLockMap.Add(key, val);
+                    return true;
                 }
+            }
         }
         private class UserEditLockVal
         {
