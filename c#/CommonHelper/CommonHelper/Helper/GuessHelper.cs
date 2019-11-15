@@ -59,6 +59,52 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 推算18位带*号身份证是否可能存在
+        /// </summary>
+        /// <param name="idCard18"></param>
+        /// <param name="unknowChar"></param>
+        /// <returns></returns>
+        public static bool GuessIDCard18Exist(string idCard18, char unknowChar = '*')
+        {
+            List<string> allRet = new List<string>();
+            string prcAreaCode = idCard18.Substring(0, 6);
+            List<string> prcAreaCodeGuessList = _prcAreaCodeGuessList.ExcludeNoMatching(prcAreaCode, unknowChar);
+            if (prcAreaCodeGuessList.Count == 0) return false;
+            string year = idCard18.Substring(6, 4);
+            List<string> yearGuessList = _yearGuessList.ExcludeNoMatching(year, unknowChar);
+            if (yearGuessList.Count == 0) return false;
+            string monthDay = idCard18.Substring(10, 4);
+            List<string> monthDayGuessList = _monthDayGuessList.ExcludeNoMatching(monthDay, unknowChar);
+            if (monthDayGuessList.Count == 0) return false;
+            string seqNum = idCard18.Substring(14, 3);
+            List<string> seqNumGuessList = _seqNumGuessList.ExcludeNoMatching(seqNum, unknowChar);
+            if (seqNumGuessList.Count == 0) return false;
+            string checkCode = idCard18.Substring(17, 1);
+            List<string> checkCodeGuessList = _checkCodeGuessList.ExcludeNoMatching(checkCode, unknowChar);
+            if (checkCodeGuessList.Count == 0) return false;
+
+            List<string>[] guessLists = new List<string>[] { prcAreaCodeGuessList, yearGuessList, monthDayGuessList, seqNumGuessList, checkCodeGuessList };
+
+            int[] indexLens = new int[guessLists.Length];
+            for (int i = 0, len = guessLists.Length; i < len; i++)
+                indexLens[i] = guessLists[i].Count;
+
+            List<int[]> allCombineList = CombineHelper.AllCombineList(indexLens);
+            StringBuilder sb = new StringBuilder();
+            string ret;
+            foreach (int[] combineArray in allCombineList)
+            {
+                for (int i = 0, len = combineArray.Length; i < len; i++)
+                    sb.Append(guessLists[i][combineArray[i]]);
+                ret = sb.ToString();
+                if (CheckHelper.IdCard18CheckCode(ret))
+                    return true;
+                sb.Clear();
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 猜想含有*号的身份证号码的完整号码
         /// </summary>
         /// <param name="idCard18">18位身份证号</param>

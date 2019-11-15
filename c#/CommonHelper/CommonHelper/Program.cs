@@ -24,20 +24,8 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-
-            new Thread(()=> 
-            {
-                test("lockA");
-            }).Start();
-            new Thread(() =>
-            {
-                test("lockA");
-            }).Start();
-            new Thread(() =>
-            {
-                test("lockB");
-            }).Start();
-            Console.ReadKey();
+            bool ret = GuessHelper.GuessIDCard18Exist("************000000");
+            Console.WriteLine();
         }
         static void test(string lockName)
         {
