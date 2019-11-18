@@ -14,38 +14,19 @@ namespace CommonWeb.Filter.Common
     /// </summary>
     public class PeakClippingAttribute : ActionFilterAttribute
     {
-        /// <summary>
-        /// 最大同时处理的线程数
-        /// </summary>
-        static int MaxThreadCount { set; get; }
-
-        /// <summary>
-        /// 当前处理的线程数
-        /// </summary>
-        static int ExecuteCount;
-
-        /// <summary>
-        /// 等待池名称
-        /// </summary>
-        static string PoolName { set; get; }
+        static SameTimeOperLock _SameTimeOperLock { set; get; }
 
         static PeakClippingAttribute()
         {
-            MaxThreadCount = 4;
-            ExecuteCount = 0;
-            PoolName = Guid.NewGuid().ToString();
+
+            _SameTimeOperLock=new SameTimeOperLock(4);
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            Interlocked.Increment(ref ExecuteCount);
-            while (ExecuteCount > MaxThreadCount)
-            {
-                ThreadHelper.BatchWait(PoolName,int.MaxValue);
-            }
+            _SameTimeOperLock.LockOnMaxThread();
             base.OnActionExecuting(filterContext);
-            Interlocked.Decrement(ref ExecuteCount);
-            ThreadHelper.BatchSet(PoolName);
+            _SameTimeOperLock.UnLock();
         }
     }
 }

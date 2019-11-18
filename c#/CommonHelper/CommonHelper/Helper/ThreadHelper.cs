@@ -1,5 +1,6 @@
 ﻿using CommonHelper.Helper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -110,15 +111,16 @@ namespace CommonHelper.Helper
 
 
         static Dictionary<string, HashSet<AutoResetEvent>> _waitMap;
-        static Dictionary<string,string> _controllerVersionMap;
+        static Dictionary<string, string> _controllerVersionMap;
         static Dictionary<string, UserEditLockVal> _editLockMap;
 
         static ThreadHelper()
         {
             _waitMap = new Dictionary<string, HashSet<AutoResetEvent>>();
             _controllerVersionMap = new Dictionary<string, string>();
-            _editLockMap= new Dictionary<string, UserEditLockVal>();
+            _editLockMap = new Dictionary<string, UserEditLockVal>();
         }
+        
 
         /// <summary>
         /// 比较控制器的版本号，如果相同的则返回true，否则返回false，并返回最新版本号
@@ -126,10 +128,11 @@ namespace CommonHelper.Helper
         /// <param name="controllerName">控制器名称</param>
         /// <param name="userVersion">用户的版本号</param>
         /// <param name="newestVersion">这是一个返回值，不论版本号有没有变化，都返回最新版本号</param>
-        public static bool CompareControllerVersion(string controllerName,string userVersion,out string newestVersion)
+        public static bool CompareControllerVersion(string controllerName, string userVersion, out string newestVersion)
         {
             controllerName = controllerName + "Version";
-            lock (string.Intern(controllerName)){
+            lock (_controllerVersionMap)
+            {
                 try
                 {
                     if (_controllerVersionMap.ContainsKey(controllerName))
@@ -139,7 +142,7 @@ namespace CommonHelper.Helper
                     }
                     else
                     {
-                        _controllerVersionMap.Add(controllerName,newestVersion=Guid.NewGuid().ToString());
+                        _controllerVersionMap.Add(controllerName, newestVersion = Guid.NewGuid().ToString());
                         return false;
                     }
                 }
@@ -159,9 +162,9 @@ namespace CommonHelper.Helper
         public static string EditControllerVersion(string controllerName)
         {
             controllerName = controllerName + "Version";
-            lock (string.Intern(controllerName))
+            lock (_controllerVersionMap)
             {
-                string newestVersion=Guid.NewGuid().ToString();
+                string newestVersion = Guid.NewGuid().ToString();
                 if (_controllerVersionMap.ContainsKey(controllerName))
                     _controllerVersionMap[controllerName] = newestVersion;
                 else
@@ -175,23 +178,25 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="controllerName">等待的控制器名称</param>
         /// <param name="waitSeconds">等待秒数</param>
-        public static void BatchWait(string controllerName, int millisecondsTimeout)
+        public static void BatchWait(string controllerName, int millisecondsTimeout = -1)
         {
             controllerName = controllerName + "Wait";
             AutoResetEvent autoResetEvent;
-            lock (string.Intern(controllerName))
+            lock (_waitMap)
             {
-                if (!_waitMap.ContainsKey(controllerName)) {
-                    lock(_waitMap)
+                if (!_waitMap.ContainsKey(controllerName))
+                {
+                    lock (_waitMap)
+                    {
                         _waitMap.Add(controllerName, new HashSet<AutoResetEvent>());
+                    }
                 }
                 _waitMap[controllerName].Add(autoResetEvent = new AutoResetEvent(false));
             }
             autoResetEvent.WaitOne(millisecondsTimeout);
-
             if (_waitMap.ContainsKey(controllerName))
             {
-                lock (string.Intern(controllerName))
+                lock (_waitMap)
                 {
                     if (_waitMap.ContainsKey(controllerName))
                     {
@@ -211,7 +216,7 @@ namespace CommonHelper.Helper
             controllerName = controllerName + "Wait";
             if (_waitMap.ContainsKey(controllerName))
             {
-                lock (string.Intern(controllerName))
+                lock (_waitMap)
                 {
                     if (_waitMap.ContainsKey(controllerName))
                     {
@@ -230,13 +235,13 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="key">延长的key值</param>
         /// <param name="username">延长的用户</param>
-        public static void AddEditLockLimitDate(string key,string username)
+        public static void AddEditLockLimitDate(string key, string username)
         {
             if (_editLockMap.ContainsKey(key))
             {
-                lock (string.Intern(key))
+                lock (_editLockMap)
                 {
-                    if (_editLockMap.ContainsKey(key) && _editLockMap[key]?.Username==username)
+                    if (_editLockMap.ContainsKey(key) && _editLockMap[key]?.Username == username)
                         _editLockMap[key].LimitDate.AddSeconds(5);
                 }
             }
@@ -248,14 +253,15 @@ namespace CommonHelper.Helper
         /// <param name="key">数据主键</param>
         /// <param name="editUsername">想要修改该数据的用户</param>
         /// <param name="username">输出占用的用户名</param>
-        public static bool UserEditLock(string key,string editUsername, out string username)
+        public static bool UserEditLock(string key, string editUsername, out string username)
         {
-            UserEditLockVal val = new UserEditLockVal {Username= editUsername, LimitDate=DateTime.Now.AddSeconds(10) };
-            lock (string.Intern(key))
+            UserEditLockVal val = new UserEditLockVal { Username = editUsername, LimitDate = DateTime.Now.AddSeconds(10) };
+            lock (_editLockMap)
             {
-                EnumerableHelper.DelEleFromMap(_editLockMap,(value)=> value.LimitDate < DateTime.Now);
+                EnumerableHelper.DelEleFromMap(_editLockMap, (value) => value.LimitDate < DateTime.Now);
                 if (_editLockMap.ContainsKey(key))
-                    if (_editLockMap[key].Username!= editUsername && _editLockMap[key].LimitDate >= DateTime.Now)
+                {
+                    if (_editLockMap[key].Username != editUsername && _editLockMap[key].LimitDate >= DateTime.Now)
                     {
                         username = _editLockMap[key].Username;
                         return false;
@@ -263,9 +269,10 @@ namespace CommonHelper.Helper
                     else
                     {
                         username = null;
-                        _editLockMap[key]= val;
+                        _editLockMap[key] = val;
                         return true;
                     }
+                }
                 else
                 {
                     username = null;
@@ -274,6 +281,10 @@ namespace CommonHelper.Helper
                 }
             }
         }
+
+        /// <summary>
+        /// 多用户修改同一个界面时的锁对象
+        /// </summary>
         private class UserEditLockVal
         {
             public string Username { set; get; }

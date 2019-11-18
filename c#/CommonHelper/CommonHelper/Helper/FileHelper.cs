@@ -11,6 +11,13 @@ namespace CommonHelper.Helper
     /// </summary>
     public static class FileHelper
     {
+        static object lockObj { set; get; }
+
+        static FileHelper()
+        {
+            lockObj = new object();
+        }
+
         /// <summary>
         /// 文件分级保存，如果文件夹中有大量文件，会影响读文件的速度，
         /// 所以需要对文件进行分组保存，默认情况下只有一级，
@@ -92,7 +99,7 @@ namespace CommonHelper.Helper
             {
                 SHA1 = EncryptHelper.GetSha1FromStream(guidStream);
             }
-            lock(string.Intern(SHA1))
+            lock(lockObj)
             {
                 if (File.Exists(basePath + Path.DirectorySeparatorChar + SHA1))
                 {
