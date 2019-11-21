@@ -145,9 +145,18 @@ namespace CommonHelper.Helper
 
             public static void HttpGet(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, CookieContainer CookieContainer = null)
             {
-                Interlocked.Increment(ref _executeCount);
-                while (_executeCount > MaxExecuteCount)
+                while (true)
+                {
+                    lock (_controllerName)
+                    {
+                        if (_executeCount < MaxExecuteCount)
+                        {
+                            _executeCount++;
+                            break;
+                        }
+                    }
                     ThreadHelper.BatchWait(_controllerName, 30000);
+                }
                 ThreadPool.QueueUserWorkItem((obj) => {
                     try
                     {
@@ -157,16 +166,28 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                    Interlocked.Decrement(ref _executeCount);
-                    ThreadHelper.BatchSet(_controllerName);
+                    lock (_controllerName)
+                    {
+                        _executeCount--;
+                    }
+                    ThreadHelper.RandomSetOne(_controllerName);
                 });
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, Dictionary<string, dynamic> Param, CookieContainer CookieContainer = null)
             {
-                Interlocked.Increment(ref _executeCount);
-                while (_executeCount > MaxExecuteCount)
-                    ThreadHelper.BatchWait(_controllerName,30000);
+                while (true)
+                {
+                    lock (_controllerName)
+                    {
+                        if (_executeCount < MaxExecuteCount)
+                        {
+                            _executeCount++;
+                            break;
+                        }
+                    }
+                    ThreadHelper.BatchWait(_controllerName, 30000);
+                }
                 ThreadPool.QueueUserWorkItem((obj)=> {
                     try
                     {
@@ -176,16 +197,28 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                Interlocked.Decrement(ref _executeCount);
-                    ThreadHelper.BatchSet(_controllerName);
+                    lock (_controllerName)
+                    {
+                        _executeCount--;
+                    }
+                    ThreadHelper.RandomSetOne(_controllerName);
                 });
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, Dictionary<string, string> Param, CookieContainer CookieContainer = null)
             {
-                Interlocked.Increment(ref _executeCount);
-                while (_executeCount > MaxExecuteCount)
+                while (true)
+                {
+                    lock (_controllerName)
+                    {
+                        if (_executeCount < MaxExecuteCount)
+                        {
+                            _executeCount++;
+                            break;
+                        }
+                    }
                     ThreadHelper.BatchWait(_controllerName, 30000);
+                }
                 ThreadPool.QueueUserWorkItem((obj) => {
                     try
                     {
@@ -195,16 +228,28 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                Interlocked.Decrement(ref _executeCount);
-                    ThreadHelper.BatchSet(_controllerName);
+                    lock (_controllerName)
+                    {
+                        _executeCount--;
+                    }
+                    ThreadHelper.RandomSetOne(_controllerName);
                 });
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, string Body, CookieContainer CookieContainer = null)
             {
-                Interlocked.Increment(ref _executeCount);
-                while (_executeCount > MaxExecuteCount)
+                while (true)
+                {
+                    lock (_controllerName)
+                    {
+                        if (_executeCount < MaxExecuteCount)
+                        {
+                            _executeCount++;
+                            break;
+                        }
+                    }
                     ThreadHelper.BatchWait(_controllerName, 30000);
+                }
                 ThreadPool.QueueUserWorkItem((obj) => {
                     try
                     {
@@ -214,8 +259,11 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                    Interlocked.Decrement(ref _executeCount);
-                    ThreadHelper.BatchSet(_controllerName);
+                    lock (_controllerName)
+                    {
+                        _executeCount--;
+                    }
+                    ThreadHelper.RandomSetOne(_controllerName);
                 });
             }
         }

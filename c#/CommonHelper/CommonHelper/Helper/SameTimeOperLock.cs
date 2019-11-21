@@ -43,9 +43,16 @@ namespace CommonHelper.Helper
         /// </summary>
         public void LockOnMaxThread()
         {
-            Interlocked.Increment(ref _ExecuteCount);
-            while (_ExecuteCount > _MaxThreadCount)
+            while (true)
             {
+                lock (_PoolName)
+                {
+                    if(_ExecuteCount < _MaxThreadCount)
+                    {
+                        _ExecuteCount++;
+                        break;
+                    }
+                }
                 ThreadHelper.BatchWait(_PoolName);
             }
         }
@@ -55,8 +62,11 @@ namespace CommonHelper.Helper
         /// </summary>
         public void UnLock()
         {
-            Interlocked.Decrement(ref _ExecuteCount);
-            ThreadHelper.BatchSet(_PoolName);
+            lock (_PoolName)
+            {
+                _ExecuteCount--;
+            }
+            ThreadHelper.RandomSetOne(_PoolName);
         }
     }
 }

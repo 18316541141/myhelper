@@ -37,7 +37,8 @@ namespace CommonHelper.Helper
             object temp;
             lock (_LockMap)
             {
-                if ((DateTime.Now - _LastClearDateTime).TotalMinutes > clearBeforeMinutes)
+                DateTime now;
+                if (((now = DateTime.Now) - _LastClearDateTime).TotalMinutes > clearBeforeMinutes)
                 {
                     List<string> keys =_LockMap.Keys.ToList();
                     foreach (string key in keys)
@@ -49,6 +50,7 @@ namespace CommonHelper.Helper
                             Monitor.Exit(temp);
                         }
                     }
+                    _LastClearDateTime = now;
                 }
                 if (_LockMap.ContainsKey(lockString))
                 {

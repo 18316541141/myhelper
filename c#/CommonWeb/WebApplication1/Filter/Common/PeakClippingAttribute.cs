@@ -18,7 +18,6 @@ namespace CommonWeb.Filter.Common
 
         static PeakClippingAttribute()
         {
-
             _SameTimeOperLock=new SameTimeOperLock(4);
         }
 

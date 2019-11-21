@@ -110,15 +110,16 @@ namespace CommonHelper.Helper
         }
 
 
-        static Dictionary<string, HashSet<AutoResetEvent>> _waitMap;
+        static Dictionary<string, List<AutoResetEvent>> _waitMap;
         static Dictionary<string, string> _controllerVersionMap;
         static Dictionary<string, UserEditLockVal> _editLockMap;
 
         static ThreadHelper()
         {
-            _waitMap = new Dictionary<string, HashSet<AutoResetEvent>>();
+            _waitMap = new Dictionary<string, List<AutoResetEvent>>();
             _controllerVersionMap = new Dictionary<string, string>();
             _editLockMap = new Dictionary<string, UserEditLockVal>();
+            _RandomIndex = new Random();
         }
         
 
@@ -188,7 +189,7 @@ namespace CommonHelper.Helper
                 {
                     lock (_waitMap)
                     {
-                        _waitMap.Add(controllerName, new HashSet<AutoResetEvent>());
+                        _waitMap.Add(controllerName, new List<AutoResetEvent>());
                     }
                 }
                 _waitMap[controllerName].Add(autoResetEvent = new AutoResetEvent(false));
@@ -205,6 +206,33 @@ namespace CommonHelper.Helper
                 }
             }
             autoResetEvent.Dispose();
+        }
+
+        /// <summary>
+        /// 随机下标
+        /// </summary>
+        static Random _RandomIndex { set; get; }
+
+        /// <summary>
+        /// 随机唤醒一个线程
+        /// </summary>
+        /// <param name="controllerName"></param>
+        public static void RandomSetOne(string controllerName)
+        {
+            controllerName = controllerName + "Wait";
+            if (_waitMap.ContainsKey(controllerName))
+            {
+                lock (_waitMap)
+                {
+                    if (_waitMap.ContainsKey(controllerName))
+                    {
+                        List<AutoResetEvent> autoResetEventList = _waitMap[controllerName];
+                        int removeIndex = _RandomIndex.Next(0, autoResetEventList.Count - 1);
+                        autoResetEventList[removeIndex].Set();
+                        autoResetEventList.RemoveAt(removeIndex);
+                    }
+                }
+            }
         }
 
         /// <summary>

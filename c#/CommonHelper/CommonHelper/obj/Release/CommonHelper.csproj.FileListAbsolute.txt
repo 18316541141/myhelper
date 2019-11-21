@@ -48,5 +48,6 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Release\zxing.presenta
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Release\System.Web.Mvc.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Release\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Release\zh-CHT\Webdiyer.MvcPager.resources.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Release\CommonHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Release\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Release\CommonHelper.pdb
