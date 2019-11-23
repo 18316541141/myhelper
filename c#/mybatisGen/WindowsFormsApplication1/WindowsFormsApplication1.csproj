@@ -80,6 +80,7 @@
     </None>
     <Compile Include="DbTypeTrans\MySqlToCSharpTrans.cs" />
     <Compile Include="Entity\KeyAttr.cs" />
+    <Compile Include="NameTrans\RobotNameCSharpTrans2.cs" />
     <Compile Include="NameTrans\RobotNameJavaTrans.cs" />
     <Compile Include="DbTypeTrans\SqlServerToJavaTrans.cs" />
     <None Include="AllTemplate\EFInverseRepository">

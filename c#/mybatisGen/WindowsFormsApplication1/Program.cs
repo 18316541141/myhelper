@@ -22,7 +22,7 @@ namespace WindowsFormsApplication1
             //Data Source = 183.2.233.235; Initial Catalog = BusinessAssistantDB_Test; User ID = BusinessHeplerTestManager; Password = BusinessHeplerTestManager123; MultipleActiveResultSets = True
             GenEntityService genEntityService = new GenEntityService
             {
-                NameTrans = new RobotNameCSharpTrans(),
+                NameTrans = new RobotNameCSharpTrans2(),
                 DbTypeTrans = new SqlServerToCSharpTrans(),
                 //DbTypeTrans = new SqliteToCSharpTrans(),
                 SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
@@ -30,7 +30,7 @@ namespace WindowsFormsApplication1
                 //server=localhost;Database=database01;UID=root;PWD=;SslMode=none
                 //SqlInfo = new MySqlInfo("localhost", "database01", "root","",3306)
             };
-            Entity entity = genEntityService.GenTemplateEntity("global_variable");
+            Entity entity = genEntityService.GenTemplateEntity("IRobot_RobotManager");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
             //entityTemplateToCode.MyBatisCode(entity);
