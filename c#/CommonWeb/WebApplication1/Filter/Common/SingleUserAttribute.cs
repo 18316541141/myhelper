@@ -34,7 +34,7 @@ namespace CommonWeb.Filter.Common
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-#if debugger
+#if DEBUG
 #else
             HttpContextBase httpContextBase = filterContext.HttpContext;
             if (!IgnoreRequests.Contains(httpContextBase.Request.Url.AbsolutePath.ToLower()))

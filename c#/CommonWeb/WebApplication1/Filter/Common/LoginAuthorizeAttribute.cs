@@ -47,7 +47,7 @@ namespace CommonWeb.Filter.Common
         /// <returns>如果已登录返回true，否则返回false</returns>
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-#if debugger
+#if DEBUG
             string username = WebConfigurationManager.AppSettings["testUser"];
             HttpSessionStateBase Session = httpContext.Session;
             FormsAuthentication.SetAuthCookie(username, false);

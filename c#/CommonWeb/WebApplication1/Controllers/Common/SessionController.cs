@@ -88,7 +88,7 @@ namespace WebApplication1.Controllers.Common
         {
             try
             {
-#if debugger
+#if DEBUG
 #else
                 if (!Convert.ToString(Session["vercode"]).Equals(vercode, StringComparison.OrdinalIgnoreCase))
                 {

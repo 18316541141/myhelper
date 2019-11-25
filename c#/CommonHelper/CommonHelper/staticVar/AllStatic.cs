@@ -36,7 +36,7 @@ namespace CommonHelper.staticVar
 
         static AllStatic()
         {
-#if debugger
+#if DEBUG
             EnvironmentType = "Debug";
 #else
             EnvironmentType = "Release";
