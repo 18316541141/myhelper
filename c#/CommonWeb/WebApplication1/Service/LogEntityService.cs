@@ -17,13 +17,13 @@ namespace CommonWeb.Service
         /// <summary>
         /// 分页查询“日志管理”模块，并返回查询结果
         /// </summary>
-        /// <param name="param">查询参数</param>
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
+        /// <param name="param">查询参数</param>
         /// <returns>返回“日志管理”模块的查询结果</returns>
-        public MyPagedList<LogEntity> Page(LogEntityParams param, int currentPageIndex = 1, int pageSize = 20)
+        public MyPagedList<LogEntity> Page(int currentPageIndex = 1, int pageSize = 20, LogEntityParams param = null)
         {
-            return Repository.PageList(param, currentPageIndex, pageSize);
+            return Repository.PageList(currentPageIndex, pageSize, param);
         }
 
         /// <summary>

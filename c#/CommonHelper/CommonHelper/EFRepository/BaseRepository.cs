@@ -648,7 +648,7 @@ namespace CommonHelper.Helper.EFRepository
         /// <param name="pageSize">每页显示数据量</param>
         /// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回分页查询结果</returns>
-        public MyPagedList<TEntity> PageList(TParams eqArgs, int pageIndex = 1, int pageSize = 20, TParams neqArgs = null)
+        public MyPagedList<TEntity> PageList(int pageIndex = 1, int pageSize = 20, TParams eqArgs = null, TParams neqArgs = null)
         {
             if (pageIndex <= 0)
             {
