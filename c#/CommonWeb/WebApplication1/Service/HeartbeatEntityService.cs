@@ -40,9 +40,9 @@ namespace CommonWeb.Service
         /// <param name="currentPageIndex">当前页码</param>
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回“心跳监测”模块的查询结果</returns>
-		public MyPagedList<HeartbeatEntity> Page(HeartbeatEntityParams param, int currentPageIndex = 1, int pageSize = 20)
+		public MyPagedList<HeartbeatEntity> Page(int currentPageIndex = 1, int pageSize = 20, HeartbeatEntityParams param = null)
         {
-            return Repository.PageList(param, currentPageIndex, pageSize);
+            return Repository.PageList(currentPageIndex, pageSize, param);
         }
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace CommonWeb.Entity.Common
             }
             else
             {
-                throw new Exception("使用该返回结果时，fileName必须以.xls或.xlsx");
+                throw new Exception("使用该返回结果时，fileName必须以.xls或.xlsx结尾。");
             }
         }
     }

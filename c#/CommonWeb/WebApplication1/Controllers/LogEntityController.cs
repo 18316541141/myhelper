@@ -28,7 +28,7 @@ namespace CommonWeb.Controllers
 		[Compress]
         public JsonResult Page(LogEntityParams param, int currentPageIndex = 1, int pageSize = 20)
         {
-            return MyJson(new Result { code = 0, data = Service.Page(param, currentPageIndex, pageSize) });
+            return MyJson(new Result { code = 0, data = Service.Page(currentPageIndex, pageSize, param) });
         }
 
         /// <summary>

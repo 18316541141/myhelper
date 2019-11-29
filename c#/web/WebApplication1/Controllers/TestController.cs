@@ -15,11 +15,11 @@ namespace WebApplication1.Controllers
     {
         public LogEntityService LogEntityService { set; get; }
 
-        public ExcelResult<LogEntity> ExportExcelTest(LogEntityParams logEntityParams,int currentPageIndex, int pageSize)
+        public ExcelResult<LogEntity> ExportExcelTest(int currentPageIndex, int pageSize, LogEntityParams logEntityParams)
         {
             return new ExcelResult<LogEntity>
             {
-                DataList = LogEntityService.Page(logEntityParams, currentPageIndex, pageSize).PageDataList,
+                DataList = LogEntityService.Page(currentPageIndex, pageSize, logEntityParams).PageDataList,
                 FileName = "测试导出.xlsx"
             };
         }
