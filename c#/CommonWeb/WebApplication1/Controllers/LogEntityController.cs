@@ -26,7 +26,7 @@ namespace CommonWeb.Controllers
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回“日志管理”模块的查询结果</returns>
 		[Compress]
-        public JsonResult Page(LogEntityParams param, int currentPageIndex = 1, int pageSize = 20)
+        public JsonResult Page(int currentPageIndex = 1, int pageSize = 20, LogEntityParams param = null)
         {
             return MyJson(new Result { code = 0, data = Service.Page(currentPageIndex, pageSize, param) });
         }
