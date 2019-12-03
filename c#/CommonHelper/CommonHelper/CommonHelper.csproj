@@ -42,16 +42,8 @@
       <HintPath>..\..\web\packages\Antlr3.StringTemplate.3.4.1.9005\lib\net35\Antlr3.StringTemplate.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac, Version=4.0.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\web\packages\Autofac.4.0.1\lib\net45\Autofac.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Autofac.Extras.DynamicProxy, Version=4.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\web\packages\Autofac.Extras.DynamicProxy.4.5.0\lib\net45\Autofac.Extras.DynamicProxy.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\web\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework">
