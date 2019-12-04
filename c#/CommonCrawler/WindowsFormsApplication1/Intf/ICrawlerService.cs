@@ -14,6 +14,14 @@ namespace CommonCrawler.Intf
     public interface ICrawlerService
     {
         /// <summary>
+        /// 设置心跳信息，当心跳信息是从远程获取时，
+        /// 使用该方法设置。
+        /// </summary>
+        /// <typeparam name="HeartbeatEntityInfo"></typeparam>
+        /// <param name="heartbeatEntityInfo"></param>
+        void SetHeartbeatEntityInfo(dynamic heartbeatEntityInfo);
+
+        /// <summary>
         /// 获取自定义的心跳信息
         /// </summary>
         /// <returns></returns>
