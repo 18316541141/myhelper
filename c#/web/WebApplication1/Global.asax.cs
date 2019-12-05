@@ -1,4 +1,5 @@
 ﻿using CommonHelper.EFMap;
+using CommonWeb.ModelBinder;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json.Linq;
@@ -24,6 +25,7 @@ namespace WebApplication1
     {
         protected void Application_Start()
         {
+            ModelBinders.Binders.DefaultBinder = new MyDefaultModelBinder();
             XmlConfigurator.Configure(new FileInfo(WebConfigurationManager.AppSettings["Log4netPath"]));
             Database.SetInitializer<DbContext>(null);
             AreaRegistration.RegisterAllAreas();
