@@ -24,7 +24,7 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            string ret = NumToChinese.NumConvertToChinese(1347859347);
+            bool ret =CheckHelper.CheckBankCardCode("6225760008219524");
             Console.WriteLine();
         }
         /// <summary>

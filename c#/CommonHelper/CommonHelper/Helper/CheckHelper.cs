@@ -349,5 +349,37 @@ namespace CommonHelper.Helper
                 return false;
             return true;
         }
+
+        /// <summary>
+        /// 校验银行卡号是否合法
+        /// </summary>
+        /// <param name="bankCardCode"></param>
+        /// <returns></returns>
+        public static bool CheckBankCardCode(string bankCardCode)
+        {
+            Regex regex = new Regex("^\\d{16,19}$");
+            if (regex.IsMatch(bankCardCode))
+            {
+                int sum = 0;
+                for (int i=0,num,len_i= bankCardCode.Length; i<len_i;i++)
+                {
+                    num = Convert.ToInt32(Convert.ToString(bankCardCode[i]));
+                    if (i % 2 == 0)
+                    {
+                        string tempNum = Convert.ToString(num * 2);
+                        for (int j=0,len_j=tempNum.Length;j<len_j ;j++)
+                        {
+                            sum += Convert.ToInt32(Convert.ToString(tempNum[j]));
+                        }
+                    }
+                    else
+                    {
+                        sum += num;
+                    }
+                }
+                return sum % 10 == 0;
+            }
+            return false;
+        }
     }
 }
