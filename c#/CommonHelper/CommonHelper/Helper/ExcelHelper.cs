@@ -106,14 +106,19 @@ namespace CommonHelper.Helper
                 HSSFSheet hssfSheet = (HSSFSheet)hssfWorkbook.CreateSheet(GetSheetName(typeof(T), groupName));
                 HSSFRow hssfRow = (HSSFRow)hssfSheet.CreateRow(0);
                 ExcelCol excelCol;
+                int[] colWidths = new int[excelColInfoList.Count];
+                int width;
                 foreach (ExcelColInfo excelColInfo in excelColInfoList)
                 {
                     excelCol = excelColInfo.ExcelCol;
-                    hssfRow.CreateCell(excelCol.ColIndex).SetCellValue(excelCol.ColName);
+                    width = SetCellValue(hssfRow.CreateCell(excelCol.ColIndex), excelCol.ColName);
+                    if (width > colWidths[excelCol.ColIndex])
+                    {
+                        colWidths[excelCol.ColIndex] = width;
+                    }
                 }
                 T temp;
-                int[] colWidths = new int[excelColInfoList.Count];
-                for (int i = 1, width, len = dataList.Count; i <= len; i++)
+                for (int i = 1, len = dataList.Count; i <= len; i++)
                 {
                     temp = dataList[i];
                     hssfRow = (HSSFRow)hssfSheet.CreateRow(i);
@@ -233,12 +238,13 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 填写单元格数据
+        /// 填写单元格数据，并根据填写内容推算宽度
         /// </summary>
         /// <param name="cell">单元格</param>
         /// <param name="val">数据值</param>
         /// <param name="dateCellStyle">日期单元格样式</param>
-        static int SetCellValue(ICell cell, object val, ICellStyle dateCellStyle)
+        /// <returns>返回推算宽度</returns>
+        static int SetCellValue(ICell cell, object val, ICellStyle dateCellStyle = null)
         {
             int width = 0;
             if (val != null)
@@ -257,7 +263,10 @@ namespace CommonHelper.Helper
                 }
                 else if (val.GetType() == typeof(DateTime))
                 {
-                    cell.CellStyle = dateCellStyle;
+                    if (dateCellStyle != null)
+                    {
+                        cell.CellStyle = dateCellStyle;
+                    }
                     cell.SetCellValue(Convert.ToDateTime(val));
                     cellString = Convert.ToString(cell.DateCellValue);
                 }
@@ -396,14 +405,19 @@ namespace CommonHelper.Helper
                 XSSFSheet xssfSheet = (XSSFSheet)xssfWorkbook.CreateSheet(GetSheetName(typeof(T), groupName));
                 XSSFRow xssfRow = (XSSFRow)xssfSheet.CreateRow(0);
                 ExcelCol excelCol;
+                int width;
+                int[] colWidths = new int[excelColInfoList.Count];
                 foreach (ExcelColInfo excelColInfo in excelColInfoList)
                 {
                     excelCol = excelColInfo.ExcelCol;
-                    xssfRow.CreateCell(excelCol.ColIndex).SetCellValue(excelCol.ColName);
+                    width = SetCellValue(xssfRow.CreateCell(excelCol.ColIndex), excelCol.ColName);
+                    if (width > colWidths[excelCol.ColIndex])
+                    {
+                        colWidths[excelCol.ColIndex] = width;
+                    }
                 }
                 object temp;
-                int[] colWidths = new int[excelColInfoList.Count];
-                for (int i = 0, width, len = dataList.Count; i < len; i++)
+                for (int i = 0, len = dataList.Count; i < len; i++)
                 {
                     temp = dataList[i];
                     xssfRow = (XSSFRow)xssfSheet.CreateRow(i + 1);
