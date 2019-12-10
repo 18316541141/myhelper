@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
 		{
 			return new ExcelResult<$entity.EntityName$>
 			{
-				DataList = Service.Page(currentPageIndex, pageSize, param).pageDataList,
+				DataList = Service.BigPage(currentPageIndex, pageSize, param).pageDataList,
 				FileName = "测试excel."+excelType
 			};
 		}

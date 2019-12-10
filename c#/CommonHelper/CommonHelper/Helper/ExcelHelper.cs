@@ -89,6 +89,9 @@ namespace CommonHelper.Helper
         public static void ListToExcelXls<T>(List<T>[] dataListArrays, Stream outputStream, string groupName = null)
         {
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+            ICellStyle dateCellStyle = hssfWorkbook.CreateCellStyle();
+            ICreationHelper creationHelper = hssfWorkbook.GetCreationHelper();
+            dateCellStyle.DataFormat = creationHelper.CreateDataFormat().GetFormat("yyyy-MM-dd hh:mm:ss");
             foreach (List<T> dataList in dataListArrays)
             {
                 if (dataList == null || dataList.Count == 0)
@@ -119,7 +122,8 @@ namespace CommonHelper.Helper
                         excelCol = excelColInfo.ExcelCol;
                         width = SetCellValue(
                             (HSSFCell)hssfRow.CreateCell(excelCol.ColIndex),
-                            excelColInfo.PropertyInfo.GetValue(temp)
+                            excelColInfo.PropertyInfo.GetValue(temp),
+                            dateCellStyle
                         );
                         if (width > colWidths[excelCol.ColIndex])
                         {
@@ -155,15 +159,22 @@ namespace CommonHelper.Helper
         {
             foreach (ExcelSheet excelSheet in type.GetCustomAttributes(typeof(ExcelSheet)))
             {
-                if (groupName == null)
+                if (string.IsNullOrEmpty(excelSheet.SheetName))
                 {
-                    return excelSheet.SheetName;
+                    return "sheet" + PasswordHelper.RandomPassword(6, 1);
                 }
                 else
                 {
-                    if (excelSheet.GroupName == groupName)
+                    if (string.IsNullOrEmpty(groupName))
                     {
                         return excelSheet.SheetName;
+                    }
+                    else
+                    {
+                        if (excelSheet.GroupName == groupName)
+                        {
+                            return excelSheet.SheetName;
+                        }
                     }
                 }
             }
@@ -226,7 +237,8 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="cell">单元格</param>
         /// <param name="val">数据值</param>
-        static int SetCellValue(ICell cell, object val)
+        /// <param name="dateCellStyle">日期单元格样式</param>
+        static int SetCellValue(ICell cell, object val, ICellStyle dateCellStyle)
         {
             int width = 0;
             if (val != null)
@@ -245,6 +257,7 @@ namespace CommonHelper.Helper
                 }
                 else if (val.GetType() == typeof(DateTime))
                 {
+                    cell.CellStyle = dateCellStyle;
                     cell.SetCellValue(Convert.ToDateTime(val));
                     cellString = Convert.ToString(cell.DateCellValue);
                 }
@@ -366,6 +379,9 @@ namespace CommonHelper.Helper
         public static void ListToExcelXlsx<T>(List<T>[] dataListArrays, Stream outputStream, string groupName = null)
         {
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+            ICellStyle dateCellStyle = xssfWorkbook.CreateCellStyle();
+            ICreationHelper creationHelper = xssfWorkbook.GetCreationHelper();
+            dateCellStyle.DataFormat = creationHelper.CreateDataFormat().GetFormat("yyyy-MM-dd hh:mm:ss");
             foreach (List<T> dataList in dataListArrays)
             {
                 if (dataList == null || dataList.Count == 0)
@@ -396,7 +412,8 @@ namespace CommonHelper.Helper
                         excelCol = excelColInfo.ExcelCol;
                         width = SetCellValue(
                             (XSSFCell)xssfRow.CreateCell(excelCol.ColIndex),
-                            excelColInfo.PropertyInfo.GetValue(temp)
+                            excelColInfo.PropertyInfo.GetValue(temp),
+                            dateCellStyle
                         );
                         if (width > colWidths[excelCol.ColIndex])
                         {

@@ -588,7 +588,7 @@ namespace CommonHelper.Helper.EFRepository
 
 
         /// <summary>
-        /// 查询pageSize超过1000的分页查询，因为pageSize过大会导致查询超时，为避免这种情况，
+        /// 查询pageSize超过10000的分页查询，因为pageSize过大会导致查询超时，为避免这种情况，
 		/// 必须使用该方法进行分页查询。
         /// </summary>
         /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
@@ -596,7 +596,7 @@ namespace CommonHelper.Helper.EFRepository
         /// <param name="pageSize">每页显示数据量</param>
 		/// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回分页查询结果</returns>
-        public MyPagedList<TEntity> BigPageList(TParams eqArgs, int pageIndex = 1, int pageSize = 10000, TParams neqArgs = null)
+        public MyPagedList<TEntity> BigPageList(int pageIndex = 1, int pageSize = 10000, TParams eqArgs = null, TParams neqArgs = null)
         {
             if (pageIndex <= 0)
             {
