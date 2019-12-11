@@ -118,10 +118,10 @@ namespace CommonHelper.Helper
                     }
                 }
                 T temp;
-                for (int i = 1, len = dataList.Count; i <= len; i++)
+                for (int i = 0, len = dataList.Count; i < len; i++)
                 {
                     temp = dataList[i];
-                    hssfRow = (HSSFRow)hssfSheet.CreateRow(i);
+                    hssfRow = (HSSFRow)hssfSheet.CreateRow(i + 1);
                     foreach (ExcelColInfo excelColInfo in excelColInfoList)
                     {
                         excelCol = excelColInfo.ExcelCol;
