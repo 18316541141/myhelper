@@ -640,12 +640,61 @@ namespace CommonHelper.Helper.EFRepository
         /// <returns></returns>
         protected abstract DisPageEntity<TEntity> GetDisPageEntity(TParams paramz);
 
+
+        /// <summary>
+        /// 基础查询对象委托，仅返回含有多表关联的查询对象，不含有其他查询条件
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <returns></returns>
+        public delegate IQueryable<TEntity> BaseQuery(DbContext dbContext);
+
+        /// <summary>
+        /// 对多表联合查询需要额外的查询条件时，使用该委托进行添加
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="eqArgs"></param>
+        /// <param name="neqArgs"></param>
+        /// <returns></returns>
+        public delegate IQueryable<TEntity> ExQuery(IQueryable<TEntity> query, TParams eqArgs = null, TParams neqArgs = null);
+
+        /// <summary>
+        /// 可扩展的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
+        /// </summary>
+        /// <param name="baseQuery">基础查询对象委托</param>
+        /// <param name="exQuery">额外查询条件委托</param>
+        /// <param name="pageIndex">查询页码</param>
+        /// <param name="pageSize">每页显示数据量</param>
+        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
+        /// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
+        /// <returns></returns>
+        public MyPagedList<TEntity> PageList(BaseQuery baseQuery , ExQuery exQuery, int pageIndex = 1, int pageSize = 20, TParams eqArgs = null, TParams neqArgs = null)
+        {
+            if (pageIndex <= 0)
+            {
+                pageIndex = 1;
+            }
+            if (pageSize > 100)
+            {
+                pageSize = 100;
+            }
+            else if (pageSize <= 0)
+            {
+                pageSize = 20;
+            }
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                IQueryable<TEntity> query = Query(baseQuery(dbContext), eqArgs, neqArgs);
+                query = exQuery(query);
+                return query.ToMyPagedList(pageIndex, pageSize);
+            }
+        }
+
         /// <summary>
         /// 普通的分页查询功能，pageSize不宜过大，如果pageSize大于1000，使用：BigPageList
         /// </summary>
-        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
         /// <param name="pageIndex">查询页码</param>
         /// <param name="pageSize">每页显示数据量</param>
+        /// <param name="eqArgs">查询参数，不为null时会作为查询参数</param>
         /// <param name="neqArgs">不等查询参数，不为null时会作为不等查询参数</param>
         /// <returns>返回分页查询结果</returns>
         public MyPagedList<TEntity> PageList(int pageIndex = 1, int pageSize = 20, TParams eqArgs = null, TParams neqArgs = null)
