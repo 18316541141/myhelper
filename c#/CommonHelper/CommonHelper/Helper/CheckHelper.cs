@@ -357,7 +357,7 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static bool CheckBankCardCode(string bankCardCode)
         {
-            Regex regex = new Regex("^\\d{16,19}$");
+            Regex regex = new Regex("^\\d{14,19}$");
             if (regex.IsMatch(bankCardCode))
             {
                 int sum = 0;
