@@ -109,16 +109,30 @@ namespace CommonHelper.Helper
             Thread.Sleep(Convert.ToInt32(Rem.ToString()));
         }
 
-
+        /// <summary>
+        /// 等待池表
+        /// </summary>
         static Dictionary<string, List<AutoResetEvent>> _waitMap;
         static Dictionary<string, string> _controllerVersionMap;
         static Dictionary<string, UserEditLockVal> _editLockMap;
+
+        /// <summary>
+        /// 事件队列，避免重复创建事件
+        /// </summary>
+        static Queue<AutoResetEvent> _autoResetEventQueue;
+
+        /// <summary>
+        /// 事件组队列，避免重复创建事件组
+        /// </summary>
+        static Queue<List<AutoResetEvent>> _autoResetEventListQueue;
 
         static ThreadHelper()
         {
             _waitMap = new Dictionary<string, List<AutoResetEvent>>();
             _controllerVersionMap = new Dictionary<string, string>();
             _editLockMap = new Dictionary<string, UserEditLockVal>();
+            _autoResetEventQueue = new Queue<AutoResetEvent>();
+            _autoResetEventListQueue = new Queue<List<AutoResetEvent>>();
             _RandomIndex = new Random();
         }
         
@@ -189,10 +203,25 @@ namespace CommonHelper.Helper
                 {
                     lock (_waitMap)
                     {
-                        _waitMap.Add(controllerName, new List<AutoResetEvent>());
+                        if (_autoResetEventListQueue.Count == 0)
+                        {
+                            _waitMap.Add(controllerName, new List<AutoResetEvent>());
+                        }
+                        else
+                        {
+                            _waitMap.Add(controllerName, _autoResetEventListQueue.Dequeue());
+                        }
                     }
                 }
-                _waitMap[controllerName].Add(autoResetEvent = new AutoResetEvent(false));
+                if(_autoResetEventQueue.Count == 0)
+                {
+                    autoResetEvent = new AutoResetEvent(false);
+                }
+                else
+                {
+                    autoResetEvent = _autoResetEventQueue.Dequeue();
+                }
+                _waitMap[controllerName].Add(autoResetEvent);
             }
             autoResetEvent.WaitOne(millisecondsTimeout);
             if (_waitMap.ContainsKey(controllerName))
@@ -202,6 +231,10 @@ namespace CommonHelper.Helper
                     if (_waitMap.ContainsKey(controllerName))
                     {
                         _waitMap[controllerName].Remove(autoResetEvent);
+                    }
+                    if(_autoResetEventQueue.Count < 1000)
+                    {
+                        _autoResetEventQueue.Enqueue(autoResetEvent);
                     }
                 }
             }
@@ -228,7 +261,12 @@ namespace CommonHelper.Helper
                     {
                         List<AutoResetEvent> autoResetEventList = _waitMap[controllerName];
                         int removeIndex = _RandomIndex.Next(0, autoResetEventList.Count - 1);
-                        autoResetEventList[removeIndex].Set();
+                        AutoResetEvent autoResetEvent = autoResetEventList[removeIndex];
+                        autoResetEvent.Set();
+                        if (_autoResetEventQueue.Count < 1000)
+                        {
+                            _autoResetEventQueue.Enqueue(autoResetEvent);
+                        }
                         autoResetEventList.RemoveAt(removeIndex);
                     }
                 }
@@ -248,11 +286,20 @@ namespace CommonHelper.Helper
                 {
                     if (_waitMap.ContainsKey(controllerName))
                     {
-                        foreach (AutoResetEvent autoResetEvent in _waitMap[controllerName])
+                        List<AutoResetEvent> autoResetEventList = _waitMap[controllerName];
+                        foreach (AutoResetEvent autoResetEvent in autoResetEventList)
                         {
                             autoResetEvent.Set();
+                            if (_autoResetEventQueue.Count < 1000)
+                            {
+                                _autoResetEventQueue.Enqueue(autoResetEvent);
+                            }
                         }
                         _waitMap.Remove(controllerName);
+                        if (_autoResetEventListQueue.Count < 100)
+                        {
+                            _autoResetEventListQueue.Enqueue(autoResetEventList);
+                        }
                     }
                 }
             }
