@@ -24,8 +24,10 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            bool ret =CheckHelper.CheckBankCardCode("6225760008219524");
-            Console.WriteLine();
+            //bool ret =CheckHelper.CheckBankCardCode("6225760008219524");
+            //Console.WriteLine();
+            bool ret=DateHelper.IsPrcWorkDay(DateTime.Now);
+            Console.WriteLine(ret);
         }
         /// <summary>
         /// 数字转中文

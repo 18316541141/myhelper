@@ -33,13 +33,30 @@ namespace CommonHelper.Helper
             lock (typeof(DateHelper))
             {
                 if (_workDayDateCache.ToString("yyyyMMdd") == date.ToString("yyyyMMdd"))
+                {
                     return _isWorkDayCache;
+                }
                 else
+                {
                     while (true)
+                    {
+                        string dateStrFormat = date.ToString("yyyyMMdd");
                         try
                         {
+                            JObject retJson = HttpWebRequestHelper.HttpGet($"http://tool.bitefu.net/jiari/?d={dateStrFormat}&back=json").GetJsonObj();
                             _workDayDateCache = date;
-                            JObject retJson = HttpWebRequestHelper.HttpGet($"http://api.goseek.cn/Tools/holiday?date={date.ToString("yyyyMMdd")}").GetJsonObj();
+                            return _isWorkDayCache = Convert.ToString(retJson[dateStrFormat]) == "0";
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            Console.WriteLine("检查法定工作日出错，10秒后重试...");
+                            Thread.Sleep(10000);
+                        }
+                        try
+                        {
+                            JObject retJson = HttpWebRequestHelper.HttpGet($"http://api.goseek.cn/Tools/holiday?date={dateStrFormat}").GetJsonObj();
+                            _workDayDateCache = date;
                             return _isWorkDayCache = Convert.ToString(retJson["data"]) == "0";
                         }
                         catch (Exception ex)
@@ -48,9 +65,12 @@ namespace CommonHelper.Helper
                             Console.WriteLine("检查法定工作日出错，10秒后重试...");
                             Thread.Sleep(10000);
                         }
-
+                    }
+                }
             }
         }
+
+        //http://tool.bitefu.net/jiari/
 
         /// <summary>
         /// 等待到指定时间，如果没到指定时间则阻塞，直到等到指定时间；

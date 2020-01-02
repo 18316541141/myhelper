@@ -807,6 +807,29 @@ namespace CommonHelper.Helper.EFRepository
         /// <summary>
         /// 批量修改变化值，把entity不为null的数据视为变化值
         /// </summary>
+        /// <param name="idList">用于存放需批量修改的主键id，只需主键id</param>
+        /// <param name="entity">用于存放需批量修改的数据</param>
+        /// <returns></returns>
+        public virtual int UpdateChangeBatch(List<TEntity> idList, TEntity entity)
+        {
+            using (BaseDbContext dbContext = CreateDbContext())
+            {
+                UpdateChangeBatch(dbContext, idList, entity);
+                return dbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// 批量修改变化值的专用代码，不同的实体类修改的值都不同，具体由子类决定
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="idList"></param>
+        /// <param name="entity"></param>
+        protected abstract void UpdateChangeBatch(BaseDbContext dbContext, List<TEntity> idList, TEntity entity);
+
+        /// <summary>
+        /// 批量修改变化值，把entity不为null的数据视为变化值
+        /// </summary>
         /// <param name="entities">修改实体类集合，必须要传入主键，其余的参数如果不为null则视为变化值（主键id除外，只做数据标识）</param>
         /// <returns>返回修改的数据行数</returns>
         public virtual int UpdateChange(List<TEntity> entities)
@@ -822,7 +845,7 @@ namespace CommonHelper.Helper.EFRepository
         }
 
         /// <summary>
-        /// 修改变化值的部分共用代码，这里抽取出来简化结构
+        /// 修改变化值的专用代码，不同实体类修改的值不同，由子类决定
         /// </summary>
         /// <param name="updateBefore"></param>
         /// <param name="entity"></param>
