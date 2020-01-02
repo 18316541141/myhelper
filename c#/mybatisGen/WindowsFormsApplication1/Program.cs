@@ -22,15 +22,16 @@ namespace WindowsFormsApplication1
             //Data Source = 183.2.233.235; Initial Catalog = BusinessAssistantDB_Test; User ID = BusinessHeplerTestManager; Password = BusinessHeplerTestManager123; MultipleActiveResultSets = True
             GenEntityService genEntityService = new GenEntityService
             {
-                NameTrans = new RobotNameCSharpTrans2(),
-                DbTypeTrans = new SqlServerToCSharpTrans(),
+                NameTrans = new RobotNameCSharpTrans(),
+                //DbTypeTrans = new SqlServerToCSharpTrans(),
+                DbTypeTrans = new MySqlToCSharpTrans(),
                 //DbTypeTrans = new SqliteToCSharpTrans(),
-                SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
+                //SqlInfo = new SqlServerInfo("183.2.233.235", "BusinessAssistantDB_Test", "BusinessHeplerTestManager", "BusinessHeplerTestManager123"),
                 //SqlInfo = new SqliteInfo(@"D:\sqlite\databases\test.db")
                 //server=localhost;Database=database01;UID=root;PWD=;SslMode=none
-                //SqlInfo = new MySqlInfo("localhost", "database01", "root","",3306)
+                SqlInfo = new MySqlInfo("localhost", "database01", "root", "", 3306)
             };
-            Entity entity = genEntityService.GenTemplateEntity("IRobot_RobotManager");
+            Entity entity = genEntityService.GenTemplateEntity("Fisherycrewsystem");
             EntityTemplateToCode entityTemplateToCode = new EntityTemplateToCode();
             entityTemplateToCode.EntityFrameworkCode(entity);
             //entityTemplateToCode.MyBatisCode(entity);

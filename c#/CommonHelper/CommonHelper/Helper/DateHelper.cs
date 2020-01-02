@@ -70,8 +70,6 @@ namespace CommonHelper.Helper
             }
         }
 
-        //http://tool.bitefu.net/jiari/
-
         /// <summary>
         /// 等待到指定时间，如果没到指定时间则阻塞，直到等到指定时间；
         /// 如果超过了指定时间，则直接往下执行。

@@ -114,7 +114,7 @@ namespace CommonHelper.Helper
     /// <summary>
     /// http请求帮助类
     /// </summary>
-    public static class HttpWebRequestHelper
+    public static partial class HttpWebRequestHelper
     {
         /// <summary>
         /// 异步http请求帮助类

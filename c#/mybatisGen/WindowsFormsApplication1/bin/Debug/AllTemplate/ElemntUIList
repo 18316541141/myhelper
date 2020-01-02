@@ -91,9 +91,10 @@
 ------------------------------------------------------------------------------------------------------
 		编辑部分：
 		<el-dialog v-bind:title="(formData.$entity.KeyName$===''?'新增':'编辑')+'***模块'" top="25px" width="300px"
-			v-bind:visible.sync="editDialog"
-			v-bind:modal-append-to-body="true"
-			v-bind:append-to-body="true">
+			:visible.sync="editDialog"
+			:modal-append-to-body="true"
+			:append-to-body="true"
+      :close-on-click-modal="false">
 			<div style="width:100%;height:400px;overflow-y:auto;">
 				<el-form ref="form" v-bind:model="formData" label-width="80px" v-on:keyup.enter.native="onSubmit">
 				<div class="form-body">

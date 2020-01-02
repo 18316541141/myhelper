@@ -115,8 +115,8 @@ namespace WebApplication1.Repository
 		/// <summary>
         /// 修改变化值的部分共用代码，这里抽取出来简化结构
         /// </summary>
-        /// <param name="updateBefore"></param>
-        /// <param name="entity"></param>
+        /// <param name="dbContext">连接上下文</param>
+        /// <param name="entity">更新字段数据</param>
         protected override void UpdateChange(BaseDbContext dbContext, $entity.EntityName$ entity)
 		{
 			$entity.EntityName$  updateBefore = new $entity.EntityName$  { $entity.KeyName$ = entity.$entity.KeyName$};
@@ -127,6 +127,26 @@ namespace WebApplication1.Repository
 				updateBefore.$it.PropName$ = entity.$it.PropName$;
 			}
 			$endif$$endif$}$
+		}
+
+		/// <summary>
+        /// 批量修改变化值的专用代码，不同的实体类修改的值都不同，具体由子类决定
+        /// </summary>
+        /// <param name="dbContext">连接上下文</param>
+        /// <param name="idList">更新的数据主键</param>
+        /// <param name="entity">更新字段数据</param>
+        protected override void UpdateChangeBatch(BaseDbContext dbContext, List<$entity.EntityName$> idList, $entity.EntityName$ entity)
+		{
+			foreach($entity.EntityName$ updateBefore in idList)
+			{
+				dbContext.Set<$entity.EntityName$>().Attach(updateBefore);
+				$entity.PropList:{$if(it.ParamsTypeIsEqual)$$if(!it.IsKey)$
+				if (entity.$it.PropName$ != null)
+				{
+					updateBefore.$it.PropName$ = entity.$it.PropName$;
+				}
+				$endif$$endif$}$
+			}
 		}
 
 		/// <summary>

@@ -43,9 +43,9 @@ namespace WebApplication1.Controllers
         /// <param name="pageSize">每页显示的数据量</param>
         /// <returns>返回***模块的查询结果</returns>
 		[Compress]
-		public JsonResult Page($entity.EntityName$Params param,int currentPageIndex = 1,int pageSize = 20)
+		public JsonResult Page(int currentPageIndex = 1,int pageSize = 20,$entity.EntityName$Params param = null)
 		{
-			return MyJson(new Result{code = 0, data = Service.Page(param, currentPageIndex, pageSize)});
+			return MyJson(new Result{code = 0, data = Service.Page(currentPageIndex, pageSize, param)});
 		}
 ----------------------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
 		{
 			return new ExcelResult<$entity.EntityName$>
 			{
-				DataList = Service.Page(param, currentPageIndex, pageSize).pageDataList,
+				DataList = Service.BigPage(currentPageIndex, pageSize, param).pageDataList,
 				FileName = "测试excel."+excelType
 			};
 		}

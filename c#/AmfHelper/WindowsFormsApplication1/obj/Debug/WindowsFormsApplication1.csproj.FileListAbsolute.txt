@@ -1,0 +1,2 @@
+E:\git_projects\myhelper\c#\AmfHelper\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+E:\git_projects\myhelper\c#\AmfHelper\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
