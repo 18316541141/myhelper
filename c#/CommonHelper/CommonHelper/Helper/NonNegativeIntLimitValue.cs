@@ -132,7 +132,13 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 更新阈值
+        /// 更新阈值，当阈值相对之前的阈值增加时
+        ///     在“全等限制”下，所有变量都增加，直到符合全等限制为止、
+        ///     在“等于或小于限制（自动、手动）”下，所有变量不变
+        /// 当阈值相对之前的阈值减少时
+        ///     在“全等限制”下，所有变量都减少，直到符合全等限制为止、
+        ///     在“等于或小于限制（自动、手动）”下，所有变量和不超过阈值时变量不变；
+        ///     超过阈值时所有变量都减少，直到符合全等限制为止
         /// </summary>
         /// <param name="newThreadHold">更新的阈值</param>
         public void UpdateThreadHold(int newThreadHold)
@@ -158,7 +164,7 @@ namespace CommonHelper.Helper
                 {
                     changeThreadHold = newThreadHold - Threshold;
                 }
-                else if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO)
+                else if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO || _LimitValueRule == LimitValueRule.LESS_OR_EQUALS_MANUAL)
                 {
                     changeThreadHold = newThreadHold - _ValuesMap.Values.Sum();
                     if (changeThreadHold > 0)
@@ -231,6 +237,7 @@ namespace CommonHelper.Helper
 
         /// <summary>
         /// 追加新变量
+        /// 在“全等限制”下，所有变量
         /// </summary>
         /// <param name="key">变量名</param>
         /// <param name="val">变量值</param>
@@ -255,6 +262,15 @@ namespace CommonHelper.Helper
                 int lossVal = Threshold - _ValuesMap.Values.Sum();
                 if (lossVal >= 0)
                 {
+#if DEBUG
+                    Console.WriteLine($"add {key}={val}");
+                    Console.WriteLine(OutputDebug());
+#endif
+                    return;
+                }
+                if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_MANUAL)
+                {
+                    _ValuesMap[key] = 0;
 #if DEBUG
                     Console.WriteLine($"add {key}={val}");
                     Console.WriteLine(OutputDebug());
@@ -327,8 +343,17 @@ namespace CommonHelper.Helper
                 _ReadOnlyIsNewest = false;
                 _ValuesMap[key] = newVal;
                 int lossVal = _ValuesMap.Values.Sum() - Threshold;
-                if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO && lossVal < 0)
+                if (lossVal <= 0)
                 {
+#if DEBUG
+                    Console.WriteLine($"update {key}={newVal}");
+                    Console.WriteLine(OutputDebug());
+#endif
+                    return;
+                }
+                if(_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_MANUAL)
+                {
+                    _ValuesMap[key] -= lossVal;
 #if DEBUG
                     Console.WriteLine($"update {key}={newVal}");
                     Console.WriteLine(OutputDebug());

@@ -26,7 +26,7 @@ namespace PA_Robot
         static void Main()
         {
             AllocConsole();
-            NonNegativeIntLimitValue non = new NonNegativeIntLimitValue(10000, LimitValueRule.EQUALS, "A", "B", "C", "D", "E");
+            NonNegativeIntLimitValue non = new NonNegativeIntLimitValue(10000, LimitValueRule.LESS_OR_EQUALS_MANUAL, "A", "B", "C", "D", "E");
             non.UpdateVal("A", 20);
             non.UpdateThreadHold(7700);
             non.AddVal("F",234);
