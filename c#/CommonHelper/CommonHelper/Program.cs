@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
@@ -24,10 +25,24 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            //bool ret =CheckHelper.CheckBankCardCode("6225760008219524");
-            //Console.WriteLine();
-            bool ret=DateHelper.IsPrcWorkDay(DateTime.Now);
-            Console.WriteLine(ret);
+            AllocConsole();
+            NonNegativeIntLimitValue non = new NonNegativeIntLimitValue(10000, LimitValueRule.LESS_OR_EQUALS, "A", "B", "C", "D", "E");
+            non.UpdateVal("A", 20);
+            non.UpdateThreadHold(7700);
+            non.AddVal("F",234);
+            non.UpdateVal("B", 20);
+            non.UpdateThreadHold(8700);
+            non.AddVal("G", 567);
+            non.UpdateVal("C", 20);
+            non.UpdateThreadHold(10086);
+            non.AddVal("I", 444);
+            non.UpdateVal("D", 20);
+            non.UpdateThreadHold(666);
+            non.AddVal("J", 22);
+            non.UpdateVal("E", 20);
+            non.UpdateThreadHold(9999);
+            non.AddVal("K", 13);
+            Console.ReadKey();
         }
         /// <summary>
         /// 数字转中文
