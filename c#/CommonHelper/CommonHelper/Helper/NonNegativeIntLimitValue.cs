@@ -17,9 +17,17 @@ namespace CommonHelper.Helper
         EQUALS,
 
         /// <summary>
-        /// 等于或小于限制，变量和必须小于等于阈值
+        /// 等于或小于限制，变量和必须小于等于阈值，当
+        /// 变量增加时并超出限制时，自动的从其他变量扣减
         /// </summary>
-        LESS_OR_EQUALS,
+        LESS_OR_EQUALS_AUTO,
+
+        /// <summary>
+        /// 等于或小于限制，变量和必须小于等于阈值，当
+        /// 变量增加时并超出限制时，不会自动扣减，而是停止增加；
+        /// 用户需要手动从其他变量扣减
+        /// </summary>
+        LESS_OR_EQUALS_MANUAL
     }
 
     /// <summary>
@@ -54,7 +62,7 @@ namespace CommonHelper.Helper
         LimitValueRule _LimitValueRule { set; get; }
 
         /// <summary>
-        /// 创建非负数限制池
+        /// 创建非负数限制
         /// </summary>
         /// <param name="threshold">阈值，所有变量的和必须等于阈值</param>
         /// <param name="keys">变量的key值</param>
@@ -150,7 +158,7 @@ namespace CommonHelper.Helper
                 {
                     changeThreadHold = newThreadHold - Threshold;
                 }
-                else if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS)
+                else if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO)
                 {
                     changeThreadHold = newThreadHold - _ValuesMap.Values.Sum();
                     if (changeThreadHold > 0)
@@ -319,7 +327,7 @@ namespace CommonHelper.Helper
                 _ReadOnlyIsNewest = false;
                 _ValuesMap[key] = newVal;
                 int lossVal = _ValuesMap.Values.Sum() - Threshold;
-                if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS && lossVal < 0)
+                if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO && lossVal < 0)
                 {
 #if DEBUG
                     Console.WriteLine($"update {key}={newVal}");
