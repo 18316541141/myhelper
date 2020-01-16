@@ -205,6 +205,23 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 获取变量值
+        /// </summary>
+        /// <param name="key">变量名</param>
+        /// <returns>返回变量值</returns>
+        public int GetVal(string key)
+        {
+            lock (this)
+            {
+                if (!_ValuesMap.ContainsKey(key))
+                {
+                    throw new Exception("变量不存在，获取失败！");
+                }
+                return _ValuesMap[key];
+            }
+        }
+
+        /// <summary>
         /// 追加新变量
         /// </summary>
         /// <param name="key">变量名</param>
