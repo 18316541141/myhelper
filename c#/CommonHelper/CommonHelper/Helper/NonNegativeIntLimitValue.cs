@@ -54,7 +54,7 @@ namespace CommonHelper.Helper
         LimitValueRule _LimitValueRule { set; get; }
 
         /// <summary>
-        /// 创建非负数数限制池
+        /// 创建非负数限制池
         /// </summary>
         /// <param name="threshold">阈值，所有变量的和必须等于阈值</param>
         /// <param name="keys">变量的key值</param>
