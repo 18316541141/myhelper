@@ -178,6 +178,7 @@
     <Compile Include="EFRepository\BaseRepository.cs" />
     <Compile Include="EFRepository\GlobalVariableRepository.cs" />
     <Compile Include="EFRepository\InverseRepository.cs" />
+    <Compile Include="Helper\NonNegativeDoubleLimitValue.cs" />
     <Compile Include="Helper\NonNegativeIntLimitValue.cs" />
     <Compile Include="Helper\LockStringHelper.cs" />
     <Compile Include="Helper\NumToChinese.cs" />

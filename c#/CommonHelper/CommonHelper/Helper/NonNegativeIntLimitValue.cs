@@ -36,6 +36,21 @@ namespace CommonHelper.Helper
     /// </summary>
     public class NonNegativeIntLimitValue
     {
+        static NonNegativeIntLimitValue()
+        {
+            _DebugOutput = true;
+        }
+
+        static bool _DebugOutput { set; get; }
+
+        /// <summary>
+        /// 关闭调试输出
+        /// </summary>
+        public static void CloseDebugOutput()
+        {
+            _DebugOutput = false;
+        }
+
         /// <summary>
         /// 阈值
         /// </summary>
@@ -65,6 +80,7 @@ namespace CommonHelper.Helper
         /// 创建非负整数限制
         /// </summary>
         /// <param name="threshold">阈值，所有变量的和必须等于阈值</param>
+        /// <param name="limitValueRule">限制规则</param>
         /// <param name="keys">变量的key值</param>
         public NonNegativeIntLimitValue(long threshold, LimitValueRule limitValueRule, params string[] keys)
         {
@@ -81,7 +97,10 @@ namespace CommonHelper.Helper
             _ValuesMap[keys[0]] += rest;
             _ReadOnlyMap = new ReadOnlyDictionary<string, long>(_ValuesMap);
 #if DEBUG
-            Console.WriteLine(OutputDebug());
+            if (_DebugOutput)
+            {
+                Console.WriteLine(OutputDebug());
+            }
 #endif
         }
 
@@ -171,8 +190,11 @@ namespace CommonHelper.Helper
                     {
                         Threshold = newThreadHold;
 #if DEBUG
-                        Console.WriteLine($"update newThreadHold={newThreadHold}");
-                        Console.WriteLine(OutputDebug());
+                        if (_DebugOutput)
+                        {
+                            Console.WriteLine($"update newThreadHold={newThreadHold}");
+                            Console.WriteLine(OutputDebug());
+                        }
 #endif
                         return;
                     }
@@ -212,8 +234,11 @@ namespace CommonHelper.Helper
                     }
                 }
 #if DEBUG
-                Console.WriteLine($"update newThreadHold={newThreadHold}");
-                Console.WriteLine(OutputDebug());
+                if (_DebugOutput)
+                {
+                    Console.WriteLine($"update newThreadHold={newThreadHold}");
+                    Console.WriteLine(OutputDebug());
+                }
 #endif
             }
         }
@@ -263,8 +288,11 @@ namespace CommonHelper.Helper
                 if (lossVal >= 0)
                 {
 #if DEBUG
-                    Console.WriteLine($"add {key}={val}");
-                    Console.WriteLine(OutputDebug());
+                    if (_DebugOutput)
+                    {
+                        Console.WriteLine($"add {key}={val}");
+                        Console.WriteLine(OutputDebug());
+                    }
 #endif
                     return;
                 }
@@ -272,8 +300,11 @@ namespace CommonHelper.Helper
                 {
                     _ValuesMap[key] = 0;
 #if DEBUG
-                    Console.WriteLine($"add {key}={val}");
-                    Console.WriteLine(OutputDebug());
+                    if (_DebugOutput)
+                    {
+                        Console.WriteLine($"add {key}={val}");
+                        Console.WriteLine(OutputDebug());
+                    }
 #endif
                     return;
                 }
@@ -317,8 +348,11 @@ namespace CommonHelper.Helper
                     }
                 }
 #if DEBUG
-                Console.WriteLine($"add {key}={val}");
-                Console.WriteLine(OutputDebug());
+                if (_DebugOutput)
+                {
+                    Console.WriteLine($"add {key}={val}");
+                    Console.WriteLine(OutputDebug());
+                }
 #endif
             }
         }
@@ -343,20 +377,29 @@ namespace CommonHelper.Helper
                 _ReadOnlyIsNewest = false;
                 _ValuesMap[key] = newVal;
                 long lossVal = _ValuesMap.Values.Sum() - Threshold;
-                if (lossVal <= 0)
+                if (lossVal <= 0 && _LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO)
                 {
 #if DEBUG
-                    Console.WriteLine($"update {key}={newVal}");
-                    Console.WriteLine(OutputDebug());
+                    if (_DebugOutput)
+                    {
+                        Console.WriteLine($"update {key}={newVal}");
+                        Console.WriteLine(OutputDebug());
+                    }
 #endif
                     return;
                 }
                 if(_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_MANUAL)
                 {
-                    _ValuesMap[key] -= lossVal;
+                    if (lossVal > 0)
+                    {
+                        _ValuesMap[key] -= lossVal;
+                    }
 #if DEBUG
-                    Console.WriteLine($"update {key}={newVal}");
-                    Console.WriteLine(OutputDebug());
+                    if (_DebugOutput)
+                    {
+                        Console.WriteLine($"update {key}={newVal}");
+                        Console.WriteLine(OutputDebug());
+                    }
 #endif
                     return;
                 }
@@ -397,8 +440,11 @@ namespace CommonHelper.Helper
                     }
                 }
 #if DEBUG
-                Console.WriteLine($"update {key}={newVal}");
-                Console.WriteLine(OutputDebug());
+                if (_DebugOutput)
+                {
+                    Console.WriteLine($"update {key}={newVal}");
+                    Console.WriteLine(OutputDebug());
+                }
 #endif
             }
         }
