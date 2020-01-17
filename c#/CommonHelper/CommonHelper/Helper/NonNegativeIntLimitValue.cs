@@ -39,17 +39,17 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 阈值
         /// </summary>
-        public int Threshold { private set; get; }
+        public long Threshold { private set; get; }
 
         /// <summary>
         /// 变量表
         /// </summary>
-        Dictionary<string, int> _ValuesMap { set; get; }
+        Dictionary<string, long> _ValuesMap { set; get; }
 
         /// <summary>
         /// 只读变量表
         /// </summary>
-        ReadOnlyDictionary<string, int> _ReadOnlyMap { set; get; }
+        ReadOnlyDictionary<string, long> _ReadOnlyMap { set; get; }
 
         /// <summary>
         /// 只读表是否为最新版
@@ -62,24 +62,24 @@ namespace CommonHelper.Helper
         LimitValueRule _LimitValueRule { set; get; }
 
         /// <summary>
-        /// 创建非负数限制
+        /// 创建非负整数限制
         /// </summary>
         /// <param name="threshold">阈值，所有变量的和必须等于阈值</param>
         /// <param name="keys">变量的key值</param>
-        public NonNegativeIntLimitValue(int threshold, LimitValueRule limitValueRule, params string[] keys)
+        public NonNegativeIntLimitValue(long threshold, LimitValueRule limitValueRule, params string[] keys)
         {
             _LimitValueRule = limitValueRule;
             Threshold = threshold;
             _ReadOnlyIsNewest = true;
-            int rest = threshold % keys.Length;
-            int avg = (threshold - rest) / keys.Length;
-            _ValuesMap = new Dictionary<string, int>();
+            long rest = threshold % keys.Length;
+            long avg = (threshold - rest) / keys.Length;
+            _ValuesMap = new Dictionary<string, long>();
             foreach (string key in keys)
             {
                 _ValuesMap.Add(key, avg);
             }
             _ValuesMap[keys[0]] += rest;
-            _ReadOnlyMap = new ReadOnlyDictionary<string, int>(_ValuesMap);
+            _ReadOnlyMap = new ReadOnlyDictionary<string, long>(_ValuesMap);
 #if DEBUG
             Console.WriteLine(OutputDebug());
 #endif
@@ -98,7 +98,7 @@ namespace CommonHelper.Helper
                 outPut.Append(keyVal.Key).Append("=").Append(keyVal.Value).Append("，");
             }
             string connChar = "";
-            int sum = 0;
+            long sum = 0;
             foreach (var keyVal in _ValuesMap)
             {
                 outPut.Append(connChar).Append(keyVal.Key);
@@ -114,7 +114,7 @@ namespace CommonHelper.Helper
         /// 获取只读的map，用于遍历。
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyDictionary<string, int> GetDictionary()
+        public ReadOnlyDictionary<string, long> GetDictionary()
         {
             if (!_ReadOnlyIsNewest)
             {
@@ -122,7 +122,7 @@ namespace CommonHelper.Helper
                 {
                     if (!_ReadOnlyIsNewest)
                     {
-                        _ReadOnlyMap = new ReadOnlyDictionary<string, int>(_ValuesMap);
+                        _ReadOnlyMap = new ReadOnlyDictionary<string, long>(_ValuesMap);
                         _ReadOnlyIsNewest = true;
 
                     }
@@ -141,7 +141,7 @@ namespace CommonHelper.Helper
         ///     超过阈值时所有变量都减少，直到符合全等限制为止
         /// </summary>
         /// <param name="newThreadHold">更新的阈值</param>
-        public void UpdateThreadHold(int newThreadHold)
+        public void UpdateThreadHold(long newThreadHold)
         {
             if (newThreadHold < 0)
             {
@@ -159,7 +159,7 @@ namespace CommonHelper.Helper
             lock (this)
             {
                 _ReadOnlyIsNewest = false;
-                int changeThreadHold = 0;
+                long changeThreadHold = 0;
                 if (_LimitValueRule == LimitValueRule.EQUALS)
                 {
                     changeThreadHold = newThreadHold - Threshold;
@@ -178,9 +178,9 @@ namespace CommonHelper.Helper
                     }
                 }
                 Threshold = newThreadHold;
-                int restChangeThreadHold = changeThreadHold % _ValuesMap.Count;
-                int avgChangeThreadHold = (changeThreadHold - restChangeThreadHold) / _ValuesMap.Count;
-                int afterVal;
+                long restChangeThreadHold = changeThreadHold % _ValuesMap.Count;
+                long avgChangeThreadHold = (changeThreadHold - restChangeThreadHold) / _ValuesMap.Count;
+                long afterVal;
                 foreach (var key in _ValuesMap.Keys.ToList())
                 {
                     afterVal = _ValuesMap[key] + avgChangeThreadHold;
@@ -223,7 +223,7 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="key">变量名</param>
         /// <returns>返回变量值</returns>
-        public int GetVal(string key)
+        public long GetVal(string key)
         {
             lock (this)
             {
@@ -241,7 +241,7 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="key">变量名</param>
         /// <param name="val">变量值</param>
-        public void AddVal(string key, int val = 0)
+        public void AddVal(string key, long val = 0)
         {
             if (_ValuesMap.ContainsKey(key))
             {
@@ -259,7 +259,7 @@ namespace CommonHelper.Helper
             {
                 _ReadOnlyIsNewest = false;
                 _ValuesMap.Add(key, val);
-                int lossVal = Threshold - _ValuesMap.Values.Sum();
+                long lossVal = Threshold - _ValuesMap.Values.Sum();
                 if (lossVal >= 0)
                 {
 #if DEBUG
@@ -277,9 +277,9 @@ namespace CommonHelper.Helper
 #endif
                     return;
                 }
-                int rest = lossVal % (_ValuesMap.Count - 1);
-                int avgLossVal = (lossVal - rest) / (_ValuesMap.Count - 1);
-                int afterVal;
+                long rest = lossVal % (_ValuesMap.Count - 1);
+                long avgLossVal = (lossVal - rest) / (_ValuesMap.Count - 1);
+                long afterVal;
                 foreach (string tempKey in _ValuesMap.Keys.ToList())
                 {
                     if (tempKey != key)
@@ -328,7 +328,7 @@ namespace CommonHelper.Helper
         /// </summary>
         /// <param name="key">变量名称</param>
         /// <param name="newVal">新值</param>
-        public void UpdateVal(string key, int newVal)
+        public void UpdateVal(string key, long newVal)
         {
             if (newVal > Threshold)
             {
@@ -342,7 +342,7 @@ namespace CommonHelper.Helper
             {
                 _ReadOnlyIsNewest = false;
                 _ValuesMap[key] = newVal;
-                int lossVal = _ValuesMap.Values.Sum() - Threshold;
+                long lossVal = _ValuesMap.Values.Sum() - Threshold;
                 if (lossVal <= 0)
                 {
 #if DEBUG
@@ -360,8 +360,8 @@ namespace CommonHelper.Helper
 #endif
                     return;
                 }
-                int rest = lossVal % (_ValuesMap.Count - 1);
-                int lossValAvg = (lossVal - rest) / (_ValuesMap.Count - 1);
+                long rest = lossVal % (_ValuesMap.Count - 1);
+                long lossValAvg = (lossVal - rest) / (_ValuesMap.Count - 1);
                 foreach (var tempKey in _ValuesMap.Keys.ToList())
                 {
                     if (tempKey != key)
