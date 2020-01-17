@@ -28,19 +28,19 @@ namespace PA_Robot
             AllocConsole();
             NonNegativeDoubleLimitValue non = new NonNegativeDoubleLimitValue(100,2, LimitValueRule.LESS_OR_EQUALS_MANUAL, "A", "B", "C", "D", "E");
             non.UpdateVal("A", .2);
-            non.UpdateThreadHold(77);
+            non.UpdateThreshold(77);
             non.AddVal("F",2.34);
             non.UpdateVal("B", .2);
-            non.UpdateThreadHold(87);
+            non.UpdateThreshold(87);
             non.AddVal("G", 5.67);
             non.UpdateVal("C", .2);
-            non.UpdateThreadHold(100.86);
+            non.UpdateThreshold(100.86);
             non.AddVal("I", 4.44);
             non.UpdateVal("D", .2);
-            non.UpdateThreadHold(6.66);
+            non.UpdateThreshold(6.66);
             non.AddVal("J", .22);
             non.UpdateVal("E", .2);
-            non.UpdateThreadHold(99.99);
+            non.UpdateThreshold(99.99);
             non.AddVal("K", .13);
             Console.ReadKey();
         }

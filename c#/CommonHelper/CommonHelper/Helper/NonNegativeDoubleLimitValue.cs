@@ -38,7 +38,7 @@ namespace CommonHelper.Helper
         ReadOnlyDictionary<string, double> _ReadOnlyDoubleMap { set; get; }
 
         /// <summary>
-        /// 创建非负整数限制
+        /// 创建非负浮点数限制
         /// </summary>
         /// <param name="threshold">阈值，所有变量的和必须等于阈值</param>
         /// <param name="decimalCoumt">小数位数</param>
@@ -71,13 +71,13 @@ namespace CommonHelper.Helper
         ///     在“等于或小于限制（自动、手动）”下，所有变量和不超过阈值时变量不变；
         ///     超过阈值时所有变量都减少，直到符合全等限制为止
         /// </summary>
-        /// <param name="newThreadHold">更新的阈值</param>
-        public void UpdateThreadHold(double newThreadHold)
+        /// <param name="newThreshold">更新的阈值</param>
+        public void UpdateThreshold(double newThreshold)
         {
-            Threshold = newThreadHold < 0 ? 0 : newThreadHold;
-            _NonNegativeIntLimitValue.UpdateThreadHold(Convert.ToInt64(newThreadHold * Math.Pow(10, _DecimalCount)));
+            Threshold = newThreshold < 0 ? 0 : newThreshold;
+            _NonNegativeIntLimitValue.UpdateThreshold(Convert.ToInt64(newThreshold * Math.Pow(10, _DecimalCount)));
 #if DEBUG
-            Console.WriteLine($"update newThreadHold={newThreadHold}");
+            Console.WriteLine($"update newThreshold={newThreshold}");
             Console.WriteLine(OutputDebug());
 #endif
         }

@@ -41,6 +41,9 @@ namespace CommonHelper.Helper
             _DebugOutput = true;
         }
 
+        /// <summary>
+        /// 调试输出的开关
+        /// </summary>
         static bool _DebugOutput { set; get; }
 
         /// <summary>
@@ -159,10 +162,10 @@ namespace CommonHelper.Helper
         ///     在“等于或小于限制（自动、手动）”下，所有变量和不超过阈值时变量不变；
         ///     超过阈值时所有变量都减少，直到符合全等限制为止
         /// </summary>
-        /// <param name="newThreadHold">更新的阈值</param>
-        public void UpdateThreadHold(long newThreadHold)
+        /// <param name="newThreshold">更新的阈值</param>
+        public void UpdateThreshold(long newThreshold)
         {
-            if (newThreadHold < 0)
+            if (newThreshold < 0)
             {
                 lock (this)
                 {
@@ -178,34 +181,34 @@ namespace CommonHelper.Helper
             lock (this)
             {
                 _ReadOnlyIsNewest = false;
-                long changeThreadHold = 0;
+                long changeThreshold = 0;
                 if (_LimitValueRule == LimitValueRule.EQUALS)
                 {
-                    changeThreadHold = newThreadHold - Threshold;
+                    changeThreshold = newThreshold - Threshold;
                 }
                 else if (_LimitValueRule == LimitValueRule.LESS_OR_EQUALS_AUTO || _LimitValueRule == LimitValueRule.LESS_OR_EQUALS_MANUAL)
                 {
-                    changeThreadHold = newThreadHold - _ValuesMap.Values.Sum();
-                    if (changeThreadHold > 0)
+                    changeThreshold = newThreshold - _ValuesMap.Values.Sum();
+                    if (changeThreshold > 0)
                     {
-                        Threshold = newThreadHold;
+                        Threshold = newThreshold;
 #if DEBUG
                         if (_DebugOutput)
                         {
-                            Console.WriteLine($"update newThreadHold={newThreadHold}");
+                            Console.WriteLine($"update newThreshold={newThreshold}");
                             Console.WriteLine(OutputDebug());
                         }
 #endif
                         return;
                     }
                 }
-                Threshold = newThreadHold;
-                long restChangeThreadHold = changeThreadHold % _ValuesMap.Count;
-                long avgChangeThreadHold = (changeThreadHold - restChangeThreadHold) / _ValuesMap.Count;
+                Threshold = newThreshold;
+                long restChangeThreshold = changeThreshold % _ValuesMap.Count;
+                long avgChangeThreshold = (changeThreshold - restChangeThreshold) / _ValuesMap.Count;
                 long afterVal;
                 foreach (var key in _ValuesMap.Keys.ToList())
                 {
-                    afterVal = _ValuesMap[key] + avgChangeThreadHold;
+                    afterVal = _ValuesMap[key] + avgChangeThreshold;
                     if (afterVal >= 0)
                     {
                         _ValuesMap[key] = afterVal;
@@ -213,18 +216,18 @@ namespace CommonHelper.Helper
                     else
                     {
                         _ValuesMap[key] = 0;
-                        restChangeThreadHold += afterVal;
+                        restChangeThreshold += afterVal;
                     }
                 }
-                if (restChangeThreadHold != 0)
+                if (restChangeThreshold != 0)
                 {
                     foreach (var key in _ValuesMap.Keys.ToList())
                     {
-                        afterVal = restChangeThreadHold + _ValuesMap[key];
+                        afterVal = restChangeThreshold + _ValuesMap[key];
                         if (afterVal < 0)
                         {
                             _ValuesMap[key] = 0;
-                            restChangeThreadHold = afterVal;
+                            restChangeThreshold = afterVal;
                         }
                         else
                         {
@@ -236,7 +239,7 @@ namespace CommonHelper.Helper
 #if DEBUG
                 if (_DebugOutput)
                 {
-                    Console.WriteLine($"update newThreadHold={newThreadHold}");
+                    Console.WriteLine($"update newThreshold={newThreshold}");
                     Console.WriteLine(OutputDebug());
                 }
 #endif
