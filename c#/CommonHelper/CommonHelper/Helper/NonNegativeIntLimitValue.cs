@@ -90,14 +90,24 @@ namespace CommonHelper.Helper
             _LimitValueRule = limitValueRule;
             Threshold = threshold;
             _ReadOnlyIsNewest = true;
-            long rest = threshold % keys.Length;
-            long avg = (threshold - rest) / keys.Length;
             _ValuesMap = new Dictionary<string, long>();
-            foreach (string key in keys)
+            if(_LimitValueRule == LimitValueRule.EQUALS)
             {
-                _ValuesMap.Add(key, avg);
+                long rest = threshold % keys.Length;
+                long avg = (threshold - rest) / keys.Length;
+                foreach (string key in keys)
+                {
+                    _ValuesMap.Add(key, avg);
+                }
+                _ValuesMap[keys[0]] += rest;
             }
-            _ValuesMap[keys[0]] += rest;
+            else
+            {
+                foreach (string key in keys)
+                {
+                    _ValuesMap.Add(key, 0);
+                }
+            }
             _ReadOnlyMap = new ReadOnlyDictionary<string, long>(_ValuesMap);
 #if DEBUG
             if (_DebugOutput)
