@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,6 +16,35 @@ namespace CommonHelper.Helper
     /// </summary>
     public static class ProcessHelper
     {
+        /// <summary>
+        /// 使得程序只能运行一个实例。
+        /// </summary>
+        /// <returns>返回true，则表示首次运行，返回false则表示已有允许的进程</returns>
+        public static bool RunOne()
+        {
+            using (Mutex mutex = new Mutex(false, "RunOne"))
+            {
+                mutex.WaitOne();
+                try
+                {
+                    string processName = Process.GetCurrentProcess().ProcessName;
+                    Process[] processes = Process.GetProcessesByName(processName);
+                    if (processes.Length > 1)
+                    {
+                        MessageBox.Show("程序已经在运行中", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Application.Exit();
+
+                        return false;
+                    }
+                    return true;
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
+            }
+        }
+
         /// <summary>
         /// 运行一个进程
         /// </summary>
