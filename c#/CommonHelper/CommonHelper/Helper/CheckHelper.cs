@@ -261,6 +261,10 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static bool CheckIDCard18(string Id)
         {
+            if (string.IsNullOrEmpty(Id) || Id.Length != 18)
+            {
+                return false;
+            }
             long n = 0;
             if (long.TryParse(Id.Remove(17), out n) == false || n < Math.Pow(10, 16) || long.TryParse(Id.Replace('x', '0').Replace('X', '0'), out n) == false)
                 return false;//数字验证
