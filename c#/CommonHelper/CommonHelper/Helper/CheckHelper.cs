@@ -276,6 +276,21 @@ namespace CommonHelper.Helper
             return true;//符合GB11643-1999标准
         }
 
+        /// <summary>
+        /// 身份证后6位验证
+        /// </summary>
+        /// <param name="Id">身份证号</param>
+        /// <returns></returns>
+        public static bool CheckIDCardEnd6(string id)
+        {
+            Regex idCardEnd6Match = new Regex("\\d{5}[\\dXx]");
+            if (idCardEnd6Match.IsMatch(id))
+            {
+                int day = Convert.ToInt32(id.Substring(0, 2));
+                return day > 0 || day < 32;
+            }
+            return false;
+        }
 
         /// <summary>
         /// 18位身份证的校验权值
