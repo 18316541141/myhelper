@@ -287,7 +287,7 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static bool CheckIDCardEnd6(string id)
         {
-            Regex idCardEnd6Match = new Regex("\\d{5}[\\dXx]");
+            Regex idCardEnd6Match = new Regex("^\\d{5}[\\dXx]$");
             if (idCardEnd6Match.IsMatch(id))
             {
                 int day = Convert.ToInt32(id.Substring(0, 2));
