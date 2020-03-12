@@ -227,7 +227,7 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
-        /// 检查号牌号码是否合法
+        /// 检查号牌（车牌）号码是否合法
         /// </summary>
         /// <param name="plateNo">号牌号码</param>
         /// <returns>如果号牌号码合法则返回true，否则返回false</returns>
