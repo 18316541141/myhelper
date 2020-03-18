@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CommonHelper.Entity;
 using CommonHelper.Helper.EFDbContext;
 using CommonWeb.Repository;
 
@@ -22,6 +23,11 @@ namespace WebApplication1.Repository
         public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext();
+        }
+
+        protected override void UpdateChangeBatch(BaseDbContext dbContext, List<HeartbeatEntity> idList, HeartbeatEntity entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
