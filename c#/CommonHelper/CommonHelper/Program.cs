@@ -25,10 +25,9 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            List<string> dataList = new List<string>();
-            List<int> showIndexList = new List<int>();
-
-            Console.ReadKey();
+            HardwareHelper.MonitorOff();
+            Thread.Sleep(1000);
+            HardwareHelper.MonitorOff();
         }
         /// <summary>
         /// 数字转中文
