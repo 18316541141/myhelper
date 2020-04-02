@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Management;
 using System.Net;
@@ -25,9 +26,9 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            HardwareHelper.MonitorOff();
-            Thread.Sleep(1000);
-            HardwareHelper.MonitorOff();
+            ThreadHelper.BatchWait("aaa",10000);
+            ThreadHelper.BatchWait("aaa", 10000);
+            Console.ReadKey();
         }
         /// <summary>
         /// 数字转中文

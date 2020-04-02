@@ -121,21 +121,15 @@ namespace CommonHelper.Helper
         /// </summary>
         static Queue<AutoResetEvent> _autoResetEventQueue;
 
-        /// <summary>
-        /// 事件组队列，避免重复创建事件组
-        /// </summary>
-        static Queue<List<AutoResetEvent>> _autoResetEventListQueue;
-
         static ThreadHelper()
         {
             _waitMap = new Dictionary<string, List<AutoResetEvent>>();
             _controllerVersionMap = new Dictionary<string, string>();
             _editLockMap = new Dictionary<string, UserEditLockVal>();
             _autoResetEventQueue = new Queue<AutoResetEvent>();
-            _autoResetEventListQueue = new Queue<List<AutoResetEvent>>();
             _RandomIndex = new Random();
         }
-        
+
 
         /// <summary>
         /// 比较控制器的版本号，如果相同的则返回true，否则返回false，并返回最新版本号
@@ -203,17 +197,10 @@ namespace CommonHelper.Helper
                 {
                     lock (_waitMap)
                     {
-                        if (_autoResetEventListQueue.Count == 0)
-                        {
-                            _waitMap.Add(controllerName, new List<AutoResetEvent>());
-                        }
-                        else
-                        {
-                            _waitMap.Add(controllerName, _autoResetEventListQueue.Dequeue());
-                        }
+                        _waitMap.Add(controllerName, new List<AutoResetEvent>());
                     }
                 }
-                if(_autoResetEventQueue.Count == 0)
+                if (_autoResetEventQueue.Count == 0)
                 {
                     autoResetEvent = new AutoResetEvent(false);
                 }
@@ -232,13 +219,16 @@ namespace CommonHelper.Helper
                     {
                         _waitMap[controllerName].Remove(autoResetEvent);
                     }
-                    if(_autoResetEventQueue.Count < 1000)
+                    if (_autoResetEventQueue.Count < 1000)
                     {
                         _autoResetEventQueue.Enqueue(autoResetEvent);
                     }
+                    else
+                    {
+                        autoResetEvent.Dispose();
+                    }
                 }
             }
-            autoResetEvent.Dispose();
         }
 
         /// <summary>
@@ -263,10 +253,6 @@ namespace CommonHelper.Helper
                         int removeIndex = _RandomIndex.Next(0, autoResetEventList.Count - 1);
                         AutoResetEvent autoResetEvent = autoResetEventList[removeIndex];
                         autoResetEvent.Set();
-                        if (_autoResetEventQueue.Count < 1000)
-                        {
-                            _autoResetEventQueue.Enqueue(autoResetEvent);
-                        }
                         autoResetEventList.RemoveAt(removeIndex);
                     }
                 }
@@ -290,16 +276,8 @@ namespace CommonHelper.Helper
                         foreach (AutoResetEvent autoResetEvent in autoResetEventList)
                         {
                             autoResetEvent.Set();
-                            if (_autoResetEventQueue.Count < 1000)
-                            {
-                                _autoResetEventQueue.Enqueue(autoResetEvent);
-                            }
                         }
                         _waitMap.Remove(controllerName);
-                        if (_autoResetEventListQueue.Count < 100)
-                        {
-                            _autoResetEventListQueue.Enqueue(autoResetEventList);
-                        }
                     }
                 }
             }

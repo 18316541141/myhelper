@@ -192,7 +192,7 @@ namespace CommonHelper.Helper
             }
             else
             {
-                return text.StartsWith("wxp://");
+                return text.StartsWith("wxp://") || text.StartsWith("https://payapp.weixin.qq.com/qrpay/order/home2?");
             }
         }
     }

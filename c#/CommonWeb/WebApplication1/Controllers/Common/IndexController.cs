@@ -79,7 +79,7 @@ namespace WebApplication1.Controllers.Common
             {
                 string newestVersion;
                 bool initRet = ThreadHelper.CompareControllerVersion(realTimePool, realTimeVersion, out newestVersion);
-                if (realTimeVersion == null)
+                if (string.IsNullOrEmpty(realTimeVersion))
                 {
                     initRet = RealTimeInitService.Init(realTimePool, username);
                 }
