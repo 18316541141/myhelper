@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using CommonHelper.Helper.EFDbContext;
+using WebApplication1.Entity;
 
 namespace WebApplication1.Repository
 {
@@ -21,6 +22,11 @@ namespace WebApplication1.Repository
         public override BaseDbContext CreateDbContext()
         {
             return new MyDbContext();
+        }
+
+        protected override void UpdateChangeBatch(BaseDbContext dbContext, List<GlobalVariable> idList, GlobalVariable entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
