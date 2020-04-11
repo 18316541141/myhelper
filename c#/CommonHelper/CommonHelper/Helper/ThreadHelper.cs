@@ -210,8 +210,8 @@ namespace CommonHelper.Helper
                 }
                 _waitMap[controllerName].Add(autoResetEvent);
             }
-            autoResetEvent.WaitOne(millisecondsTimeout);
-            if (_waitMap.ContainsKey(controllerName))
+            bool ret = autoResetEvent.WaitOne(millisecondsTimeout);
+            if (!ret && _waitMap.ContainsKey(controllerName))
             {
                 lock (_waitMap)
                 {
@@ -254,6 +254,14 @@ namespace CommonHelper.Helper
                         AutoResetEvent autoResetEvent = autoResetEventList[removeIndex];
                         autoResetEvent.Set();
                         autoResetEventList.RemoveAt(removeIndex);
+                        if (_autoResetEventQueue.Count < 1000)
+                        {
+                            _autoResetEventQueue.Enqueue(autoResetEvent);
+                        }
+                        else
+                        {
+                            autoResetEvent.Dispose();
+                        }
                     }
                 }
             }
@@ -276,6 +284,14 @@ namespace CommonHelper.Helper
                         foreach (AutoResetEvent autoResetEvent in autoResetEventList)
                         {
                             autoResetEvent.Set();
+                            if (_autoResetEventQueue.Count < 1000)
+                            {
+                                _autoResetEventQueue.Enqueue(autoResetEvent);
+                            }
+                            else
+                            {
+                                autoResetEvent.Dispose();
+                            }
                         }
                         _waitMap.Remove(controllerName);
                     }
