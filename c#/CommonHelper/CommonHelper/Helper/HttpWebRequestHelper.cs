@@ -122,13 +122,17 @@ namespace CommonHelper.Helper
         public static class AsyncReq
         {
             static int _executeCount;
-            public static int MaxExecuteCount { set; get; }
-            static string _controllerName;
+            static int MaxExecuteCount { set; get; }
+            
+            /// <summary>
+            /// 同时操作锁
+            /// </summary>
+            static SameTimeOperLock _SameTimeOperLock;
             static AsyncReq()
             {
                 _executeCount = 0;
                 MaxExecuteCount = 8;
-                _controllerName = Guid.NewGuid().ToString();
+                _SameTimeOperLock = new SameTimeOperLock(MaxExecuteCount);
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, Dictionary<string, string> Query, string Json, CookieContainer CookieContainer = null) =>
@@ -145,18 +149,7 @@ namespace CommonHelper.Helper
 
             public static void HttpGet(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, CookieContainer CookieContainer = null)
             {
-                while (true)
-                {
-                    lock (_controllerName)
-                    {
-                        if (_executeCount < MaxExecuteCount)
-                        {
-                            _executeCount++;
-                            break;
-                        }
-                    }
-                    ThreadHelper.BatchWait(_controllerName, 30000);
-                }
+                _SameTimeOperLock.LockOnMaxThread();
                 ThreadPool.QueueUserWorkItem((obj) => {
                     try
                     {
@@ -166,28 +159,13 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                    lock (_controllerName)
-                    {
-                        _executeCount--;
-                    }
-                    ThreadHelper.RandomSetOne(_controllerName);
+                    _SameTimeOperLock.UnLock();
                 });
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, Dictionary<string, dynamic> Param, CookieContainer CookieContainer = null)
             {
-                while (true)
-                {
-                    lock (_controllerName)
-                    {
-                        if (_executeCount < MaxExecuteCount)
-                        {
-                            _executeCount++;
-                            break;
-                        }
-                    }
-                    ThreadHelper.BatchWait(_controllerName, 30000);
-                }
+                _SameTimeOperLock.LockOnMaxThread();
                 ThreadPool.QueueUserWorkItem((obj)=> {
                     try
                     {
@@ -197,28 +175,13 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                    lock (_controllerName)
-                    {
-                        _executeCount--;
-                    }
-                    ThreadHelper.RandomSetOne(_controllerName);
+                    _SameTimeOperLock.UnLock();
                 });
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, Dictionary<string, string> Param, CookieContainer CookieContainer = null)
             {
-                while (true)
-                {
-                    lock (_controllerName)
-                    {
-                        if (_executeCount < MaxExecuteCount)
-                        {
-                            _executeCount++;
-                            break;
-                        }
-                    }
-                    ThreadHelper.BatchWait(_controllerName, 30000);
-                }
+                _SameTimeOperLock.LockOnMaxThread();
                 ThreadPool.QueueUserWorkItem((obj) => {
                     try
                     {
@@ -228,28 +191,13 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                    lock (_controllerName)
-                    {
-                        _executeCount--;
-                    }
-                    ThreadHelper.RandomSetOne(_controllerName);
+                    _SameTimeOperLock.UnLock();
                 });
             }
 
             public static void HttpPost(AsyncCallback asyncCallback, AsyncFailCallback asyncFailCallback, string RequestUrl, string Body, CookieContainer CookieContainer = null)
             {
-                while (true)
-                {
-                    lock (_controllerName)
-                    {
-                        if (_executeCount < MaxExecuteCount)
-                        {
-                            _executeCount++;
-                            break;
-                        }
-                    }
-                    ThreadHelper.BatchWait(_controllerName, 30000);
-                }
+                _SameTimeOperLock.LockOnMaxThread();
                 ThreadPool.QueueUserWorkItem((obj) => {
                     try
                     {
@@ -259,11 +207,7 @@ namespace CommonHelper.Helper
                     {
                         asyncFailCallback(ex);
                     }
-                    lock (_controllerName)
-                    {
-                        _executeCount--;
-                    }
-                    ThreadHelper.RandomSetOne(_controllerName);
+                    _SameTimeOperLock.UnLock();
                 });
             }
         }
