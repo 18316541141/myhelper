@@ -34,9 +34,10 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static object DistributionLock(string lockString,int clearBeforeMinutes = 1)
         {
-            object temp;
             lock (_LockMap)
             {
+                #region 清理空闲的锁对象，释放内存
+                object temp;
                 DateTime now;
                 if (((now = DateTime.Now) - _LastClearDateTime).TotalMinutes > clearBeforeMinutes)
                 {
@@ -52,6 +53,7 @@ namespace CommonHelper.Helper
                     }
                     _LastClearDateTime = now;
                 }
+                #endregion
                 if (_LockMap.ContainsKey(lockString))
                 {
                     return _LockMap[lockString];
