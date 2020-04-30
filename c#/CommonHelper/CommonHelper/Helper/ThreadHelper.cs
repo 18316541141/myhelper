@@ -100,6 +100,19 @@ namespace CommonHelper.Helper
         /// 睡眠很长的一段时间
         /// </summary>
         /// <param name="milliseconds"></param>
+        public static void Sleep(double milliseconds)
+        {
+            double Rem = milliseconds % int.MaxValue;
+            double Times = (milliseconds - Rem) / int.MaxValue;
+            for (long j = 0; j < Times; j++)
+                Thread.Sleep(int.MaxValue);
+            Thread.Sleep((int)Rem);
+        }
+
+        /// <summary>
+        /// 睡眠很长的一段时间
+        /// </summary>
+        /// <param name="milliseconds"></param>
         public static void Sleep(long milliseconds)
         {
             long Rem = milliseconds % int.MaxValue;
