@@ -26,8 +26,7 @@ namespace PA_Robot
         [STAThread]
         static void Main()
         {
-            ThreadHelper.BatchWait("aaa",10000);
-            ThreadHelper.BatchWait("aaa", 10000);
+            Console.WriteLine(string.Format("{0:100000}", 1234));
             Console.ReadKey();
         }
         /// <summary>
