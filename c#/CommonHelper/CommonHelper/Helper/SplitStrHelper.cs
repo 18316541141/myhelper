@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CommonHelper.Helper
 {
     /// <summary>
-    /// 含有分隔符的字符串帮助类
+    /// 含有分隔符的字符串帮助类，该类不是线程安全的。
     /// </summary>
     public class SplitStrHelper
     {
@@ -15,6 +15,17 @@ namespace CommonHelper.Helper
         /// 拼接字符串的数组
         /// </summary>
         List<string> _SplitStrArray;
+
+        /// <summary>
+        /// 获取连接串的字符串数量
+        /// </summary>
+        public int Length
+        {
+            get
+            {
+                return _SplitStrArray.Count;
+            }
+        }
 
         /// <summary>
         /// 获取拼接字符串的数组的副本
@@ -90,6 +101,59 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 在结尾追加字符串
+        /// </summary>
+        /// <param name="str">追加的字符串</param>
+        /// <returns></returns>
+        public SplitStrHelper Add(string str)
+        {
+            _SplitStrArray.Add(str);
+            _SplitStr = string.Join(_ConnChar, _SplitStrArray);
+            return this;
+        }
+
+        /// <summary>
+        /// 在特定位置插入字符串
+        /// </summary>
+        /// <param name="index">插入的索引位置</param>
+        /// <param name="str">插入的字符串</param>
+        /// <returns></returns>
+        public SplitStrHelper Insert(int index, string str)
+        {
+            _SplitStrArray.Insert(index, str);
+            _SplitStr = string.Join(_ConnChar, _SplitStrArray);
+            return this;
+        }
+
+
+
+        /// <summary>
+        /// 按照下标删除字符串
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public SplitStrHelper Del(int index)
+        {
+            _SplitStrArray.RemoveAt(index);
+            _SplitStr = string.Join(_ConnChar, _SplitStrArray);
+            return this;
+        }
+
+        /// <summary>
+        /// 根据字符串删除字符串
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public SplitStrHelper Del(string str)
+        {
+            _SplitStrArray.Remove(str);
+            _SplitStr = string.Join(_ConnChar, _SplitStrArray);
+            return this;
+        }
+
+
+
+        /// <summary>
         /// 去除重复项
         /// </summary>
         public SplitStrHelper RemoveRepeat()
@@ -123,6 +187,7 @@ namespace CommonHelper.Helper
             {
                 _SplitStrArray[i] = _SplitStrArray[i].Trim();
             }
+            _SplitStr = string.Join(_ConnChar, _SplitStrArray);
             return this;
         }
     }
