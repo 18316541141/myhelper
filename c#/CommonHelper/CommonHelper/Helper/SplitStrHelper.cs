@@ -151,7 +151,22 @@ namespace CommonHelper.Helper
             return this;
         }
 
-
+        /// <summary>
+        /// 去除空串项
+        /// </summary>
+        /// <returns></returns>
+        public SplitStrHelper RemoveEmpty()
+        {
+            for (int i = _SplitStrArray.Count-1; i >= 0; i--)
+            {
+                if (string.IsNullOrEmpty(_SplitStrArray[i]))
+                {
+                    _SplitStrArray.RemoveAt(i);
+                }
+            }
+            _SplitStr = string.Join(_ConnChar, _SplitStrArray);
+            return this;
+        }
 
         /// <summary>
         /// 去除重复项
