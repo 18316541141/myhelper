@@ -12,6 +12,41 @@ namespace CommonHelper.Helper
     public static class EnumHelper
     {
         /// <summary>
+        /// 检查枚举中是否包含传入的数据data，若包含返回true，否则返回false
+        /// </summary>
+        /// <typeparam name="N">枚举值类型</typeparam>
+        /// <param name="type">枚举类型</param>
+        /// <param name="data">检查数据</param>
+        /// <param name="where">筛选条件，可选择哪些数据不参与检测</param>
+        /// <returns></returns>
+        public static bool Contain<N>(Type type ,N data, Where<N> where = null)
+        {
+            if (where == null)
+            {
+                foreach (var item in Enum.GetValues(type))
+                {
+                    if(item.Equals(data))
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                KeyValuePair<string, N> keyVal;
+                foreach (var item in Enum.GetValues(type))
+                {
+                    keyVal = new KeyValuePair<string, N>(Enum.GetName(type, item), (N)item);
+                    if (where(keyVal) && item.Equals(data))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 根据枚举类型把相关的枚举分解为特定类型
         /// </summary>
         /// <typeparam name="T">返回集合的元素类型</typeparam>
