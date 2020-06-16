@@ -19,28 +19,16 @@ namespace CommonHelper.Helper
         /// <param name="data">检查数据</param>
         /// <param name="where">筛选条件，可选择哪些数据不参与检测</param>
         /// <returns></returns>
-        public static bool Contain<N>(Type type ,N data, Where<N> where = null)
+        public static bool Contain<N>(Type type, N data, Where<N> where)
         {
-            if (where == null)
+            string temp = Enum.GetName(type, data);
+            KeyValuePair<string, N> keyVal;
+            foreach (var item in Enum.GetValues(type))
             {
-                foreach (var item in Enum.GetValues(type))
+                keyVal = new KeyValuePair<string, N>(Enum.GetName(type, item), (N)item);
+                if (where(keyVal) && Enum.GetName(type, item) == temp)
                 {
-                    if(item.Equals(data))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                KeyValuePair<string, N> keyVal;
-                foreach (var item in Enum.GetValues(type))
-                {
-                    keyVal = new KeyValuePair<string, N>(Enum.GetName(type, item), (N)item);
-                    if (where(keyVal) && item.Equals(data))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;

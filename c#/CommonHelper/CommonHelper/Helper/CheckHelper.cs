@@ -46,6 +46,17 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 检查是否为正确的uri格式
+        /// </summary>
+        /// <param name="uri">uri字符串</param>
+        /// <returns>如果正确返回true</returns>
+        public static bool IsUri(string uri)
+        {
+            Uri result;
+            return Uri.TryCreate(uri, UriKind.Relative, out result);
+        }
+
+        /// <summary>
         /// 检查是否为移动电话号码
         /// </summary>
         /// <param name="str"></param>
