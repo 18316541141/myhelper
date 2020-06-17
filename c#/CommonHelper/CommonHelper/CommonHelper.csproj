@@ -187,6 +187,7 @@
     <Compile Include="Helper\RelationDataHelper.cs" />
     <Compile Include="Helper\SameTimeOperLock.cs" />
     <Compile Include="Helper\SplitStrHelper.cs" />
+    <Compile Include="Helper\TreeNodeHelper.cs" />
     <Compile Include="staticVar\AllStatic.cs" />
     <Compile Include="FindAttr\FindDataAttr.cs" />
     <Compile Include="FindAttr\FindDataConvertAttr.cs" />
