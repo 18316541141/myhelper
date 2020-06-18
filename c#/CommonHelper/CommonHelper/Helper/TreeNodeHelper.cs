@@ -125,8 +125,8 @@ namespace CommonHelper.Helper
         /// <summary>
         /// 从下标列表中获取节点
         /// </summary>
-        /// <param name="treeList"></param>
-        /// <param name="indexs"></param>
+        /// <param name="treeList">树集合</param>
+        /// <param name="indexs">下标列表</param>
         /// <returns></returns>
         N GetNodeFromIndex(List<N> treeList,int[] indexs)
         {
