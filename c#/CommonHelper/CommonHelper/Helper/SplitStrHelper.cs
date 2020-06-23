@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CommonHelper.Helper
@@ -191,6 +192,23 @@ namespace CommonHelper.Helper
             }
             _SplitStr = string.Join(_ConnChar, _SplitStrArray);
             return this;
+        }
+
+        /// <summary>
+        /// 对每个元素进行正则校验
+        /// </summary>
+        /// <param name="regex"></param>
+        /// <returns></returns>
+        public bool IsMatch(Regex regex)
+        {
+            for (int i = 0, len_i = _SplitStrArray.Count; i < len_i; i++)
+            {
+                if (!regex.IsMatch(_SplitStrArray[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
