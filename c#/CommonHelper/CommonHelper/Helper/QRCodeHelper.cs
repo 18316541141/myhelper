@@ -25,7 +25,7 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static Stream CreateQRCodeStream(string content, ImageFormat imageFormat = null, Bitmap icon = null)
         {
-            if(imageFormat == null)
+            if (imageFormat == null)
             {
                 imageFormat = ImageFormat.Jpeg;
             }
@@ -42,7 +42,7 @@ namespace CommonHelper.Helper
         /// <param name="content">二维码内容</param>
         /// <param name="icon">二维码中间图标</param>
         /// <returns></returns>
-        public static Bitmap CreateQRCodeBitmap(string content,Bitmap icon = null)
+        public static Bitmap CreateQRCodeBitmap(string content, Bitmap icon = null)
         {
             QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(content, ECCLevel.H);

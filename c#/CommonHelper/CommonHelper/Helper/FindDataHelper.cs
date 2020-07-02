@@ -52,7 +52,7 @@ namespace CommonHelper.Helper
         /// <param name="htmlNode">html节点</param>
         /// <param name="xpaths">多个xpath</param>
         /// <returns>返回最先匹配的节点</returns>
-        public static HtmlNode FindDataByXPath(HtmlNode htmlNode,string[] xpaths)
+        public static HtmlNode FindDataByXPath(HtmlNode htmlNode, string[] xpaths)
         {
             HtmlNode retNode;
             foreach (string xpath in xpaths)
@@ -69,7 +69,7 @@ namespace CommonHelper.Helper
         /// <param name="jtoken">json对象</param>
         /// <param name="jsonPaths">多个jsonPath</param>
         /// <returns>返回最先寻找到的结果</returns>
-        public static JToken FindDataByJsonPath(JToken jtoken,string[] jsonPaths)
+        public static JToken FindDataByJsonPath(JToken jtoken, string[] jsonPaths)
         {
             JToken retToken;
             foreach (string jsonPath in jsonPaths)
@@ -91,7 +91,7 @@ namespace CommonHelper.Helper
             XmlElement retEle;
             foreach (string xpath in xpaths)
             {
-                retEle =(XmlElement) xmlElement.SelectSingleNode(xpath);
+                retEle = (XmlElement)xmlElement.SelectSingleNode(xpath);
                 if (retEle != null) return retEle;
             }
             return null;
@@ -152,16 +152,16 @@ namespace CommonHelper.Helper
         /// <param name="prefix">前缀</param>
         /// <param name="suffix">后缀</param>
         /// <returns>返回匹配结果</returns>
-        public static string FindDataByPrefixAndSuffix(string text,string prefix,string suffix)
+        public static string FindDataByPrefixAndSuffix(string text, string prefix, string suffix)
         {
             int startIndex = text.IndexOf(prefix);
             if (startIndex == -1)
                 throw new Exception($"前缀：“{prefix}”没有找到匹配结果。");
             startIndex = startIndex + prefix.Length;
             int endIndex = text.IndexOf(suffix, startIndex);
-            if(endIndex==-1)
+            if (endIndex == -1)
                 throw new Exception($"后缀：“{suffix}”没有找到匹配结果。");
-            return text.Substring(startIndex,endIndex- startIndex);
+            return text.Substring(startIndex, endIndex - startIndex);
         }
 
         /// <summary>
@@ -173,9 +173,9 @@ namespace CommonHelper.Helper
         public static string FindDataByPrefixAndSuffix(string text, string[] prefixAndSuffix)
         {
             if (prefixAndSuffix.Length == 0) throw new Exception("没有任何前缀和后缀。");
-            if (prefixAndSuffix.Length%2!=0) throw new Exception("前缀和后缀数量不一致。");
-            Exception lastEx=null;
-            for (int i=0,len=prefixAndSuffix.Length;i<len;i+=2)
+            if (prefixAndSuffix.Length % 2 != 0) throw new Exception("前缀和后缀数量不一致。");
+            Exception lastEx = null;
+            for (int i = 0, len = prefixAndSuffix.Length; i < len; i += 2)
                 try
                 {
                     return FindDataByPrefixAndSuffix(text, prefixAndSuffix[i], prefixAndSuffix[i + 1]);
@@ -195,7 +195,7 @@ namespace CommonHelper.Helper
         /// <param name="prefix">前缀</param>
         /// <param name="suffix">后缀</param>
         /// <returns></returns>
-        public static string FindDataByPrefixAndSuffix(HtmlNode htmlNode, string prefix, string suffix)=>
+        public static string FindDataByPrefixAndSuffix(HtmlNode htmlNode, string prefix, string suffix) =>
             FindDataByPrefixAndSuffix(htmlNode.OuterHtml, prefix, suffix);
 
         /// <summary>
@@ -218,25 +218,25 @@ namespace CommonHelper.Helper
         {
             Type type = typeof(T);
             object obj = type.GetConstructor(Type.EmptyTypes).Invoke(null);
-            FindDataConvert findDataConvert=null;
+            FindDataConvert findDataConvert = null;
             if (type.IsDefined(typeof(FindDataConvertAttr), false))
             {
                 FindDataConvertAttr findDataConvertAttr = (FindDataConvertAttr)type.GetCustomAttribute(typeof(FindDataConvertAttr));
-                findDataConvert =(FindDataConvert) findDataConvertAttr.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
+                findDataConvert = (FindDataConvert)findDataConvertAttr.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
             }
             foreach (PropertyInfo propertyInfo in type.GetProperties())
                 foreach (Attribute attr in propertyInfo.GetCustomAttributes(false))
                     if (attr.GetType() == typeof(FindDataAttr))
                     {
                         FindDataAttr findDataAttr = (FindDataAttr)attr;
-                        if(findDataAttr.RuleEnum == RuleEnum.PrefixSuffix)
+                        if (findDataAttr.RuleEnum == RuleEnum.PrefixSuffix)
                         {
-                            string dataStr=FindDataByPrefixAndSuffix(text, findDataAttr.RuleArray);
+                            string dataStr = FindDataByPrefixAndSuffix(text, findDataAttr.RuleArray);
                             dynamic convertAfter;
                             if (findDataConvert != null && findDataConvert.ConvertTo(propertyInfo.Name, dataStr, out convertAfter))
                                 propertyInfo.SetValue(obj, convertAfter);
                             else
-                                propertyInfo.SetValue(obj, string.IsNullOrEmpty(dataStr)|| string.IsNullOrEmpty(dataStr.Trim())? findDataAttr.DefaultVal: dataStr);
+                                propertyInfo.SetValue(obj, string.IsNullOrEmpty(dataStr) || string.IsNullOrEmpty(dataStr.Trim()) ? findDataAttr.DefaultVal : dataStr);
                             continue;
                         }
                     }
@@ -255,7 +255,7 @@ namespace CommonHelper.Helper
             Type type = typeof(T);
             object obj = type.GetConstructor(Type.EmptyTypes).Invoke(null);
             FindDataConvertAttr findDataConvertAttr = (FindDataConvertAttr)type.GetCustomAttribute(typeof(FindDataConvertAttr));
-            FindDataConvert findDataConvert =(FindDataConvert)findDataConvertAttr.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
+            FindDataConvert findDataConvert = (FindDataConvert)findDataConvertAttr.Type.GetConstructor(Type.EmptyTypes).Invoke(null);
             foreach (PropertyInfo propertyInfo in type.GetProperties())
                 foreach (Attribute attr in propertyInfo.GetCustomAttributes(false))
                     if (attr.GetType() == typeof(FindDataAttr))
