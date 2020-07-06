@@ -65,6 +65,7 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OOXML.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXml4Net.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\NPOI.OpenXmlFormats.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\QRCoder.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\SeleniumExtras.WaitHelpers.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\Snowflake.Net.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Data.SQLite.dll
@@ -94,5 +95,6 @@ E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zxing.presentati
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\System.Web.Mvc.xml
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHS\Webdiyer.MvcPager.resources.dll
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\bin\Debug\zh-CHT\Webdiyer.MvcPager.resources.dll
+E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.csprojResolveAssemblyReference.cache
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.exe
 E:\git_projects\myhelper\c#\CommonHelper\CommonHelper\obj\Debug\CommonHelper.pdb

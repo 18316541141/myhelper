@@ -48,12 +48,12 @@ namespace CommonWeb.Filter.Common
         /// <summary>
         /// 记录近期访客的操作记录
         /// </summary>
-        public static Dictionary<string, OperRecord> RecordMap { set; get; }
+        static Dictionary<string, OperRecord> RecordMap { set; get; }
 
         /// <summary>
         /// 最近一次清理日期
         /// </summary>
-        public static DateTime LastClearDate { set; get; }
+        static DateTime LastClearDate { set; get; }
 
         static OperCountAttribute()
         {

@@ -170,6 +170,7 @@ E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\System.Web.WebPages.Ra
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\Webdiyer.MvcPager.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\WebGrease.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\HtmlAgilityPack.dll
+E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\QRCoder.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\zxing.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\NPOI.dll
 E:\git_projects\myhelper\c#\CommonWeb\WebApplication1\bin\NPOI.OOXML.dll

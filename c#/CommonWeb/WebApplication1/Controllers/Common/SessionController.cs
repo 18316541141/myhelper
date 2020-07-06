@@ -55,6 +55,7 @@ namespace WebApplication1.Controllers.Common
         /// <param name="username"></param>
         /// <returns></returns>
         [AllowAnonymous]
+        [OperCount(ClearMillisecond=60,CountLimit = 3)]
         [Sign(new string[] { "callback", "signKey", "createDate", "r" })]
         public JsonResult JsonpLogin(string callback,string signKey)
         {
@@ -84,6 +85,8 @@ namespace WebApplication1.Controllers.Common
         /// <param name="vercode">验证码</param>
         /// <returns>返回登录结果的json</returns>
         [AllowAnonymous]
+        [OperCount(ClearMillisecond = 60, CountLimit = 3)]
+
         public JsonResult Login(string username, string password, string vercode)
         {
             try
