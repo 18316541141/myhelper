@@ -57,6 +57,16 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 校验是否为正确的邮箱格式
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public static bool IsEmail(string email)
+        {
+            return new Regex("^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$").IsMatch(email);
+        }
+
+        /// <summary>
         /// 检查是否为移动电话号码
         /// </summary>
         /// <param name="str"></param>
