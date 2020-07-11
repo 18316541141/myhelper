@@ -26,6 +26,30 @@ namespace CommonHelper.Helper
         }
 
         /// <summary>
+        /// 根据数字分配一个锁对象，使得该锁对象对同数字锁定，不同
+        /// 数字则通过。
+        /// </summary>
+        /// <param name="lockNum">锁数字</param>
+        /// <param name="clearBeforeMinutes">手动清理x分钟前的空闲锁对象，默认是1分钟前</param>
+        /// <returns></returns>
+        public static object DistributionLock(int lockNum, int clearBeforeMinutes = 1)
+        {
+            return DistributionLock(Convert.ToString(lockNum), clearBeforeMinutes);
+        }
+
+        /// <summary>
+        /// 根据数字分配一个锁对象，使得该锁对象对同数字锁定，不同
+        /// 数字则通过。
+        /// </summary>
+        /// <param name="lockNum">锁数字</param>
+        /// <param name="clearBeforeMinutes">手动清理x分钟前的空闲锁对象，默认是1分钟前</param>
+        /// <returns></returns>
+        public static object DistributionLock(long lockNum, int clearBeforeMinutes = 1)
+        {
+            return DistributionLock(Convert.ToString(lockNum), clearBeforeMinutes);
+        }
+
+        /// <summary>
         /// 根据字符串分配一个锁对象，使得该锁对象对同字符串锁定，不同
         /// 字符串则通过。
         /// </summary>
