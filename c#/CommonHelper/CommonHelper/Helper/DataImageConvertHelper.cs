@@ -162,6 +162,7 @@ namespace CommonHelper.Helper
             }
             BarcodeReader reader = new BarcodeReader();
             reader.Options.CharacterSet = characterSet;
+            string text;
             foreach (Rectangle rectangle in CandidateRectList)
             {
                 using (Bitmap newBitmap = new Bitmap(rectangle.Width, rectangle.Height))
@@ -169,9 +170,13 @@ namespace CommonHelper.Helper
                     using (var g = Graphics.FromImage(newBitmap))
                     {
                         g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        g.DrawImage(qrcodeImg, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+                        g.DrawImage(qrcodeImg, rectangle.X, rectangle.Y, qrcodeImg.Width, qrcodeImg.Height);
                     }
-                    return reader.Decode(new Bitmap(newBitmap))?.Text;
+                    text = reader.Decode(new Bitmap(newBitmap))?.Text;
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        return text;
+                    }
                 }
             }
             return null;
