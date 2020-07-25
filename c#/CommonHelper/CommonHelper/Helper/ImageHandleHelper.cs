@@ -19,6 +19,72 @@ namespace CommonHelper.Helper
     public static class ImageHandleHelper
     {
         /// <summary>
+        /// base64字符串转点阵图对象
+        /// </summary>
+        /// <param name="base64Str">base64字符串</param>
+        /// <returns></returns>
+        public static Bitmap Base64ToBitmap(string base64Str)
+        {
+            byte[] buffer = Convert.FromBase64String(base64Str);
+            MemoryStream ms = new MemoryStream(buffer);
+            Bitmap bitmap = new Bitmap(ms);
+            return bitmap;
+        }
+
+        /// <summary>
+        /// 读取指定路径的图片，返回该图片的base64
+        /// </summary>
+        /// <param name="imgFilePath">图片路径</param>
+        /// <returns>返回图片的base64</returns>
+        public static string ImgFileToBase64(string imgFilePath)
+        {
+            using (Image image = Image.FromFile(imgFilePath))
+                return ImageToBase64(image);
+        }
+
+        /// <summary>
+        /// 图片的Image对象转base64
+        /// </summary>
+        /// <param name="image">图片的Image对象</param>
+        /// <returns>返回图片的base64</returns>
+        public static string ImageToBase64(Image image)
+        {
+            using (Bitmap bitmap = new Bitmap(image))
+                return BitmapToBase64(bitmap);
+        }
+
+        /// <summary>
+        /// 图片的Bitmap对象转base64
+        /// </summary>
+        /// <param name="bitmap">图片的Bitmap对象</param>
+        /// <returns>返回图片的base64</returns>
+        public static string BitmapToBase64(Bitmap bitmap)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bitmap.Save(ms, ImageFormat.Jpeg);
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// 图片输入流转base64，会自动关闭流。
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <returns></returns>
+        public static string ImgStreamToBase64(Stream inputStream)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                StreamHelper.FastCopyStream(inputStream, memoryStream, false);
+                using (inputStream)
+                {
+                    return Convert.ToBase64String(memoryStream.ToArray());
+                }
+            }
+        }
+
+        /// <summary>
         /// 按照切点进行切图，按行切割
         /// </summary>
         /// <param name="bitmap">原图</param>
