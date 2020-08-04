@@ -187,6 +187,7 @@
     <Compile Include="EFRepository\InverseRepository.cs" />
     <Compile Include="Helper\EnumHelper.cs" />
     <Compile Include="Helper\HardwareHelper.cs" />
+    <Compile Include="Helper\ImageDrawTreeHelper.cs" />
     <Compile Include="Helper\NonNegativeDoubleLimitValue.cs" />
     <Compile Include="Helper\NonNegativeIntLimitValue.cs" />
     <Compile Include="Helper\LockStringHelper.cs" />
