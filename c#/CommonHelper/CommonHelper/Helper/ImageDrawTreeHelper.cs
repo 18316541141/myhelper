@@ -14,6 +14,30 @@ namespace CommonHelper.Helper
     public class ImageDrawTreeHelper
     {
         /// <summary>
+        /// 执行与释放或重置非托管资源相关的应用程序定义的任务
+        /// </summary>
+        public void Dispose(DrawImg drawImg)
+        {
+            bool hasChild = drawImg.DrawList != null && drawImg.DrawList.Count > 0;
+            if (hasChild)
+            {
+                foreach (Draw childDraw in drawImg.DrawList)
+                {
+                    if (childDraw.GetType() == typeof(DrawImg))
+                    {
+                        DrawImg tempDrawImg = (DrawImg)childDraw;
+                        using (tempDrawImg.BackgroundImage) { }
+                        Dispose(tempDrawImg);
+                    }
+                }
+            }
+            else
+            {
+                using (drawImg.BackgroundImage) { }
+            }
+        }
+
+        /// <summary>
         /// 根据drawImg树结构进行绘图
         /// </summary>
         /// <param name="drawImg">drawImg树结构</param>
@@ -40,10 +64,7 @@ namespace CommonHelper.Helper
                 }
                 if (background != null)
                 {
-                    using (background)
-                    {
-                        g.DrawImage(background, new Rectangle(0, 0, drawImg.Width, drawImg.Height));
-                    }
+                    g.DrawImage(background, new Rectangle(0, 0, drawImg.Width, drawImg.Height));
                 }
                 if (hasChild)
                 {
