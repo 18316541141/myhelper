@@ -197,7 +197,19 @@ namespace CommonHelper.Helper
         /// <returns>返回克隆体</returns>
         public object Clone()
         {
-            return MemberwiseClone();
+            return new DrawImg
+            {
+                DrawList = DrawList.ToList(),
+                BackgroundPath = BackgroundPath,
+                BackgroundUrl= BackgroundUrl,
+                BackgroundImage = BackgroundImage,
+                BackgroundColor = BackgroundColor,
+                Rotate = Rotate,
+                Height = Height,
+                Width = Width,
+                Left = Left,
+                Top = Top
+            };
         }
     }
 }
