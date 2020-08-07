@@ -185,39 +185,39 @@ namespace CommonHelper.Helper
         /// <param name="param"></param>
         void AttrVarSet(DrawText drawText, XmlAttribute xmlAttr, Dictionary<string, object> param)
         {
-            if (string.Equals(xmlAttr.Name, ":Width", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(xmlAttr.Name, "ref-Width", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.Width = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Height", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Height", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.Height = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Left", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Left", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.Left = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Top", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Top", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.Top = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Text", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Text", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.Text = (string)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":FontFamily", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-FontFamily", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.FontFamily = (string)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":FontSize", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-FontSize", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.FontSize = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":FontStyle", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-FontStyle", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.FontStyle = (FontStyle)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Brush", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Brush", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawText.Brush = (Brush)param[xmlAttr.Value];
             }
@@ -231,39 +231,39 @@ namespace CommonHelper.Helper
         /// <param name="param"></param>
         void AttrVarSet(DrawImg drawImg, XmlAttribute xmlAttr, Dictionary<string, object> param)
         {
-            if (string.Equals(xmlAttr.Name, ":Width", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(xmlAttr.Name, "ref-Width", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.Width = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Height", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Height", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.Height = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Left", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Left", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.Left = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Top", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Top", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.Top = (int)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":BackgroundPath", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-BackgroundPath", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.BackgroundPath = (string)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":BackgroundUrl", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-BackgroundUrl", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.BackgroundUrl = (string)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":BackgroundImage", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-BackgroundImage", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.BackgroundImage = (Image)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":BackgroundColor", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-BackgroundColor", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.BackgroundColor = (Color)param[xmlAttr.Value];
             }
-            else if (string.Equals(xmlAttr.Name, ":Rotate", StringComparison.CurrentCultureIgnoreCase))
+            else if (string.Equals(xmlAttr.Name, "ref-Rotate", StringComparison.CurrentCultureIgnoreCase))
             {
                 drawImg.Rotate = (RotateFlipType)param[xmlAttr.Value];
             }
