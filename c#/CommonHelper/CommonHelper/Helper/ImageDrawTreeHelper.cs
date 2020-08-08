@@ -43,7 +43,7 @@ namespace CommonHelper.Helper
                 <drawImg width="" height="" left="" top="" backgroundPath="" backgroundUrl="" rotate="">
                 
                 </drawImg>
-                <drawText width="" height="" left="" top="" text="" fontFamily="" fontSize="" fontStyle="" brush="">
+                <drawText width="" height="" left="" top="" text="" fontFamily="" fontSize="" fontStyle="">
                     
                 </drawText>
             </drawImg>
@@ -108,13 +108,76 @@ namespace CommonHelper.Helper
             {
                 foreach (var item in Enum.GetValues(typeof(FontStyle)))
                 {
-                    if (xmlAttr.Value == item.ToString())
+                    if (string.Equals(xmlAttr.Value, item.ToString(), StringComparison.CurrentCultureIgnoreCase))
                     {
                         drawText.FontStyle = (FontStyle)item;
                         break;
                     }
                 }
             }
+            else if (string.Equals(xmlAttr.Name, "FontColor", StringComparison.CurrentCultureIgnoreCase))
+            {
+                string color = xmlAttr.Value.Trim();
+                drawText.FontColor = ColorDescToColor(color);
+            }
+        }
+
+
+        public Color ColorDescToColor(string colorDesc)
+        {
+            if (!string.IsNullOrEmpty(colorDesc))
+            {
+                colorDesc = colorDesc.Trim();
+                int[] rgb = new int[3];
+                if (colorDesc.StartsWith("#"))
+                {
+                    if (colorDesc.Length == 4)
+                    {
+                        for (int i = 1, j = 0; i < 4; i++, j++)
+                        {
+                            if (colorDesc[i] >= '0' && colorDesc[i] <= '9')
+                            {
+                                rgb[j] = colorDesc[i] - '0';
+                            }
+                            else if (colorDesc[i] >= 'a' && colorDesc[i] <= 'f')
+                            {
+                                rgb[j] = colorDesc[i] - 'a' + 10;
+                            }
+                            rgb[j] += rgb[j] * 16;
+                        }
+                        return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (colorDesc.Length == 7)
+                    {
+                        for (int i = 2, j = 0; i < 8; i += 2, j++)
+                        {
+                            if (colorDesc[i] >= '0' && colorDesc[i] <= '9')
+                            {
+                                rgb[j] = colorDesc[i] - '0';
+                            }
+                            else if (colorDesc[i] >= 'a' && colorDesc[i] <= 'f')
+                            {
+                                rgb[j] = colorDesc[i] - 'a' + 10;
+                            }
+                            rgb[j] += (colorDesc[i - 1] - 'a' + 10) * 15;
+                        }
+                        return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+                    }
+                }
+                else if (colorDesc.StartsWith("rgb(") && colorDesc.EndsWith(")"))
+                {
+                    string[] rgbStrs = colorDesc.Remove(colorDesc.Length - 1, 1).Remove(0, 4).Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0, parseInt = 0; i < rgbStrs.Length; i++)
+                    {
+                        if (int.TryParse(rgbStrs[i].Trim(), out parseInt))
+                        {
+                            rgb[i] = parseInt;
+                        }
+                    }
+                    return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+                }
+            }
+            return Color.Black;
         }
 
         /// <summary>
@@ -168,7 +231,7 @@ namespace CommonHelper.Helper
             {
                 foreach (var item in Enum.GetValues(typeof(RotateFlipType)))
                 {
-                    if (xmlAttr.Value == item.ToString())
+                    if (string.Equals(xmlAttr.Value, item.ToString(), StringComparison.CurrentCultureIgnoreCase))
                     {
                         drawImg.Rotate = (RotateFlipType)item;
                         break;
@@ -185,41 +248,51 @@ namespace CommonHelper.Helper
         /// <param name="param"></param>
         void AttrVarSet(DrawText drawText, XmlAttribute xmlAttr, Dictionary<string, object> param)
         {
-            if (string.Equals(xmlAttr.Name, "ref-Width", StringComparison.CurrentCultureIgnoreCase))
+            if (param.ContainsKey(xmlAttr.Value))
             {
-                drawText.Width = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Height", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.Height = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Left", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.Left = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Top", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.Top = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Text", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.Text = (string)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-FontFamily", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.FontFamily = (string)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-FontSize", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.FontSize = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-FontStyle", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.FontStyle = (FontStyle)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Brush", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawText.Brush = (Brush)param[xmlAttr.Value];
+                try
+                {
+                    if (string.Equals(xmlAttr.Name, "ref-Width", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.Width = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Height", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.Height = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Left", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.Left = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Top", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.Top = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Text", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.Text = (string)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-FontFamily", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.FontFamily = (string)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-FontSize", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.FontSize = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-FontStyle", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.FontStyle = (FontStyle)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-FontColor", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawText.FontColor = (Color)param[xmlAttr.Value];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"设置动态属性时出错，错误原因：{ex.Message}");
+                }
             }
         }
 
@@ -231,41 +304,51 @@ namespace CommonHelper.Helper
         /// <param name="param"></param>
         void AttrVarSet(DrawImg drawImg, XmlAttribute xmlAttr, Dictionary<string, object> param)
         {
-            if (string.Equals(xmlAttr.Name, "ref-Width", StringComparison.CurrentCultureIgnoreCase))
+            if (param.ContainsKey(xmlAttr.Value))
             {
-                drawImg.Width = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Height", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.Height = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Left", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.Left = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Top", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.Top = (int)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-BackgroundPath", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.BackgroundPath = (string)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-BackgroundUrl", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.BackgroundUrl = (string)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-BackgroundImage", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.BackgroundImage = (Image)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-BackgroundColor", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.BackgroundColor = (Color)param[xmlAttr.Value];
-            }
-            else if (string.Equals(xmlAttr.Name, "ref-Rotate", StringComparison.CurrentCultureIgnoreCase))
-            {
-                drawImg.Rotate = (RotateFlipType)param[xmlAttr.Value];
+                try
+                {
+                    if (string.Equals(xmlAttr.Name, "ref-Width", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.Width = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Height", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.Height = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Left", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.Left = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Top", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.Top = (int)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-BackgroundPath", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.BackgroundPath = (string)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-BackgroundUrl", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.BackgroundUrl = (string)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-BackgroundImage", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.BackgroundImage = (Image)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-BackgroundColor", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.BackgroundColor = (Color)param[xmlAttr.Value];
+                    }
+                    else if (string.Equals(xmlAttr.Name, "ref-Rotate", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        drawImg.Rotate = (RotateFlipType)param[xmlAttr.Value];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"设置动态属性时出错，错误原因：{ex.Message}");
+                }
             }
         }
 
@@ -297,6 +380,12 @@ namespace CommonHelper.Helper
             return image;
         }
 
+        /// <summary>
+        /// 把节点解析成DrawImg对象
+        /// </summary>
+        /// <param name="xmlNodeList"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
         List<Draw> NodeToDrawImg(XmlNodeList xmlNodeList, Dictionary<string, object> param = null)
         {
             List<Draw> drawList = new List<Draw>();
@@ -390,7 +479,7 @@ namespace CommonHelper.Helper
                             DrawText tempDrawText = (DrawText)childDraw;
                             Font font = new Font(tempDrawText.FontFamily, tempDrawText.FontSize, tempDrawText.FontStyle);
                             RectangleF rectangleF = new RectangleF(tempDrawText.Left, tempDrawText.Top, tempDrawText.Width, tempDrawText.Height);
-                            g.DrawString(tempDrawText.Text, font, tempDrawText.Brush, rectangleF);
+                            g.DrawString(tempDrawText.Text, font, new SolidBrush(tempDrawText.FontColor), rectangleF);
                         }
                     }
                 }
@@ -452,9 +541,9 @@ namespace CommonHelper.Helper
         public FontStyle FontStyle { set; get; }
 
         /// <summary>
-        /// 画笔纹理
+        /// 文字颜色
         /// </summary>
-        public Brush Brush { set; get; }
+        public Color FontColor { set; get; }
     }
 
     /// <summary>
