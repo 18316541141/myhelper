@@ -61,18 +61,18 @@ namespace CommonHelper.Helper
         public static void FastCopyStream(Stream src, Stream target, bool autoClose = true)
         {
             byte[] Buff = new byte[4096];
-            using (Stream buffSrc = new BufferedStream(src))
-            using (Stream buffTarget = new BufferedStream(target))
+            Stream buffSrc = new BufferedStream(src);
+            Stream buffTarget = new BufferedStream(target);
+            for (int Len; (Len = buffSrc.Read(Buff, 0, Buff.Length)) > 0;)
+                buffTarget.Write(Buff, 0, Len);
+            var len = buffTarget.Length;
+            var position = buffTarget.Position;
+            if (autoClose)
             {
-                for (int Len; (Len = buffSrc.Read(Buff, 0, Buff.Length)) > 0;)
-                    buffTarget.Write(Buff, 0, Len);
                 buffSrc.Dispose();
                 buffTarget.Dispose();
-                if (autoClose)
-                {
-                    src.Dispose();
-                    target.Dispose();
-                }
+                src.Dispose();
+                target.Dispose();
             }
         }
     }

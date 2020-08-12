@@ -248,9 +248,18 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static Image GetImage(this WebResponse Response) {
             if (DefaultCheckLogout.IsLogout(Response))
+            {
                 throw new Exception("已退出登录！(ERROR:-3)");
+            }
             else
-                return Image.FromStream(Response.GetInput());
+            {
+                using (Stream srcStream = Response.GetInput())
+                {
+                    MemoryStream targetStream = new MemoryStream();
+                    StreamHelper.FastCopyStream(srcStream, targetStream, false);
+                    return Image.FromStream(targetStream);
+                }
+            }
         }
 
         /// <summary>
@@ -260,9 +269,18 @@ namespace CommonHelper.Helper
         /// <returns></returns>
         public static Bitmap GetBitmap(this WebResponse Response) {
             if (DefaultCheckLogout.IsLogout(Response))
+            {
                 throw new Exception("已退出登录！(ERROR:-3)");
+            }
             else
-                return new Bitmap(Response.GetInput());
+            {
+                using (Stream srcStream = Response.GetInput())
+                {
+                    MemoryStream targetStream = new MemoryStream();
+                    StreamHelper.FastCopyStream(srcStream, targetStream, false);
+                    return new Bitmap(targetStream);
+                }
+            }
         }
 
         /// <summary>

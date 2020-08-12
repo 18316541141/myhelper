@@ -151,6 +151,8 @@ namespace CommonHelper.Helper
         /// <param name="text">源文本</param>
         /// <param name="prefix">前缀</param>
         /// <param name="suffix">后缀</param>
+        /// <param name="startIndex">数据起始位置</param>
+        /// <param name="endIndex">数据结束位置</param>
         /// <returns>返回匹配结果</returns>
         public static string FindDataByPrefixAndSuffix(string text, string prefix, string suffix)
         {
@@ -159,6 +161,73 @@ namespace CommonHelper.Helper
                 throw new Exception($"前缀：“{prefix}”没有找到匹配结果。");
             startIndex = startIndex + prefix.Length;
             int endIndex = text.IndexOf(suffix, startIndex);
+            if (endIndex == -1)
+                throw new Exception($"后缀：“{suffix}”没有找到匹配结果。");
+            return text.Substring(startIndex, endIndex - startIndex);
+        }
+
+        /// <summary>
+        /// 使用前缀和后缀查找数据，然后把匹配数据全部去除
+        /// </summary>
+        /// <param name="text">源文本</param>
+        /// <param name="prefix">前缀</param>
+        /// <param name="suffix">后缀</param>
+        /// <returns>去除匹配项后返回的数据</returns>
+        public static string RemoveAllByPrefixAndSuffix(string text, string prefix, string suffix)
+        {
+            for (int startFindIndex = 0;;)
+            {
+                int startIndex = text.IndexOf(prefix, startFindIndex);
+                if (startIndex == -1)
+                {
+                    return text;
+                }
+                int endIndex = text.IndexOf(suffix, startIndex) + suffix.Length;
+                if (endIndex == -1)
+                {
+                    return text;
+                }
+                text = text.Substring(0, startIndex) + text.Substring(endIndex);
+                startFindIndex = startIndex;
+            }
+        }
+
+        /// <summary>
+        /// 使用前缀和后缀查找数据，然后把匹配数据替换为新数据，只替换首个匹配项。
+        /// </summary>
+        /// <param name="text">源文本</param>
+        /// <param name="prefix">前缀</param>
+        /// <param name="suffix">后缀</param>
+        /// <param name="newStr">新数据</param>
+        /// <returns>返回替换后的数据</returns>
+        public static string ReplaceByPrefixAndSuffix(string text, string prefix, string suffix, string newStr)
+        {
+            int startIndex = text.IndexOf(prefix);
+            if (startIndex == -1)
+                throw new Exception($"前缀：“{prefix}”没有找到匹配结果。");
+            int endIndex = text.IndexOf(suffix, startIndex)+ suffix.Length;
+            if (endIndex == -1)
+                throw new Exception($"后缀：“{suffix}”没有找到匹配结果。");
+            return text.Substring(0, startIndex) + newStr + text.Substring(endIndex);
+        }
+
+        /// <summary>
+        /// 使用前缀和后缀查找数据，然后截取前缀和后缀，得到中间的数据
+        /// </summary>
+        /// <param name="text">源文本</param>
+        /// <param name="prefix">前缀</param>
+        /// <param name="suffix">后缀</param>
+        /// <param name="findStartIndex">起始查找位置</param>
+        /// <param name="startIndex">数据起始位置</param>
+        /// <param name="endIndex">数据结束位置</param>
+        /// <returns>返回匹配结果</returns>
+        public static string FindDataByPrefixAndSuffix(string text, string prefix, string suffix,int findStartIndex, out int startIndex, out int endIndex)
+        {
+            startIndex = text.IndexOf(prefix, findStartIndex);
+            if (startIndex == -1)
+                throw new Exception($"前缀：“{prefix}”没有找到匹配结果。");
+            startIndex = startIndex + prefix.Length;
+            endIndex = text.IndexOf(suffix, startIndex);
             if (endIndex == -1)
                 throw new Exception($"后缀：“{suffix}”没有找到匹配结果。");
             return text.Substring(startIndex, endIndex - startIndex);
@@ -195,8 +264,11 @@ namespace CommonHelper.Helper
         /// <param name="prefix">前缀</param>
         /// <param name="suffix">后缀</param>
         /// <returns></returns>
-        public static string FindDataByPrefixAndSuffix(HtmlNode htmlNode, string prefix, string suffix) =>
-            FindDataByPrefixAndSuffix(htmlNode.OuterHtml, prefix, suffix);
+        public static string FindDataByPrefixAndSuffix(HtmlNode htmlNode, string prefix, string suffix)
+        {
+            int startIndex, endIndex;
+            return FindDataByPrefixAndSuffix(htmlNode.OuterHtml, prefix, suffix);
+        }
 
         /// <summary>
         /// 使用前缀和后缀查找数据
@@ -205,8 +277,11 @@ namespace CommonHelper.Helper
         /// <param name="prefix">前缀</param>
         /// <param name="suffix">后缀</param>
         /// <returns></returns>
-        public static string FindDataByPrefixAndSuffix(XmlNode xmlNode, string prefix, string suffix) =>
-            FindDataByPrefixAndSuffix(xmlNode.OuterXml, prefix, suffix);
+        public static string FindDataByPrefixAndSuffix(XmlNode xmlNode, string prefix, string suffix)
+        {
+            int startIndex, endIndex;
+            return FindDataByPrefixAndSuffix(xmlNode.OuterXml, prefix, suffix);
+        }
 
         /// <summary>
         /// 从文本中寻找数据
