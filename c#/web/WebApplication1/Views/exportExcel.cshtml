@@ -40,7 +40,6 @@
         var exportSize = @Model.ExportSize;
         var exportName = '@Model.ExportName';
         var $tempForm;
-        debugger;
         if($('#@id').length === 0){
             $tempForm = $('@Html.Raw(paramInputStr)');
             $('body').append($tempForm);
@@ -76,11 +75,39 @@
         $('#@id').find('[name="fileName"]').val(exportName+exportIndex+'.xlsx');
         $('#@id').submit();
     }
+    top.exportExcel@(id)=exportExcel@(id);
     function download@(id)() {
         var index = top.layer.load();
         var exportSize = @Model.ExportSize;
         var exportName = '@Model.ExportName';
-        $.post('@Model.CountAction',@Html.Raw(paramStr),function(res){
+        var postData = @Html.Raw(paramStr);
+        var $tempForm;
+        if($('#@id').length === 0){
+            $tempForm = $('@Html.Raw(paramInputStr)');
+            $('body').append($tempForm);
+        }else{
+            $tempForm=$('#@id');
+        }
+        var $temp = $('#btn@(id)');
+        do{
+            $temp = $temp.parent();
+        }while($temp.length !== 0 && $temp[0].nodeName !== 'FORM');
+        if($temp[0].nodeName === 'FORM'){
+            $temp.find('input,select').each(function(){
+                var name = $(this).attr('name');
+                if(name === undefined){
+                    return true;
+                }
+                var value;
+                if(this.nodeName === 'INPUT'){
+                    value = $(this).attr('value');
+                } else if(this.nodeName === 'SELECT'){
+                    value = this.options[this.selectedIndex].value;
+                }
+                postData[name] = value;
+            });
+        }
+        $.post('@Model.CountAction', postData, function(res){
             top.layer.close(index);
             if(res.totalCount>exportSize){
                 var rest = res.totalCount % exportSize;
@@ -91,36 +118,29 @@
                         '<tr>'+
                             '<td>'+exportName+(i+1)+'.xlsx</td>'+
                             '<td>点击“导出”时导出第'+(exportSize*i+1)+'-'+(exportSize*(i+1))+'条数据</td>'+
-                            '<td><a href="javascript:void(0);" onclick="exportExcel@(id)('+(i+1)+')">导出</a></td>'+
+                            '<td><a href="javascript:exportExcel@(id)('+(i+1)+');">导出</a></td>'+
                         '</tr>';
                 }
                 tbody+='</tbody>';
                 top.layer.open({
                     type:1,
+                    area: ['500px', '400px'],
+                    title:'分批导出excel列表',
                     content:
-                        '<table class="layui-table">'+
-                            '<thead>'+
-                                '<tr>'+
-                                    '<th>文件名</th>'+
-                                    '<th>描述</th>'+
-                                    '<th>操作</th>'+
-                                '</tr>'+
-                            '</thead>'+
-                            tbody+
-                        '</table>'
+                        '<div style="padding:10px;">'+
+                            '<table class="layui-table">'+
+                                '<thead>'+
+                                    '<tr>'+
+                                        '<th>文件名</th>'+
+                                        '<th>描述</th>'+
+                                        '<th>操作</th>'+
+                                    '</tr>'+
+                                '</thead>'+
+                                tbody+
+                            '</table>'+
+                        '</div>'
                 });
             }else{
-                var $tempForm;
-                if($('#@id').length === 0){
-                    $tempForm = $('@Html.Raw(paramInputStr)');
-                    $('body').append($tempForm);
-                }else{
-                    $tempForm=$('#@id');
-                }
-                var $temp = $('#btn@(id)');
-                do{
-                    $temp = $temp.parent();
-                }while($temp.length !== 0 && $temp[0].nodeName !== 'FORM');
                 if($temp[0].nodeName === 'FORM'){
                     $temp.find('input,select').each(function(){
                         var name = $(this).attr('name');
