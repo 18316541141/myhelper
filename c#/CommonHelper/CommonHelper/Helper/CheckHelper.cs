@@ -12,6 +12,8 @@ namespace CommonHelper.Helper
     /// </summary>
     public static class CheckHelper
     {
+
+
         /// <summary>
         /// 检查是否存在重复，用于校验一组数据是否重复
         /// </summary>
@@ -32,6 +34,16 @@ namespace CommonHelper.Helper
                 }
             }
             return hashSet.Count < stringList.Count;
+        }
+
+        /// <summary>
+        /// 企业税号校验
+        /// </summary>
+        /// <param name="enterpriseTaxNo">企业税号</param>
+        /// <returns></returns>
+        public static bool CheckEnterpriseTaxNo(string enterpriseTaxNo)
+        {
+            return new Regex("^[A-Z0-9]{15}$|^[A-Z0-9]{17}$|^[A-Z0-9]{18}$|^[A-Z0-9]{20}$").IsMatch(enterpriseTaxNo);
         }
 
         /// <summary>
